@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/guide_screen.dart';
 import 'about_screen.dart';
 import 'faq_screen.dart';
@@ -13,11 +14,15 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor:Pref.isDartMode?null: Colors.blue,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.close),
+          icon: const Icon(
+            Icons.close,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
       ),
       body: Column(
@@ -61,7 +66,6 @@ class MenuScreen extends StatelessWidget {
           ShareBottomSheet.show();
         }
         // Handle other menu items...
-        
       },
     );
   }

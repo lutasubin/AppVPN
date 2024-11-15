@@ -19,6 +19,11 @@ dependencies:
   get: ^4.6.6
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.5
+  http: ^1.2.2
+  csv: ^6.0.0
+  lottie: ^3.1.3
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   
   
 
@@ -44,3 +49,5 @@ flutter:
     - assets/vpn/
     - assets/images/
     - assets/icons/
+    - assets/lottie/
+    - assets/flags/

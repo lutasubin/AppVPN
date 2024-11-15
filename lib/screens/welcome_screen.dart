@@ -52,15 +52,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             Image.asset(
               'assets/images/welcome.png', // Đảm bảo rằng bạn có hình ảnh này trong thư mục assets
-              height: 200,
+              height: 400,
             ),
             SizedBox(height: 40),
             Text(
               "Welcome to\nVPN - Fast & Safe",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Colors.orange,
+                color: const Color.fromARGB(255, 30, 141, 232),
               ),
               textAlign: TextAlign.center,
             ),

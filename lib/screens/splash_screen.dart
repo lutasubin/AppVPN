@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 'MADE IN VIETNAM WITH ❤️',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Colors.black, letterSpacing: 1),
+                    color: Theme.of(context).lightText, letterSpacing: 1),
               ))
         ],
       ),

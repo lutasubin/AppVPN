@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/splash_screen.dart';
 
 // Global variables
@@ -17,6 +18,8 @@ Future<void> main() async {
 
   // Enter full-screen
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+
+  await Pref.initializeHive();
 
   // Set orientation to portrait only
   await SystemChrome.setPreferredOrientations([
@@ -49,7 +52,21 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
+      themeMode: Pref.isDartMode ? ThemeMode.dark:ThemeMode.light,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 3,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
+}
+
+extension AppTheme on ThemeData {
+  Color get lightText => Pref.isDartMode ? Colors.white70 : Colors.black54;
+  Color get bottomNav => Pref.isDartMode ? Colors.white12 : Colors.blue;
+
 }
