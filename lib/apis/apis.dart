@@ -1,8 +1,12 @@
 
+import 'dart:convert';
 import 'dart:developer';
 import 'package:csv/csv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
+import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 
 class Apis {
@@ -10,7 +14,7 @@ class Apis {
     final List<Vpn> vpnList = [];
 
     try {
-      final res = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
+        final res = await get(Uri.parse(dotenv.env['VPN_FREE'] ?? ''));
       final csvString = res.body.split('#')[1].replaceAll('*', '');
       List<List<dynamic>> list = const CsvToListConverter().convert(csvString);
       final header = list[0];
@@ -33,5 +37,32 @@ class Apis {
     Pref.vpnList = vpnList;
   }
     return vpnList;
+    
+  }
+  static Future<void> getIPDetails({required Rx<IPDetails> ipData}) async {
+    try {
+            final res = await get(Uri.parse(dotenv.env['IP_FREE'] ?? ''));
+      final data = jsonDecode(res.body);
+      log(data.toString());
+      ipData.value = IPDetails.fromJson(data);
+    } catch (e) {
+      // MyDialogs.error(msg: e.toString());
+      log('\ngetIPDetailsE: $e');
+    }
   }
 }
+// Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36
+
+// For Understanding Purpose
+
+//*** CSV Data ***
+// Name,    Country,  Ping
+// Test1,   JP,       12
+// Test2,   US,       112
+// Test3,   IN,       7
+
+//*** List Data ***
+// [ [Name, Country, Ping], [Test1, JP, 12], [Test2, US, 112], [Test3, IN, 7] ]
+
+//*** Json Data ***
+// {"Name": "Test1", "Country": "JP", "Ping": 12}

@@ -1,6 +1,6 @@
 // import 'dart:developer';
 
-import 'dart:convert';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +9,12 @@ import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/main.dart';
-import 'package:vpn_basic_project/models/vpn.dart';
-import 'package:vpn_basic_project/models/vpn_config.dart';
+
 import 'package:vpn_basic_project/models/vpn_status.dart';
-import 'package:vpn_basic_project/screens/how_to_connect_screen.dart';
+
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
+import 'package:vpn_basic_project/screens/network_test_screen.dart';
 import 'package:vpn_basic_project/widgets/count_down_time%20.dart';
 import 'package:vpn_basic_project/widgets/home_card.dart';
 
@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
               padding: EdgeInsets.only(right: 8),
               onPressed: () {
-                Get.off(() => HowToConnectScreen());
+                Get.off(() => NetworkTestScreen());
               },
               icon: Icon(
                 CupertinoIcons.info,

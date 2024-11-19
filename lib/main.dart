@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
@@ -12,6 +13,8 @@ late SharedPreferences prefs;
 Future<void> main() async {
   // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load();
 
   // Initialize shared preferences
   prefs = await SharedPreferences.getInstance();
