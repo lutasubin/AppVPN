@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
+import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/main.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
@@ -27,6 +28,9 @@ class VpnCart extends StatelessWidget {
           controller.vpn.value =vpn;
           Pref.vpn =vpn;
           Get.back();
+
+          MyDialogs.success(msg: 'Connecting VPN Location...');
+
           if(controller.vpnState.value == VpnEngine.vpnConnected){
             VpnEngine.stopVpn();
             Future.delayed(Duration(seconds: 2),(){

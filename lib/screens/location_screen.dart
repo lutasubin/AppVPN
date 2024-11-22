@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
+import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/main.dart';
 import 'package:vpn_basic_project/screens/search_screen.dart';
@@ -10,18 +13,20 @@ import 'package:vpn_basic_project/widgets/vpn_cart.dart';
 
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
-  
+
   final LocationController _controller = Get.put(LocationController());
-  final TextEditingController _searchController = TextEditingController();
+
+  final _adController = NativeAdController();
 
   @override
   Widget build(BuildContext context) {
-    if (_controller.vpnList.isEmpty)  _controller.getVpnData();
-    
+    if (_controller.vpnList.isEmpty) _controller.getVpnData();
+
+    _adController.ad = AdHelper.loadNativeAd(adController: _adController);
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          backgroundColor:Pref.isDartMode?null: Colors.blue,
+          backgroundColor: Pref.isDartMode ? null : Colors.blue,
           leading: IconButton(
             onPressed: () {
               Get.back();
@@ -43,7 +48,7 @@ class LocationScreen extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                 Get.to(() => SearchScreen());
+                Get.to(() => SearchScreen());
               },
               icon: Icon(
                 Icons.search,
@@ -53,6 +58,13 @@ class LocationScreen extends StatelessWidget {
             ),
           ],
         ),
+       bottomNavigationBar:
+            // Config.hideAds ? null:
+            _adController.ad != null && _adController.adLoaded.isTrue
+                ? SafeArea(
+                    child: SizedBox(
+                        height: 85, child: AdWidget(ad: _adController.ad!)))
+                : null,
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 10),
           child: FloatingActionButton(
@@ -75,11 +87,6 @@ class LocationScreen extends StatelessWidget {
     );
   }
 
-  
-   
-  
-
-  
   _vpnData() => ListView.builder(
         itemCount: _controller.vpnList.length,
         physics: BouncingScrollPhysics(),
@@ -92,22 +99,6 @@ class LocationScreen extends StatelessWidget {
           vpn: _controller.vpnList[i],
         ),
       );
-
-  // Widget _noResultsFound() {
-  //   return Center(
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Image.asset('assets/images/no_results.png'),
-  //         SizedBox(height: 20),
-  //         Text(
-  //           'No results found for "${_searchController.text}"',
-  //           style: TextStyle(fontSize: 18, color: Colors.black54),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _loadingWidget(BuildContext context) => SizedBox(
         width: double.infinity,

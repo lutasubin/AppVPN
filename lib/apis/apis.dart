@@ -1,10 +1,10 @@
-
 import 'dart:convert';
 import 'dart:developer';
 import 'package:csv/csv.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
@@ -14,7 +14,7 @@ class Apis {
     final List<Vpn> vpnList = [];
 
     try {
-        final res = await get(Uri.parse(dotenv.env['VPN_FREE'] ?? ''));
+      final res = await get(Uri.parse(dotenv.env['VPN_FREE'] ?? ''));
       final csvString = res.body.split('#')[1].replaceAll('*', '');
       List<List<dynamic>> list = const CsvToListConverter().convert(csvString);
       final header = list[0];
@@ -29,24 +29,25 @@ class Apis {
       }
       log(vpnList.first.HostName);
     } catch (e) {
+      MyDialogs.error(msg: e.toString());
       log('\ngetVPNSeversE:$e');
     }
     // log(res.body);
-  vpnList.shuffle();
-  if (vpnList.isNotEmpty) {
-    Pref.vpnList = vpnList;
-  }
+    vpnList.shuffle();
+    if (vpnList.isNotEmpty) {
+      Pref.vpnList = vpnList;
+    }
     return vpnList;
-    
   }
+
   static Future<void> getIPDetails({required Rx<IPDetails> ipData}) async {
     try {
-            final res = await get(Uri.parse(dotenv.env['IP_FREE'] ?? ''));
+      final res = await get(Uri.parse(dotenv.env['IP_FREE'] ?? ''));
       final data = jsonDecode(res.body);
       log(data.toString());
       ipData.value = IPDetails.fromJson(data);
     } catch (e) {
-      // MyDialogs.error(msg: e.toString());
+     MyDialogs.error(msg: e.toString());
       log('\ngetIPDetailsE: $e');
     }
   }

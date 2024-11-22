@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
               padding: EdgeInsets.only(right: 8),
               onPressed: () {
-                Get.off(() => NetworkTestScreen());
+                Get.to(() => NetworkTestScreen());
               },
               icon: Icon(
                 CupertinoIcons.info,
@@ -111,7 +111,7 @@ class HomeScreen extends StatelessWidget {
               //ping time
               HomeCard(
                   title: _controller.vpn.value.Ping.isEmpty
-                      ? '000 ms'
+                      ? '100 ms'
                       : '${_controller.vpn.value.Ping} ms',
                   icon: CircleAvatar(
                     backgroundColor: Colors.orangeAccent,
