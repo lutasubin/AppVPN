@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "806740368711",
+    "project_id": "freevpn-flutter-f1370",
+    "storage_bucket": "freevpn-flutter-f1370.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806740368711:android:ab5eafe74fab6b4806c062",
+        "android_client_info": {
+          "package_name": "com.Lutasubin.freeVpn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7oIfmbpAHVtG-yGiMBTrviC3jbiB_zDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

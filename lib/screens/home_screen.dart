@@ -1,12 +1,12 @@
 // import 'dart:developer';
 
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
+import 'package:vpn_basic_project/helpers/config.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/main.dart';
 
@@ -15,6 +15,7 @@ import 'package:vpn_basic_project/models/vpn_status.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
+import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
 import 'package:vpn_basic_project/widgets/count_down_time%20.dart';
 import 'package:vpn_basic_project/widgets/home_card.dart';
 
@@ -37,7 +38,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Pref.isDartMode ?null: Colors.blue,
+        backgroundColor: Pref.isDartMode ? null : Colors.blue,
         leading: IconButton(
           onPressed: () {
             Get.to(() => MenuScreen());
@@ -56,9 +57,21 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Get.changeThemeMode(
-                  Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
-                  Pref.isDarkMode =!Pref.isDartMode;
+              if(Config.hideAds){
+                Get.changeThemeMode(
+                        Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
+                    Pref.isDarkMode = !Pref.isDartMode;
+                  return;
+              }
+              Get.dialog(WatchAdDialog(
+                onComplete: () {
+                  AdHelper.showRewardedAd(onComplete: () {
+                    Get.changeThemeMode(
+                        Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
+                    Pref.isDarkMode = !Pref.isDartMode;
+                  });
+                },
+              ));
             },
             icon: Icon(
               Icons.brightness_medium,
@@ -254,7 +267,7 @@ class HomeScreen extends StatelessWidget {
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: mq.width * .04),
-              color:Theme.of(context).bottomNav,
+              color: Theme.of(context).bottomNav,
               height: 60,
               child: Row(
                 children: [

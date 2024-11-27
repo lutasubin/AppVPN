@@ -59,6 +59,8 @@ class LocationScreen extends StatelessWidget {
           ],
         ),
        bottomNavigationBar:
+
+       
             // Config.hideAds ? null:
             _adController.ad != null && _adController.adLoaded.isTrue
                 ? SafeArea(

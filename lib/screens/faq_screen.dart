@@ -23,7 +23,7 @@ class _FAQScreenState extends State<FAQScreen> {
     ),
     FAQItem(
       question: 'Is it safe?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
+      answer: 'Please rest assured that our app is very safe and secure...',
     ),
     FAQItem(
       question: 'Can\'t connect, not stable or speed is slow?',

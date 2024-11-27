@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/screens/welcome_screen.dart';
 
 // import '../helpers/ad_helper.dart';
@@ -22,8 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
       //exit full-screen
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-    //   AdHelper.precacheInterstitialAd();
-    //   AdHelper.precacheNativeAd();
+      AdHelper.precacheInterstitialAd();
+      AdHelper.precacheNativeAd();
 
       //navigate to home
       Get.off(() => WelcomeScreen());

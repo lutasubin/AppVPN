@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
+import 'package:vpn_basic_project/helpers/config.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/splash_screen.dart';
 
@@ -23,6 +25,8 @@ Future<void> main() async {
   // Enter full-screen
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
+    await Firebase.initializeApp();
+    await Config.initConfig();
   await Pref.initializeHive();
 
   await AdHelper.initAds();
