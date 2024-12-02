@@ -26,7 +26,7 @@ class LocationScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          backgroundColor: Pref.isDartMode ? null : Colors.blue,
+          backgroundColor: Pref.isDartMode ? null : Colors.orange,
           leading: IconButton(
             onPressed: () {
               Get.back();
@@ -58,9 +58,8 @@ class LocationScreen extends StatelessWidget {
             ),
           ],
         ),
-       bottomNavigationBar:
+        bottomNavigationBar:
 
-       
             // Config.hideAds ? null:
             _adController.ad != null && _adController.adLoaded.isTrue
                 ? SafeArea(
@@ -70,7 +69,7 @@ class LocationScreen extends StatelessWidget {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 10),
           child: FloatingActionButton(
-            backgroundColor: const Color.fromARGB(255, 27, 139, 231),
+            backgroundColor: Colors.orange,
             onPressed: () {
               _controller.getVpnData();
             },

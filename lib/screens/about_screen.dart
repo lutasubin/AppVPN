@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
+
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -7,11 +9,19 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 30,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: const Text('About us'),
+        title: const Text(
+          'About us',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -64,4 +74,4 @@ class AboutScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -38,30 +38,29 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Pref.isDartMode ? null : Colors.blue,
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
         leading: IconButton(
           onPressed: () {
             Get.to(() => MenuScreen());
           },
           icon: Icon(
             Icons.menu,
-            size: 25,
+            size: 30,
             color: Colors.white,
           ),
         ),
         title: Text(
-          'FreeVpnVietNam',
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+          'OpenVPN',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              if(Config.hideAds){
+              if (Config.hideAds) {
                 Get.changeThemeMode(
-                        Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
-                    Pref.isDarkMode = !Pref.isDartMode;
-                  return;
+                    Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
+                Pref.isDarkMode = !Pref.isDartMode;
+                return;
               }
               Get.dialog(WatchAdDialog(
                 onComplete: () {
@@ -75,7 +74,7 @@ class HomeScreen extends StatelessWidget {
             },
             icon: Icon(
               Icons.brightness_medium,
-              size: 26,
+              size: 30,
               color: Colors.white,
             ),
           ),
@@ -86,7 +85,7 @@ class HomeScreen extends StatelessWidget {
               },
               icon: Icon(
                 CupertinoIcons.info,
-                size: 27,
+                size: 30,
                 color: Colors.white,
               ))
         ],
@@ -179,61 +178,79 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  //vpn button
   Widget _vpnButton() => Column(
         children: [
-          //button
-          Semantics(
-            button: true,
-            child: InkWell(
-              onTap: () {
-                _controller.connectToVpn();
-              },
-              borderRadius: BorderRadius.circular(100),
-              child: Container(
-                padding: EdgeInsets.all(32),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // Hình nền Trái Đất
+              Container(
+                width: 360,
+                height: 360,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _controller.getButtonColor.withOpacity(.1),
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _controller.getButtonColor.withOpacity(.3),
+                  image: DecorationImage(
+                    image: AssetImage(
+                        'assets/images/earth.png'), // Đường dẫn đến hình ảnh Trái Đất
+                    fit: BoxFit.cover,
                   ),
-                  child: Container(
-                      width: mq.height * .14,
-                      height: mq.height * .14,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _controller.getButtonColor,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.power_settings_new,
-                            size: 28,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            _controller.getButtonText,
-                            style: TextStyle(
-                                fontSize: 12.5,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      )),
                 ),
               ),
-            ),
+              // Nút
+              Semantics(
+                button: true,
+                child: InkWell(
+                  onTap: () {
+                    _controller.connectToVpn();
+                  },
+                  borderRadius: BorderRadius.circular(100),
+                  child: Container(
+                    padding: EdgeInsets.all(50),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _controller.getButtonColor.withOpacity(.1),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(25),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _controller.getButtonColor.withOpacity(.3),
+                      ),
+                      child: Container(
+                        width: mq.height * .15,
+                        height: mq.height * .15,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _controller.getButtonColor,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.power_settings_new,
+                              size: 45,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              _controller.getButtonText,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          //connection status label
+          // Trạng thái kết nối
           Container(
             margin:
                 EdgeInsets.only(top: mq.height * .015, bottom: mq.height * .02),
@@ -242,16 +259,15 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.blue, borderRadius: BorderRadius.circular(15)),
             child: Text(
               _controller.vpnState.value == VpnEngine.vpnDisconnected
-                  ? 'Not connected'
+                  ? 'Not Connected'
                   : _controller.vpnState.replaceAll('_', '').toLowerCase(),
               style: TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.w500),
             ),
           ),
-
-          //!countdown timer
+          // Đếm ngược
           Obx(() => CountDownTimer(
               startTimer:
                   _controller.vpnState.value == VpnEngine.vpnConnected)),
@@ -274,16 +290,16 @@ class HomeScreen extends StatelessWidget {
                   Icon(
                     CupertinoIcons.globe,
                     color: Colors.white,
-                    size: 28,
+                    size: 30,
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 15,
                   ),
                   Text(
                     'Change Location',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500),
                   ),
                   Spacer(),
@@ -291,8 +307,8 @@ class HomeScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     child: Icon(
                       Icons.keyboard_arrow_right_rounded,
-                      color: Colors.blue,
-                      size: 28,
+                      color: Colors.orange,
+                      size: 30,
                     ),
                   )
                 ],

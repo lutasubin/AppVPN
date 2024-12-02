@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
 
 class SplitTunnelingScreen extends StatefulWidget {
   const SplitTunnelingScreen({super.key});
@@ -32,11 +34,19 @@ class _SplitTunnelingScreenState extends State<SplitTunnelingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 30,
+          ),
+          onPressed: () => Get.back(),
         ),
-        title: const Text('Split tunneling'),
+        title: const Text(
+          'Split tunneling',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
       ),
       body: Column(
         children: [
@@ -156,4 +166,4 @@ class AppListTile extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/home_screen.dart';
 import 'package:vpn_basic_project/widgets/vpn_cart.dart';
 
@@ -28,7 +29,19 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search VPN'),
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
+        title: Text(
+          'Search VPN',
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 30,
+          ),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -69,4 +82,4 @@ class SearchScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

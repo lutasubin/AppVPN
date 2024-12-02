@@ -18,7 +18,7 @@ class HomeController extends GetxController {
 
   void connectToVpn() {
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
-      MyDialogs.info( msg: 'Select a Location by clicking \'Change Location\'');
+      MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
       return;
     }
 
@@ -49,13 +49,25 @@ class HomeController extends GetxController {
   Color get getButtonColor {
     switch (vpnState.value) {
       case VpnEngine.vpnDisconnected:
-        return Colors.blue;
+        return Colors.orange;
       case VpnEngine.vpnConnected:
         return Colors.green;
       default:
         return Colors.red;
     }
   }
+
+  /// Lấy biểu tượng hiển thị cho nút
+  // IconData get getButtonIcon {
+  //   switch (vpnState.value) {
+  //     case VpnEngine.vpnDisconnected:
+  //       return Icons.power_settings_new; // Biểu tượng bật
+  //     case VpnEngine.vpnConnected:
+  //       return Icons.stop_sharp; // Biểu tượng ngắt
+  //     default:
+  //       return Icons.hourglass_top; // Biểu tượng chờ
+  //   }
+  // }
 
   String get getButtonText {
     switch (vpnState.value) {

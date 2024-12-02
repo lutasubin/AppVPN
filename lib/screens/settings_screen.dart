@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/split_tunneling_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -45,11 +46,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 30,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: const Text('Setting'),
+        title: const Text(
+          'Setting',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
       ),
       body: ListView(
         children: [
@@ -65,18 +74,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ...protocols.map((protocol) => RadioListTile<String>(
-            value: protocol,
-            groupValue: selectedProtocol,
-            title: Text(protocol),
-            onChanged: (value) {
-              setState(() {
-                selectedProtocol = value!;
-              });
-            },
-          )),
-          
+                value: protocol,
+                groupValue: selectedProtocol,
+                title: Text(protocol),
+                onChanged: (value) {
+                  setState(() {
+                    selectedProtocol = value!;
+                  });
+                },
+              )),
+
           const Divider(height: 32),
-          
+
           // Split Tunneling Section
           ListTile(
             title: const Text('Split tunneling'),
@@ -85,9 +94,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Get.to(() => const SplitTunnelingScreen());
             },
           ),
-          
+
           const Divider(height: 32),
-          
+
           // Notification Section
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -115,4 +124,4 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
-} 
+}

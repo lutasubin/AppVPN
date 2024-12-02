@@ -15,7 +15,7 @@ class MenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Pref.isDartMode?null: Colors.blue,
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
@@ -23,6 +23,10 @@ class MenuScreen extends StatelessWidget {
             color: Colors.white,
             size: 30,
           ),
+        ),
+        title: Text(
+          "Menu",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       ),
       body: Column(
@@ -48,7 +52,7 @@ class MenuScreen extends StatelessWidget {
 
   Widget _buildMenuItem({required IconData icon, required String title}) {
     return ListTile(
-      leading: Icon(icon, color: Colors.blue),
+      leading: Icon(icon, color: Colors.orange),
       title: Text(title,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
       onTap: () {

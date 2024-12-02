@@ -17,34 +17,33 @@ class VpnCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final controller =Get.find<HomeController>();
+    final controller = Get.find<HomeController>();
     return Card(
       elevation: 5,
       margin: EdgeInsets.symmetric(vertical: mq.height * .01),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
-        onTap: (){
-          controller.vpn.value =vpn;
-          Pref.vpn =vpn;
+        onTap: () {
+          controller.vpn.value = vpn;
+          Pref.vpn = vpn;
           Get.back();
 
           MyDialogs.success(msg: 'Connecting VPN Location...');
 
-          if(controller.vpnState.value == VpnEngine.vpnConnected){
+          if (controller.vpnState.value == VpnEngine.vpnConnected) {
             VpnEngine.stopVpn();
-            Future.delayed(Duration(seconds: 2),(){
-               controller.connectToVpn();
+            Future.delayed(Duration(seconds: 2), () {
+              controller.connectToVpn();
             });
-          }else{
-             controller.connectToVpn();
+          } else {
+            controller.connectToVpn();
           }
-         
         },
         borderRadius: BorderRadius.circular(15),
         child: ListTile(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+
           leading: Container(
             padding: EdgeInsets.all(.5),
             decoration: BoxDecoration(
@@ -60,19 +59,19 @@ class VpnCart extends StatelessWidget {
               ),
             ),
           ),
-        
+
           //tile:
           title: Text(
             vpn.CountryLong,
             style: TextStyle(fontSize: 13),
           ),
-        
+
           //subtitle:
           subtitle: Row(
             children: [
               Icon(
                 Icons.speed_rounded,
-                color: Colors.blue,
+                color: Colors.orange,
                 size: 20,
               ),
               SizedBox(
@@ -90,32 +89,33 @@ class VpnCart extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(vpn.NumVpnSessions.toString(),style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).lightText
-              ),),
+              Text(
+                vpn.NumVpnSessions.toString(),
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).lightText),
+              ),
               SizedBox(
                 width: 4,
               ),
               Icon(
                 CupertinoIcons.person_3,
-                color: Colors.blue,
+                color: Colors.orange,
               ),
             ],
           ),
         ),
       ),
     );
-
-    
   }
-  String _formatBytes(int bytes,int decimals){
-    if (bytes<=0) {
+
+  String _formatBytes(int bytes, int decimals) {
+    if (bytes <= 0) {
       return "0 8";
     }
-    const suffixes =["Bps","Kbps","Mbps","Bbps","Tbps"];
-    var i =(log(bytes) / log(1024)).floor();
+    const suffixes = ["Bps", "Kbps", "Mbps", "Bbps", "Tbps"];
+    var i = (log(bytes) / log(1024)).floor();
     return '${(bytes / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }
 }

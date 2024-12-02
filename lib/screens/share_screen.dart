@@ -38,12 +38,16 @@ class ShareBottomSheet extends StatelessWidget {
               const Text(
                 'Share With',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange),
               ),
               IconButton(
-                icon: const Icon(Icons.close, size: 24),
+                icon: const Icon(
+                  Icons.close,
+                  size: 30,
+                  color: Colors.orange,
+                ),
                 onPressed: () => Get.back(),
               ),
             ],

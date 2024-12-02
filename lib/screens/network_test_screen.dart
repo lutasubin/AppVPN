@@ -21,10 +21,10 @@ class NetworkTestScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Pref.isDartMode ? null : Colors.blue,
+          backgroundColor: Pref.isDartMode ? null : Colors.orange,
           leading: IconButton(
             onPressed: () {
-             Get.off(() => HomeScreen());
+              Get.off(() => HomeScreen());
             },
             icon: Icon(
               Icons.arrow_back,
@@ -34,18 +34,23 @@ class NetworkTestScreen extends StatelessWidget {
           ),
           title: Text(
             'Network Test Screen',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
           )),
 
       //refresh button
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 10),
         child: FloatingActionButton(
+            backgroundColor: Colors.orange,
             onPressed: () {
               ipData.value = IPDetails.fromJson({});
               Apis.getIPDetails(ipData: ipData);
             },
-            child: Icon(CupertinoIcons.refresh,color: const Color.fromARGB(255, 28, 132, 218),)),
+            child: Icon(
+              CupertinoIcons.refresh,
+              color: Colors.white,
+              size: 30,
+            )),
       ),
 
       body: Obx(

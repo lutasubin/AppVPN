@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
 
 class RateScreen extends StatefulWidget {
   const RateScreen({super.key});
@@ -26,11 +27,19 @@ class _RateScreenState extends State<RateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 30,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: const Text('Rate us'),
+        title: const Text(
+          'Rate us',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
       ),
       body: Center(
         child: Card(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/helpers/pref.dart';
+
 class FAQScreen extends StatefulWidget {
   const FAQScreen({super.key});
 
@@ -35,11 +37,19 @@ class _FAQScreenState extends State<FAQScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Pref.isDartMode ? null : Colors.orange,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 30,
+          ),
           onPressed: () => Get.back(),
         ),
-        title: const Text('FAQ'),
+        title: const Text(
+          'FAQ',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -95,7 +105,7 @@ class FAQExpansionTile extends StatelessWidget {
           ),
           trailing: Icon(
             faqItem.isExpanded ? Icons.remove : Icons.add,
-            color: Colors.blue,
+            color: Colors.orange,
           ),
           onExpansionChanged: (expanded) {
             faqItem.isExpanded = expanded;
@@ -117,4 +127,4 @@ class FAQExpansionTile extends StatelessWidget {
       ),
     );
   }
-} 
+}

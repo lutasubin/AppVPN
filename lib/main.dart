@@ -77,6 +77,6 @@ class _MyAppState extends State<MyApp> {
 
 extension AppTheme on ThemeData {
   Color get lightText => Pref.isDartMode ? Colors.white70 : Colors.black54;
-  Color get bottomNav => Pref.isDartMode ? Colors.white12 : Colors.blue;
+  Color get bottomNav => Pref.isDartMode ? Colors.white12 : Colors.orange;
 
 }
