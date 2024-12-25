@@ -5,7 +5,7 @@ import 'package:vpn_basic_project/screens/guide_screen.dart';
 import 'about_screen.dart';
 import 'faq_screen.dart';
 import 'rate_screen.dart';
-import 'settings_screen.dart';
+// import 'settings_screen.dart';
 import 'share_screen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -21,7 +21,7 @@ class MenuScreen extends StatelessWidget {
           icon: const Icon(
             Icons.close,
             color: Colors.white,
-            size: 30,
+            size: 25,
           ),
         ),
         title: Text(
@@ -65,7 +65,7 @@ class MenuScreen extends StatelessWidget {
         } else if (title == 'Rate us') {
           Get.to(() => const RateScreen());
         } else if (title == 'Setting') {
-          Get.to(() => const SettingsScreen());
+          // Get.to(() => const SettingsScreen());
         } else if (title == 'Share with friend') {
           ShareBottomSheet.show();
         }

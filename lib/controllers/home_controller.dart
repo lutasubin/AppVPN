@@ -13,7 +13,8 @@ import 'package:vpn_basic_project/services/vpn_engine.dart';
 
 class HomeController extends GetxController {
   final Rx<Vpn> vpn = Pref.vpn.obs;
-
+  final isConnecting =
+      false.obs; // Thêm thuộc tính để theo dõi trạng thái kết nối
   final vpnState = VpnEngine.vpnDisconnected.obs;
 
   void connectToVpn() {
@@ -57,16 +58,23 @@ class HomeController extends GetxController {
     }
   }
 
-  /// Lấy biểu tượng hiển thị cho nút
-  // IconData get getButtonIcon {
-  //   switch (vpnState.value) {
-  //     case VpnEngine.vpnDisconnected:
-  //       return Icons.power_settings_new; // Biểu tượng bật
-  //     case VpnEngine.vpnConnected:
-  //       return Icons.stop_sharp; // Biểu tượng ngắt
-  //     default:
-  //       return Icons.hourglass_top; // Biểu tượng chờ
+  // Widget getLottieEffect() {
+  //   if (isConnecting.value) {
+  //     return Lottie.asset(
+  //       'assets/lottie/loadingVPN.json',
+  //       width: 100,
+  //       height: 100,
+  //       fit: BoxFit.cover,
+  //     );
+  //   } else if (vpnState.value == VpnEngine.vpnConnected) {
+  //     return Lottie.asset(
+  //       ' assets/lottie/loadingVPN.json',
+  //       width: 100,
+  //       height: 100,
+  //       fit: BoxFit.cover,
+  //     );
   //   }
+  //   return SizedBox.shrink(); // Nếu không có hiệu ứng, trả về một Widget trống
   // }
 
   String get getButtonText {

@@ -1,107 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({Key? key}) : super(key: key);
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   bool isChecked = false;
+  bool isAgreed = false;  // Trạng thái đồng ý của người dùng
 
+  // Đọc trạng thái đồng ý từ SharedPreferences khi màn hình được tạo
+  @override
+  void initState() {
+    super.initState();
+    _checkAgreementStatus();
+  }
+
+  // Kiểm tra trạng thái đồng ý của người dùng
+  Future<void> _checkAgreementStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isAgreed = prefs.getBool('isAgreed') ?? false;
+    });
+  }
+
+  // Lưu trạng thái đồng ý và điều hướng đến HomeScreen
+  Future<void> _agreeAndContinue() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isAgreed', true);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) =>  HomeScreen()),
+    );
+  }
+
+  // Hiển thị Dialog thoát ứng dụng
   void _showExitDialog() {
-    Get.dialog(
-      AlertDialog(
-        title: Text("Are you sure to quit?"),
-        content: Text(
-          "According to the Play Store Policy, we are not allowed to provide services if you don’t agree. If you leave this page, you will quit the app directly.",
-        ),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Exit App"),
+        content: const Text("Are you sure you want to exit the app?"),
         actions: [
           TextButton(
-            child: Text(
-              "Cancel",
-              style: TextStyle(color: Color.fromARGB(255, 17, 105, 177)),
-            ),
-            onPressed: () {
-              Get.off(() => HomeScreen());
-            },
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
           ),
           TextButton(
-            child: Text(
-              "Quit",
-              style: TextStyle(color: Color.fromARGB(255, 17, 105, 177)),
-            ),
-            onPressed: () {
-              SystemNavigator.pop(); // Thoát ứng dụng
-            },
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Exit"),
           ),
         ],
       ),
-    );
+    ).then((value) {
+      if (value == true) {
+        // Thoát ứng dụng
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.pop(context);
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Hình ảnh chào mừng
             Image.asset(
-              'assets/images/welcome.png', // Đảm bảo rằng bạn có hình ảnh này trong thư mục assets
-              height: 400,
+              'assets/images/welcome.png',
+              height: 300,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.image_not_supported, size: 300);
+              },
             ),
-            SizedBox(height: 40),
-            Text(
+            const SizedBox(height: 40),
+
+            // Tiêu đề ứng dụng
+            const Text(
               "Welcome to\nVPN - Fast & Safe",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: const Color.fromARGB(255, 30, 141, 232),
+                color: Color.fromARGB(255, 30, 141, 232),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
+
+            // Điều khoản sử dụng
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Checkbox(
-                  activeColor: Color.fromARGB(255, 17, 105, 177),
+                  activeColor: const Color.fromARGB(255, 17, 105, 177),
                   value: isChecked,
                   onChanged: (bool? value) {
                     setState(() {
                       isChecked = value ?? false;
                     });
-                    print(
-                        isChecked); // Debug: Kiểm tra trạng thái checkbox khi thay đổi
                   },
                 ),
                 Expanded(
-                  child: Text(
+                  child: const Text(
                     "By using this application you agreed to Terms of Service & Privacy policy.",
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
+
+            // Nút đồng ý
             ElevatedButton(
-              onPressed: isChecked
-                  ? () {
-                      print('Button pressed!'); // Debug: Kiểm tra khi bấm nút
-                      _showExitDialog(); // Hiển thị dialog thay vì điều hướng
-                    }
-                  : null,
-              child: Text("Agree & Continue",
-                  style: TextStyle(color: Colors.white)),
+              onPressed: isChecked ? _agreeAndContinue : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: isChecked
                     ? const Color.fromARGB(255, 17, 105, 177)
                     : Colors.grey,
-                // Chọn màu khác khi chưa tích
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+              ),
+              child: const Text(
+                "Agree & Continue",
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],

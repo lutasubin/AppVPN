@@ -29,7 +29,7 @@ class NetworkTestScreen extends StatelessWidget {
             icon: Icon(
               Icons.arrow_back,
               color: Colors.white,
-              size: 30,
+              size: 25,
             ),
           ),
           title: Text(

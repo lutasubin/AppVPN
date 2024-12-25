@@ -1,8 +1,9 @@
 // import 'dart:developer';
 
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
@@ -45,7 +46,7 @@ class HomeScreen extends StatelessWidget {
           },
           icon: Icon(
             Icons.menu,
-            size: 30,
+            size: 25,
             color: Colors.white,
           ),
         ),
@@ -74,7 +75,7 @@ class HomeScreen extends StatelessWidget {
             },
             icon: Icon(
               Icons.brightness_medium,
-              size: 30,
+              size: 25,
               color: Colors.white,
             ),
           ),
@@ -85,7 +86,7 @@ class HomeScreen extends StatelessWidget {
               },
               icon: Icon(
                 CupertinoIcons.info,
-                size: 30,
+                size: 25,
                 color: Colors.white,
               ))
         ],
@@ -110,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                     child: _controller.vpn.value.CountryLong.isEmpty
                         ? Icon(
                             Icons.vpn_lock_rounded,
-                            size: 30,
+                            size: 25,
                             color: Colors.white,
                           )
                         : null,
@@ -130,7 +131,7 @@ class HomeScreen extends StatelessWidget {
                     radius: 30,
                     child: Icon(
                       Icons.equalizer_rounded,
-                      size: 30,
+                      size: 25,
                       color: Colors.white,
                     ),
                   ),
@@ -153,7 +154,7 @@ class HomeScreen extends StatelessWidget {
                           radius: 30,
                           child: Icon(
                             Icons.arrow_downward_rounded,
-                            size: 30,
+                            size: 25,
                             color: Colors.white,
                           ),
                         ),
@@ -167,7 +168,7 @@ class HomeScreen extends StatelessWidget {
                           radius: 30,
                           child: Icon(
                             Icons.arrow_upward_rounded,
-                            size: 30,
+                            size: 25,
                             color: Colors.white,
                           ),
                         ),
@@ -185,8 +186,8 @@ class HomeScreen extends StatelessWidget {
             children: [
               // Hình nền Trái Đất
               Container(
-                width: 360,
-                height: 360,
+                width: 300,
+                height: 300,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
@@ -196,6 +197,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+
               // Nút
               Semantics(
                 button: true,
@@ -205,20 +207,20 @@ class HomeScreen extends StatelessWidget {
                   },
                   borderRadius: BorderRadius.circular(100),
                   child: Container(
-                    padding: EdgeInsets.all(50),
+                    padding: EdgeInsets.all(32),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: _controller.getButtonColor.withOpacity(.1),
                     ),
                     child: Container(
-                      padding: EdgeInsets.all(25),
+                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: _controller.getButtonColor.withOpacity(.3),
                       ),
                       child: Container(
-                        width: mq.height * .15,
-                        height: mq.height * .15,
+                        width: mq.height * .14,
+                        height: mq.height * .14,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: _controller.getButtonColor,
@@ -228,7 +230,7 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.power_settings_new,
-                              size: 45,
+                              size: 28,
                               color: Colors.white,
                             ),
                             SizedBox(
@@ -290,7 +292,7 @@ class HomeScreen extends StatelessWidget {
                   Icon(
                     CupertinoIcons.globe,
                     color: Colors.white,
-                    size: 30,
+                    size: 25,
                   ),
                   SizedBox(
                     width: 15,
@@ -308,7 +310,7 @@ class HomeScreen extends StatelessWidget {
                     child: Icon(
                       Icons.keyboard_arrow_right_rounded,
                       color: Colors.orange,
-                      size: 30,
+                      size: 25,
                     ),
                   )
                 ],

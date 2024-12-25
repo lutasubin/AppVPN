@@ -39,7 +39,7 @@ class _SplitTunnelingScreenState extends State<SplitTunnelingScreen> {
           icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
-            size: 30,
+            size: 25,
           ),
           onPressed: () => Get.back(),
         ),

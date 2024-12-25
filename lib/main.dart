@@ -9,60 +9,67 @@ import 'package:vpn_basic_project/helpers/config.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/splash_screen.dart';
 
+
 // Global variables
 late Size mq;
 late SharedPreferences prefs;
 
 Future<void> main() async {
-  // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize mq with the screen size
+  mq = WidgetsBinding.instance!.window.physicalSize / WidgetsBinding.instance!.window.devicePixelRatio;
+
+  // Load environment variables
   await dotenv.load();
 
-  // Initialize shared preferences
+  // Initialize SharedPreferences
   prefs = await SharedPreferences.getInstance();
 
-  // Enter full-screen
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  // Get the user's agreement status
+ 
 
+  // Set UI mode (no need for immersive mode)
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  // Initialize Firebase, Config, Hive, and Ads
+  try {
     await Firebase.initializeApp();
     await Config.initConfig();
-  await Pref.initializeHive();
+    await Pref.initializeHive();
+    await AdHelper.initAds();
+  } catch (e) {
+    debugPrint("Error during initialization: $e");
+  }
 
-  await AdHelper.initAds();
-
-  // Set orientation to portrait only
+  // Set device orientation
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(const MyApp());
+  // Run the application
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  const MyApp({Key? key, }) : super(key: key);
 
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'OpenVpn Demo',
-      home: const SplashScreen(),
+      home:  SplashScreen(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 3,
         ),
-        // You might want to add more theme configurations here
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
-      themeMode: Pref.isDartMode ? ThemeMode.dark:ThemeMode.light,
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         appBarTheme: const AppBarTheme(
@@ -70,6 +77,7 @@ class _MyAppState extends State<MyApp> {
           elevation: 3,
         ),
       ),
+      themeMode: Pref.isDartMode ? ThemeMode.dark : ThemeMode.light,
       debugShowCheckedModeBanner: false,
     );
   }
@@ -78,5 +86,4 @@ class _MyAppState extends State<MyApp> {
 extension AppTheme on ThemeData {
   Color get lightText => Pref.isDartMode ? Colors.white70 : Colors.black54;
   Color get bottomNav => Pref.isDartMode ? Colors.white12 : Colors.orange;
-
 }

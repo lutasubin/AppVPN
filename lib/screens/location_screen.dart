@@ -109,6 +109,7 @@ class LocationScreen extends StatelessWidget {
           children: [
             LottieBuilder.asset(
               'assets/lottie/loading.json',
+              // 'assets/lottie/loadingVPN.json',
               width: 200,
             ),
             Text(

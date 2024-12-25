@@ -14,7 +14,7 @@ class GuideScreen extends StatelessWidget {
           icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
-            size: 30,
+            size: 25,
           ),
           onPressed: () => Get.back(),
         ),
