@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/helpers/pref.dart';
+// import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/main.dart';
 import 'package:vpn_basic_project/screens/search_screen.dart';
 import 'package:vpn_basic_project/widgets/vpn_cart.dart';
@@ -25,22 +25,23 @@ class LocationScreen extends StatelessWidget {
     _adController.ad = AdHelper.loadNativeAd(adController: _adController);
     return Obx(
       () => Scaffold(
+        backgroundColor: const Color(0xFF212121),
         appBar: AppBar(
-          backgroundColor: Pref.isDartMode ? null : Colors.orange,
+          backgroundColor: const Color(0xFF212121),
           leading: IconButton(
             onPressed: () {
               Get.back();
             },
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.white,
-              size: 30,
+              color: const Color(0xFFFFFFFF),
+              size: 25,
             ),
           ),
           title: Text(
-            'VPN Locations(${_controller.vpnList.length})',
+            'IP(${_controller.vpnList.length})'.tr,
             style: TextStyle(
-              color: Colors.white,
+              color: const Color(0xFFFFFFFF),
               fontSize: 20,
               fontWeight: FontWeight.w500,
             ),
@@ -52,8 +53,8 @@ class LocationScreen extends StatelessWidget {
               },
               icon: Icon(
                 Icons.search,
-                color: Colors.white,
-                size: 30,
+                color: const Color(0xFFFFFFFF),
+                size: 25,
               ),
             ),
           ],
@@ -69,13 +70,13 @@ class LocationScreen extends StatelessWidget {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 10),
           child: FloatingActionButton(
-            backgroundColor: Colors.orange,
+            backgroundColor: Color(0xFFF15E24),
             onPressed: () {
               _controller.getVpnData();
             },
             child: Icon(
               CupertinoIcons.refresh,
-              color: Colors.white,
+              color: const Color(0xFFFFFFFF),
             ),
           ),
         ),
@@ -115,8 +116,9 @@ class LocationScreen extends StatelessWidget {
             Text(
               'Loading VPNs...😄',
               style: TextStyle(
+                color: const Color(0xFFFFFFFF),
                 fontSize: 18,
-                color: Theme.of(context).lightText,
+                backgroundColor: const Color(0xFF212121),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -129,7 +131,7 @@ class LocationScreen extends StatelessWidget {
           'VPNs Not Found...😶',
           style: TextStyle(
             fontSize: 18,
-            color: Theme.of(context).lightText,
+            backgroundColor: const Color(0xFF212121),
             fontWeight: FontWeight.bold,
           ),
         ),

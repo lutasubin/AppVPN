@@ -19,6 +19,7 @@ class VpnCart extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
     return Card(
+      color: const Color(0xFF172032),
       elevation: 5,
       margin: EdgeInsets.symmetric(vertical: mq.height * .01),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -63,7 +64,7 @@ class VpnCart extends StatelessWidget {
           //tile:
           title: Text(
             vpn.CountryLong,
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 13, color: Colors.white),
           ),
 
           //subtitle:
@@ -71,7 +72,7 @@ class VpnCart extends StatelessWidget {
             children: [
               Icon(
                 Icons.speed_rounded,
-                color: Colors.orange,
+                color: Color(0xFFF15E24),
                 size: 20,
               ),
               SizedBox(
@@ -80,9 +81,10 @@ class VpnCart extends StatelessWidget {
               Text(
                 _formatBytes(vpn.Speed, 1),
                 style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).lightText),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.green,
+                ),
               ),
             ],
           ),
@@ -92,16 +94,17 @@ class VpnCart extends StatelessWidget {
               Text(
                 vpn.NumVpnSessions.toString(),
                 style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).lightText),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
               ),
               SizedBox(
                 width: 4,
               ),
               Icon(
                 CupertinoIcons.person_3,
-                color: Colors.orange,
+                color: Color(0xFFF15E24),
               ),
             ],
           ),

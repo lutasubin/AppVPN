@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
-import 'package:vpn_basic_project/helpers/pref.dart';
+// import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/home_screen.dart';
 import 'package:vpn_basic_project/widgets/vpn_cart.dart';
 
@@ -14,11 +15,14 @@ class SearchScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/images/no_results.png'),
+          SvgPicture.asset('assets/svg/webpage-not-found 1.svg'),
           SizedBox(height: 20),
           Text(
             'No results found for "${_searchController.text}"',
-            style: TextStyle(fontSize: 18, color: Colors.black54),
+            style: TextStyle(
+              fontSize: 18,
+              color: const Color(0xFFFFFFFF),
+            ),
           ),
         ],
       ),
@@ -28,17 +32,20 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF212121),
       appBar: AppBar(
-        backgroundColor: Pref.isDartMode ? null : Colors.orange,
+        backgroundColor: const Color(0xFF212121),
         title: Text(
           'Search VPN',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: const Color(0xFFFFFFFF),
+          ),
         ),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.white,
-            size: 30,
+            color: const Color(0xFFFFFFFF),
+            size: 25,
           ),
           onPressed: () => Get.back(),
         ),
@@ -49,11 +56,14 @@ class SearchScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                style: TextStyle(color: Color(0XFFFFFFFF)),
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: 'Enter location...',
-                  border: OutlineInputBorder(),
-                ),
+                    hintText: 'Enter location...',
+                    border: OutlineInputBorder(),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF767C8A),
+                    )),
                 onChanged: (value) {
                   _controller.filterVpnList(value);
                 },

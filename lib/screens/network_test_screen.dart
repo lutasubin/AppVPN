@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/screens/home_screen.dart';
 
-import '../helpers/pref.dart';
+// import '../helpers/pref.dart';
 import '../main.dart';
 import '../models/ip_details.dart';
 import '../models/network_data.dart';
@@ -17,38 +17,39 @@ class NetworkTestScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ipData = IPDetails.fromJson({}).obs;
     Apis.getIPDetails(ipData: ipData);
-    // APIs.getIPDetails(ipData: ipData);
 
     return Scaffold(
+      backgroundColor: const Color(0xFF212121),
+
       appBar: AppBar(
-          backgroundColor: Pref.isDartMode ? null : Colors.orange,
+          backgroundColor: const Color(0xFF212121),
           leading: IconButton(
             onPressed: () {
               Get.off(() => HomeScreen());
             },
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.white,
+              color: const Color(0xFFFFFFFF),
               size: 25,
             ),
           ),
           title: Text(
-            'Network Test Screen',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+            'IP Information'.tr,
+            style: TextStyle(color: const Color(0xFFFFFFFF), fontWeight: FontWeight.w500),
           )),
 
       //refresh button
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 10),
         child: FloatingActionButton(
-            backgroundColor: Colors.orange,
+            backgroundColor:  Color(0xFFF15E24),
             onPressed: () {
               ipData.value = IPDetails.fromJson({});
               Apis.getIPDetails(ipData: ipData);
             },
             child: Icon(
               CupertinoIcons.refresh,
-              color: Colors.white,
+              color: const Color(0xFFFFFFFF),
               size: 30,
             )),
       ),

@@ -26,7 +26,9 @@ class HomeCard extends StatelessWidget {
             ),
             Text(
               title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Color(0xFFF15E24),
+              ),
             ),
             SizedBox(
               height: 6,
@@ -34,9 +36,10 @@ class HomeCard extends StatelessWidget {
             Text(
               subtitle,
               style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).lightText),
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFFFFFFFF),
+              ),
             )
           ],
         ));

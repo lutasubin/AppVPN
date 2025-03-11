@@ -11,6 +11,7 @@ class NetworkCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        color: const Color(0xFF172032),
         elevation: 5,
         margin: EdgeInsets.symmetric(vertical: mq.height * .01),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -26,10 +27,16 @@ class NetworkCard extends StatelessWidget {
                 color: data.icon.color, size: data.icon.size ?? 28),
 
             //title
-            title: Text(data.title),
+            title: Text(
+              data.title,
+              style: TextStyle(color: Color(0XFFFFFF)),
+            ),
 
             //subtitle
-            subtitle: Text(data.subtitle),
+            subtitle: Text(
+              data.subtitle,
+              style: TextStyle(color: Color(0xFF767C8A)),
+            ),
           ),
         ));
   }

@@ -10,7 +10,7 @@ class Pref {
     _box = await Hive.openBox('data');
   }
 
-  static bool get isDartMode => _box.get('isDartMode') ?? false;
+  // static bool get isDartMode => _box.get('isDartMode') ?? false;
 
   static set isDarkMode(bool v) =>_box.put('isDartMode', v);
 
@@ -30,4 +30,9 @@ class Pref {
 
   static set vpnList(List<Vpn> vpn) =>
       _box.put('vpnList', jsonEncode(vpn));
+
+// Ngôn ngữ đã chọn
+  static String get selectedLanguage => _box.get('selectedLanguage') ?? '';
+  static set selectedLanguage(String value) => _box.put('selectedLanguage', value);
+
 }

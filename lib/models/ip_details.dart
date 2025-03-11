@@ -24,6 +24,6 @@ class IPDetails {
     zip = json['zip'] ?? ' - - - - ';
     timezone = json['timezone'] ?? 'Unknown';
     isp = json['isp'] ?? 'Unknown';
-    query = json['query'] ?? 'Not available';
+    query = json['query'] ?? 'Loading...';
   }
 }

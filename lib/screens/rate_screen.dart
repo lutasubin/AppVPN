@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/helpers/pref.dart';
+// import 'package:vpn_basic_project/helpers/pref.dart';
 
 class RateScreen extends StatefulWidget {
   const RateScreen({super.key});
@@ -26,23 +26,26 @@ class _RateScreenState extends State<RateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF212121),
       appBar: AppBar(
-        backgroundColor: Pref.isDartMode ? null : Colors.orange,
+        backgroundColor: const Color(0xFF212121),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: const Color(0xFFFFFFFF),
             size: 25,
           ),
           onPressed: () => Get.back(),
         ),
-        title: const Text(
-          'Rate us',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        title: Text(
+          'Rate us'.tr,
+          style: TextStyle(
+              color: const Color(0xFFFFFFFF), fontWeight: FontWeight.w500),
         ),
       ),
       body: Center(
         child: Card(
+          color: const Color(0xFF172032),
           margin: const EdgeInsets.all(16),
           elevation: 4,
           shape: RoundedRectangleBorder(
@@ -53,11 +56,12 @@ class _RateScreenState extends State<RateScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Do you like our app ?',
+                Text(
+                  'Do you like our app ?'.tr,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: const Color(0xFFFFFFFF),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -74,7 +78,7 @@ class _RateScreenState extends State<RateScreen> {
                     return IconButton(
                       icon: Icon(
                         index < selectedRating ? Icons.star : Icons.star_border,
-                        color: Colors.amber,
+                        color: Color(0xFFF15E24), // Màu cam
                         size: 32,
                       ),
                       onPressed: () {
@@ -94,9 +98,10 @@ class _RateScreenState extends State<RateScreen> {
                       onPressed: () {
                         Get.back();
                       },
-                      child: const Text(
-                        'Later',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      child: Text(
+                        'Later'.tr,
+                        style:
+                            TextStyle(fontSize: 16, color: Color(0XFFFFFFFF)),
                       ),
                     ),
                     ElevatedButton(
@@ -105,11 +110,13 @@ class _RateScreenState extends State<RateScreen> {
                         if (selectedRating > 0) {
                           // Submit rating logic here
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               backgroundColor: Colors.blue,
                               content: Text(
-                                'Thanks for rating!',
-                                style: TextStyle(color: Colors.white),
+                                'Thanks for rating!'.tr,
+                                style: TextStyle(
+                                  color: const Color(0xFFFFFFFF),
+                                ),
                               ),
                             ),
                           );
@@ -117,16 +124,19 @@ class _RateScreenState extends State<RateScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFFF15E24), // Màu cam
+                        foregroundColor: Color(0xFFFFFFFF),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
                           vertical: 12,
                         ),
                       ),
-                      child: const Text(
-                        'Rate now',
-                        style: TextStyle(fontSize: 16),
+                      child: Text(
+                        'Rate now'.tr,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: const Color(0xFFFFFFFF),
+                        ),
                       ),
                     ),
                   ],

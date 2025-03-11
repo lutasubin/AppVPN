@@ -1,321 +1,262 @@
 // import 'dart:developer';
-
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/apis/apis.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
-import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/helpers/config.dart';
-import 'package:vpn_basic_project/helpers/pref.dart';
+// import 'package:vpn_basic_project/helpers/ad_helper.dart';
+// import 'package:vpn_basic_project/helpers/config.dart';
+// import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/main.dart';
-
+import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn_status.dart';
-
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
-import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
+// import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
+import 'package:vpn_basic_project/widgets/change_location.dart';
 import 'package:vpn_basic_project/widgets/count_down_time%20.dart';
 import 'package:vpn_basic_project/widgets/home_card.dart';
-
-// import '../models/vpn_status.dart';
 import '../services/vpn_engine.dart';
 
 class HomeScreen extends StatelessWidget {
-  // final Vpn selectedVpn;
-  HomeScreen({
-    super.key,
-  });
+  final ipData = IPDetails.fromJson({}).obs;
   final _controller = Get.put(HomeController());
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ///Add listener to update vpn state
+    Apis.getIPDetails(ipData: ipData);
+
+    /// Add listener to update vpn state
     VpnEngine.vpnStageSnapshot().listen((event) {
       _controller.vpnState.value = event;
+      if (event == VpnEngine.vpnConnected) {
+        Apis.getIPDetails(ipData: ipData).then((_) {
+          ipData.refresh();
+        }).catchError((e) {
+          print('Lỗi khi lấy IP: $e');
+        });
+      }
     });
 
     return Scaffold(
+      backgroundColor: const Color(0xFF212121),
       appBar: AppBar(
-        backgroundColor: Pref.isDartMode ? null : Colors.orange,
+        backgroundColor: const Color(0xFF212121),
         leading: IconButton(
-          onPressed: () {
-            Get.to(() => MenuScreen());
-          },
+          onPressed: () => Get.to(() => MenuScreen()),
           icon: Icon(
             Icons.menu,
             size: 25,
-            color: Colors.white,
+            color: const Color(0xFFFFFFFF),
           ),
         ),
-        title: Text(
-          'OpenVPN',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        title: SvgPicture.asset(
+          'assets/svg/logo.svg',
+          width: 158,
+          height: 35,
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              if (Config.hideAds) {
-                Get.changeThemeMode(
-                    Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
-                Pref.isDarkMode = !Pref.isDartMode;
-                return;
-              }
-              Get.dialog(WatchAdDialog(
-                onComplete: () {
-                  AdHelper.showRewardedAd(onComplete: () {
-                    Get.changeThemeMode(
-                        Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
-                    Pref.isDarkMode = !Pref.isDartMode;
-                  });
-                },
-              ));
-            },
-            icon: Icon(
-              Icons.brightness_medium,
-              size: 25,
-              color: Colors.white,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     if (Config.hideAds) {
+          //       Get.changeThemeMode(
+          //           Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
+          //       Pref.isDarkMode = !Pref.isDartMode;
+          //       return;
+          //     }
+          //     Get.dialog(WatchAdDialog(
+          //       onComplete: () {
+          //         AdHelper.showRewardedAd(onComplete: () {
+          //           Get.changeThemeMode(
+          //               Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
+          //           Pref.isDarkMode = !Pref.isDartMode;
+          //         });
+          //       },
+          //     ));
+          //   },
+          //   icon: Icon(Icons.brightness_medium, size: 25, color: Colors.orange),
+          // ),
           IconButton(
               padding: EdgeInsets.only(right: 8),
-              onPressed: () {
-                Get.to(() => NetworkTestScreen());
-              },
+              onPressed: () => Get.to(() => NetworkTestScreen()),
               icon: Icon(
                 CupertinoIcons.info,
                 size: 25,
-                color: Colors.white,
-              ))
+                color: const Color(0xFFFFFFFF),
+              )),
         ],
       ),
       bottomNavigationBar: _changeLocation(context),
-      body: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        //vpn button
-        Obx(() => _vpnButton()),
-
-        Obx(
-          () => Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //country flag
-              HomeCard(
-                  title: _controller.vpn.value.CountryLong.isEmpty
-                      ? 'Country'
-                      : _controller.vpn.value.CountryLong,
-                  icon: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    radius: 30,
-                    child: _controller.vpn.value.CountryLong.isEmpty
-                        ? Icon(
-                            Icons.vpn_lock_rounded,
-                            size: 25,
-                            color: Colors.white,
-                          )
-                        : null,
-                    backgroundImage: _controller.vpn.value.CountryLong.isEmpty
-                        ? null
-                        : AssetImage(
-                            'assets/flags/${_controller.vpn.value.CountryShort.toLowerCase()}.png'),
-                  ),
-                  subtitle: 'Free'),
-              //ping time
-              HomeCard(
-                  title: _controller.vpn.value.Ping.isEmpty
-                      ? '100 ms'
-                      : '${_controller.vpn.value.Ping} ms',
-                  icon: CircleAvatar(
-                    backgroundColor: Colors.orangeAccent,
-                    radius: 30,
-                    child: Icon(
-                      Icons.equalizer_rounded,
-                      size: 25,
-                      color: Colors.white,
-                    ),
-                  ),
-                  subtitle: 'Ping'),
-            ],
+      body: Column(
+        children: [
+          Expanded(
+            flex: 3, // 60% chiều cao cho nút VPN
+            child: Center(child: Obx(() => _vpnButton(context))),
           ),
-        ),
-
-        StreamBuilder<VpnStatus?>(
-            initialData: VpnStatus(),
-            stream: VpnEngine.vpnStatusSnapshot(),
-            builder: (context, snapshot) => Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //download
-                    HomeCard(
-                        title: '${snapshot.data?.byteIn ?? '0 kbps'}',
-                        icon: CircleAvatar(
-                          backgroundColor: Colors.lightGreen,
-                          radius: 30,
-                          child: Icon(
-                            Icons.arrow_downward_rounded,
-                            size: 25,
-                            color: Colors.white,
-                          ),
+          Expanded(
+            flex: 2, // 40% chiều cao cho HomeCard
+            child: StreamBuilder<VpnStatus?>(
+              initialData: VpnStatus(),
+              stream: VpnEngine.vpnStatusSnapshot(),
+              builder: (context, snapshot) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  HomeCard(
+                      title: '${snapshot.data?.byteIn ?? '---'}',
+                      icon: CircleAvatar(
+                        backgroundColor: Color(0xFF03C343),
+                        radius: mq.width * 0.08, // Responsive radius
+                        child: Icon(
+                          Icons.arrow_downward_rounded,
+                          size: mq.width * 0.06,
+                          color: const Color(0xFFFFFFFF),
                         ),
-                        subtitle: 'Download'),
-                    //upload
-                    HomeCard(
-                        title: '${snapshot.data?.byteOut ?? '0 kbps'}',
-                        icon: CircleAvatar(
-                          backgroundColor:
-                              const Color.fromARGB(255, 15, 128, 220),
-                          radius: 30,
-                          child: Icon(
-                            Icons.arrow_upward_rounded,
-                            size: 25,
-                            color: Colors.white,
-                          ),
+                      ),
+                      subtitle: 'Download'.tr),
+                  HomeCard(
+                      title: '${snapshot.data?.byteOut ?? '---'}',
+                      icon: CircleAvatar(
+                        backgroundColor: Color(0xFF4684F6), // Màu xanh dương
+                        radius: mq.width * 0.08,
+                        child: Icon(
+                          Icons.arrow_upward_rounded,
+                          size: mq.width * 0.06,
+                          color: const Color(0xFFFFFFFF),
                         ),
-                        subtitle: 'Uploads'),
-                  ],
-                ))
-      ]),
+                      ),
+                      subtitle: 'Uploads'.tr),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _vpnButton() => Column(
+  // Nút VPN
+  Widget _vpnButton(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              // Hình nền Trái Đất
-              Container(
-                width: 300,
-                height: 300,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage(
-                        'assets/images/earth.png'), // Đường dẫn đến hình ảnh Trái Đất
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              // Nút
-              Semantics(
-                button: true,
-                child: InkWell(
-                  onTap: () {
-                    _controller.connectToVpn();
-                  },
-                  borderRadius: BorderRadius.circular(100),
-                  child: Container(
-                    padding: EdgeInsets.all(32),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _controller.getButtonColor.withOpacity(.1),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _controller.getButtonColor.withOpacity(.3),
-                      ),
-                      child: Container(
-                        width: mq.height * .14,
-                        height: mq.height * .14,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _controller.getButtonColor,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.power_settings_new,
-                              size: 28,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              _controller.getButtonText,
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
+          Obx(() {
+            final isRunning =
+                _controller.vpnState.value == VpnEngine.vpnConnected ||
+                    _controller.vpnState.value == VpnEngine.vpnConnecting;
+            return Column(
+              children: [
+                if (_controller.vpnState.value == VpnEngine.vpnDisconnected)
+                  Text(
+                    'Disconnected'.tr,
+                    style: TextStyle(
+                      fontSize: mq.width * 0.08,
+                      color: const Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                if (isRunning) CountDownTimer(startTimer: true),
+              ],
+            );
+          }),
+          SizedBox(height: mq.height * 0.01),
+          Text(
+            _controller.getButtonText,
+            style: TextStyle(
+                color: Color(0xFF03C343),
+                fontSize:
+                    12 // Màu nền xanh lá              fontSize: mq.width * 0.04,
                 ),
-              ),
-            ],
           ),
-          // Trạng thái kết nối
-          Container(
-            margin:
-                EdgeInsets.only(top: mq.height * .015, bottom: mq.height * .02),
-            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(15)),
-            child: Text(
-              _controller.vpnState.value == VpnEngine.vpnDisconnected
-                  ? 'Not Connected'
-                  : _controller.vpnState.replaceAll('_', '').toLowerCase(),
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
+          SizedBox(height: mq.height * 0.06),
+          Center(
+            child: GestureDetector(
+              onTap: _controller.connectToVpn,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                width: mq.width < 160
+                    ? mq.width * 0.9
+                    : 148, // Giới hạn nếu màn hình nhỏ hơn 160
+                height: mq.height < 100
+                    ? mq.height * 0.8
+                    : 80, // Giới hạn nếu màn hình thấp hơn 100
+                decoration: BoxDecoration(
+                  color: _controller.getButtonColor,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Align(
+                  alignment: _controller.vpnState.value ==
+                              VpnEngine.vpnConnected ||
+                          _controller.vpnState.value == VpnEngine.vpnConnecting
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Container(
+                    margin: EdgeInsets.all(mq.width * 0.015),
+                    width: (mq.width < 160 ? mq.width * 0.9 : 148) *
+                        0.46, // Tỷ lệ với width
+                    height: (mq.width < 160 ? mq.width * 0.9 : 148) *
+                        0.46, // Giữ hình tròn
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFFFFF),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
-          // Đếm ngược
-          Obx(() => CountDownTimer(
-              startTimer:
-                  _controller.vpnState.value == VpnEngine.vpnConnected)),
         ],
       );
 
+  // Thanh chọn vị trí
   Widget _changeLocation(BuildContext context) => SafeArea(
         child: Semantics(
           button: true,
           child: InkWell(
-            onTap: () {
-              Get.to(() => LocationScreen());
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: mq.width * .04),
-              color: Theme.of(context).bottomNav,
-              height: 60,
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.globe,
-                    color: Colors.white,
-                    size: 25,
+            onTap: () => Get.to(() => LocationScreen()),
+            child: Obx(() => Container(
+                  padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
+                  color: Color(0xFF172032),
+                  height: mq.height * 0.08, // 8% chiều cao màn hình
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ChangeLocation(
+                          title: _controller.vpn.value.CountryLong.isEmpty
+                              ? 'Choose location'.tr
+                              : _controller.vpn.value.CountryLong,
+                          icon: CircleAvatar(
+                            backgroundColor: Color(0xFF172032),
+                            radius: mq.width * 0.06,
+                            child: _controller.vpn.value.CountryLong.isEmpty
+                                ? Icon(
+                                    CupertinoIcons.globe,
+                                    size: mq.width * 0.06,
+                                    color: const Color(0xFFFFFFFF),
+                                  )
+                                : null,
+                            backgroundImage: _controller
+                                    .vpn.value.CountryLong.isEmpty
+                                ? null
+                                : AssetImage(
+                                    'assets/flags/${_controller.vpn.value.CountryShort.toLowerCase()}.png'),
+                          ),
+                          ip: ipData.value.query,
+                        ),
+                      ),
+                      CircleAvatar(
+                        backgroundColor: Color(0xFF172032),
+                        radius: mq.width * 0.05,
+                        child: Icon(Icons.keyboard_arrow_right_rounded,
+                            color: const Color(0xFFFFFFFF),
+                            size: mq.width * 0.06),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Text(
-                    'Change Location',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Spacer(),
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.keyboard_arrow_right_rounded,
-                      color: Colors.orange,
-                      size: 25,
-                    ),
-                  )
-                ],
-              ),
-            ),
+                )),
           ),
         ),
       );

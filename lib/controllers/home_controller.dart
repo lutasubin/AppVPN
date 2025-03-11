@@ -50,41 +50,26 @@ class HomeController extends GetxController {
   Color get getButtonColor {
     switch (vpnState.value) {
       case VpnEngine.vpnDisconnected:
-        return Colors.orange;
+        return Color(0xFF343A4B); // Màu xanh đậm xám;
       case VpnEngine.vpnConnected:
-        return Colors.green;
+        return Color(0xFFF15E24); // Màu cam nổi bật
+      case VpnEngine.vpnConnecting:
+        return Color(0xFFF15E24);
       default:
-        return Colors.red;
+        return Color(0xFF343A4B); // Màu xanh đậm xám
     }
   }
-
-  // Widget getLottieEffect() {
-  //   if (isConnecting.value) {
-  //     return Lottie.asset(
-  //       'assets/lottie/loadingVPN.json',
-  //       width: 100,
-  //       height: 100,
-  //       fit: BoxFit.cover,
-  //     );
-  //   } else if (vpnState.value == VpnEngine.vpnConnected) {
-  //     return Lottie.asset(
-  //       ' assets/lottie/loadingVPN.json',
-  //       width: 100,
-  //       height: 100,
-  //       fit: BoxFit.cover,
-  //     );
-  //   }
-  //   return SizedBox.shrink(); // Nếu không có hiệu ứng, trả về một Widget trống
-  // }
 
   String get getButtonText {
     switch (vpnState.value) {
       case VpnEngine.vpnDisconnected:
-        return 'Tap to connect';
+        return 'TAP TO CONNECT'.tr;
       case VpnEngine.vpnConnected:
-        return 'Disconnect';
+        return 'CONNECTED'.tr;
+      case VpnEngine.vpnConnecting:
+        return 'Connecting....'.tr;
       default:
-        return 'Connecting....';
+        return 'Waiting....'.tr;
     }
   }
 }
