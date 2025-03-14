@@ -1,21 +1,14 @@
-// import 'dart:developer';
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/apis.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
-// import 'package:vpn_basic_project/helpers/ad_helper.dart';
-// import 'package:vpn_basic_project/helpers/config.dart';
-// import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/main.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn_status.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
-// import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
 import 'package:vpn_basic_project/widgets/change_location.dart';
 import 'package:vpn_basic_project/widgets/count_down_time%20.dart';
 import 'package:vpn_basic_project/widgets/home_card.dart';
@@ -31,7 +24,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Apis.getIPDetails(ipData: ipData);
 
-    /// Add listener to update vpn state
+    /// Thêm listener để cập nhật trạng thái VPN
     VpnEngine.vpnStageSnapshot().listen((event) {
       _controller.vpnState.value = event;
       if (event == VpnEngine.vpnConnected) {
@@ -43,107 +36,130 @@ class HomeScreen extends StatelessWidget {
       }
     });
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF212121),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF212121),
-        leading: IconButton(
-          onPressed: () => Get.to(() => MenuScreen()),
-          icon: Icon(
-            Icons.menu,
-            size: 25,
-            color: const Color(0xFFFFFFFF),
+    return SafeArea(
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                // Hình nền SVG
+                SvgPicture.asset(
+                  'assets/svg/Group 17.svg',
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    Color(0xFF212121),
+                    BlendMode.dstATop,
+                  ),
+                ),
+                // Nội dung giao diện
+                Column(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Center(
+                          child: Obx(() => _vpnButton(context, constraints))),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: StreamBuilder<VpnStatus?>(
+                        initialData: VpnStatus(byteIn: '---', byteOut: '---'),
+                        stream: VpnEngine.vpnStatusSnapshot(),
+                        builder: (context, snapshot) {
+                          print(
+                              'Snapshot data: ${snapshot.data?.byteIn}, ${snapshot.data?.byteOut}');
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                // Đảm bảo không bị lỗi tràn layout
+                                child: HomeCard(
+                                  title: snapshot.data?.byteIn ?? '---',
+                                  icon: CircleAvatar(
+                                    backgroundColor: const Color(0xFF03C343),
+                                    radius: constraints.maxWidth * 0.08 > 30.0
+                                        ? 30.0
+                                        : constraints.maxWidth * 0.08,
+                                    child: Icon(
+                                      Icons.arrow_downward_rounded,
+                                      size: constraints.maxWidth * 0.06 > 24.0
+                                          ? 24.0
+                                          : constraints.maxWidth * 0.06,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  subtitle: 'Download'.tr,
+                                ),
+                              ),
+                              Flexible(
+                                child: HomeCard(
+                                  title: snapshot.data?.byteOut ?? '---',
+                                  icon: CircleAvatar(
+                                    backgroundColor: const Color(0xFF4684F6),
+                                    radius: constraints.maxWidth * 0.08 > 30.0
+                                        ? 30.0
+                                        : constraints.maxWidth * 0.08,
+                                    child: Icon(
+                                      Icons.arrow_upward_rounded,
+                                      size: constraints.maxWidth * 0.06 > 24.0
+                                          ? 24.0
+                                          : constraints.maxWidth * 0.06,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  subtitle: 'Uploads'.tr,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF212121),
+          leading: IconButton(
+            onPressed: () => Get.to(() => MenuScreen()),
+            icon: Icon(
+              Icons.menu,
+              size: 25.0,
+              color: const Color(0xFFFFFFFF),
+            ),
           ),
-        ),
-        title: SvgPicture.asset(
-          'assets/svg/logo.svg',
-          width: 158,
-          height: 35,
-        ),
-        actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     if (Config.hideAds) {
-          //       Get.changeThemeMode(
-          //           Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
-          //       Pref.isDarkMode = !Pref.isDartMode;
-          //       return;
-          //     }
-          //     Get.dialog(WatchAdDialog(
-          //       onComplete: () {
-          //         AdHelper.showRewardedAd(onComplete: () {
-          //           Get.changeThemeMode(
-          //               Pref.isDartMode ? ThemeMode.light : ThemeMode.dark);
-          //           Pref.isDarkMode = !Pref.isDartMode;
-          //         });
-          //       },
-          //     ));
-          //   },
-          //   icon: Icon(Icons.brightness_medium, size: 25, color: Colors.orange),
-          // ),
-          IconButton(
-              padding: EdgeInsets.only(right: 8),
+          title: SvgPicture.asset(
+            'assets/svg/logo.svg',
+            width: 158.0,
+            height: 35.0,
+          ),
+          actions: [
+            IconButton(
+              padding: EdgeInsets.only(right: 8.0),
               onPressed: () => Get.to(() => NetworkTestScreen()),
               icon: Icon(
                 CupertinoIcons.info,
-                size: 25,
+                size: 25.0,
                 color: const Color(0xFFFFFFFF),
-              )),
-        ],
-      ),
-      bottomNavigationBar: _changeLocation(context),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 3, // 60% chiều cao cho nút VPN
-            child: Center(child: Obx(() => _vpnButton(context))),
-          ),
-          Expanded(
-            flex: 2, // 40% chiều cao cho HomeCard
-            child: StreamBuilder<VpnStatus?>(
-              initialData: VpnStatus(),
-              stream: VpnEngine.vpnStatusSnapshot(),
-              builder: (context, snapshot) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  HomeCard(
-                      title: '${snapshot.data?.byteIn ?? '---'}',
-                      icon: CircleAvatar(
-                        backgroundColor: Color(0xFF03C343),
-                        radius: mq.width * 0.08, // Responsive radius
-                        child: Icon(
-                          Icons.arrow_downward_rounded,
-                          size: mq.width * 0.06,
-                          color: const Color(0xFFFFFFFF),
-                        ),
-                      ),
-                      subtitle: 'Download'.tr),
-                  HomeCard(
-                      title: '${snapshot.data?.byteOut ?? '---'}',
-                      icon: CircleAvatar(
-                        backgroundColor: Color(0xFF4684F6), // Màu xanh dương
-                        radius: mq.width * 0.08,
-                        child: Icon(
-                          Icons.arrow_upward_rounded,
-                          size: mq.width * 0.06,
-                          color: const Color(0xFFFFFFFF),
-                        ),
-                      ),
-                      subtitle: 'Uploads'.tr),
-                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: _changeLocation(context),
       ),
     );
   }
 
   // Nút VPN
-  Widget _vpnButton(BuildContext context) => Column(
+  Widget _vpnButton(BuildContext context, BoxConstraints constraints) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Obx(() {
+            print('VPN State: ${_controller.vpnState.value}');
             final isRunning =
                 _controller.vpnState.value == VpnEngine.vpnConnected ||
                     _controller.vpnState.value == VpnEngine.vpnConnecting;
@@ -153,7 +169,9 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'Disconnected'.tr,
                     style: TextStyle(
-                      fontSize: mq.width * 0.08,
+                      fontSize: constraints.maxWidth * 0.08 > 24.0
+                          ? 24.0
+                          : constraints.maxWidth * 0.08,
                       color: const Color(0xFFFFFFFF),
                       fontWeight: FontWeight.w500,
                     ),
@@ -162,30 +180,36 @@ class HomeScreen extends StatelessWidget {
               ],
             );
           }),
-          SizedBox(height: mq.height * 0.01),
+          SizedBox(
+              height: constraints.maxHeight * 0.01 > 8.0
+                  ? 8.0
+                  : constraints.maxHeight * 0.01),
           Text(
             _controller.getButtonText,
             style: TextStyle(
-                color: Color(0xFF03C343),
-                fontSize:
-                    12 // Màu nền xanh lá              fontSize: mq.width * 0.04,
-                ),
+              color: Color(0xFF03C343),
+              fontSize: 12.0,
+            ),
           ),
-          SizedBox(height: mq.height * 0.06),
+          SizedBox(
+              height: constraints.maxHeight * 0.05 > 100.0
+                  ? 100.0
+                  : constraints.maxHeight * 0.05),
           Center(
             child: GestureDetector(
               onTap: _controller.connectToVpn,
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
-                width: mq.width < 160
-                    ? mq.width * 0.9
-                    : 148, // Giới hạn nếu màn hình nhỏ hơn 160
-                height: mq.height < 100
-                    ? mq.height * 0.8
-                    : 80, // Giới hạn nếu màn hình thấp hơn 100
+                width: constraints.maxWidth * 0.4 > 148.0
+                    ? 148.0
+                    : constraints.maxWidth * 0.4,
+                height: (constraints.maxWidth * 0.4 > 148.0
+                        ? 148.0
+                        : constraints.maxWidth * 0.4) *
+                    0.54,
                 decoration: BoxDecoration(
                   color: _controller.getButtonColor,
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(50.0),
                 ),
                 child: Align(
                   alignment: _controller.vpnState.value ==
@@ -194,11 +218,15 @@ class HomeScreen extends StatelessWidget {
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
                   child: Container(
-                    margin: EdgeInsets.all(mq.width * 0.015),
-                    width: (mq.width < 160 ? mq.width * 0.9 : 148) *
-                        0.46, // Tỷ lệ với width
-                    height: (mq.width < 160 ? mq.width * 0.9 : 148) *
-                        0.46, // Giữ hình tròn
+                    margin: EdgeInsets.all(6.0),
+                    width: (constraints.maxWidth * 0.4 > 148.0
+                            ? 148.0
+                            : constraints.maxWidth * 0.4) *
+                        0.46,
+                    height: (constraints.maxWidth * 0.4 > 148.0
+                            ? 148.0
+                            : constraints.maxWidth * 0.4) *
+                        0.46,
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFFFFF),
                       shape: BoxShape.circle,
@@ -218,9 +246,9 @@ class HomeScreen extends StatelessWidget {
           child: InkWell(
             onTap: () => Get.to(() => LocationScreen()),
             child: Obx(() => Container(
-                  padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
                   color: Color(0xFF172032),
-                  height: mq.height * 0.08, // 8% chiều cao màn hình
+                  height: 48.0,
                   child: Row(
                     children: [
                       Expanded(
@@ -230,11 +258,11 @@ class HomeScreen extends StatelessWidget {
                               : _controller.vpn.value.CountryLong,
                           icon: CircleAvatar(
                             backgroundColor: Color(0xFF172032),
-                            radius: mq.width * 0.06,
+                            radius: 24.0,
                             child: _controller.vpn.value.CountryLong.isEmpty
                                 ? Icon(
                                     CupertinoIcons.globe,
-                                    size: mq.width * 0.06,
+                                    size: 24.0,
                                     color: const Color(0xFFFFFFFF),
                                   )
                                 : null,
@@ -249,10 +277,12 @@ class HomeScreen extends StatelessWidget {
                       ),
                       CircleAvatar(
                         backgroundColor: Color(0xFF172032),
-                        radius: mq.width * 0.05,
-                        child: Icon(Icons.keyboard_arrow_right_rounded,
-                            color: const Color(0xFFFFFFFF),
-                            size: mq.width * 0.06),
+                        radius: 16.0,
+                        child: Icon(
+                          Icons.keyboard_arrow_right_rounded,
+                          color: const Color(0xFFFFFFFF),
+                          size: 20.0,
+                        ),
                       ),
                     ],
                   ),

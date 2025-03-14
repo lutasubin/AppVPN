@@ -1,13 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
-import '../main.dart';
 
 class HomeCard extends StatelessWidget {
   final String title, subtitle;
   final Widget icon;
 
-  HomeCard({
+  const HomeCard({
     Key? key,
     required this.title,
     required this.icon,
@@ -16,32 +13,39 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: mq.width * .45,
-        child: Column(
-          children: [
-            icon,
-            SizedBox(
-              height: 6,
-            ),
-            Text(
-              title,
-              style: TextStyle(
-                color: Color(0xFFF15E24),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          width: constraints.maxWidth * 0.45, // Giới hạn chiều rộng
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Giữ layout nhỏ gọn
+            children: [
+              icon,
+              const SizedBox(height: 5),
+              Text(
+                title,
+                textAlign: TextAlign.center, // Căn giữa tiêu đề
+                style: const TextStyle(
+                  color: Color(0xFFF15E24),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFFFFFFFF),
+              const SizedBox(height: 5),
+              Text(
+                subtitle,
+                textAlign: TextAlign.center, // Căn giữa nội dung phụ
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
               ),
-            )
-          ],
-        ));
+            ],
+          ),
+        );
+      },
+    );
   }
 }
