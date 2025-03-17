@@ -26,9 +26,9 @@ class _RateScreenState extends State<RateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF212121),
+      backgroundColor: const Color(0xFF02091A), // Mã màu mới
       appBar: AppBar(
-        backgroundColor: const Color(0xFF212121),
+        backgroundColor: const Color(0xFF02091A), // Mã màu mới
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,

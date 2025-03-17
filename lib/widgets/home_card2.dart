@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class HomeCard extends StatelessWidget {
+class HomeCard2 extends StatelessWidget {
   final String title, subtitle;
   final Widget icon;
 
-  const HomeCard({
+  const HomeCard2({
     Key? key,
     required this.title,
     required this.icon,
@@ -25,12 +25,11 @@ class HomeCard extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                 title,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.center, // Căn giữa tiêu đề
                 maxLines: 1, // Ép buộc hiển thị trên 1 dòng
-                overflow: TextOverflow
-                    .ellipsis, // Cắt ngắn nếu quá dài// Căn giữa tiêu đề
+                overflow: TextOverflow.ellipsis, // Cắt ngắn nếu quá dài
                 style: const TextStyle(
-                  color: Color(0xFF03C343),
+                  color: Color(0xFF4684F6),
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
                 ),
@@ -42,7 +41,7 @@ class HomeCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF03C343),
+                  color: Color(0xFF4684F6),
                 ),
               ),
             ],

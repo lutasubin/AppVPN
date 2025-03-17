@@ -25,9 +25,9 @@ class LocationScreen extends StatelessWidget {
     _adController.ad = AdHelper.loadNativeAd(adController: _adController);
     return Obx(
       () => Scaffold(
-        backgroundColor: const Color(0xFF212121),
+        backgroundColor: const Color(0xFF02091A), // Mã màu mới
         appBar: AppBar(
-          backgroundColor: const Color(0xFF212121),
+          backgroundColor: const Color(0xFF02091A), // Mã màu mới
           leading: IconButton(
             onPressed: () {
               Get.back();
@@ -118,7 +118,7 @@ class LocationScreen extends StatelessWidget {
               style: TextStyle(
                 color: const Color(0xFFFFFFFF),
                 fontSize: 18,
-                backgroundColor: const Color(0xFF212121),
+                backgroundColor: const Color(0xFF02091A), // Mã màu mới
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -131,7 +131,7 @@ class LocationScreen extends StatelessWidget {
           'VPNs Not Found...😶',
           style: TextStyle(
             fontSize: 18,
-            backgroundColor: const Color(0xFF212121),
+            backgroundColor: const Color(0xFF02091A), // Mã màu mới
             fontWeight: FontWeight.bold,
           ),
         ),

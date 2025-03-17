@@ -32,9 +32,9 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF212121),
+      backgroundColor: const Color(0xFF02091A), // Mã màu mới
       appBar: AppBar(
-        backgroundColor: const Color(0xFF212121),
+        backgroundColor: const Color(0xFF02091A), // Mã màu mới
         title: Text(
           'Search VPN',
           style: TextStyle(

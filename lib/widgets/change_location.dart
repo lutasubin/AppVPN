@@ -29,7 +29,7 @@ class ChangeLocation extends StatelessWidget {
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                 color: Color(0xFFF15E24), ),
+                 color: Color(0xFFFFFFFF), ),
             ),
             Text(
               ip,

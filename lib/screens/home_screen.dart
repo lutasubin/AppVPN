@@ -12,6 +12,7 @@ import 'package:vpn_basic_project/screens/network_test_screen.dart';
 import 'package:vpn_basic_project/widgets/change_location.dart';
 import 'package:vpn_basic_project/widgets/count_down_time%20.dart';
 import 'package:vpn_basic_project/widgets/home_card.dart';
+import 'package:vpn_basic_project/widgets/home_card2.dart';
 import '../services/vpn_engine.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -49,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   height: constraints.maxHeight,
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Color(0xFF212121),
+                    Color(0xFF02091A), // Mã màu mới
                     BlendMode.dstATop,
                   ),
                 ),
@@ -73,6 +74,25 @@ class HomeScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Flexible(
+                                child: HomeCard2(
+                                  title: snapshot.data?.byteOut ?? '---',
+                                  icon: CircleAvatar(
+                                    backgroundColor: const Color(0xFF4684F6),
+                                    radius: constraints.maxWidth * 0.08 > 30.0
+                                        ? 30.0
+                                        : constraints.maxWidth * 0.08,
+                                    child: Icon(
+                                      Icons.arrow_upward_rounded,
+                                      size: constraints.maxWidth * 0.06 > 24.0
+                                          ? 24.0
+                                          : constraints.maxWidth * 0.06,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  subtitle: 'Uploads'.tr,
+                                ),
+                              ),
+                              Flexible(
                                 // Đảm bảo không bị lỗi tràn layout
                                 child: HomeCard(
                                   title: snapshot.data?.byteIn ?? '---',
@@ -92,25 +112,6 @@ class HomeScreen extends StatelessWidget {
                                   subtitle: 'Download'.tr,
                                 ),
                               ),
-                              Flexible(
-                                child: HomeCard(
-                                  title: snapshot.data?.byteOut ?? '---',
-                                  icon: CircleAvatar(
-                                    backgroundColor: const Color(0xFF4684F6),
-                                    radius: constraints.maxWidth * 0.08 > 30.0
-                                        ? 30.0
-                                        : constraints.maxWidth * 0.08,
-                                    child: Icon(
-                                      Icons.arrow_upward_rounded,
-                                      size: constraints.maxWidth * 0.06 > 24.0
-                                          ? 24.0
-                                          : constraints.maxWidth * 0.06,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  subtitle: 'Uploads'.tr,
-                                ),
-                              ),
                             ],
                           );
                         },
@@ -123,7 +124,7 @@ class HomeScreen extends StatelessWidget {
           },
         ),
         appBar: AppBar(
-          backgroundColor: const Color(0xFF212121),
+          backgroundColor: const Color(0xFF02091A), // Mã màu mới
           leading: IconButton(
             onPressed: () => Get.to(() => MenuScreen()),
             icon: Icon(
@@ -262,7 +263,7 @@ class HomeScreen extends StatelessWidget {
                             child: _controller.vpn.value.CountryLong.isEmpty
                                 ? Icon(
                                     CupertinoIcons.globe,
-                                    size: 24.0,
+                                    size: 25.0,
                                     color: const Color(0xFFFFFFFF),
                                   )
                                 : null,
@@ -281,7 +282,7 @@ class HomeScreen extends StatelessWidget {
                         child: Icon(
                           Icons.keyboard_arrow_right_rounded,
                           color: const Color(0xFFFFFFFF),
-                          size: 20.0,
+                          size: 25.0,
                         ),
                       ),
                     ],

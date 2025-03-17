@@ -26,7 +26,7 @@ class ShareBottomSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFF02091A), // Mã màu mới
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -38,15 +38,16 @@ class ShareBottomSheet extends StatelessWidget {
               const Text(
                 'Share With',
                 style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.orange),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFFFFFF),
+                ),
               ),
               IconButton(
                 icon: const Icon(
                   Icons.close,
                   size: 30,
-                  color: Colors.orange,
+                  color: Color(0xFFFFFFFF),
                 ),
                 onPressed: () => Get.back(),
               ),
@@ -156,7 +157,7 @@ class SocialMediaButton extends StatelessWidget {
         'Could not open $label',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red.withOpacity(0.8),
-        colorText: Colors.white,
+        colorText: Color(0xFFFFFFFF),
         margin: const EdgeInsets.all(8),
         borderRadius: 8,
       );
@@ -199,7 +200,7 @@ class SocialMediaButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
-            color: Colors.black87,
+            color: Color(0xFFFFFFFF),
           ),
         ),
       ],

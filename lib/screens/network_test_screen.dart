@@ -19,10 +19,10 @@ class NetworkTestScreen extends StatelessWidget {
     Apis.getIPDetails(ipData: ipData);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF212121),
+      backgroundColor: const Color(0xFF02091A), // Mã màu mới
 
       appBar: AppBar(
-          backgroundColor: const Color(0xFF212121),
+          backgroundColor: const Color(0xFF02091A), // Mã màu mới
           leading: IconButton(
             onPressed: () {
               Get.off(() => HomeScreen());

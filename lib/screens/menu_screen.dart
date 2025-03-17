@@ -36,9 +36,9 @@ class _MenuScreenState extends State<MenuScreen> {
     final currentLanguage = languageMap[currentLanguageCode] ?? 'Default';
 
     return Scaffold(
-      backgroundColor: const Color(0xFF212121),
+      backgroundColor: const Color(0xFF02091A), // Mã màu mới
       appBar: AppBar(
-        backgroundColor: const Color(0xFF212121),
+        backgroundColor: const Color(0xFF02091A), // Mã màu mới
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(

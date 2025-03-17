@@ -48,13 +48,38 @@ class LanguageScreen extends StatelessWidget {
         'name': 'Chinese',
         'flag': 'assets/flags/cn.png',
       },
+      {
+        'code': 'fr',
+        'name': 'French',
+        'flag': 'assets/flags/fr.png',
+      },
+      {
+        'code': 'es',
+        'name': 'Spanish',
+        'flag': 'assets/flags/es.png',
+      },
+      {
+        'code': 'de',
+        'name': 'German',
+        'flag': 'assets/flags/de.png',
+      },
+      {
+        'code': 'ru',
+        'name': 'Russian',
+        'flag': 'assets/flags/ru.png',
+      },
+      // {
+      //   'code': 'ar',
+      //   'name': 'Arabic',
+      //   'flag': 'assets/flags/ar.png',
+      // },
     ];
 
     final RxString selectedLanguage = Pref.selectedLanguage.obs;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF212121),
+        backgroundColor: const Color(0xFF02091A), // Mã màu mới
         title: Text(
           'Language'.tr,
           style: const TextStyle(
@@ -67,7 +92,7 @@ class LanguageScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
       ),
-      backgroundColor: const Color(0xFF212121),
+      backgroundColor: const Color(0xFF02091A), // Mã màu mới
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
@@ -83,7 +108,7 @@ class LanguageScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(
                       color:
-                          isSelected ? const Color(0xFFF15E24) : Colors.black12,
+                          isSelected ? const Color(0xFFF15E24) :const Color(0xFF172032),
                       width: 2.0, // Tăng độ rộng viền để nổi bật hơn
                     ),
                     color: const Color(0xFF172032),

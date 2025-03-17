@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF02091A), // Mã màu mới,
       body: Stack(
         children: [
           Center(
@@ -106,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16.0),
-                color: Colors.black,
+                color: Color(0xFF02091A), // Mã màu mới
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
