@@ -25,6 +25,10 @@ class _MenuScreenState extends State<MenuScreen> {
     'vi': 'Vietnamese',
     'ja': 'Japanese',
     'zh': 'Chinese',
+    'fr': 'French',
+    'es': 'Spanish',
+    'de': 'German',
+    'ru': 'Russian',
   };
 
   @override
@@ -81,7 +85,8 @@ class _MenuScreenState extends State<MenuScreen> {
               icon: Icons.star,
               iconColor: Colors.yellow,
               title: 'Rate us'.tr,
-              onTap: () => Get.to(() => const RateScreen()),
+              onTap: () => Get.to(() => const RateScreen(),
+                  transition: Transition.upToDown),
             ),
             const SizedBox(height: 8),
             _buildMenuItem(

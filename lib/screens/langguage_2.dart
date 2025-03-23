@@ -69,11 +69,6 @@ class LanguageScreen2 extends StatelessWidget {
         'name': 'Russian',
         'flag': 'assets/flags/ru.png',
       },
-      // {
-      //   'code': 'ar',
-      //   'name': 'Arabic',
-      //   'flag': 'assets/flags/ar.png',
-      // },
     ];
 
     // Khởi tạo selectedLanguage rỗng ban đầu

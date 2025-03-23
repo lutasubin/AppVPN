@@ -1,13 +1,8 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/main.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 
@@ -18,107 +13,93 @@ class VpnCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-    return Card(
-      color: const Color(0xFF172032),
-      elevation: 5,
-      margin: EdgeInsets.symmetric(vertical: mq.height * .01),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: InkWell(
-        onTap: () {
-          controller.vpn.value = vpn;
-          Pref.vpn = vpn;
-          Get.back();
 
-          MyDialogs.success(msg: 'Connecting VPN Location...');
-
-          if (controller.vpnState.value == VpnEngine.vpnConnected) {
-            VpnEngine.stopVpn();
-            Future.delayed(Duration(seconds: 2), () {
-              controller.connectToVpn();
-            });
-          } else {
-            controller.connectToVpn();
-          }
-        },
-        borderRadius: BorderRadius.circular(15),
-        child: ListTile(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-
-          leading: Container(
-            padding: EdgeInsets.all(.5),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
-                borderRadius: BorderRadius.circular(5)),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.asset(
-                'assets/flags/${vpn.CountryShort.toLowerCase()}.png',
-                height: 40,
-                width: mq.width * .15,
-                fit: BoxFit.cover,
-              ),
-            ),
+    return Obx(() => Container(
+          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Color(0xFF172032),
+            borderRadius: BorderRadius.circular(10),
+            border: controller.vpn.value == vpn
+                ? Border.all(color: const Color(0xFFF15E24), width: 2)
+                : null,
           ),
+          child: ListTile(
+              onTap: () {
+                controller.vpn.value = vpn;
+                Pref.vpn = vpn;
+                // controller.setVpn(vpn);
+                Get.back();
 
-          //tile:
-          title: Text(
-            vpn.CountryLong,
-            style: TextStyle(fontSize: 13, color: Colors.white),
-          ),
+                MyDialogs.success(msg: 'Connecting VPN Location...');
 
-          //subtitle:
-          subtitle: Row(
-            children: [
-              Icon(
-                Icons.speed_rounded,
-                color: Color(0xFFF15E24),
-                size: 20,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                _formatBytes(vpn.Speed, 1),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.green,
+                if (controller.vpnState.value == VpnEngine.vpnConnected) {
+                  VpnEngine.stopVpn();
+                  Future.delayed(Duration(seconds: 2), () {
+                    controller.connectToVpn();
+                  });
+                } else {
+                  controller.connectToVpn();
+                }
+              },
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image.asset(
+                  'assets/flags/${vpn.CountryShort.toLowerCase()}.png',
+                  height: 35,
+                  width: 35,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ],
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                vpn.NumVpnSessions.toString(),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+              title: Text(
+                vpn.CountryLong,
+                style: TextStyle(fontSize: 14, color: const Color(0xFFFFFFFF)),
               ),
-              SizedBox(
-                width: 4,
+              subtitle: Row(
+                children: [
+                  Text(
+                    vpn.IP,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF767C8A),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Icon(Icons.wifi, color: Color(0xFF03C343), size: 18),
+                  SizedBox(width: 3),
+                  Text(
+                    "${vpn.Ping} m/s",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: _getPingColor(vpn.Ping.toString()),
+                    ),
+                  ),
+                ],
               ),
-              Icon(
-                CupertinoIcons.person_3,
-                color: Color(0xFFF15E24),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              trailing: Icon(
+                controller.vpn.value.IP == vpn.IP
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_off,
+                color: controller.vpn.value.IP == vpn.IP
+                    ? const Color(0xFFF15E24)
+                    : Color(0xFF767C8A),
+              )),
+        ));
   }
 
-  String _formatBytes(int bytes, int decimals) {
-    if (bytes <= 0) {
-      return "0 8";
+  Color _getPingColor(String ping) {
+    int? pingValue = int.tryParse(ping);
+    if (pingValue == null) {
+      return Color(0xFF767C8A); // Màu mặc định nếu ping không hợp lệ
     }
-    const suffixes = ["Bps", "Kbps", "Mbps", "Bbps", "Tbps"];
-    var i = (log(bytes) / log(1024)).floor();
-    return '${(bytes / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
+
+    if (pingValue <= 50) {
+      return Color(0xFF03C343);
+    } else if (pingValue <= 100) {
+      return Color(0xFFEFA80E);
+    } else {
+      return Colors.red;
+    }
   }
 }

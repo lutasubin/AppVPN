@@ -66,7 +66,7 @@ class NetworkTestScreen extends StatelessWidget {
               //ip
               NetworkCard(
                   data: NetworkData(
-                      title: 'IP Address',
+                      title: 'IP Address'.tr,
                       subtitle: ipData.value.query,
                       icon: Icon(CupertinoIcons.location_solid,
                           color: Colors.blue))),
@@ -74,23 +74,23 @@ class NetworkTestScreen extends StatelessWidget {
               //isp
               NetworkCard(
                   data: NetworkData(
-                      title: 'Internet Provider',
+                      title: 'Internet Provider'.tr,
                       subtitle: ipData.value.isp,
                       icon: Icon(Icons.business, color: Colors.orange))),
 
               //location
               NetworkCard(
                   data: NetworkData(
-                      title: 'Location',
+                      title: 'Location'.tr,
                       subtitle: ipData.value.country.isEmpty
-                          ? 'Fetching ...'
+                          ? 'Fetching ...'.tr
                           : '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
                       icon: Icon(CupertinoIcons.location, color: Colors.pink))),
 
               //pin code
               NetworkCard(
                   data: NetworkData(
-                      title: 'Pin-code',
+                      title: 'Pin-code'.tr,
                       subtitle: ipData.value.zip,
                       icon: Icon(CupertinoIcons.location_solid,
                           color: Colors.cyan))),
@@ -98,7 +98,7 @@ class NetworkTestScreen extends StatelessWidget {
               //timezone
               NetworkCard(
                   data: NetworkData(
-                      title: 'Timezone',
+                      title: 'Timezone'.tr,
                       subtitle: ipData.value.timezone,
                       icon: Icon(CupertinoIcons.time, color: Colors.green))),
             ]),

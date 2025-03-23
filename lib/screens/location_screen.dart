@@ -39,7 +39,7 @@ class LocationScreen extends StatelessWidget {
             ),
           ),
           title: Text(
-            'IP(${_controller.vpnList.length})'.tr,
+            'Ip'.tr,
             style: TextStyle(
               color: const Color(0xFFFFFFFF),
               fontSize: 20,
@@ -113,22 +113,13 @@ class LocationScreen extends StatelessWidget {
               // 'assets/lottie/loadingVPN.json',
               width: 200,
             ),
-            Text(
-              'Loading VPNs...😄',
-              style: TextStyle(
-                color: const Color(0xFFFFFFFF),
-                fontSize: 18,
-                backgroundColor: const Color(0xFF02091A), // Mã màu mới
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ],
         ),
       );
 
   Widget _noVPNFound(BuildContext context) => Center(
         child: Text(
-          'VPNs Not Found...😶',
+          'VPNs Not Found...😶'.tr,
           style: TextStyle(
             fontSize: 18,
             backgroundColor: const Color(0xFF02091A), // Mã màu mới

@@ -12,7 +12,7 @@ class Pref {
 
   // static bool get isDartMode => _box.get('isDartMode') ?? false;
 
-  static set isDarkMode(bool v) =>_box.put('isDartMode', v);
+  // static set isDarkMode(bool v) =>_box.put('isDartMode', v);
 
   static Vpn get vpn => Vpn.fromJson(jsonDecode(_box.get('vpn') ?? '{}'));
   static set vpn(Vpn v) => _box.put('vpn', jsonEncode(v));

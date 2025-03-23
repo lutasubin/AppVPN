@@ -18,7 +18,7 @@ class SearchScreen extends StatelessWidget {
           SvgPicture.asset('assets/svg/webpage-not-found 1.svg'),
           SizedBox(height: 20),
           Text(
-            'No results found for "${_searchController.text}"',
+            'No results found for'.tr + '${_searchController.text}',
             style: TextStyle(
               fontSize: 18,
               color: const Color(0xFFFFFFFF),

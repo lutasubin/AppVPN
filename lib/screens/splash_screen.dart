@@ -113,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen>
                   children: [
                     LinearProgressIndicator(
                       value: _animation.value,
-                      backgroundColor: Colors.grey,
+                      backgroundColor:  Color(0xFF767C8A),
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         Color(0xFFF15E24),
                       ),

@@ -72,4 +72,10 @@ class HomeController extends GetxController {
         return 'Waiting....'.tr;
     }
   }
+  void setVpn(Vpn newVpn) {
+  vpn.value = newVpn;
+  Pref.vpn = newVpn;
+  update(); // Đảm bảo UI nhận thay đổi
+}
+
 }

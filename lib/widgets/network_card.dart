@@ -29,7 +29,7 @@ class NetworkCard extends StatelessWidget {
             //title
             title: Text(
               data.title,
-              style: TextStyle(color: Color(0XFFFFFF)),
+              style: TextStyle(color: const Color(0xFFFFFFFF)),
             ),
 
             //subtitle
