@@ -20,7 +20,15 @@ import '../services/vpn_engine.dart';
 
 /// Màn hình chính của ứng dụng VPN.
 /// Hiển thị trạng thái VPN, nút kết nối, thông tin tải lên/tải xuống và quảng cáo.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  /// Constructor cho HomeScreen.
+  HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   /// Dữ liệu chi tiết IP, được quản lý bằng Obx để theo dõi thay đổi.
   final ipData = IPDetails.fromJson({}).obs;
 
@@ -29,9 +37,6 @@ class HomeScreen extends StatelessWidget {
 
   /// Bộ điều khiển quảng cáo tự nhiên.
   final _adController = NativeAdController();
-
-  /// Constructor cho HomeScreen.
-  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -176,16 +181,18 @@ class HomeScreen extends StatelessWidget {
               ),
               bottomNavigationBar: Container(
                 color: const Color(0xFF02091A),
-                height: 120,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _changeLocation(context),
+                    SizedBox(
+                      height: 5,
+                    ),
                     if (_adController.ad != null &&
                         _adController.adLoaded.isTrue)
                       SafeArea(
                         child: SizedBox(
-                            height: 70, child: AdWidget(ad: _adController.ad!)),
+                            height: 85, child: AdWidget(ad: _adController.ad!)),
                       ),
                   ],
                 ),
@@ -232,8 +239,8 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           SizedBox(
-              height: constraints.maxHeight * 0.05 > 100.0
-                  ? 100.0
+              height: constraints.maxHeight * 0.05 > 80.0
+                  ? 80.0
                   : constraints.maxHeight * 0.05),
           Center(
             child: GestureDetector(

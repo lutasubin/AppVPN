@@ -81,7 +81,7 @@ class LanguageScreen2 extends StatelessWidget {
       },
       {
         'code': 'th',
-        'name': 'Thai',
+        'name': 'Thailand',
         'flag': 'assets/flags/th.png', // Cờ Thái Lan
       },
       {
@@ -118,7 +118,7 @@ class LanguageScreen2 extends StatelessWidget {
           IconButton(
             icon: const Icon(
               Icons.check,
-              color: Colors.white,
+              color: Color(0xFFFFFFFF),
               size: 25,
             ),
             onPressed: () {

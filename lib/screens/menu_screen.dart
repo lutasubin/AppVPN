@@ -32,8 +32,9 @@ class _MenuScreenState extends State<MenuScreen> {
     'ar': 'Arabic',
     'tr': 'Turkish',
     'da': 'Danish',
-    'th': 'Thai',
+    'th': 'Thailand',
     'id': 'Indonesian',
+    'ss': 'Arabic'
   };
 
   @override
@@ -50,7 +51,7 @@ class _MenuScreenState extends State<MenuScreen> {
         backgroundColor: const Color(0xFF02091A), // Mã màu mới
         leading: IconButton(
           onPressed: () {
-                         Get.back(); // Quay lại màn hình trước
+            Get.back(); // Quay lại màn hình trước
           },
           icon: Icon(
             Icons.arrow_back,

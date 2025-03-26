@@ -1,6 +1,5 @@
 import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
@@ -126,8 +125,23 @@ class AdHelper {
           },
         ),
         request: const AdRequest(),
-        nativeTemplateStyle:
-            NativeTemplateStyle(templateType: TemplateType.small))
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
       ..load();
   }
 
@@ -167,8 +181,24 @@ class AdHelper {
           },
         ),
         request: const AdRequest(),
-        nativeTemplateStyle:
-            NativeTemplateStyle(templateType: TemplateType.small))
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            
+            templateType: TemplateType.small))
       ..load();
   }
 

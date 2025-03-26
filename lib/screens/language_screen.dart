@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
+import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
 
 class LanguageScreen extends StatelessWidget {
   final _adController = NativeAdController();
@@ -82,7 +83,7 @@ class LanguageScreen extends StatelessWidget {
       },
       {
         'code': 'th',
-        'name': 'Thai',
+        'name': 'Thailand',
         'flag': 'assets/flags/th.png', // Cờ Thái Lan
       },
       {
@@ -109,19 +110,35 @@ class LanguageScreen extends StatelessWidget {
       () => Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xFF02091A), // Mã màu mới
-          title: Text(
-            'Language'.tr,
-            style: const TextStyle(
-              color: Color(0xFFFFFFFF),
-              fontWeight: FontWeight.bold,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Language'.tr,
+                style: const TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.check,
+                color: Color(0xFFFFFFFF),
+                size: 25,
+              ),
+              onPressed: () {
+                Get.dialog(WatchAdDialog(onComplete: () {
+                  AdHelper.showRewardedAd(onComplete: () {
+                    Get.back();
+                   
+                  });
+                }));
+              },
             ),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Get.back(); // Quay lại màn hình trước
-            },
-          ),
+          ],
         ),
         backgroundColor: const Color(0xFF02091A),
         bottomNavigationBar:
@@ -129,7 +146,7 @@ class LanguageScreen extends StatelessWidget {
             _adController.ad != null && _adController.adLoaded.isTrue
                 ? SafeArea(
                     child: SizedBox(
-                        height: 100, child: AdWidget(ad: _adController.ad!)))
+                        height: 120, child: AdWidget(ad: _adController.ad!)))
                 : null,
         body: Padding(
           padding: const EdgeInsets.all(16.0),

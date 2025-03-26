@@ -69,7 +69,7 @@ class LocationScreen extends StatelessWidget {
             _adController.ad != null && _adController.adLoaded.isTrue
                 ? SafeArea(
                     child: SizedBox(
-                        height: 85, child: AdWidget(ad: _adController.ad!)))
+                        height: 120, child: AdWidget(ad: _adController.ad!)))
                 : null,
         body: _controller.isLoading.value
             ? _loadingWidget(context) // Hiển thị khi đang tải
