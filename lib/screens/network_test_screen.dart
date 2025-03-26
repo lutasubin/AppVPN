@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/screens/home_screen.dart';
 
 // import '../helpers/pref.dart';
 import '../main.dart';
@@ -25,7 +24,7 @@ class NetworkTestScreen extends StatelessWidget {
           backgroundColor: const Color(0xFF02091A), // Mã màu mới
           leading: IconButton(
             onPressed: () {
-              Get.off(() => HomeScreen());
+             Get.back();
             },
             icon: Icon(
               Icons.arrow_back,
@@ -35,14 +34,15 @@ class NetworkTestScreen extends StatelessWidget {
           ),
           title: Text(
             'IP Information'.tr,
-            style: TextStyle(color: const Color(0xFFFFFFFF), fontWeight: FontWeight.w500),
+            style: TextStyle(
+                color: const Color(0xFFFFFFFF), fontWeight: FontWeight.w500),
           )),
 
       //refresh button
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 10),
         child: FloatingActionButton(
-            backgroundColor:  Color(0xFFF15E24),
+            backgroundColor: Color(0xFFF15E24),
             onPressed: () {
               ipData.value = IPDetails.fromJson({});
               Apis.getIPDetails(ipData: ipData);
@@ -70,14 +70,18 @@ class NetworkTestScreen extends StatelessWidget {
                       subtitle: ipData.value.query,
                       icon: Icon(CupertinoIcons.location_solid,
                           color: Colors.blue))),
-
+              SizedBox(
+                height: 10,
+              ),
               //isp
               NetworkCard(
                   data: NetworkData(
                       title: 'Internet Provider'.tr,
                       subtitle: ipData.value.isp,
                       icon: Icon(Icons.business, color: Colors.orange))),
-
+              SizedBox(
+                height: 10,
+              ),
               //location
               NetworkCard(
                   data: NetworkData(
@@ -86,7 +90,9 @@ class NetworkTestScreen extends StatelessWidget {
                           ? 'Fetching ...'.tr
                           : '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
                       icon: Icon(CupertinoIcons.location, color: Colors.pink))),
-
+              SizedBox(
+                height: 10,
+              ),
               //pin code
               NetworkCard(
                   data: NetworkData(
@@ -94,7 +100,9 @@ class NetworkTestScreen extends StatelessWidget {
                       subtitle: ipData.value.zip,
                       icon: Icon(CupertinoIcons.location_solid,
                           color: Colors.cyan))),
-
+              SizedBox(
+                height: 10,
+              ),
               //timezone
               NetworkCard(
                   data: NetworkData(

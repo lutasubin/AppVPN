@@ -73,9 +73,9 @@ class _CountDownTimerState extends State<CountDownTimer> {
     return Text(
       '$hours:$minutes:$seconds',
       style: const TextStyle(
-        fontSize: 50,
-        color: const Color(0xFFFFFFFF),
-      ),
+          fontSize: 40,
+          color: const Color(0xFFFFFFFF),
+          fontWeight: FontWeight.bold),
     );
   }
 }

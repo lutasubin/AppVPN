@@ -8,8 +8,11 @@ import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import '../controllers/native_ad_controller.dart';
 import 'config.dart';
 
+/// Lớp hỗ trợ quản lý quảng cáo Google Mobile Ads trong ứng dụng Flutter.
+/// Cung cấp các phương thức để khởi tạo, tải và hiển thị các loại quảng cáo khác nhau.
 class AdHelper {
-  // for initializing ads sdk
+  /// Khởi tạo SDK Google Mobile Ads.
+  /// Cần gọi hàm này trước khi sử dụng bất kỳ loại quảng cáo nào.
   static Future<void> initAds() async {
     await MobileAds.instance.initialize();
   }
@@ -22,6 +25,8 @@ class AdHelper {
 
   //*****************Interstitial Ad******************
 
+  /// Tải trước quảng cáo toàn màn hình để sẵn sàng hiển thị khi cần.
+  /// Quảng cáo sẽ tự động tải lại sau khi được hiển thị hoặc thất bại.
   static void precacheInterstitialAd() {
     log('Precache Interstitial Ad - Id: ${Config.interstitialAd}');
 
@@ -32,7 +37,7 @@ class AdHelper {
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          //ad listener
+          // Lắng nghe sự kiện khi quảng cáo được hiển thị hoặc đóng
           ad.fullScreenContentCallback =
               FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
             _resetInterstitialAd();
@@ -49,12 +54,17 @@ class AdHelper {
     );
   }
 
+  /// Đặt lại trạng thái quảng cáo toàn màn hình về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
   static void _resetInterstitialAd() {
     _interstitialAd?.dispose();
     _interstitialAd = null;
     _interstitialAdLoaded = false;
   }
 
+  /// Hiển thị quảng cáo toàn màn hình.
+  /// Nếu quảng cáo chưa sẵn sàng, sẽ tải và hiển thị ngay khi hoàn tất.
+  /// [onComplete] được gọi sau khi quảng cáo hiển thị hoặc thất bại.
   static void showInterstitialAd({required VoidCallback onComplete}) {
     log('Interstitial Ad Id: ${Config.interstitialAd}');
 
@@ -76,7 +86,6 @@ class AdHelper {
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          //ad listener
           ad.fullScreenContentCallback =
               FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
             onComplete();
@@ -97,6 +106,8 @@ class AdHelper {
 
   //*****************Native Ad******************
 
+  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
+  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
   static void precacheNativeAd() {
     log('Precache Native Ad - Id: ${Config.nativeAd}');
 
@@ -115,18 +126,22 @@ class AdHelper {
           },
         ),
         request: const AdRequest(),
-        // Styling
         nativeTemplateStyle:
             NativeTemplateStyle(templateType: TemplateType.small))
       ..load();
   }
 
+  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
   static void _resetNativeAd() {
     _nativeAd?.dispose();
     _nativeAd = null;
     _nativeAdLoaded = false;
   }
 
+  /// Tải và trả về một quảng cáo tự nhiên.
+  /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
+  /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
   static NativeAd? loadNativeAd({required NativeAdController adController}) {
     log('Native Ad Id: ${Config.nativeAd}');
 
@@ -152,7 +167,6 @@ class AdHelper {
           },
         ),
         request: const AdRequest(),
-        // Styling
         nativeTemplateStyle:
             NativeTemplateStyle(templateType: TemplateType.small))
       ..load();
@@ -160,6 +174,8 @@ class AdHelper {
 
   //*****************Rewarded Ad******************
 
+  /// Hiển thị quảng cáo có thưởng.
+  /// [onComplete] được gọi khi người dùng nhận được phần thưởng.
   static void showRewardedAd({required VoidCallback onComplete}) {
     log('Rewarded Ad Id: ${Config.rewardedAd}');
 
@@ -176,8 +192,6 @@ class AdHelper {
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           Get.back();
-
-          //reward listener
           ad.show(
               onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
             onComplete();

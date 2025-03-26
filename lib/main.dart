@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -11,42 +10,43 @@ import 'package:vpn_basic_project/helpers/config.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/splash_screen.dart';
 
-// Global variables
+// Biến toàn cục
 late Size mq;
 late SharedPreferences prefs;
 
+/// Hàm khởi tạo chính của ứng dụng.
+/// Thiết lập các dịch vụ cần thiết trước khi chạy ứng dụng.
 Future<void> main() async {
-  // debugPaintSizeEnabled = true; // Hiển thị viền widget
+  // debugPaintSizeEnabled = true; // Hiển thị viền widget để debug
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize mq with the screen size
+  // Khởi tạo kích thước màn hình (mq)
   mq = WidgetsBinding.instance.window.physicalSize /
       WidgetsBinding.instance.window.devicePixelRatio;
 
-  // Load environment variables
+  // Tải biến môi trường từ file .env
   await dotenv.load();
 
-  // Initialize SharedPreferences
+  // Khởi tạo SharedPreferences
   prefs = await SharedPreferences.getInstance();
-  // Kiểm tra và đặt cờ lần đầu tiên (nếu chưa có)
+  // Đặt cờ lần đầu tiên nếu chưa có
   await prefs.setBool('isFirstLaunch', prefs.getBool('isFirstLaunch') ?? true);
-  // Get the user's agreement status
 
-  // Set UI mode (no need for immersive mode)
+  // Thiết lập chế độ giao diện người dùng (edge-to-edge)
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  // Initialize Firebase, Config, Hive, and Ads
+  // Khởi tạo Firebase, Config, Hive, và quảng cáo
   try {
     await Firebase.initializeApp();
     await Config.initConfig();
     await Pref.initializeHive();
     await AdHelper.initAds();
   } catch (e) {
-    debugPrint("Error during initialization: $e");
+    debugPrint("Lỗi trong quá trình khởi tạo: $e");
   }
 
-  // Set device orientation
+  // Thiết lập hướng thiết bị (chỉ hỗ trợ dọc)
   await SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((value) {
@@ -54,6 +54,8 @@ Future<void> main() async {
   });
 }
 
+/// Lớp chính của ứng dụng.
+/// Cấu hình GetMaterialApp với theme, locale và màn hình khởi đầu.
 class MyApp extends StatelessWidget {
   const MyApp({
     Key? key,
@@ -62,7 +64,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      
       title: 'OpenVpn Demo',
       home: SplashScreen(),
       theme: ThemeData(
@@ -80,7 +81,6 @@ class MyApp extends StatelessWidget {
           elevation: 3,
         ),
       ),
-      // themeMode: Pref.isDartMode ? ThemeMode.dark : ThemeMode.light,
       // Thêm hỗ trợ đa ngôn ngữ
       locale: Locale(Pref.selectedLanguage.isEmpty
           ? Get.deviceLocale?.languageCode ?? 'en'
@@ -91,8 +91,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// extension AppTheme on ThemeData {
-//   Color get lightText => Pref.isDartMode ? Colors.white70 : Colors.black54;
-//   Color get bottomNav => Pref.isDartMode ? Colors.white12 : Colors.orange;
-// }

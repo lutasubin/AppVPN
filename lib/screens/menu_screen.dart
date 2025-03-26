@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:vpn_basic_project/helpers/pref.dart'; // Bỏ comment để sử dụng Pref
 import 'package:vpn_basic_project/screens/language_screen.dart';
-import 'package:vpn_basic_project/screens/rate_screen.dart';
+// import 'package:vpn_basic_project/screens/rate_screen.dart';
 import 'share_screen.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -29,6 +29,11 @@ class _MenuScreenState extends State<MenuScreen> {
     'es': 'Spanish',
     'de': 'German',
     'ru': 'Russian',
+    'ar': 'Arabic',
+    'tr': 'Turkish',
+    'da': 'Danish',
+    'th': 'Thai',
+    'id': 'Indonesian',
   };
 
   @override
@@ -44,10 +49,12 @@ class _MenuScreenState extends State<MenuScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF02091A), // Mã màu mới
         leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(
+          onPressed: () {
+                         Get.back(); // Quay lại màn hình trước
+          },
+          icon: Icon(
             Icons.arrow_back,
-            color: Color(0xFFFFFFFF),
+            color: const Color(0xFFFFFFFF),
             size: 25,
           ),
         ),
@@ -77,17 +84,17 @@ class _MenuScreenState extends State<MenuScreen> {
               iconColor: Colors.purpleAccent,
               title: 'Language'.tr,
               trailingText: currentLanguage,
-              onTap: () => Get.to(() => const LanguageScreen()),
+              onTap: () => Get.to(() => LanguageScreen()),
             ),
             const SizedBox(height: 8),
-            _buildMenuItem(
-              context: context,
-              icon: Icons.star,
-              iconColor: Colors.yellow,
-              title: 'Rate us'.tr,
-              onTap: () => Get.to(() => const RateScreen(),
-                  transition: Transition.upToDown),
-            ),
+            // _buildMenuItem(
+            //   context: context,
+            //   icon: Icons.star,
+            //   iconColor: Colors.yellow,
+            //   title: 'Rate us'.tr,
+            //   onTap: () => Get.to(() => const RateScreen(),
+            //       transition: Transition.upToDown),
+            // ),
             const SizedBox(height: 8),
             _buildMenuItem(
               context: context,
@@ -97,17 +104,17 @@ class _MenuScreenState extends State<MenuScreen> {
               onTap: () => ShareBottomSheet.show(),
             ),
             const SizedBox(height: 8),
-            _buildMenuItem(
-                context: context,
-                icon: Icons.privacy_tip,
-                iconColor: Colors.green,
-                title: 'Privacy Policy'.tr,
-                onTap: () async {
-                  const url = 'https://your-privacy-policy-url.com';
-                  if (await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url));
-                  }
-                }),
+            // _buildMenuItem(
+            //     context: context,
+            //     icon: Icons.privacy_tip,
+            //     iconColor: Colors.green,
+            //     title: 'Privacy Policy'.tr,
+            //     onTap: () async {
+            //       const url = 'https://your-privacy-policy-url.com';
+            //       if (await canLaunchUrl(Uri.parse(url))) {
+            //         await launchUrl(Uri.parse(url));
+            //       }
+            //     }),
           ],
         ),
       ),

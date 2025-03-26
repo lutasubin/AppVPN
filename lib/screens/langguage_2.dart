@@ -69,6 +69,31 @@ class LanguageScreen2 extends StatelessWidget {
         'name': 'Russian',
         'flag': 'assets/flags/ru.png',
       },
+      {
+        'code': 'ss',
+        'name': 'Arabic',
+        'flag': 'assets/flags/ae.png', // Cờ UAE cho tiếng Ả Rập (có thể thay đổi nếu cần)
+      },
+      {
+        'code': 'da',
+        'name': 'Danish',
+        'flag': 'assets/flags/dk.png', // Cờ Đan Mạch
+      },
+      {
+        'code': 'th',
+        'name': 'Thai',
+        'flag': 'assets/flags/th.png', // Cờ Thái Lan
+      },
+      {
+        'code': 'id',
+        'name': 'Indonesian',
+        'flag': 'assets/flags/id.png', // Cờ Indonesia
+      },
+      {
+        'code': 'tr',
+        'name': 'Turkish',
+        'flag': 'assets/flags/tr.png', // Cờ Thổ Nhĩ Kỳ
+      },
     ];
 
     // Khởi tạo selectedLanguage rỗng ban đầu
@@ -165,11 +190,11 @@ class LanguageScreen2 extends StatelessWidget {
 
                       // Cập nhật locale ngay khi chọn
                       if (value == 'default') {
-                          Get.updateLocale(
-                              Get.deviceLocale ?? const Locale('en'));
-                        } else {
-                          Get.updateLocale(Locale(value));
-                        }
+                        Get.updateLocale(
+                            Get.deviceLocale ?? const Locale('en'));
+                      } else {
+                        Get.updateLocale(Locale(value));
+                      }
 
                       Get.snackbar(
                         'Success'.tr,

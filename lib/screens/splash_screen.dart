@@ -59,9 +59,9 @@ class _SplashScreenState extends State<SplashScreen>
 
         if (isFirstLaunch) {
           await prefs.setBool('isFirstLaunch', false); // Đặt cờ là không phải lần đầu
-           Get.off(() => LanguageScreen2());
+           Get.offAll(() => LanguageScreen2());
         } else {
-           Get.off(() => HomeScreen());
+           Get.offAll(() => HomeScreen());
         }
       }
     });

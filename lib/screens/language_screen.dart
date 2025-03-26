@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 
 class LanguageScreen extends StatelessWidget {
-  const LanguageScreen({super.key});
+  final _adController = NativeAdController();
+
+  LanguageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    _adController.ad = AdHelper.loadNativeAd(adController: _adController);
+
     final List<Map<String, dynamic>> languages = [
       {
         'code': 'default',
@@ -68,99 +75,132 @@ class LanguageScreen extends StatelessWidget {
         'name': 'Russian',
         'flag': 'assets/flags/ru.png',
       },
-      // {
-      //   'code': 'ar',
-      //   'name': 'Arabic',
-      //   'flag': 'assets/flags/ar.png',
-      // },
+      {
+        'code': 'da',
+        'name': 'Danish',
+        'flag': 'assets/flags/dk.png', // Cờ Đan Mạch
+      },
+      {
+        'code': 'th',
+        'name': 'Thai',
+        'flag': 'assets/flags/th.png', // Cờ Thái Lan
+      },
+      {
+        'code': 'id',
+        'name': 'Indonesian',
+        'flag': 'assets/flags/id.png', // Cờ Indonesia
+      },
+      {
+        'code': 'tr',
+        'name': 'Turkish',
+        'flag': 'assets/flags/tr.png', // Cờ Thổ Nhĩ Kỳ
+      },
+      {
+        'code': 'ss',
+        'name': 'Arabic',
+        'flag':
+            'assets/flags/ae.png', // Cờ UAE cho tiếng Ả Rập (có thể thay đổi nếu cần)
+      },
     ];
 
     final RxString selectedLanguage = Pref.selectedLanguage.obs;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF02091A), // Mã màu mới
-        title: Text(
-          'Language'.tr,
-          style: const TextStyle(
-            color: Color(0xFFFFFFFF),
-            fontWeight: FontWeight.bold,
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF02091A), // Mã màu mới
+          title: Text(
+            'Language'.tr,
+            style: const TextStyle(
+              color: Color(0xFFFFFFFF),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Get.back(); // Quay lại màn hình trước
+            },
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Get.back(),
-        ),
-      ),
-      backgroundColor: const Color(0xFF02091A), // Mã màu mới
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: languages.length,
-          itemBuilder: (context, index) {
-            final language = languages[index];
-            final isSelected = selectedLanguage.value == language['code'] ||
-                (language['code'] == 'default' &&
-                    selectedLanguage.value.isEmpty);
+        backgroundColor: const Color(0xFF02091A),
+        bottomNavigationBar:
+            // Config.hideAds ? null:
+            _adController.ad != null && _adController.adLoaded.isTrue
+                ? SafeArea(
+                    child: SizedBox(
+                        height: 100, child: AdWidget(ad: _adController.ad!)))
+                : null,
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView.builder(
+            itemCount: languages.length,
+            itemBuilder: (context, index) {
+              final language = languages[index];
+              final isSelected = selectedLanguage.value == language['code'] ||
+                  (language['code'] == 'default' &&
+                      selectedLanguage.value.isEmpty);
 
-            return Obx(() => Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color:
-                          isSelected ? const Color(0xFFF15E24) :const Color(0xFF172032),
-                      width: 2.0, // Tăng độ rộng viền để nổi bật hơn
+              return Obx(() => Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFFF15E24)
+                            : const Color(0xFF172032),
+                        width: 2.0, // Tăng độ rộng viền để nổi bật hơn
+                      ),
+                      color: const Color(0xFF172032),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    color: const Color(0xFF172032),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: RadioListTile<String>(
-                    value: language['code'],
-                    groupValue: selectedLanguage.value.isEmpty
-                        ? 'default'
-                        : selectedLanguage.value,
-                    activeColor: const Color(
-                        0xFFF15E24), // Thay đổi radio button thành màu vàng
-                    title: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 16,
-                          backgroundImage: AssetImage(language['flag']),
-                        ),
-                        const SizedBox(width: 20),
-                        Text(
-                          language['name'],
-                          style: const TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    child: RadioListTile<String>(
+                      value: language['code'],
+                      groupValue: selectedLanguage.value.isEmpty
+                          ? 'default'
+                          : selectedLanguage.value,
+                      activeColor: const Color(
+                          0xFFF15E24), // Thay đổi radio button thành màu vàng
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 16,
+                            backgroundImage: AssetImage(language['flag']),
                           ),
-                        ),
-                      ],
-                    ),
-                    onChanged: (value) {
-                      if (value != null) {
-                        selectedLanguage.value = value;
-                        Pref.selectedLanguage = value;
+                          const SizedBox(width: 20),
+                          Text(
+                            language['name'],
+                            style: const TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      onChanged: (value) {
+                        if (value != null) {
+                          selectedLanguage.value = value;
+                          Pref.selectedLanguage = value;
 
-                        if (value == 'default') {
-                          Get.updateLocale(
-                              Get.deviceLocale ?? const Locale('en'));
-                        } else {
-                          Get.updateLocale(Locale(value));
+                          if (value == 'default') {
+                            Get.updateLocale(
+                                Get.deviceLocale ?? const Locale('en'));
+                          } else {
+                            Get.updateLocale(Locale(value));
+                          }
+                          Get.snackbar(
+                            'Success'.tr,
+                            'Changed to'.tr + ' ${language['name']}',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: const Color(0xFF172032),
+                            colorText: const Color(0xFFFFFFFF),
+                          );
                         }
-                        Get.snackbar(
-                          'Success'.tr,
-                          'Changed to'.tr + ' ${language['name']}',
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: const Color(0xFF172032),
-                          colorText: const Color(0xFFFFFFFF),
-                        );
-                      }
-                    },
-                  ),
-                ));
-          },
+                      },
+                    ),
+                  ));
+            },
+          ),
         ),
       ),
     );
