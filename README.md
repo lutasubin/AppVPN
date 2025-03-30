@@ -1,13 +1,7 @@
 <h1 align="center">Hi 👋, I'm Lutasubin</h1>
 <h3 align="center">A passionate mobile developer from VietNam</h3>
 
-FreeVPN App Flutter
-Status Dart Flutter
 
-⭐ Note: This project is for learning & educational purposes and uses an older version of the OpenVPN SDK. If you plan to publish this on the Play Store, it may get rejected.
-
-📱 Simple, Decent & Free VPN App Based on the OpenVPN Protocol
-A lightweight, easy-to-use VPN application built with Flutter, offering secure connections via the OpenVPN protocol.
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=lutasubin&label=Profile%20views&color=0e75b6&style=flat" alt="lutasubin" /> </p>
 
