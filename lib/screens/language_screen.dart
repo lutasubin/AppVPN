@@ -7,13 +7,13 @@ import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
 
 class LanguageScreen extends StatelessWidget {
-  final _adController = NativeAdController();
+  final _adController1 = NativeAdController();
 
   LanguageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    _adController.ad = AdHelper.loadNativeAd(adController: _adController);
+    _adController1.ad = AdHelper.loadNativeAd1(adController: _adController1);
 
     final List<Map<String, dynamic>> languages = [
       {
@@ -109,6 +109,7 @@ class LanguageScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false, // Tắt nút thoát mặc định
           backgroundColor: const Color(0xFF02091A), // Mã màu mới
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -133,7 +134,6 @@ class LanguageScreen extends StatelessWidget {
                 Get.dialog(WatchAdDialog(onComplete: () {
                   AdHelper.showRewardedAd(onComplete: () {
                     Get.back();
-                   
                   });
                 }));
               },
@@ -143,10 +143,10 @@ class LanguageScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF02091A),
         bottomNavigationBar:
             // Config.hideAds ? null:
-            _adController.ad != null && _adController.adLoaded.isTrue
+            _adController1.ad != null && _adController1.adLoaded.isTrue
                 ? SafeArea(
                     child: SizedBox(
-                        height: 120, child: AdWidget(ad: _adController.ad!)))
+                        height: 350, child: AdWidget(ad: _adController1.ad!)))
                 : null,
         body: Padding(
           padding: const EdgeInsets.all(16.0),

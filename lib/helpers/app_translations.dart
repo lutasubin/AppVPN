@@ -4,6 +4,11 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
+          'no_internet': 'No Internet!',
+          'no_internet_title': 'Connection Error',
+          'change_theme': 'Change Theme',
+          'watch_ad_message': 'Watch an Ad to Change App Theme.',
+          'watch_ad': 'Watch Ad',
           'error_connect_server':
               'Unable to connect to the server. Please check your network connection and try again.',
           'Choose location': 'Select a location',
@@ -48,6 +53,11 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
+          'no_internet': 'Không có Internet!',
+          'no_internet_title': 'Lỗi kết nối',
+          'change_theme': 'Thay đổi chủ đề',
+          'watch_ad_message': 'Xem quảng cáo để thay đổi chủ đề ứng dụng.',
+          'watch_ad': 'Xem quảng cáo',
           'error_connect_server':
               'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng và thử lại.',
           'Choose location': 'Chọn vị trí',
@@ -92,6 +102,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
+          'change_theme': 'थीम बदलें',
+          'watch_ad_message': 'ऐप थीम बदलने के लिए एक विज्ञापन देखें।',
+          'watch_ad': 'विज्ञापन देखें',
           'error_connect_server':
               'सर्वर से कनेक्ट करने में असमर्थ। कृपया अपनी नेटवर्क कनेक्शन जांचें और पुनः प्रयास करें।',
           'Choose location': 'स्थान चुनें',
@@ -136,6 +149,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
+          'change_theme': '테마 변경',
+          'watch_ad_message': '광고를 보고 앱 테마를 변경하세요.',
+          'watch_ad': '광고 보기',
           'error_connect_server': '서버에 연결할 수 없습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.',
           'Choose location': '위치 선택',
           'Disconnected': '연결 끊김',
@@ -178,6 +194,10 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
+          'change_theme': 'Mudar Tema',
+          'watch_ad_message':
+              'Assista a um anúncio para mudar o tema do aplicativo.',
+          'watch_ad': 'Assistir Anúncio',
           'error_connect_server':
               'Não foi possível conectar ao servidor. Por favor, verifique sua conexão de rede e tente novamente.',
           'Choose location': 'Escolher localização',
@@ -222,6 +242,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Não foi possível abrir o URL da loja',
         },
         'ja': {
+          'change_theme': 'テーマを変更',
+          'watch_ad_message': '広告を見てアプリのテーマを変更します。',
+          'watch_ad': '広告を見る',
           'error_connect_server': 'サーバーに接続できません。ネットワーク接続を確認して、もう一度お試しください。',
           'Choose location': '場所を選択',
           'Disconnected': '切断されました',
@@ -264,6 +287,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
+          'change_theme': '更改主题',
+          'watch_ad_message': '观看广告以更改应用主题。',
+          'watch_ad': '观看广告',
           'error_connect_server': '无法连接到服务器。请检查您的网络连接并重试。',
           'Choose location': '选择位置',
           'Disconnected': '已断开连接',
@@ -306,6 +332,10 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
+          'change_theme': 'Cambiar tema',
+          'watch_ad_message':
+              'Mira un anuncio para cambiar el tema de la aplicación.',
+          'watch_ad': 'Ver anuncio',
           'error_connect_server':
               'No se pudo conectar al servidor. Por favor, verifica tu conexión de red e intenta de nuevo.',
           'Choose location': 'Elegir ubicación',
@@ -350,6 +380,10 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
+          'change_theme': 'Thema ändern',
+          'watch_ad_message':
+              'Sehen Sie sich eine Anzeige an, um das App-Thema zu ändern.',
+          'watch_ad': 'Anzeige ansehen',
           'error_connect_server':
               'Verbindung zum Server konnte nicht hergestellt werden. Bitte überprüfe deine Netzwerkverbindung und versuche es erneut.',
           'Choose location': 'Standort wählen',
@@ -394,6 +428,10 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
+          'change_theme': 'Сменить тему',
+          'watch_ad_message':
+              'Посмотрите рекламу, чтобы изменить тему приложения.',
+          'watch_ad': 'Смотреть рекламу',
           'error_connect_server':
               'Не удалось подключиться к серверу. Пожалуйста, проверьте подключение к сети и попробуйте снова.',
           'Choose location': 'Выбрать местоположение',
@@ -482,6 +520,10 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
+          'change_theme': 'Changer de thème',
+          'watch_ad_message':
+              'Regardez une pub pour changer le thème de l’application.',
+          'watch_ad': 'Regarder la pub',
           'error_connect_server':
               'Impossible de se connecter au serveur. Veuillez vérifier votre connexion réseau et réessayer.',
           'Choose location': 'Choisir un emplacement',
@@ -527,6 +569,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
+          'change_theme': 'Skift tema',
+          'watch_ad_message': 'Se en annonce for at ændre app-temaet.',
+          'watch_ad': 'Se annonce',
           'error_connect_server':
               'Kan ikke oprette forbindelse til serveren. Tjek venligst din netværksforbindelse og prøv igen.',
           'Choose location': 'Vælg en placering',
@@ -572,6 +617,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
+          'change_theme': 'تغيير السمة',
+          'watch_ad_message': 'شاهد إعلانًا لتغيير سمة التطبيق.',
+          'watch_ad': 'مشاهدة الإعلان',
           'error_connect_server':
               'غير قادر على الاتصال بالخادم. يرجى التحقق من اتصال الشبكة والمحاولة مرة أخرى.',
           'Choose location': 'اختر الموقع',
@@ -617,6 +665,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
+          'change_theme': 'เปลี่ยนธีม',
+          'watch_ad_message': 'ดูโฆษณาเพื่อเปลี่ยนธีมของแอป',
+          'watch_ad': 'ดูโฆษณา',
           'error_connect_server':
               'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่อเครือข่ายและลองอีกครั้ง',
           'Choose location': 'เลือกตำแหน่ง',
@@ -662,6 +713,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
+          'change_theme': 'Ubah Tema',
+          'watch_ad_message': 'Tonton iklan untuk mengubah tema aplikasi.',
+          'watch_ad': 'Tonton Iklan',
           'error_connect_server':
               'Tidak dapat terhubung ke server. Silakan periksa koneksi jaringan Anda dan coba lagi.',
           'Choose location': 'Pilih lokasi',
@@ -707,6 +761,10 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
+          'change_theme': 'Temayı Değiştir',
+          'watch_ad_message':
+              'Uygulama temasını değiştirmek için bir reklam izleyin.',
+          'watch_ad': 'Reklam İzle',
           'error_connect_server':
               'Sunucuya bağlanılamıyor. Lütfen ağ bağlantınızı kontrol edin ve tekrar deneyin.',
           'Choose location': 'Konum seç',

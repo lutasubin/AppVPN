@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/home_screen.dart';
 import 'package:vpn_basic_project/screens/langguage_2.dart'; // Thêm import này
@@ -19,13 +17,12 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-
   @override
   void initState() {
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 3),
       vsync: this,
     );
 
@@ -35,36 +32,44 @@ class _SplashScreenState extends State<SplashScreen>
       });
 
     _controller.forward();
+    _navigateAfterDelay();
+  }
 
-    // Future.delayed(const Duration(seconds: 4), () {
-    //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    //   AdHelper.precacheInterstitialAd();
-    //   AdHelper.precacheNativeAd();
-    //   Get.off(() => LanguageScreen2());
-    // });
+  Future<void> _navigateAfterDelay() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
 
-    Future.delayed(const Duration(seconds: 4), () async {
-      if (mounted) {
-        final prefs = await SharedPreferences.getInstance();
-        final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
 
-        AdHelper.precacheInterstitialAd();
-        AdHelper.precacheNativeAd();
+      AdHelper.precacheInterstitialAd();
+      AdHelper.precacheNativeAd();
 
-        // Áp dụng ngôn ngữ đã chọn
-        final savedLanguage = Pref.selectedLanguage;
-        if (savedLanguage.isNotEmpty) {
-          Get.updateLocale(Locale(savedLanguage));
-        }
-
-        if (isFirstLaunch) {
-          await prefs.setBool('isFirstLaunch', false); // Đặt cờ là không phải lần đầu
-           Get.offAll(() => LanguageScreen2());
-        } else {
-           Get.offAll(() => HomeScreen());
-        }
+      final savedLanguage = Pref.selectedLanguage;
+      if (savedLanguage.isNotEmpty) {
+        Get.updateLocale(Locale(savedLanguage));
       }
-    });
+
+      if (isFirstLaunch) {
+        await prefs.setBool('isFirstLaunch', false);
+        AdHelper.showInterstitialAd(onComplete: () {
+          Get.offAll(() => LanguageScreen2(),
+              transition: Transition.fade,
+              duration: Duration(milliseconds: 500));
+        });
+      } else {
+        AdHelper.showInterstitialAd(onComplete: () {
+          Get.offAll(() => HomeScreen(),
+              transition: Transition.fade,
+              duration: Duration(milliseconds: 500));
+        });
+      }
+    } catch (e) {
+      print('Error in navigation: $e');
+      Get.offAll(() => HomeScreen(),
+          transition: Transition.fade, duration: Duration(milliseconds: 500));
+    }
   }
 
   @override
@@ -83,8 +88,8 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  'assets/svg/Frame 2.svg', // Thay đổi đường dẫn tới file SVG của bạn
+                Image.asset(
+                  'assets/images/Logo VPN.png', // Thay đổi đường dẫn tới file SVG của bạn
                   width: 86,
                   height: 86,
                 ),
@@ -113,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen>
                   children: [
                     LinearProgressIndicator(
                       value: _animation.value,
-                      backgroundColor:  Color(0xFF767C8A),
+                      backgroundColor: Color(0xFF767C8A),
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         Color(0xFFF15E24),
                       ),

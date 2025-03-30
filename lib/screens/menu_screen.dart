@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 // import 'package:url_launcher/url_launcher.dart';
 import 'package:vpn_basic_project/helpers/pref.dart'; // Bỏ comment để sử dụng Pref
+import 'package:vpn_basic_project/screens/Privacy_policy.dart';
 import 'package:vpn_basic_project/screens/language_screen.dart';
 // import 'package:vpn_basic_project/screens/rate_screen.dart';
 import 'share_screen.dart';
@@ -87,7 +88,7 @@ class _MenuScreenState extends State<MenuScreen> {
               trailingText: currentLanguage,
               onTap: () => Get.to(() => LanguageScreen()),
             ),
-            const SizedBox(height: 8),
+            // const SizedBox(height: 8),
             // _buildMenuItem(
             //   context: context,
             //   icon: Icons.star,
@@ -105,17 +106,14 @@ class _MenuScreenState extends State<MenuScreen> {
               onTap: () => ShareBottomSheet.show(),
             ),
             const SizedBox(height: 8),
-            // _buildMenuItem(
-            //     context: context,
-            //     icon: Icons.privacy_tip,
-            //     iconColor: Colors.green,
-            //     title: 'Privacy Policy'.tr,
-            //     onTap: () async {
-            //       const url = 'https://your-privacy-policy-url.com';
-            //       if (await canLaunchUrl(Uri.parse(url))) {
-            //         await launchUrl(Uri.parse(url));
-            //       }
-            //     }),
+            _buildMenuItem(
+                context: context,
+                icon: Icons.privacy_tip,
+                iconColor: Color(0xFF03C343),
+                title: 'Privacy Policy'.tr,
+                onTap: ()  {
+                  Get.to(() => PrivacyPolicy());
+                }),
           ],
         ),
       ),

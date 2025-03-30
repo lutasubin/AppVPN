@@ -20,15 +20,10 @@ import '../services/vpn_engine.dart';
 
 /// Màn hình chính của ứng dụng VPN.
 /// Hiển thị trạng thái VPN, nút kết nối, thông tin tải lên/tải xuống và quảng cáo.
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   /// Constructor cho HomeScreen.
   HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   /// Dữ liệu chi tiết IP, được quản lý bằng Obx để theo dõi thay đổi.
   final ipData = IPDetails.fromJson({}).obs;
 
@@ -113,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     24.0
                                                 ? 24.0
                                                 : constraints.maxWidth * 0.06,
-                                            color: Colors.white,
+                                            color: Color(0xFFFFFFFF),
                                           ),
                                         ),
                                         subtitle: 'Uploads'.tr,
@@ -135,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     24.0
                                                 ? 24.0
                                                 : constraints.maxWidth * 0.06,
-                                            color: Colors.white,
+                                            color: Color(0xFFFFFFFF),
                                           ),
                                         ),
                                         subtitle: 'Download'.tr,
@@ -208,8 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Obx(() {
             print('VPN State: ${_controller.vpnState.value}');
             final isRunning =
-                _controller.vpnState.value == VpnEngine.vpnConnected ||
-                    _controller.vpnState.value == VpnEngine.vpnConnecting;
+                _controller.vpnState.value == VpnEngine.vpnConnected;
+            // _controller.vpnState.value == VpnEngine.vpnConnecting;
             return Column(
               children: [
                 if (_controller.vpnState.value == VpnEngine.vpnDisconnected)
@@ -231,13 +226,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: constraints.maxHeight * 0.01 > 8.0
                   ? 8.0
                   : constraints.maxHeight * 0.01),
-          Text(
-            _controller.getButtonText,
-            style: TextStyle(
-              color: Color(0xFF03C343),
-              fontSize: 12.0,
-            ),
-          ),
+          // update lai trang thai ket noi
+          _controller.getButtonContent,
+
           SizedBox(
               height: constraints.maxHeight * 0.05 > 80.0
                   ? 80.0
@@ -260,8 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Align(
                   alignment: _controller.vpnState.value ==
-                              VpnEngine.vpnConnected ||
-                          _controller.vpnState.value == VpnEngine.vpnConnecting
+                          VpnEngine.vpnConnected
+                      //|| _controller.vpnState.value == VpnEngine.vpnConnecting
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
                   child: Container(
@@ -320,7 +311,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : AssetImage(
                                     'assets/flags/${_controller.vpn.value.CountryShort.toLowerCase()}.png'),
                           ),
-                          ip: ipData.value.query,
+                          ip: _controller.vpn.value.IP.isEmpty
+                              ? 'loading...'
+                              : _controller.vpn.value.IP,
                         ),
                       ),
                       CircleAvatar(

@@ -67,20 +67,10 @@ class MyApp extends StatelessWidget {
       title: 'OpenVpn Demo',
       home: SplashScreen(),
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 3,
-        ),
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor:
+            const Color(0xFF02091A), // Đặt màu nền mặc định
       ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 3,
-        ),
-      ),
+      themeMode: ThemeMode.dark, // Cố định chế độ tối
       // Thêm hỗ trợ đa ngôn ngữ
       locale: Locale(Pref.selectedLanguage.isEmpty
           ? Get.deviceLocale?.languageCode ?? 'en'
@@ -88,6 +78,8 @@ class MyApp extends StatelessWidget {
       fallbackLocale: const Locale('en'), // Ngôn ngữ dự phòng
       translations: AppTranslations(), // Sử dụng AppTranslations từ file riêng
       debugShowCheckedModeBanner: false,
+      defaultTransition: Transition.fade, // Hiệu ứng chuyển đổi mặc định
+      transitionDuration: Duration(milliseconds: 500),
     );
   }
 }

@@ -72,7 +72,8 @@ class LanguageScreen2 extends StatelessWidget {
       {
         'code': 'ss',
         'name': 'Arabic',
-        'flag': 'assets/flags/ae.png', // Cờ UAE cho tiếng Ả Rập (có thể thay đổi nếu cần)
+        'flag':
+            'assets/flags/ae.png', // Cờ UAE cho tiếng Ả Rập (có thể thay đổi nếu cần)
       },
       {
         'code': 'da',
@@ -101,6 +102,7 @@ class LanguageScreen2 extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Tắt nút thoát mặc định
         backgroundColor: const Color(0xFF02091A),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,

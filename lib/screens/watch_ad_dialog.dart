@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class WatchAdDialog extends StatelessWidget {
@@ -10,16 +9,16 @@ class WatchAdDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(
-        'Change Theme',
+        'change_theme'.tr,
         style: TextStyle(color: Color(0xFFFFFFFF)),
       ),
-      content: Text('Watch an Ad to Change App Theme.',
+      content: Text('watch_ad_message'.tr,
           style: TextStyle(color: Color(0xFFFFFFFF))),
       actions: [
         CupertinoDialogAction(
           isDefaultAction: true,
           textStyle: TextStyle(color: Color(0xFF03C343)),
-          child: Text('Watch Ad'),
+          child: Text('watch_ad'.tr),
           onPressed: () {
             Get.back();
             onComplete();

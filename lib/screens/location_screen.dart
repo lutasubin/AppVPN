@@ -19,7 +19,7 @@ class LocationScreen extends StatelessWidget {
   final LocationController _controller = Get.put(LocationController());
 
   /// Bộ điều khiển quảng cáo tự nhiên.
-  final _adController = NativeAdController();
+  final _adController2 = NativeAdController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class LocationScreen extends StatelessWidget {
     if (_controller.vpnList.isEmpty) _controller.getVpnData();
 
     // Tải quảng cáo tự nhiên
-    _adController.ad = AdHelper.loadNativeAd(adController: _adController);
+    _adController2.ad = AdHelper.loadNativeAd2(adController: _adController2);
 
     return Obx(
       () => Scaffold(
@@ -66,10 +66,10 @@ class LocationScreen extends StatelessWidget {
           ],
         ),
         bottomNavigationBar:
-            _adController.ad != null && _adController.adLoaded.isTrue
+            _adController2.ad != null && _adController2.adLoaded.isTrue
                 ? SafeArea(
                     child: SizedBox(
-                        height: 120, child: AdWidget(ad: _adController.ad!)))
+                        height: 120, child: AdWidget(ad: _adController2.ad!)))
                 : null,
         body: _controller.isLoading.value
             ? _loadingWidget(context) // Hiển thị khi đang tải
