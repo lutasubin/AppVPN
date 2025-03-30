@@ -38,9 +38,6 @@ alt="lutasubin" /></p>
   <img src="https://github.com/lutasubin/AppVPN/blob/master/scrennhost/image.png" alt="VPN App Screenshot 1" style="margin-right: 10px;"/>
   <img src="https://github.com/lutasubin/AppVPN/blob/master/scrennhost/image1.png" alt="VPN App Screenshot 2" style="margin-right: 10px;"/>
   <img src="https://github.com/lutasubin/AppVPN/blob/master/scrennhost/image2.png" alt="VPN App Screenshot 3" style="margin-right: 10px;"/>
-</div>
-<div style="display: flex; overflow-x: auto;">
- 
   <img src="https://github.com/lutasubin/AppVPN/blob/master/scrennhost/image3.png" alt="VPN App Screenshot 4" style="margin-right: 10px;"/>
   <img src="https://github.com/lutasubin/AppVPN/blob/master/scrennhost/image4.png" alt="VPN App Screenshot 5" style="margin-right: 10px;"/>
   <img src="https://github.com/lutasubin/AppVPN/blob/master/scrennhost/image5.png" alt="VPN App Screenshot 6" style="margin-right: 10px;"/>
