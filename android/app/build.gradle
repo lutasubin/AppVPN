@@ -46,6 +46,20 @@ android {
         versionName = flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            if (project.hasProperty('keyPropertiesFile')) {
+                def keyProperties = new Properties()
+                file(project.keyPropertiesFile).withInputStream { keyProperties.load(it) }
+
+                storeFile file(keyProperties['storeFile'])
+                storePassword keyProperties['storePassword']
+                keyAlias keyProperties['keyAlias']
+                keyPassword keyProperties['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
             signingConfig signingConfigs.debug
