@@ -31,7 +31,9 @@ class VpnCart extends StatelessWidget {
                 // controller.setVpn(vpn);
                 Get.back();
 
-                MyDialogs.success(msg: 'Connecting VPN Location 5s...');
+                // MyDialogs.success(
+                //     msg:
+                //         'Please wait 20s to connect. If not, please check your network or switch to another country....');
 
                 if (controller.vpnState.value == VpnEngine.vpnConnected) {
                   VpnEngine.stopVpn();

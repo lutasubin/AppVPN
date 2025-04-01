@@ -4,6 +4,8 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
+          'connection_restored': 'Connection has been restored',
+          'waiting_time':'Please wait 20s to connect. If not, please check your network or switch to another country...',
           'no_internet': 'No Internet!',
           'no_internet_title': 'Connection Error',
           'change_theme': 'Change Theme',
@@ -53,6 +55,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
+          'connection_restored': 'Kết nối đã được khôi phục',
+          'waiting_time':'Vui lòng đợi 20 giây để kết nối. Nếu không, vui lòng kiểm tra mạng của bạn hoặc chuyển sang quốc gia khác...',
           'no_internet': 'Không có Internet!',
           'no_internet_title': 'Lỗi kết nối',
           'change_theme': 'Thay đổi chủ đề',
@@ -102,6 +106,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
+          'connection_restored': 'कनेक्शन बहाल हो गया है',
+          'waiting_time': 'कृपया 20 सेकंड तक कनेक्ट होने की प्रतीक्षा करें। यदि नहीं, तो कृपया अपने नेटवर्क की जाँच करें या किसी अन्य देश में स्विच करें...',
           'change_theme': 'थीम बदलें',
           'watch_ad_message': 'ऐप थीम बदलने के लिए एक विज्ञापन देखें।',
           'watch_ad': 'विज्ञापन देखें',
@@ -149,6 +155,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
+          'connection_restored': '연결이 복구되었습니다',
+          'waiting_time':'20초 동안 연결될 때까지 기다려 주세요. 그렇지 않으면 네트워크를 확인하거나 다른 나라로 전환해 주세요...',
           'change_theme': '테마 변경',
           'watch_ad_message': '광고를 보고 앱 테마를 변경하세요.',
           'watch_ad': '광고 보기',
@@ -194,6 +202,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
+          'connection_restored': 'A conexão foi restaurada',
+          'waiting_time': 'Por favor, aguarde 20 segundos para conectar. Se não, verifique sua rede ou mude para outro país...',
           'change_theme': 'Mudar Tema',
           'watch_ad_message':
               'Assista a um anúncio para mudar o tema do aplicativo.',
@@ -242,6 +252,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Não foi possível abrir o URL da loja',
         },
         'ja': {
+          'connection_restored': '接続が復元されました',
+          'waiting_time': '20秒間接続するのを待ってください。そうでない場合は、ネットワークを確認するか、別の国に切り替えてください...',
           'change_theme': 'テーマを変更',
           'watch_ad_message': '広告を見てアプリのテーマを変更します。',
           'watch_ad': '広告を見る',
@@ -287,6 +299,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
+          'connection_restored': '连接已恢复',
+          'waiting_time':'请等待20秒以连接。如果没有，请检查您的网络或切换到另一个国家...',
           'change_theme': '更改主题',
           'watch_ad_message': '观看广告以更改应用主题。',
           'watch_ad': '观看广告',
@@ -332,6 +346,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
+          'connection_restored': 'La conexión ha sido restaurada',
+          'waiting_time': 'Por favor, espera 20 segundos para conectar. Si no, revisa tu red o cambia a otro país...',
           'change_theme': 'Cambiar tema',
           'watch_ad_message':
               'Mira un anuncio para cambiar el tema de la aplicación.',
@@ -380,6 +396,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
+          'connection_restored': 'Die Verbindung wurde wiederhergestellt',
+          'waiting_time': 'Bitte warte 20 Sekunden, um eine Verbindung herzustellen. Falls nicht, überprüfe dein Netzwerk oder wechsle in ein anderes Land...',
           'change_theme': 'Thema ändern',
           'watch_ad_message':
               'Sehen Sie sich eine Anzeige an, um das App-Thema zu ändern.',
@@ -428,6 +446,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
+          'connection_restored': 'Соединение восстановлено',
+          'waiting_time': 'Пожалуйста, подождите 20 секунд для подключения. Если нет, проверьте сеть или переключитесь на другую страну...',
           'change_theme': 'Сменить тему',
           'watch_ad_message':
               'Посмотрите рекламу, чтобы изменить тему приложения.',
@@ -520,6 +540,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
+          'connection_restored': 'La connexion a été rétablie',
+          'waiting_time': 'Veuillez attendre 20 secondes pour vous connecter. Sinon, vérifiez votre réseau ou changez de pays...',
           'change_theme': 'Changer de thème',
           'watch_ad_message':
               'Regardez une pub pour changer le thème de l’application.',
@@ -569,6 +591,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
+          'connection_restored': 'Forbindelsen er blevet gendannet',
+          'waiting_time': 'Vent venligst 20 sekunder for at oprette forbindelse. Hvis ikke, tjek dit netværk eller skift til et andet land...',
           'change_theme': 'Skift tema',
           'watch_ad_message': 'Se en annonce for at ændre app-temaet.',
           'watch_ad': 'Se annonce',
@@ -617,6 +641,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
+          'connection_restored': 'تم استعادة الاتصال',
+          'waiting_time': 'يرجى الانتظار 20 ثانية للاتصال. إذا لم يحدث ذلك، تحقق من شبكتك أو انتقل إلى بلد آخر...',
           'change_theme': 'تغيير السمة',
           'watch_ad_message': 'شاهد إعلانًا لتغيير سمة التطبيق.',
           'watch_ad': 'مشاهدة الإعلان',
@@ -665,6 +691,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
+          'connection_restored': 'การเชื่อมต่อได้รับการกู้คืน',
+          'waiting_time': 'กรุณารอ 20 วินาทีเพื่อเชื่อมต่อ หากไม่สำเร็จ กรุณาตรวจสอบเครือข่ายของคุณหรือเปลี่ยนไปยังประเทศอื่น...',
           'change_theme': 'เปลี่ยนธีม',
           'watch_ad_message': 'ดูโฆษณาเพื่อเปลี่ยนธีมของแอป',
           'watch_ad': 'ดูโฆษณา',
@@ -713,6 +741,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
+          'connection_restored': 'Koneksi telah dipulihkan',
+          'waiting_time': 'Harap tunggu 20 detik untuk terhubung. Jika tidak, periksa jaringan Anda atau ganti ke negara lain...',
           'change_theme': 'Ubah Tema',
           'watch_ad_message': 'Tonton iklan untuk mengubah tema aplikasi.',
           'watch_ad': 'Tonton Iklan',
@@ -761,6 +791,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
+          'connection_restored': 'Bağlantı geri yüklendi',
+          'waiting_time': 'Lütfen bağlantı için 20 saniye bekleyin. Olmazsa, ağınızı kontrol edin veya başka bir ülkeye geçin...',
           'change_theme': 'Temayı Değiştir',
           'watch_ad_message':
               'Uygulama temasını değiştirmek için bir reklam izleyin.',

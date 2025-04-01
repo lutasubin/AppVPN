@@ -6,7 +6,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/apis/apis.dart';
 import 'package:vpn_basic_project/controllers/home_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
+import 'package:vpn_basic_project/controllers/network_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
+import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn_status.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
@@ -32,6 +34,9 @@ class HomeScreen extends StatelessWidget {
 
   /// Bộ điều khiển quảng cáo tự nhiên.
   final _adController = NativeAdController();
+
+  // Lấy NetworkController
+  final _networkController = Get.find<NetworkController>();
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +155,13 @@ class HomeScreen extends StatelessWidget {
               appBar: AppBar(
                 backgroundColor: const Color(0xFF02091A),
                 leading: IconButton(
-                  onPressed: () => Get.to(() => MenuScreen()),
+                  onPressed: ()async {
+                    if (!await _networkController.checkConnection()) {
+                      MyDialogs2.error(msg: 'error_connect_server'.tr);
+                      return;
+                    }
+                    Get.to(() => MenuScreen());
+                  },
                   icon: Icon(
                     Icons.menu,
                     size: 25.0,
@@ -235,7 +246,14 @@ class HomeScreen extends StatelessWidget {
                   : constraints.maxHeight * 0.05),
           Center(
             child: GestureDetector(
-              onTap: _controller.connectToVpn,
+              onTap: ()async {
+                // Kiểm tra kết nối mạng trước khi kết nối VPN
+                if (!await _networkController.checkConnection()) {
+                  MyDialogs2.error(msg: 'error_connect_server'.tr);
+                  return;
+                }
+                _controller.connectToVpn(); // Tiếp tục kết nối nếu có mạng
+              },
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
                 width: constraints.maxWidth * 0.4 > 148.0
@@ -283,7 +301,13 @@ class HomeScreen extends StatelessWidget {
         child: Semantics(
           button: true,
           child: InkWell(
-            onTap: () => Get.to(() => LocationScreen()),
+            onTap: ()async {
+              if (!await _networkController.checkConnection()) {
+                MyDialogs2.error(msg: 'error_connect_server'.tr);
+                return;
+              }
+              Get.to(() => LocationScreen());
+            },
             child: Obx(() => Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   color: Color(0xFF172032),

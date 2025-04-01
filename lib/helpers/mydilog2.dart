@@ -5,6 +5,7 @@ class MyDialogs2 {
   static void error({required String msg, String? title}) {
     Get.dialog(
       AlertDialog(
+        backgroundColor: Color(0xFFFFFFFF),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -32,6 +33,7 @@ class MyDialogs2 {
             Text(
               msg,
               style: const TextStyle(
+                color: Color(0xFFF15E24),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -53,7 +55,14 @@ class MyDialogs2 {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('OK'),
+            child: const Text(
+              'OK',
+              style: TextStyle(
+                color: Color(0xFFF15E24),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),

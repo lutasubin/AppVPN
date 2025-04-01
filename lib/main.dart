@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vpn_basic_project/controllers/dependency_injection.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/app_translations.dart';
 import 'package:vpn_basic_project/helpers/config.dart';
@@ -19,7 +20,13 @@ late SharedPreferences prefs;
 Future<void> main() async {
   // debugPaintSizeEnabled = true; // Hiển thị viền widget để debug
 
+  // check internet
+ 
+  await DependencyInjection.init();
+
+
   WidgetsFlutterBinding.ensureInitialized();
+  
 
   // Khởi tạo kích thước màn hình (mq)
   mq = WidgetsBinding.instance.window.physicalSize /

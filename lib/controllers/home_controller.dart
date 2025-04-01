@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
@@ -18,10 +17,14 @@ class HomeController extends GetxController {
   Timer? _waitingTimer;
   final RxInt _remainingSeconds = 20.obs;
 
-  void connectToVpn() async{
+  void connectToVpn() async {
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
       MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
       return;
+    }
+
+    if (vpnState.value == VpnEngine.vpnDisconnected) {
+      MyDialogs.success(msg: 'waiting_time'.tr);
     }
 
     if (vpnState.value == VpnEngine.vpnDisconnected) {
@@ -35,9 +38,7 @@ class HomeController extends GetxController {
           config: config);
 
       AdHelper.showInterstitialAd(onComplete: () async {
-        _remainingSeconds.value = 20;
         _startWaitingTimer();
-        update();
 
         await VpnEngine.startVpn(vpnConfig);
         vpnState.value = VpnEngine.vpnConnected;
@@ -45,10 +46,10 @@ class HomeController extends GetxController {
         update();
       });
     } else {
+      await VpnEngine.stopVpn();
       vpnState.value = VpnEngine.vpnDisconnected;
       _cancelWaitingTimer();
       update();
-     await VpnEngine.stopVpn();
     }
   }
 
@@ -61,9 +62,7 @@ class HomeController extends GetxController {
         update();
       } else {
         if (vpnState.value != VpnEngine.vpnConnected) {
-          // vpnState.value = VpnEngine.vpnDisconnected;
           VpnEngine.stopVpn(); // Ngắt kết nối khi hết thời gian chờ
-
           _cancelWaitingTimer();
           update();
         }
@@ -82,8 +81,7 @@ class HomeController extends GetxController {
         return Color(0xFF343A4B);
       case VpnEngine.vpnConnected:
         return Color(0xFFF15E24);
-      // case VpnEngine.vpnConnecting:
-      //   return Color(0xFFF15E24);
+
       default:
         return Color(0xFF343A4B);
     }
@@ -121,27 +119,7 @@ class HomeController extends GetxController {
             ),
           ],
         );
-      // case VpnEngine.vpnConnecting:
-      //   return Row(
-      //     mainAxisSize: MainAxisSize.min,
-      //     children: [
-      //       Icon(
-      //         Icons.connect_without_contact_outlined,
-      //         color: Color(0xFF03C343),
-      //         size: 12,
-      //       ),
-      //       SizedBox(
-      //         width: 5,
-      //       ),
-      //       Text(
-      //         'Connecting....'.tr,
-      //         style: TextStyle(
-      //           color: Color(0xFF03C343),
-      //           fontSize: 12.0,
-      //         ),
-      //       ),
-      //     ],
-      //   );
+
       default:
         return Row(
           mainAxisSize: MainAxisSize.min,
