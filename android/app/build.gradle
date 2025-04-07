@@ -24,6 +24,12 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) { 
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace = "com.Lutasubin.freeVpn"
     compileSdk = 34
@@ -48,21 +54,16 @@ android {
 
     signingConfigs {
         release {
-            if (project.hasProperty('keyPropertiesFile')) {
-                def keyProperties = new Properties()
-                file(project.keyPropertiesFile).withInputStream { keyProperties.load(it) }
-
-                storeFile file(keyProperties['storeFile'])
-                storePassword keyProperties['storePassword']
-                keyAlias keyProperties['keyAlias']
-                keyPassword keyProperties['keyPassword']
-            }
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             // disable minify and shrink resources
             minifyEnabled false
             shrinkResources false

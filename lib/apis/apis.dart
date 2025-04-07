@@ -30,7 +30,7 @@ class Apis {
       }
       log(vpnList.first.HostName);
     } catch (e) {
-      MyDialogs2.error(msg: 'error_connect_server'.tr);
+      // MyDialogs2.error(msg: 'error_connect_server'.tr);
       log('\ngetVPNSeversE:$e');
     }
     // log(res.body);
@@ -48,7 +48,7 @@ class Apis {
       log(data.toString());
       ipData.value = IPDetails.fromJson(data);
     } catch (e) {
-      MyDialogs2.error(msg: 'error_connect_server'.tr);
+      // MyDialogs2.error(msg: 'error_connect_server'.tr);
       log('\ngetIPDetailsE: $e');
     }
   }

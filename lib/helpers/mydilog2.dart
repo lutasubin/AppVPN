@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyDialogs2 {
+  //error
   static void error({required String msg, String? title}) {
     Get.dialog(
       AlertDialog(
@@ -68,5 +69,38 @@ class MyDialogs2 {
       ),
       barrierDismissible: false,
     );
+  }
+
+  //warning
+  static void warning({required String msg}) {
+    Get.snackbar('', '',
+        backgroundColor: const Color(0xFFFFA726), // Màu nền cam
+        duration: Duration(seconds: 5),
+        titleText: Row(
+          children: [
+            Icon(
+              Icons.warning_amber_rounded,
+              color: Color(0xFFFFFFFF), // Biểu tượng màu trắng
+              size: 30,
+            ),
+            const SizedBox(
+                width: 10), // Khoảng cách 10px giữa biểu tượng và tiêu đề
+            const Text(
+              'Warning!',
+              style: TextStyle(
+                color: Color(0xFFFFFFFF), // Chữ "Warning!" màu trắng
+                fontWeight: FontWeight.bold, // Chữ in đậm
+                fontSize: 20, // Kích thước chữ 20px
+              ),
+            ),
+          ],
+        ),
+        messageText: Text(
+          msg,
+          style: const TextStyle(
+            color: Color(0xFFFFFFFF), // Nội dung thông báo màu đen
+            fontSize: 16, // Kích thước chữ 16px
+          ),
+        ));
   }
 }

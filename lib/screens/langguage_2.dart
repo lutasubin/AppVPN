@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/home_screen.dart';
 
-class LanguageScreen2 extends StatelessWidget {
-  const LanguageScreen2({super.key});
+class LanguageScreen2 extends StatefulWidget {
 
+  LanguageScreen2({super.key});
+
+  @override
+  State<LanguageScreen2> createState() => _LanguageScreen2State();
+}
+
+class _LanguageScreen2State extends State<LanguageScreen2> {
+  final _adController4 = NativeAdController();
+  // Khởi tạo selectedLanguage rỗng ban đầu
+    final RxString selectedLanguage = Pref.selectedLanguage.obs;
+
+   @override
+  void initState() {
+    super.initState();
+    _adController4.ad = AdHelper.loadNativeAd2(adController: _adController4);
+  }
+  
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> languages = [
@@ -97,8 +116,7 @@ class LanguageScreen2 extends StatelessWidget {
       },
     ];
 
-    // Khởi tạo selectedLanguage rỗng ban đầu
-    final RxString selectedLanguage = Pref.selectedLanguage.obs;
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -129,20 +147,27 @@ class LanguageScreen2 extends StatelessWidget {
                     ? (Get.deviceLocale ?? const Locale('en'))
                     : Locale(selectedLanguage.value));
                 Get.offAll(() => HomeScreen());
-              } else {
-                Get.snackbar(
-                  'Warning'.tr,
-                  'Please select a language'.tr,
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: const Color(0xFF172032),
-                  colorText: const Color(0xFFFFFFFF),
-                );
               }
+              // else {
+              //   Get.snackbar(
+              //     'Warning'.tr,
+              //     'Please select a language'.tr,
+              //     snackPosition: SnackPosition.BOTTOM,
+              //     backgroundColor: const Color(0xFF172032),
+              //     colorText: const Color(0xFFFFFFFF),
+              //   );
+              // }
             },
           ),
         ],
       ),
       backgroundColor: const Color(0xFF02091A),
+      bottomNavigationBar: // Config.hideAds ? null:
+          _adController4.ad != null && _adController4.adLoaded.isTrue
+              ? SafeArea(
+                  child: SizedBox(
+                      height: 120, child: AdWidget(ad: _adController4.ad!)))
+              : null,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
@@ -198,13 +223,13 @@ class LanguageScreen2 extends StatelessWidget {
                         Get.updateLocale(Locale(value));
                       }
 
-                      Get.snackbar(
-                        'Success'.tr,
-                        'Changed to'.tr + ' ${language['name']}',
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: const Color(0xFF172032),
-                        colorText: const Color(0xFFFFFFFF),
-                      );
+                      // Get.snackbar(
+                      //   'Success'.tr,
+                      //   'Changed to'.tr + ' ${language['name']}',
+                      //   snackPosition: SnackPosition.BOTTOM,
+                      //   backgroundColor: const Color(0xFF172032),
+                      //   colorText: const Color(0xFFFFFFFF),
+                      // );
                     }
                   },
                 ),

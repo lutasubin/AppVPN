@@ -155,7 +155,7 @@ class HomeScreen extends StatelessWidget {
               appBar: AppBar(
                 backgroundColor: const Color(0xFF02091A),
                 leading: IconButton(
-                  onPressed: ()async {
+                  onPressed: () async {
                     if (!await _networkController.checkConnection()) {
                       MyDialogs2.error(msg: 'error_connect_server'.tr);
                       return;
@@ -176,7 +176,13 @@ class HomeScreen extends StatelessWidget {
                 actions: [
                   IconButton(
                     padding: EdgeInsets.only(right: 8.0),
-                    onPressed: () => Get.to(() => NetworkTestScreen()),
+                    onPressed: () async {
+                      if (!await _networkController.checkConnection()) {
+                        MyDialogs2.error(msg: 'error_connect_server'.tr);
+                        return;
+                      }
+                      Get.to(() => NetworkTestScreen());
+                    },
                     icon: Icon(
                       CupertinoIcons.info,
                       size: 25.0,
@@ -246,7 +252,7 @@ class HomeScreen extends StatelessWidget {
                   : constraints.maxHeight * 0.05),
           Center(
             child: GestureDetector(
-              onTap: ()async {
+              onTap: () async {
                 // Kiểm tra kết nối mạng trước khi kết nối VPN
                 if (!await _networkController.checkConnection()) {
                   MyDialogs2.error(msg: 'error_connect_server'.tr);
@@ -301,7 +307,7 @@ class HomeScreen extends StatelessWidget {
         child: Semantics(
           button: true,
           child: InkWell(
-            onTap: ()async {
+            onTap: () async {
               if (!await _networkController.checkConnection()) {
                 MyDialogs2.error(msg: 'error_connect_server'.tr);
                 return;

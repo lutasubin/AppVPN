@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
+import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
@@ -16,6 +17,8 @@ class HomeController extends GetxController {
   final vpnState = VpnEngine.vpnDisconnected.obs;
   Timer? _waitingTimer;
   final RxInt _remainingSeconds = 20.obs;
+
+  bool _manuallyDisconnected = false;
 
   void connectToVpn() async {
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
@@ -46,33 +49,48 @@ class HomeController extends GetxController {
         update();
       });
     } else {
-      await VpnEngine.stopVpn();
-      vpnState.value = VpnEngine.vpnDisconnected;
-      _cancelWaitingTimer();
-      update();
+      _disconnectVpn(showWarning: false);
     }
+  }
+
+  void _disconnectVpn({bool showWarning = false}) async {
+    _manuallyDisconnected = true; // ✅ Đánh dấu người dùng tự bấm
+
+    await VpnEngine.stopVpn();
+    vpnState.value = VpnEngine.vpnDisconnected;
+    _cancelWaitingTimer(showWarning: showWarning);
+    update();
   }
 
   void _startWaitingTimer() {
     _cancelWaitingTimer();
+    _manuallyDisconnected = false; // ✅ Reset lại trước mỗi lần kết nối
+
     _remainingSeconds.value = 20;
     _waitingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingSeconds.value > 0) {
         _remainingSeconds.value--;
         update();
       } else {
-        if (vpnState.value != VpnEngine.vpnConnected) {
+        if (vpnState.value != VpnEngine.vpnConnected &&
+            !_manuallyDisconnected) {
           VpnEngine.stopVpn(); // Ngắt kết nối khi hết thời gian chờ
-          _cancelWaitingTimer();
+          _cancelWaitingTimer(
+              showWarning: true); // ⚠️ Chỉ hiển thị warning nếu thất bại
           update();
         }
       }
     });
   }
 
-  void _cancelWaitingTimer() {
+  void _cancelWaitingTimer({bool showWarning = false}) {
     _waitingTimer?.cancel();
     _waitingTimer = null;
+    if (showWarning) {
+      MyDialogs2.warning(
+        msg: 'warning'.tr,
+      );
+    }
   }
 
   Color get getButtonColor {

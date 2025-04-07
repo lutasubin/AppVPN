@@ -131,11 +131,12 @@ class LanguageScreen extends StatelessWidget {
                 size: 25,
               ),
               onPressed: () {
-                Get.dialog(WatchAdDialog(onComplete: () {
-                  AdHelper.showRewardedAd(onComplete: () {
-                    Get.back();
-                  });
-                }));
+                // Get.dialog(WatchAdDialog(onComplete: () {
+                //   AdHelper.showRewardedAd(onComplete: () {
+                //     // Get.back();
+                //   });
+                // }));
+                Get.back();
               },
             ),
           ],
@@ -205,13 +206,13 @@ class LanguageScreen extends StatelessWidget {
                           } else {
                             Get.updateLocale(Locale(value));
                           }
-                          Get.snackbar(
-                            'Success'.tr,
-                            'Changed to'.tr + ' ${language['name']}',
-                            snackPosition: SnackPosition.BOTTOM,
-                            backgroundColor: const Color(0xFF172032),
-                            colorText: const Color(0xFFFFFFFF),
-                          );
+                          // Get.snackbar(
+                          //   'Success'.tr,
+                          //   'Changed to'.tr + ' ${language['name']}',
+                          //   snackPosition: SnackPosition.BOTTOM,
+                          //   backgroundColor: const Color(0xFF172032),
+                          //   colorText: const Color(0xFFFFFFFF),
+                          // );
                         }
                       },
                     ),
