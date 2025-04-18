@@ -32,7 +32,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.Lutasubin.freeVpn"
-    compileSdk = 34
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     lintOptions {
@@ -48,8 +48,8 @@ android {
         applicationId = "com.Lutasubin.freeVpn"
         minSdk = 21
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        versionCode = 2
+        versionName = "1.1.0"
     }
 
     signingConfigs {
@@ -70,13 +70,6 @@ android {
         }
     }
 
-    configurations.all {
-        resolutionStrategy {
-            force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-            force "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
-            force 'androidx.annotation:annotation-jvm:1.7.0'
-        }
-    }
 }
 
 flutter {

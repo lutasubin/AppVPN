@@ -74,13 +74,13 @@ class MyDialogs2 {
   //warning
   static void warning({required String msg}) {
     Get.snackbar('', '',
-        backgroundColor: const Color(0xFFFFA726), // Màu nền cam
+        backgroundColor: Color(0xFFFFFFFF), // Màu nền cam
         duration: Duration(seconds: 5),
         titleText: Row(
           children: [
             Icon(
               Icons.warning_amber_rounded,
-              color: Color(0xFFFFFFFF), // Biểu tượng màu trắng
+              color: const Color(0xFFFFA726), // Biểu tượng màu trắng
               size: 30,
             ),
             const SizedBox(
@@ -88,7 +88,7 @@ class MyDialogs2 {
             const Text(
               'Warning!',
               style: TextStyle(
-                color: Color(0xFFFFFFFF), // Chữ "Warning!" màu trắng
+                color: const Color(0xFFFFA726), // Chữ "Warning!" màu trắng
                 fontWeight: FontWeight.bold, // Chữ in đậm
                 fontSize: 20, // Kích thước chữ 20px
               ),
@@ -98,7 +98,7 @@ class MyDialogs2 {
         messageText: Text(
           msg,
           style: const TextStyle(
-            color: Color(0xFFFFFFFF), // Nội dung thông báo màu đen
+            color: Colors.black, // Nội dung thông báo màu đen
             fontSize: 16, // Kích thước chữ 16px
           ),
         ));

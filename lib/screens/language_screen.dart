@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
+// import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
 
 class LanguageScreen extends StatelessWidget {
   final _adController1 = NativeAdController();
@@ -14,6 +14,7 @@ class LanguageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _adController1.ad = AdHelper.loadNativeAd1(adController: _adController1);
+     final RxString selectedLanguage = Pref.selectedLanguage.obs;
 
     final List<Map<String, dynamic>> languages = [
       {
@@ -104,121 +105,118 @@ class LanguageScreen extends StatelessWidget {
       },
     ];
 
-    final RxString selectedLanguage = Pref.selectedLanguage.obs;
 
-    return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false, // Tắt nút thoát mặc định
-          backgroundColor: const Color(0xFF02091A), // Mã màu mới
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                'Language'.tr,
-                style: const TextStyle(
-                  color: Color(0xFFFFFFFF),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.check,
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Tắt nút thoát mặc định
+        backgroundColor: const Color(0xFF02091A), // Mã màu mới
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Language'.tr,
+              style: const TextStyle(
                 color: Color(0xFFFFFFFF),
-                size: 25,
+                fontWeight: FontWeight.bold,
               ),
-              onPressed: () {
-                // Get.dialog(WatchAdDialog(onComplete: () {
-                //   AdHelper.showRewardedAd(onComplete: () {
-                //     // Get.back();
-                //   });
-                // }));
-                Get.back();
-              },
             ),
           ],
         ),
-        backgroundColor: const Color(0xFF02091A),
-        bottomNavigationBar:
-            // Config.hideAds ? null:
-            _adController1.ad != null && _adController1.adLoaded.isTrue
-                ? SafeArea(
-                    child: SizedBox(
-                        height: 350, child: AdWidget(ad: _adController1.ad!)))
-                : null,
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.builder(
-            itemCount: languages.length,
-            itemBuilder: (context, index) {
-              final language = languages[index];
-              final isSelected = selectedLanguage.value == language['code'] ||
-                  (language['code'] == 'default' &&
-                      selectedLanguage.value.isEmpty);
-
-              return Obx(() => Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: isSelected
-                            ? const Color(0xFFF15E24)
-                            : const Color(0xFF172032),
-                        width: 2.0, // Tăng độ rộng viền để nổi bật hơn
-                      ),
-                      color: const Color(0xFF172032),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: RadioListTile<String>(
-                      value: language['code'],
-                      groupValue: selectedLanguage.value.isEmpty
-                          ? 'default'
-                          : selectedLanguage.value,
-                      activeColor: const Color(
-                          0xFFF15E24), // Thay đổi radio button thành màu vàng
-                      title: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundImage: AssetImage(language['flag']),
-                          ),
-                          const SizedBox(width: 20),
-                          Text(
-                            language['name'],
-                            style: const TextStyle(
-                              color: Color(0xFFFFFFFF),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onChanged: (value) {
-                        if (value != null) {
-                          selectedLanguage.value = value;
-                          Pref.selectedLanguage = value;
-
-                          if (value == 'default') {
-                            Get.updateLocale(
-                                Get.deviceLocale ?? const Locale('en'));
-                          } else {
-                            Get.updateLocale(Locale(value));
-                          }
-                          // Get.snackbar(
-                          //   'Success'.tr,
-                          //   'Changed to'.tr + ' ${language['name']}',
-                          //   snackPosition: SnackPosition.BOTTOM,
-                          //   backgroundColor: const Color(0xFF172032),
-                          //   colorText: const Color(0xFFFFFFFF),
-                          // );
-                        }
-                      },
-                    ),
-                  ));
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.check,
+              color: Color(0xFFFFFFFF),
+              size: 25,
+            ),
+            onPressed: () {
+              // Get.dialog(WatchAdDialog(onComplete: () {
+              //   AdHelper.showRewardedAd(onComplete: () {
+              //     // Get.back();
+              //   });
+              // }));
+              Get.back();
             },
           ),
+        ],
+      ),
+      backgroundColor: const Color(0xFF02091A),
+      bottomNavigationBar: Obx(() {//! boc lai obx
+        return _adController1.ad != null && _adController1.adLoaded.isTrue
+            ? SafeArea(
+                child: SizedBox(
+                  height: 350,
+                  child: AdWidget(ad: _adController1.ad!),
+                ),
+              )
+            : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+      }),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: languages.length,
+          itemBuilder: (context, index) {
+            final language = languages[index];
+            
+            return Obx((){ //! obx boc o day
+              final isSelected = selectedLanguage.value == language['code'] ||
+                (language['code'] == 'default' &&
+                    selectedLanguage.value.isEmpty);
+            return  Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isSelected
+                          ? const Color(0xFFF15E24)
+                          : const Color(0xFF172032),
+                      width: 2.0, // Tăng độ rộng viền để nổi bật hơn
+                    ),
+                    color: const Color(0xFF172032),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: RadioListTile<String>(
+                    value: language['code'],
+                    groupValue: selectedLanguage.value.isEmpty
+                        ? 'default'
+                        : selectedLanguage.value,
+                    activeColor: const Color(
+                        0xFFF15E24), // Thay đổi radio button thành màu vàng
+                    title: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 16,
+                          backgroundImage: AssetImage(language['flag']),
+                        ),
+                        const SizedBox(width: 20),
+                        Text(
+                          language['name'],
+                          style: const TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onChanged: (value) {
+                      if (value != null) {
+                        selectedLanguage.value = value;
+                        Pref.selectedLanguage = value;
+
+                        if (value == 'default') {
+                          Get.updateLocale(
+                              Get.deviceLocale ?? const Locale('en'));
+                        } else {
+                          Get.updateLocale(Locale(value));
+                        }
+                      }
+                    },
+                  ),
+                );
+            }
+                
+                );
+          },
         ),
       ),
     );

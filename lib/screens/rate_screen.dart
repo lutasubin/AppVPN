@@ -1,197 +1,159 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:in_app_review/in_app_review.dart';
 
-// class RateScreen extends StatefulWidget {
-//   const RateScreen({super.key});
+class RatingScreen extends StatefulWidget {
+  const RatingScreen({super.key});
 
-//   @override
-//   State<RateScreen> createState() => _RateScreenState();
-// }
+  @override
+  State<RatingScreen> createState() => _RatingScreenState();
+}
 
-// class _RateScreenState extends State<RateScreen> {
-//   int selectedRating = 0;
-//   final int totalStars = 5;
+class _RatingScreenState extends State<RatingScreen> {
+  int _rating = 0;
 
-//   final List<String> emojiList = ['😐', '😢', '😥', '😐', '😊', '😍'];
-//   final List<String> feedbackList = [
-//     'Not good 😢'.tr,
-//     'Could be better 😥'.tr,
-//     'It’s okay 😐'.tr,
-//     'I like it 😊'.tr,
-//     'I love it! 😍'.tr
-//   ];
+  final Map<int, Map<String, String>> ratingContent = {
+    1: {
+      "emoji": "😢",
+      "title": "Oh No!",
+      "message":
+          "We're sorry you had a bad experience.\nPlease leave us some feedback.",
+    },
+    2: {
+      "emoji": "😕",
+      "title": "Oh No!",
+      "message":
+          "We understand you are not happy with the service.\nPlease leave us some feedback.",
+    },
+    3: {
+      "emoji": "😐",
+      "title": "Oh No!",
+      "message":
+          "We would like the opportunity to investigate your feedback further.",
+    },
+    4: {
+      "emoji": "😊",
+      "title": "So Amazing!",
+      "message": "Thank you so much for the wonderful review.",
+    },
+    5: {
+      "emoji": "😘",
+      "title": "We like you too!",
+      "message":
+          "Thank you so much for taking the time to leave us your review.",
+    },
+  };
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadSavedRating();
-//   }
+  @override
+  Widget build(BuildContext context) {
+    final content = ratingContent[_rating] ??
+        {
+          "emoji": "😊",
+          "title": "Rate Us",
+          "message":
+              "We are working hard for a better user experience.\nWe’d greatly appreciate it if you can rate us.",
+        };
 
-//   // Load đánh giá đã lưu
-//   Future<void> _loadSavedRating() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     setState(() {
-//       selectedRating = prefs.getInt('user_rating') ?? 0;
-//     });
-//   }
+    return Scaffold(
+      backgroundColor: const Color(0xFF1E1E1E),
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          width: 300,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(content["emoji"]!, style: const TextStyle(fontSize: 48)),
+              const SizedBox(height: 12),
+              Text(
+                content["title"]!,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                content["message"]!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) {
+                  final starIndex = index + 1;
+                  return IconButton(
+                      onPressed: () => setState(() => _rating = starIndex),
+                      icon: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        child: Icon(
+                          _rating >= starIndex ? Icons.star : Icons.star_border,
+                          key: ValueKey(_rating >= starIndex),
+                          color: Colors.orange,
+                          size: 32,
+                        ),
+                      ));
+                }),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                      (Set<WidgetState> states) {
+                        if (states.contains(WidgetState.disabled)) {
+                          return Colors.deepOrange
+                              .withOpacity(0.4); // màu mờ khi disabled
+                        }
+                        return Colors.deepOrange; // màu thường khi enabled
+                      },
+                    ),
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  onPressed: _rating == 0
+                      ? null // Vô hiệu hóa nếu chưa chọn sao
+                      : () {
+                          if (_rating >= 4) {
+                            // Gửi tới Google Play
+                            _launchInAppReviewOrStore();
+                          } else {
+                            // Hiển thị phản hồi
+                            Get.back();
+                          }
+                        },
+                  child: Text(
+                    _rating >= 4 ? 'Rate On Google Play' : 'Rate Us',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-//   // Lưu đánh giá
-//   Future<void> _saveRating(int rating) async {
-//     final prefs = await SharedPreferences.getInstance();
-//     await prefs.setInt('user_rating', rating);
-//   }
+Future<void> _launchInAppReviewOrStore() async {
+  final InAppReview inAppReview = InAppReview.instance;
 
-//   // Gợi ý đánh giá trên Google Play / App Store
-//   void _redirectToStore() async {
-//     final Uri url = Uri.parse(
-//         'https://play.google.com/store/apps/details?com.Lutasubin.freeVpn'); // Thay ID app của bạn
-//     if (await canLaunchUrl(url)) {
-//       await launchUrl(url, mode: LaunchMode.externalApplication);
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color(0xFF02091A),
-//       appBar: AppBar(
-//         backgroundColor: const Color(0xFF02091A),
-//         leading: IconButton(
-//           icon:
-//               const Icon(Icons.arrow_back, color: Color(0xFFFFFFFF), size: 25),
-//           onPressed: () {
-//                          Get.back(); // Quay lại màn hình trước
-
-//           },
-//         ),
-//         title: Text(
-//           'Rate us'.tr,
-//           style: const TextStyle(
-//               color: Color(0xFFFFFFFF), fontWeight: FontWeight.w500),
-//         ),
-//       ),
-//       body: Center(
-//         child: Card(
-//           color: const Color(0xFF172032),
-//           margin: const EdgeInsets.all(16),
-//           elevation: 4,
-//           shape:
-//               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-//           child: Padding(
-//             padding: const EdgeInsets.all(24.0),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Text(
-//                   'Do you like our app?'.tr,
-//                   style: const TextStyle(
-//                       fontSize: 18,
-//                       fontWeight: FontWeight.bold,
-//                       color: Color(0xFFFFFFFF)),
-//                 ),
-//                 const SizedBox(height: 24),
-
-//                 // Hiển thị emoji với hiệu ứng mượt mà
-//                 AnimatedSwitcher(
-//                   duration: const Duration(milliseconds: 300),
-//                   child: Text(
-//                     emojiList[selectedRating],
-//                     key: ValueKey<int>(selectedRating),
-//                     style: const TextStyle(fontSize: 48),
-//                   ),
-//                 ),
-
-//                 const SizedBox(height: 12),
-
-//                 // Hiển thị phản hồi
-//                 AnimatedSwitcher(
-//                   duration: const Duration(milliseconds: 300),
-//                   child: Text(
-//                     selectedRating > 0 ? feedbackList[selectedRating - 1] : '',
-//                     key: ValueKey<int>(selectedRating),
-//                     style: const TextStyle(fontSize: 16, color: Colors.white),
-//                   ),
-//                 ),
-
-//                 const SizedBox(height: 24),
-
-//                 // Chọn số sao với hiệu ứng màu sắc
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: List.generate(totalStars, (index) {
-//                     return GestureDetector(
-//                         onTap: () {
-//                           setState(() {
-//                             selectedRating = index + 1;
-//                           });
-//                           _saveRating(selectedRating);
-//                         },
-//                         child: TweenAnimationBuilder<Color?>(
-//                           tween: ColorTween(
-//                             begin: Color(0xFF767C8A),
-//                             end: index < selectedRating
-//                                 ? const Color(0xFFF15E24)
-//                                 : Color(0xFF767C8A),
-//                           ),
-//                           duration: const Duration(milliseconds: 300),
-//                           builder: (context, color, child) {
-//                             return Icon(Icons.star, color: color, size: 36);
-//                           },
-//                         ));
-//                   }),
-//                 ),
-
-//                 const SizedBox(height: 24),
-
-//                 // Nút hành động
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                   children: [
-//                     TextButton(
-//                       onPressed: () => Get.back(),
-//                       child: Text('Later'.tr,
-//                           style: TextStyle(
-//                               fontSize: 16, color: Color(0xFFFFFFFF))),
-//                     ),
-//                     ElevatedButton(
-//                       onPressed: selectedRating > 0
-//                           ? () {
-//                               ScaffoldMessenger.of(context).showSnackBar(
-//                                 SnackBar(
-//                                   backgroundColor: Color(0xFFF15E24),
-//                                   content: Text(
-//                                     'Thanks for rating!'.tr,
-//                                     style: const TextStyle(
-//                                         color: Color(0xFFFFFFFF)),
-//                                   ),
-//                                 ),
-//                               );
-//                               Get.back();
-//                               if (selectedRating >= 4) {
-//                                 _redirectToStore(); // Gợi ý đánh giá trên Store
-//                               }
-//                             }
-//                           : null,
-//                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: selectedRating > 0
-//                             ? const Color(0xFFF15E24)
-//                             : Colors.grey,
-//                         foregroundColor: Color(0xFFFFFFFF),
-//                         padding: const EdgeInsets.symmetric(
-//                             horizontal: 24, vertical: 12),
-//                       ),
-//                       child:
-//                           Text('Rate now'.tr, style: TextStyle(fontSize: 16)),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  try {
+    // Kiểm tra nếu review trong app khả dụng
+    if (await inAppReview.isAvailable()) {
+      await inAppReview.requestReview(); // Ưu tiên dùng popup trong app
+    } else {
+      await inAppReview.openStoreListing(); // Fallback: mở trang app trên CH Play
+    }
+  } catch (e) {
+    throw Exception('Không thể mở đánh giá: $e');
+  }
+}
+}

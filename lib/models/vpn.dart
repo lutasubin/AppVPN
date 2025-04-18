@@ -1,7 +1,7 @@
 class Vpn {
   late final String HostName;
   late final String IP;
-  // late final int Score;
+  late final int Score;
   late final String Ping;
   late final int Speed;
   late final String CountryLong;
@@ -17,7 +17,7 @@ class Vpn {
   Vpn({
     required this.HostName,
     required this.IP,
-    // required this.Score,
+    required this.Score,
     required this.Ping,
     required this.Speed,
     required this.CountryLong,
@@ -35,7 +35,7 @@ class Vpn {
   Vpn.fromJson(Map<String, dynamic> json){
     HostName = json['HostName'] ?? '';
     IP = json['IP'] ?? '';
-    // Score = json['Score'] ?? 0;
+    Score = json['Score'] ?? 0;
     Ping = json['Ping'].toString();
     Speed = json['Speed'] ?? 0;
     CountryLong = json['CountryLong'] ?? '';
@@ -54,18 +54,18 @@ class Vpn {
     final data = <String, dynamic>{};
     data['HostName'] = HostName;
     data['IP'] = IP;
-    // _data['Score'] = Score;
+    data['Score'] = Score;
     data['Ping'] = Ping;
     data['Speed'] = Speed;
     data['CountryLong'] = CountryLong;
     data['CountryShort'] = CountryShort;
     data['NumVpnSessions'] = NumVpnSessions;
-    // _data['Uptime'] = Uptime;
-    // _data['TotalUsers'] = TotalUsers;
-    // _data['TotalTraffic'] = TotalTraffic;
-    // _data['LogType'] = LogType;
-    // _data['Operator'] = Operator;
-    // _data['Message'] = Message;
+    // data['Uptime'] = Uptime;
+    // data['TotalUsers'] = TotalUsers;
+    // data['TotalTraffic'] = TotalTraffic;
+    // data['LogType'] = LogType;
+    // data['Operator'] = Operator;
+    // data['Message'] = Message;
     data['OpenVPN_ConfigData_Base64'] = OpenVPNConfigDataBase64;
     return data;
   }

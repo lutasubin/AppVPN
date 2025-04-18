@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_basic_project/controllers/dependency_injection.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
@@ -21,12 +22,10 @@ Future<void> main() async {
   // debugPaintSizeEnabled = true; // Hiển thị viền widget để debug
 
   // check internet
- 
+
   await DependencyInjection.init();
 
-
   WidgetsFlutterBinding.ensureInitialized();
-  
 
   // Khởi tạo kích thước màn hình (mq)
   mq = WidgetsBinding.instance.window.physicalSize /
@@ -34,6 +33,11 @@ Future<void> main() async {
 
   // Tải biến môi trường từ file .env
   await dotenv.load();
+
+  // ✅ Khai báo thiết bị test
+  MobileAds.instance.updateRequestConfiguration(
+    RequestConfiguration(testDeviceIds: ['EMULATOR']),
+  );
 
   // Khởi tạo SharedPreferences
   prefs = await SharedPreferences.getInstance();

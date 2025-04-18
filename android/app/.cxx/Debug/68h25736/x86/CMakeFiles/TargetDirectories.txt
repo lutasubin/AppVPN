@@ -1,0 +1,2 @@
+C:/VPN app/vpn-basic-project/android/app/.cxx/Debug/68h25736/x86/CMakeFiles/edit_cache.dir
+C:/VPN app/vpn-basic-project/android/app/.cxx/Debug/68h25736/x86/CMakeFiles/rebuild_cache.dir

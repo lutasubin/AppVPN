@@ -5,47 +5,32 @@ import 'package:lottie/lottie.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-// import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/main.dart';
 import 'package:vpn_basic_project/widgets/vpn_cart.dart';
 
-/// Màn hình hiển thị danh sách các vị trí VPN.
-/// Cho phép người dùng xem và chọn VPN từ danh sách.
 class LocationScreen extends StatelessWidget {
-  /// Constructor cho LocationScreen.
   LocationScreen({super.key});
 
-  /// Bộ điều khiển danh sách VPN.
   final LocationController _controller = Get.put(LocationController());
-
-  /// Bộ điều khiển quảng cáo tự nhiên.
   final _adController2 = NativeAdController();
 
   @override
   Widget build(BuildContext context) {
-    // Tải dữ liệu VPN nếu danh sách rỗng
     if (_controller.vpnList.isEmpty) _controller.getVpnData();
-
-    // Tải quảng cáo tự nhiên
     _adController2.ad = AdHelper.loadNativeAd2(adController: _adController2);
 
     return Obx(
       () => Scaffold(
-        backgroundColor: const Color(0xFF02091A), // Mã màu nền chính
+        backgroundColor: const Color(0xFF0D1424),
         appBar: AppBar(
-          backgroundColor: const Color(0xFF02091A), // Mã màu thanh tiêu đề
+          backgroundColor: const Color(0xFF0D1424),
+          elevation: 0,
           leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: const Color(0xFFFFFFFF),
-              size: 25,
-            ),
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back,
+                color: Color(0xFFFFFFFF), size: 25),
           ),
           title: Text(
-            'Ip'.tr, // Tiêu đề dịch được
+            'VPN sever',
             style: TextStyle(
               color: const Color(0xFFFFFFFF),
               fontSize: 20,
@@ -54,14 +39,9 @@ class LocationScreen extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                _controller.getVpnData(); // Làm mới danh sách VPN
-              },
-              icon: const Icon(
-                Icons.refresh, // Biểu tượng làm mới
-                color: Color(0xFFFFFFFF),
-                size: 25,
-              ),
+              onPressed: () => _controller.getVpnData(),
+              icon:
+                  const Icon(Icons.refresh, color: Color(0xFFFFFFFF), size: 25),
             ),
           ],
         ),
@@ -72,31 +52,114 @@ class LocationScreen extends StatelessWidget {
                         height: 120, child: AdWidget(ad: _adController2.ad!)))
                 : null,
         body: _controller.isLoading.value
-            ? _loadingWidget(context) // Hiển thị khi đang tải
+            ? _loadingWidget(context)
             : _controller.vpnList.isEmpty
-                ? _noVPNFound(context) // Hiển thị khi không có VPN
-                : _vpnData(), // Hiển thị danh sách VPN
+                ? _noVPNFound(context)
+                : _groupedVpnList(),
       ),
     );
   }
 
-  /// Tạo danh sách VPN dưới dạng ListView.
-  /// Hiển thị từng VPN bằng widget VpnCart.
-  Widget _vpnData() => ListView.builder(
-        itemCount: _controller.vpnList.length,
-        physics: BouncingScrollPhysics(), // Hiệu ứng cuộn mượt
-        padding: EdgeInsets.only(
-            top: mq.height * .015,
-            bottom: mq.height * .1,
-            left: mq.width * .04,
-            right: mq.width * .04),
-        itemBuilder: (ctx, i) => VpnCart(
-          vpn: _controller.vpnList[i], // Truyền dữ liệu VPN cho widget
+  Widget _groupedVpnList() {
+    // Nhóm VPN theo quốc gia
+    final Map<String, List<dynamic>> groupedVpns = {};
+
+    for (var vpn in _controller.filteredVpnList) {
+      if (!groupedVpns.containsKey(vpn.CountryLong)) {
+        groupedVpns[vpn.CountryLong] = [vpn.CountryShort, <dynamic>[]];
+      }
+      groupedVpns[vpn.CountryLong]![1].add(vpn);
+    }
+
+    // Lấy danh sách các quốc gia với VPN của họ
+    final countries = groupedVpns.keys.toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Recommend using VPNs near your location for fast and stable connections',
+            style: TextStyle(
+              color: Color(0xFFF15E24),
+              fontSize: 15,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+            itemCount: countries.length,
+            itemBuilder: (context, index) {
+              final country = countries[index];
+              final countryInfo = groupedVpns[country]!;
+              final countryCode = countryInfo[0].toString().toLowerCase();
+              final vpnList = countryInfo[1] as List;
+
+              return _buildCountrySection(country, countryCode, vpnList);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCountrySection(
+      String country, String countryCode, List vpnList) {
+    return Obx(() {
+      final isExpanded = _controller.isCountryExpanded(country);
+
+      return Container(
+        margin: EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: Color(0xFF141C31),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            // Header quốc gia có thể nhấp
+            InkWell(
+              onTap: () => _controller.toggleCountryExpansion(country),
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: AssetImage(
+                        'assets/flags/$countryCode.png',
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Text(
+                      country,
+                      style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Spacer(),
+                    Icon(
+                      isExpanded
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: Color(0xFFFFFFFF),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Danh sách VPN của quốc gia - sử dụng VpnCart widget
+            if (isExpanded) ...vpnList.map((vpn) => VpnCart(vpn: vpn)).toList(),
+          ],
         ),
       );
+    });
+  }
 
-  /// Widget hiển thị trạng thái đang tải với animation Lottie.
-  /// [context] dùng để lấy thông tin màn hình.
   Widget _loadingWidget(BuildContext context) => SizedBox(
         width: double.infinity,
         height: double.infinity,
@@ -111,14 +174,12 @@ class LocationScreen extends StatelessWidget {
         ),
       );
 
-  /// Widget hiển thị thông báo khi không tìm thấy VPN.
-  /// [context] dùng để căn giữa nội dung.
   Widget _noVPNFound(BuildContext context) => Center(
         child: Text(
-          'VPNs Not Found...😶'.tr, // Thông báo dịch được
+          'VPNs Not Found...😶'.tr,
           style: TextStyle(
             fontSize: 18,
-            backgroundColor: const Color(0xFF02091A), // Mã màu nền
+            color: Color(0xFFFFFFFF),
             fontWeight: FontWeight.bold,
           ),
         ),

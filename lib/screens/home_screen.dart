@@ -58,158 +58,155 @@ class HomeScreen extends StatelessWidget {
       }
     });
 
-    return Obx(() => SafeArea(
-          child: Scaffold(
-              body: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Stack(
+    return SafeArea(
+      child: Scaffold(
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                children: [
+                  // Hình nền SVG
+                  SvgPicture.asset(
+                    'assets/svg/Group 17.svg',
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Color(0xFF02091A), // Mã màu nền
+                      BlendMode.dstATop,
+                    ),
+                  ),
+                  // Nội dung giao diện
+                  Column(
                     children: [
-                      // Hình nền SVG
-                      SvgPicture.asset(
-                        'assets/svg/Group 17.svg',
-                        width: constraints.maxWidth,
-                        height: constraints.maxHeight,
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Color(0xFF02091A), // Mã màu nền
-                          BlendMode.dstATop,
+                      Expanded(
+                        flex: 3,
+                        child: Center(
+                            child: Obx(() => _vpnButton(context, constraints))),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: StreamBuilder<VpnStatus?>(
+                          initialData: VpnStatus(byteIn: '---', byteOut: '---'),
+                          stream: VpnEngine.vpnStatusSnapshot(),
+                          builder: (context, snapshot) {
+                            print(
+                                'Snapshot data: ${snapshot.data?.byteIn}, ${snapshot.data?.byteOut}');
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Flexible(
+                                  child: HomeCard2(
+                                    title: snapshot.data?.byteOut ?? '---',
+                                    icon: CircleAvatar(
+                                      backgroundColor: const Color(0xFF4684F6),
+                                      radius: constraints.maxWidth * 0.08 > 30.0
+                                          ? 30.0
+                                          : constraints.maxWidth * 0.08,
+                                      child: Icon(
+                                        Icons.arrow_upward_rounded,
+                                        size: constraints.maxWidth * 0.06 > 24.0
+                                            ? 24.0
+                                            : constraints.maxWidth * 0.06,
+                                        color: Color(0xFFFFFFFF),
+                                      ),
+                                    ),
+                                    subtitle: 'Uploads'.tr,
+                                  ),
+                                ),
+                                Flexible(
+                                  child: HomeCard(
+                                    title: snapshot.data?.byteIn ?? '---',
+                                    icon: CircleAvatar(
+                                      backgroundColor: const Color(0xFF03C343),
+                                      radius: constraints.maxWidth * 0.08 > 30.0
+                                          ? 30.0
+                                          : constraints.maxWidth * 0.08,
+                                      child: Icon(
+                                        Icons.arrow_downward_rounded,
+                                        size: constraints.maxWidth * 0.06 > 24.0
+                                            ? 24.0
+                                            : constraints.maxWidth * 0.06,
+                                        color: Color(0xFFFFFFFF),
+                                      ),
+                                    ),
+                                    subtitle: 'Download'.tr,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ),
-                      // Nội dung giao diện
-                      Column(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Center(
-                                child: Obx(
-                                    () => _vpnButton(context, constraints))),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: StreamBuilder<VpnStatus?>(
-                              initialData:
-                                  VpnStatus(byteIn: '---', byteOut: '---'),
-                              stream: VpnEngine.vpnStatusSnapshot(),
-                              builder: (context, snapshot) {
-                                print(
-                                    'Snapshot data: ${snapshot.data?.byteIn}, ${snapshot.data?.byteOut}');
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Flexible(
-                                      child: HomeCard2(
-                                        title: snapshot.data?.byteOut ?? '---',
-                                        icon: CircleAvatar(
-                                          backgroundColor:
-                                              const Color(0xFF4684F6),
-                                          radius:
-                                              constraints.maxWidth * 0.08 > 30.0
-                                                  ? 30.0
-                                                  : constraints.maxWidth * 0.08,
-                                          child: Icon(
-                                            Icons.arrow_upward_rounded,
-                                            size: constraints.maxWidth * 0.06 >
-                                                    24.0
-                                                ? 24.0
-                                                : constraints.maxWidth * 0.06,
-                                            color: Color(0xFFFFFFFF),
-                                          ),
-                                        ),
-                                        subtitle: 'Uploads'.tr,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: HomeCard(
-                                        title: snapshot.data?.byteIn ?? '---',
-                                        icon: CircleAvatar(
-                                          backgroundColor:
-                                              const Color(0xFF03C343),
-                                          radius:
-                                              constraints.maxWidth * 0.08 > 30.0
-                                                  ? 30.0
-                                                  : constraints.maxWidth * 0.08,
-                                          child: Icon(
-                                            Icons.arrow_downward_rounded,
-                                            size: constraints.maxWidth * 0.06 >
-                                                    24.0
-                                                ? 24.0
-                                                : constraints.maxWidth * 0.06,
-                                            color: Color(0xFFFFFFFF),
-                                          ),
-                                        ),
-                                        subtitle: 'Download'.tr,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
-                  );
-                },
-              ),
-              appBar: AppBar(
-                backgroundColor: const Color(0xFF02091A),
-                leading: IconButton(
-                  onPressed: () async {
-                    if (!await _networkController.checkConnection()) {
-                      MyDialogs2.error(msg: 'error_connect_server'.tr);
-                      return;
-                    }
-                    Get.to(() => MenuScreen());
-                  },
-                  icon: Icon(
-                    Icons.menu,
-                    size: 25.0,
-                    color: const Color(0xFFFFFFFF),
-                  ),
-                ),
-                title: SvgPicture.asset(
-                  'assets/svg/logo.svg',
-                  width: 158.0,
-                  height: 35.0,
-                ),
-                actions: [
-                  IconButton(
-                    padding: EdgeInsets.only(right: 8.0),
-                    onPressed: () async {
-                      if (!await _networkController.checkConnection()) {
-                        MyDialogs2.error(msg: 'error_connect_server'.tr);
-                        return;
-                      }
-                      Get.to(() => NetworkTestScreen());
-                    },
-                    icon: Icon(
-                      CupertinoIcons.info,
-                      size: 25.0,
-                      color: const Color(0xFFFFFFFF),
-                    ),
                   ),
                 ],
+              );
+            },
+          ),
+          appBar: AppBar(
+            backgroundColor: const Color(0xFF02091A),
+            leading: IconButton(
+              onPressed: () async {
+                if (!await _networkController.checkConnection()) {
+                  MyDialogs2.error(msg: 'error_connect_server'.tr);
+                  return;
+                }
+                Get.to(() => MenuScreen());
+              },
+              icon: Icon(
+                Icons.menu,
+                size: 25.0,
+                color: const Color(0xFFFFFFFF),
               ),
-              bottomNavigationBar: Container(
-                color: const Color(0xFF02091A),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _changeLocation(context),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    if (_adController.ad != null &&
-                        _adController.adLoaded.isTrue)
-                      SafeArea(
-                        child: SizedBox(
-                            height: 85, child: AdWidget(ad: _adController.ad!)),
-                      ),
-                  ],
+            ),
+            title: SvgPicture.asset(
+              'assets/svg/logo.svg',
+              width: 158.0,
+              height: 35.0,
+            ),
+            actions: [
+              IconButton(
+                padding: EdgeInsets.only(right: 8.0),
+                onPressed: () async {
+                  if (!await _networkController.checkConnection()) {
+                    MyDialogs2.error(msg: 'error_connect_server'.tr);
+                    return;
+                  }
+                  Get.to(() => NetworkTestScreen());
+                },
+                icon: Icon(
+                  CupertinoIcons.info,
+                  size: 25.0,
+                  color: const Color(0xFFFFFFFF),
                 ),
-              )),
-        ));
+              ),
+            ],
+          ),
+          bottomNavigationBar: Container(
+            color: const Color(0xFF02091A),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _changeLocation(context),
+                SizedBox(
+                  height: 5,
+                ),
+                Obx(() {
+                  //!boc obx thang vao ads luon
+                  if (_adController.ad != null &&
+                      _adController.adLoaded.isTrue) {
+                    return SafeArea(
+                      child: SizedBox(
+                          height: 85, child: AdWidget(ad: _adController.ad!)),
+                    );
+                  } else {
+                    return SizedBox.shrink(); // không hiển thị gì
+                  }
+                })
+              ],
+            ),
+          )),
+    );
   }
 
   /// Tạo nút điều khiển VPN với trạng thái động.

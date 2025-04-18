@@ -33,4 +33,25 @@ class Pref {
   static String get selectedLanguage => _box.get('selectedLanguage') ?? '';
   static set selectedLanguage(String value) => _box.put('selectedLanguage', value);
 
+  
+  static Future<void> storeCountryFlags(List<String> flags) async {
+    await initializeHive(); // Ensure Hive is initialized
+    await _box.put('countryFlags', jsonEncode(flags));
+  }
+
+  static List<String> getStoredCountryFlags() {
+    final data = _box.get('countryFlags');
+    return data != null ? List<String>.from(jsonDecode(data)) : [];
+  }
+
+  static Future<void> storeCountries(List<String> countries) async {
+    await initializeHive(); // Ensure Hive is initialized
+    await _box.put('countries', jsonEncode(countries));
+  }
+
+  static List<String> getStoredCountries() {
+    final data = _box.get('countries');
+    return data != null ? List<String>.from(jsonDecode(data)) : [];
+  }
+
 }

@@ -6,6 +6,7 @@ import 'package:vpn_basic_project/helpers/pref.dart'; // Bỏ comment để sử
 import 'package:vpn_basic_project/screens/Privacy_policy.dart';
 import 'package:vpn_basic_project/screens/language_screen.dart';
 // import 'package:vpn_basic_project/screens/rate_screen.dart';
+import 'rate_screen.dart';
 import 'share_screen.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -88,15 +89,15 @@ class _MenuScreenState extends State<MenuScreen> {
               trailingText: currentLanguage,
               onTap: () => Get.to(() => LanguageScreen()),
             ),
-            // const SizedBox(height: 8),
-            // _buildMenuItem(
-            //   context: context,
-            //   icon: Icons.star,
-            //   iconColor: Colors.yellow,
-            //   title: 'Rate us'.tr,
-            //   onTap: () => Get.to(() => const RateScreen(),
-            //       transition: Transition.upToDown),
-            // ),
+            const SizedBox(height: 8),
+            _buildMenuItem(
+              context: context,
+              icon: Icons.star,
+              iconColor: Colors.yellow,
+              title: 'Rate us'.tr,
+              onTap: () =>
+                  Get.to(() => RatingScreen(), transition: Transition.upToDown),
+            ),
             const SizedBox(height: 8),
             _buildMenuItem(
               context: context,
@@ -111,7 +112,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 icon: Icons.privacy_tip,
                 iconColor: Color(0xFF03C343),
                 title: 'Privacy Policy'.tr,
-                onTap: ()  {
+                onTap: () {
                   Get.to(() => PrivacyPolicy());
                 }),
           ],

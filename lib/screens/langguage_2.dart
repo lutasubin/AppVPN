@@ -148,26 +148,22 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                     : Locale(selectedLanguage.value));
                 Get.offAll(() => HomeScreen());
               }
-              // else {
-              //   Get.snackbar(
-              //     'Warning'.tr,
-              //     'Please select a language'.tr,
-              //     snackPosition: SnackPosition.BOTTOM,
-              //     backgroundColor: const Color(0xFF172032),
-              //     colorText: const Color(0xFFFFFFFF),
-              //   );
-              // }
+             
             },
           ),
         ],
       ),
       backgroundColor: const Color(0xFF02091A),
-      bottomNavigationBar: // Config.hideAds ? null:
-          _adController4.ad != null && _adController4.adLoaded.isTrue
-              ? SafeArea(
-                  child: SizedBox(
-                      height: 120, child: AdWidget(ad: _adController4.ad!)))
-              : null,
+      bottomNavigationBar: Obx(() {//! boc lai obx
+        return _adController4.ad != null && _adController4.adLoaded.isTrue
+            ? SafeArea(
+                child: SizedBox(
+                  height: 120,
+                  child: AdWidget(ad: _adController4.ad!),
+                ),
+              )
+            : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+      }),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
@@ -223,13 +219,6 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                         Get.updateLocale(Locale(value));
                       }
 
-                      // Get.snackbar(
-                      //   'Success'.tr,
-                      //   'Changed to'.tr + ' ${language['name']}',
-                      //   snackPosition: SnackPosition.BOTTOM,
-                      //   backgroundColor: const Color(0xFF172032),
-                      //   colorText: const Color(0xFFFFFFFF),
-                      // );
                     }
                   },
                 ),

@@ -4,10 +4,10 @@ description: Flutter Android VPN based on OpenVPN Library.
 publish_to: 'none'
 
 # App Version
-version: 1.0.2+2
+version: 2.0.1
 
 environment:
-  sdk: ">=3.4.3 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 # App dependencies
 dependencies:
@@ -33,6 +33,8 @@ dependencies:
   connectivity_plus: ^6.1.3
   flutter_native_splash: ^2.4.4
   firebase_remote_config: ^5.4.3
+  in_app_review: ^2.0.10
+  
   
 
 
