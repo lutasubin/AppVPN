@@ -20,7 +20,7 @@
 
     <application
         android:name="${applicationName}"
-        android:label="Free VPN"
+        android:label="AI VPN Fast Safe"
         android:icon="@mipmap/ic_launcher"
         tools:ignore="AllowBackup">
 

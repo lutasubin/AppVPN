@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:vpn_basic_project/controllers/banner%20_ad_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 
 // import '../helpers/pref.dart';
 import '../main.dart';
@@ -10,10 +13,14 @@ import '../widgets/network_card.dart';
 import '../apis/apis.dart';
 
 class NetworkTestScreen extends StatelessWidget {
-  const NetworkTestScreen({super.key});
+  final _baController = BannerAdController();
+
+  NetworkTestScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
+
     final ipData = IPDetails.fromJson({}).obs;
     Apis.getIPDetails(ipData: ipData);
 
@@ -24,7 +31,7 @@ class NetworkTestScreen extends StatelessWidget {
           backgroundColor: const Color(0xFF02091A), // Mã màu mới
           leading: IconButton(
             onPressed: () {
-             Get.back();
+              Get.back();
             },
             icon: Icon(
               Icons.arrow_back,
@@ -38,6 +45,15 @@ class NetworkTestScreen extends StatelessWidget {
                 color: const Color(0xFFFFFFFF), fontWeight: FontWeight.w500),
           )),
 
+      bottomNavigationBar: Obx(() {
+        return _baController.ba != null && _baController.baLoaded.isTrue
+            ? SafeArea(
+                child: SizedBox(
+                height: 120,
+                child: AdWidget(ad: _baController.ba!),
+              ))
+            : SizedBox.shrink();
+      }),
       //refresh button
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 10),

@@ -21,7 +21,7 @@ class Apis {
 
       final headers = list.first;
 
-      // Parse từng dòng CSV thành object Vpn
+      // Chuyển từng dòng CSV thành object Vpn
       for (int i = 1; i < list.length - 1; ++i) {
         final Map<String, dynamic> jsonMap = {
           for (int j = 0; j < headers.length; ++j)
@@ -32,26 +32,37 @@ class Apis {
 
       log("Tổng số server: ${vpnList.length}");
 
-      // Lọc server theo chất lượng: Score ≥ 100000, Ping ≤ 150ms, ưu tiên một số quốc gia
-      final filteredList = vpnList
-          .where((vpn) =>
-              vpn.Score >= 100000 &&
-              (int.tryParse(vpn.Ping) ?? 9999) <= 50 &&
-              ['JP', 'SG', 'VN'].contains(vpn.CountryLong))
-          .toList();
+      // Lọc server theo điều kiện:
+      final filteredList = vpnList.where((vpn) {
+        final ping = int.tryParse(vpn.Ping) ?? 9999;
+        final isJapan =
+            vpn.CountryLong == "Japan"; // Kiểm tra xem có phải Nhật Bản không
+        // final isSouthKorea = vpn.CountryLong ==
+        //     "Korea Republic of"; // Kiểm tra xem có phải Hàn Quốc không
+        final score = vpn.Score;
+        final speed = vpn.Speed;
 
-      // Sắp xếp theo Score giảm dần, Ping tăng dần
+        if (isJapan) {
+          // Nếu là Japan : Score > 1 triệu và Ping <= 50
+          return score > 500000 && 15 <= ping && ping <= 50 && speed >= 100;
+        } else {
+          // Các quốc gia khác: Score >500000 và Ping <= 50
+          return score > 500000 && ping <= 50 && speed >= 100;
+        }
+      }).toList();
+
+      log("Số server đạt chuẩn: ${filteredList.length}");
+
+      // Sắp xếp theo Score giảm dần, nếu bằng thì Ping tăng dần
       filteredList.sort((a, b) {
         final scoreCompare = b.Score.compareTo(a.Score);
         return scoreCompare != 0 ? scoreCompare : a.Ping.compareTo(b.Ping);
       });
 
-      log("Số server sau lọc: ${filteredList.length}");
-
       // Nếu không còn server nào đạt chuẩn thì dùng danh sách gốc
       final finalList = filteredList.isNotEmpty ? filteredList : vpnList;
 
-      // Xáo trộn thêm để tránh bị trùng lặp mỗi lần load
+      // Xáo trộn tránh trùng lặp mỗi lần load
       finalList.shuffle();
 
       // Lưu vào Pref

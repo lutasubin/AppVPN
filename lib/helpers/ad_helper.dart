@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:vpn_basic_project/controllers/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 
 import '../controllers/native_ad_controller.dart';
@@ -18,6 +19,9 @@ class AdHelper {
 
   static InterstitialAd? _interstitialAd;
   static bool _interstitialAdLoaded = false;
+
+  static BannerAd? _bannerAd;
+  static bool _bannerAdLoaded = false;
 
   static NativeAd? _nativeAd;
   static bool _nativeAdLoaded = false;
@@ -434,6 +438,64 @@ class AdHelper {
               size: 15,
             ),
             templateType: TemplateType.small))
+      ..load();
+  }
+
+  //*****************Banner Ad******************
+  /// Tải trước Banner Ad để sẵn sàng hiển thị.
+  static void precacheBannerAd() {
+    log('Precache Banner Ad - Id: ${Config.bannerAd}');
+
+    if (Config.hideAds) return;
+
+    _bannerAd = BannerAd(
+      adUnitId: Config.bannerAd,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          log('$BannerAd loaded.');
+          _bannerAdLoaded = true;
+        },
+        onAdFailedToLoad: (ad, error) {
+          disposeBannerAd();
+          log('$BannerAd failed to load: $error');
+        },
+      ),
+    )..load();
+  }
+
+  static void disposeBannerAd() {
+    _bannerAd?.dispose();
+    _bannerAd = null;
+    _bannerAdLoaded = false;
+  }
+
+  static BannerAd? loadBannerAd({required BannerAdController baController}) {
+    log('Banner Ad Id : ${Config.bannerAd}');
+
+    if (Config.hideAds) return null;
+
+    if (_bannerAdLoaded && _bannerAd != null) {
+      baController.baLoaded.value = true;
+      return _bannerAd;
+    }
+    return BannerAd(
+        size: AdSize.banner,
+        adUnitId: Config.bannerAd,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            log('$BannerAd loaded.');
+            baController.baLoaded.value = true;
+            disposeBannerAd();
+            precacheBannerAd();
+          },
+          onAdFailedToLoad: (ad, error) {
+            disposeBannerAd();
+            log('$BannerAd failed to load: $error');
+          },
+        ),
+        request: AdRequest())
       ..load();
   }
 }

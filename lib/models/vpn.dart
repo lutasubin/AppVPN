@@ -7,9 +7,9 @@ class Vpn {
   late final String CountryLong;
   late final String CountryShort;
   late final int NumVpnSessions;
-  // late final int Uptime;
-  // late final int TotalUsers;
-  // late final int TotalTraffic;
+  late final int Uptime;
+  late final int TotalUsers;
+  late final int TotalTraffic;
   // late final String LogType;
   // late final String Operator;
   // late final String Message;
@@ -23,31 +23,31 @@ class Vpn {
     required this.CountryLong,
     required this.CountryShort,
     required this.NumVpnSessions,
-    // required this.Uptime,
-    // required this.TotalUsers,
-    // required this.TotalTraffic,
+    required this.Uptime,
+    required this.TotalUsers,
+    required this.TotalTraffic,
     // required this.LogType,
     // required this.Operator,
     // required this.Message,
     required this.OpenVPNConfigDataBase64,
   });
-  
-  Vpn.fromJson(Map<String, dynamic> json){
+
+  Vpn.fromJson(Map<String, dynamic> json) {
     HostName = json['HostName'] ?? '';
     IP = json['IP'] ?? '';
     Score = json['Score'] ?? 0;
     Ping = json['Ping'].toString();
     Speed = json['Speed'] ?? 0;
     CountryLong = json['CountryLong'] ?? '';
-    CountryShort = json['CountryShort']?? '';
-    NumVpnSessions = json['NumVpnSessions']?? 0;
-    // Uptime = json['Uptime']?? '';
-    // TotalUsers = json['TotalUsers']??'';
-    // TotalTraffic = json['TotalTraffic']??'';
+    CountryShort = json['CountryShort'] ?? '';
+    NumVpnSessions = json['NumVpnSessions'] ?? 0;
+    Uptime = json['Uptime']?? 0;
+    TotalUsers = json['TotalUsers']??0;
+    TotalTraffic = json['TotalTraffic']??0;
     // LogType = json['LogType']??'';
     // Operator = json['Operator']??'';
     // Message = json['Message']??'';
-    OpenVPNConfigDataBase64 = json['OpenVPN_ConfigData_Base64']??'';
+    OpenVPNConfigDataBase64 = json['OpenVPN_ConfigData_Base64'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -60,9 +60,9 @@ class Vpn {
     data['CountryLong'] = CountryLong;
     data['CountryShort'] = CountryShort;
     data['NumVpnSessions'] = NumVpnSessions;
-    // data['Uptime'] = Uptime;
-    // data['TotalUsers'] = TotalUsers;
-    // data['TotalTraffic'] = TotalTraffic;
+    data['Uptime'] = Uptime;
+    data['TotalUsers'] = TotalUsers;
+    data['TotalTraffic'] = TotalTraffic;
     // data['LogType'] = LogType;
     // data['Operator'] = Operator;
     // data['Message'] = Message;

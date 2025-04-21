@@ -3,7 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/screens/home_screen.dart';
+import 'package:vpn_basic_project/screens/first_screen.dart';
 import 'package:vpn_basic_project/screens/langguage_2.dart'; // Thêm import này
 
 class SplashScreen extends StatefulWidget {
@@ -60,15 +60,19 @@ class _SplashScreenState extends State<SplashScreen>
         });
       } else {
         AdHelper.showInterstitialAd(onComplete: () {
-          Get.offAll(() => HomeScreen(),
+          // Get.offAll(() => HomeScreen(),
+          //     transition: Transition.fade,
+          //     duration: Duration(milliseconds: 500));
+          Get.offAll(() => OnboardingScreen(),
               transition: Transition.fade,
               duration: Duration(milliseconds: 500));
         });
       }
     } catch (e) {
       print('Error in navigation: $e');
-      Get.offAll(() => HomeScreen(),
-          transition: Transition.fade, duration: Duration(milliseconds: 500));
+       Get.offAll(() => OnboardingScreen(),
+              transition: Transition.fade,
+              duration: Duration(milliseconds: 500));
     }
   }
 

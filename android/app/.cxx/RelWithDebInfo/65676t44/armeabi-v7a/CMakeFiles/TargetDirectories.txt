@@ -1,0 +1,2 @@
+C:/VPN app/vpn-basic-project/android/app/.cxx/RelWithDebInfo/65676t44/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/VPN app/vpn-basic-project/android/app/.cxx/RelWithDebInfo/65676t44/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,113 +1,201 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:vpn_basic_project/controllers/location_controller.dart';
-import 'package:vpn_basic_project/main.dart';
-import 'package:vpn_basic_project/widgets/vpn_cart.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 
-class LocationScreen extends StatelessWidget {
-  LocationScreen({super.key});
-  final _controller = LocationController();
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _controller.getVpnData();
-    return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          leading: IconButton(
-              onPressed: () {
-                Get.back();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'VPN App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'Roboto',
+      ),
+      home: OnboardingScreen(),
+    );
+  }
+}
+
+class OnboardingScreen extends StatefulWidget {
+
+  @override
+  _OnboardingScreenState createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final _adController1 = NativeAdController();
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  // Danh sách các màn hình onboarding sử dụng hình ảnh có sẵn
+  List<OnboardingItem> onboardingItems = [
+    OnboardingItem(
+      title: "Just One Touch To Connect.",
+      assetImage: "assets/images/Frame 634360.png", // Đường dẫn đến hình ảnh 1
+      buttonText: "Next",
+    ),
+    OnboardingItem(
+      title: "Diverse VPNs In Many Different Countries.",
+      assetImage:
+          "assets/images/Frame 634360 (1).png", // Đường dẫn đến hình ảnh 2
+      buttonText: "Next",
+    ),
+    OnboardingItem(
+      title: "Protect Your Online Private",
+      assetImage:
+          "assets/images/Frame 634360 (2).png", // Đường dẫn đến hình ảnh 3
+      buttonText: "Get Start",
+    ),
+  ];
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+        _adController1.ad = AdHelper.loadNativeAd1(adController: _adController1);
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A1A),
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
               },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-                size: 30,
-              )),
-          title: Text(
-            'VPN Locations(${_controller.vpnList.length})',
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  // Show search dialog or navigate to search page
-                  // _showSearchDialog(context);
-                },
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                  size: 30,
-                )),
-          ],
-        ),
+              itemCount: onboardingItems.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 100),
+                    Container(
+                      height: 400,
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Image.asset(
+                                onboardingItems[index].assetImage,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            onboardingItems[index].title,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          // Đặt nút điều hướng và chấm trang thành hàng ngang
+                          Container(
+                            height: 50,
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Chấm trang bên trái
+                                Row(
+                                  children: List.generate(
+                                    onboardingItems.length,
+                                    (i) => buildDot(i),
+                                  ),
+                                ),
+                                // Nút Next bên phải
+                                TextButton(
+                                  onPressed: () {
+                                    if (index == onboardingItems.length - 1) {
+                                      // Chuyển đến màn hình chính
+                                      print("Bắt đầu ứng dụng");
+                                    } else {
+                                      _pageController.nextPage(
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeIn,
+                                      );
+                                    }
+                                  },
+                                  child: Text(
+                                    onboardingItems[index].buttonText,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.deepOrange,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
 
-        //refresh button
 
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 10, right: 10),
-          child: FloatingActionButton(
-            backgroundColor: const Color.fromARGB(255, 27, 139, 231),
-            onPressed: () {
-              _controller.getVpnData();
-            },
-            child: Icon(
-              CupertinoIcons.refresh,
-              color: Colors.white,
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-        ),
-
-        body: _controller.isLoading.value
-            ? _loadingWidget()
-            : _controller.vpnList.isEmpty
-                ? _noVPNFound()
-                : _vpnData(),
+        ],
       ),
+      bottomNavigationBar: Obx(() {//! boc lai obx
+        return _adController1.ad != null && _adController1.adLoaded.isTrue
+            ? SafeArea(
+                child: SizedBox(
+                  height: 350,
+                  child: AdWidget(ad: _adController1.ad!),
+                ),
+              )
+            : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+      }),
     );
   }
 
-  _vpnData() => ListView.builder(
-        itemCount: _controller.vpnList.length,
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.only(
-            top: mq.height * .015,
-            bottom: mq.height * .1,
-            left: mq.width * .04,
-            right: mq.width * .04),
-        itemBuilder: (ctx, i) => VpnCart(
-          vpn: _controller.vpnList[i],
-        ),
-      );
+  Widget buildDot(int index) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      height: 8,
+      width: 8,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: _currentPage == index ? Colors.deepOrange : Colors.grey,
+      ),
+    );
+  }
+}
 
-  _loadingWidget() => SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LottieBuilder.asset(
-              'assets/lottie/loading.json',
-              width: mq.width * .7,
-            ),
-            Text(
-              'Loading VPNs...😄',
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-      );
+class OnboardingItem {
+  final String title;
+  final String assetImage; // Đường dẫn đến hình ảnh
+  final String buttonText;
 
-  _noVPNFound() => Center(
-        child: Text(
-          'VPNs Not Found...😶',
-          style: TextStyle(
-              fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
-        ),
-      );
+  OnboardingItem({
+    required this.title,
+    required this.assetImage,
+    required this.buttonText,
+  });
 }

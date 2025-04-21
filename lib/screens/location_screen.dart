@@ -80,9 +80,9 @@ class LocationScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            'Recommend using VPNs near your location for fast and stable connections',
+            "👉 \"Each time you access, please reload to use a new VPN server.\"",
             style: TextStyle(
-              color: Color(0xFFF15E24),
+              color: Color(0xFFFFFFFF),
               fontSize: 15,
             ),
           ),

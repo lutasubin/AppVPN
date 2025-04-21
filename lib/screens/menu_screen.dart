@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:vpn_basic_project/controllers/banner%20_ad_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 // import 'package:url_launcher/url_launcher.dart';
 import 'package:vpn_basic_project/helpers/pref.dart'; // Bỏ comment để sử dụng Pref
 import 'package:vpn_basic_project/screens/Privacy_policy.dart';
@@ -9,14 +12,11 @@ import 'package:vpn_basic_project/screens/language_screen.dart';
 import 'rate_screen.dart';
 import 'share_screen.dart';
 
-class MenuScreen extends StatefulWidget {
-  const MenuScreen({super.key});
+class MenuScreen extends StatelessWidget {
+  final _baController = BannerAdController();
 
-  @override
-  State<MenuScreen> createState() => _MenuScreenState();
-}
+  MenuScreen({super.key});
 
-class _MenuScreenState extends State<MenuScreen> {
   // Bản đồ ánh xạ mã ngôn ngữ sang tên đầy đủ
   final Map<String, String> languageMap = {
     'default': 'Default',
@@ -41,6 +41,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
     // Lấy ngôn ngữ hiện tại từ Pref hoặc Get.locale
     final currentLanguageCode = Pref.selectedLanguage.isNotEmpty
         ? Pref.selectedLanguage
@@ -53,8 +54,8 @@ class _MenuScreenState extends State<MenuScreen> {
         backgroundColor: const Color(0xFF02091A), // Mã màu mới
         leading: IconButton(
           onPressed: () {
-            Get.back(); // Quay lại màn hình trước
-          },
+             AdHelper.showInterstitialAd(onComplete: ()=>Get.back());
+            },
           icon: Icon(
             Icons.arrow_back,
             color: const Color(0xFFFFFFFF),
@@ -69,6 +70,15 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: Obx(() {
+        return _baController.ba != null && _baController.baLoaded.isTrue
+            ? SafeArea(
+                child: SizedBox(
+                height: 120,
+                child: AdWidget(ad: _baController.ba!),
+              ))
+            : SizedBox.shrink();
+      }),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(

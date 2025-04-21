@@ -225,8 +225,8 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'Disconnected'.tr,
                     style: TextStyle(
-                      fontSize: constraints.maxWidth * 0.08 > 25.0
-                          ? 25.0
+                      fontSize: constraints.maxWidth * 0.08 > 40.0
+                          ? 40.0
                           : constraints.maxWidth * 0.08,
                       color: const Color(0xFFFFFFFF),
                       fontWeight: FontWeight.w500,
@@ -236,17 +236,11 @@ class HomeScreen extends StatelessWidget {
               ],
             );
           }),
-          SizedBox(
-              height: constraints.maxHeight * 0.01 > 8.0
-                  ? 8.0
-                  : constraints.maxHeight * 0.01),
+          SizedBox(height: 8),
           // update lai trang thai ket noi
           _controller.getButtonContent,
 
-          SizedBox(
-              height: constraints.maxHeight * 0.05 > 80.0
-                  ? 80.0
-                  : constraints.maxHeight * 0.05),
+          SizedBox(height: 80),
           Center(
             child: GestureDetector(
               onTap: () async {

@@ -4,10 +4,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/screens/home_screen.dart';
+import 'package:vpn_basic_project/test/test_screen.dart';
 
 class LanguageScreen2 extends StatefulWidget {
-
   LanguageScreen2({super.key});
 
   @override
@@ -17,14 +16,14 @@ class LanguageScreen2 extends StatefulWidget {
 class _LanguageScreen2State extends State<LanguageScreen2> {
   final _adController4 = NativeAdController();
   // Khởi tạo selectedLanguage rỗng ban đầu
-    final RxString selectedLanguage = Pref.selectedLanguage.obs;
+  final RxString selectedLanguage = Pref.selectedLanguage.obs;
 
-   @override
+  @override
   void initState() {
     super.initState();
     _adController4.ad = AdHelper.loadNativeAd2(adController: _adController4);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> languages = [
@@ -116,8 +115,6 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
       },
     ];
 
-    
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false, // Tắt nút thoát mặc định
@@ -146,15 +143,15 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                 Get.updateLocale(selectedLanguage.value == 'default'
                     ? (Get.deviceLocale ?? const Locale('en'))
                     : Locale(selectedLanguage.value));
-                Get.offAll(() => HomeScreen());
+                Get.offAll(() => OnboardingScreen());
               }
-             
             },
           ),
         ],
       ),
       backgroundColor: const Color(0xFF02091A),
-      bottomNavigationBar: Obx(() {//! boc lai obx
+      bottomNavigationBar: Obx(() {
+        //! boc lai obx
         return _adController4.ad != null && _adController4.adLoaded.isTrue
             ? SafeArea(
                 child: SizedBox(
@@ -218,7 +215,6 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                       } else {
                         Get.updateLocale(Locale(value));
                       }
-
                     }
                   },
                 ),
