@@ -11,6 +11,7 @@ import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/widgets/cowndowncircle.dart';
 
 import '../helpers/ad_helper.dart';
+import '../screens/rate_screen.dart';
 
 class HomeController extends GetxController {
   // VPN đang chọn
@@ -49,6 +50,9 @@ class HomeController extends GetxController {
       return;
     }
 
+    // Đếm số lần người dùng nhấn nút kết nối
+    _incrementConnectionAttempts();
+
     if (vpnState.value == VpnEngine.vpnDisconnected) {
       final configData =
           utf8.decode(base64Decode(vpn.value.OpenVPNConfigDataBase64));
@@ -68,6 +72,38 @@ class HomeController extends GetxController {
       });
     }
   }
+
+  /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
+  void _incrementConnectionAttempts() {
+    // Chỉ hiển thị rating nếu chưa hiển thị trước đây
+    if (!Pref.hasShownRating) {
+      int attempts = Pref.connectionAttempts + 1;
+      Pref.connectionAttempts = attempts;
+      
+      // Kiểm tra nếu đã nhấn nút kết nối 3 lần
+      if (attempts >= 3) {
+        // Đặt lịch hiển thị màn hình rating sau 1 giây
+        Future.delayed(Duration(seconds: 1), () {
+          _showRatingScreen();
+        });
+      }
+    }
+  }
+
+  /// Hiển thị màn hình rating
+  void _showRatingScreen() {
+    // Đánh dấu đã hiển thị rating
+    Pref.hasShownRating = true;
+    
+    // Reset số lần nhấn nút kết nối
+    Pref.resetConnectionAttempts();
+    
+    // Hiển thị màn hình rating
+    Get.to(() => RatingScreen());
+  }
+
+
+
 
   /// Ngắt kết nối VPN
   void _disconnectVpn({bool showWarning = false}) async {

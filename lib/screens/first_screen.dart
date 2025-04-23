@@ -19,19 +19,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   List<OnboardingItem> onboardingItems = [
     OnboardingItem(
       title: "Just One Touch To Connect.",
-      assetImage: "assets/images/Frame 634360.png", // Đường dẫn đến hình ảnh 1
+      assetImage: "assets/images/image3.png", // Đường dẫn đến hình ảnh 1
       buttonText: "Next",
     ),
     OnboardingItem(
       title: "Diverse VPNs In Many Different Countries.",
-      assetImage:
-          "assets/images/Frame 634360 (1).png", // Đường dẫn đến hình ảnh 2
+      assetImage: "assets/images/image2.png", // Đường dẫn đến hình ảnh 2
       buttonText: "Next",
     ),
     OnboardingItem(
       title: "Protect Your Online Private",
-      assetImage:
-          "assets/images/Frame 634360 (2).png", // Đường dẫn đến hình ảnh 3
+      assetImage: "assets/images/image1.png", // Đường dẫn đến hình ảnh 3
       buttonText: "Get Start",
     ),
   ];
@@ -83,10 +81,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             onboardingItems[index].title,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFFFFFFFF)
-                            ),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFFFFFFFF)),
                           ),
                           SizedBox(height: 20),
                           // Đặt nút điều hướng và chấm trang thành hàng ngang

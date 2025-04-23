@@ -54,4 +54,21 @@ class Pref {
     return data != null ? List<String>.from(jsonDecode(data)) : [];
   }
 
+   // Đếm số lần nhấn nút kết nối
+  static int get connectionAttempts => _box.get('connectionAttempts') ?? 0;
+  static set connectionAttempts(int count) => _box.put('connectionAttempts', count);
+  
+  // Kiểm tra xem đã hiển thị màn hình đánh giá chưa
+  static bool get hasShownRating => _box.get('hasShownRating') ?? false;
+  static set hasShownRating(bool value) => _box.put('hasShownRating', value);
+  
+  // Reset số lần nhấn nút kết nối
+  static void resetConnectionAttempts() => _box.put('connectionAttempts', 0);
+  
+  // Phương thức để reset tất cả dữ liệu liên quan đến tính năng đánh giá
+  static void resetRatingData() {
+    _box.put('connectionAttempts', 0);
+    _box.put('hasShownRating', false);
+  }
+
 }

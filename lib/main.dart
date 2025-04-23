@@ -22,7 +22,6 @@ Future<void> main() async {
   // debugPaintSizeEnabled = true; // Hiển thị viền widget để debug
 
   // check internet
-
   await DependencyInjection.init();
 
   WidgetsFlutterBinding.ensureInitialized();
