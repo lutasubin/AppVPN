@@ -4,7 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/test/test_screen.dart';
+import 'package:vpn_basic_project/screens/first_screen.dart';
 
 class LanguageScreen2 extends StatefulWidget {
   LanguageScreen2({super.key});

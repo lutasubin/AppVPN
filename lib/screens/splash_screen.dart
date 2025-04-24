@@ -60,9 +60,6 @@ class _SplashScreenState extends State<SplashScreen>
         });
       } else {
         AdHelper.showInterstitialAd(onComplete: () {
-          // Get.offAll(() => HomeScreen(),
-          //     transition: Transition.fade,
-          //     duration: Duration(milliseconds: 500));
           Get.offAll(() => OnboardingScreen(),
               transition: Transition.fade,
               duration: Duration(milliseconds: 500));
