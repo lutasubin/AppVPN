@@ -50,8 +50,6 @@ class HomeController extends GetxController {
       return;
     }
 
-    // Đếm số lần người dùng nhấn nút kết nối
-    _incrementConnectionAttempts();
 
     if (vpnState.value == VpnEngine.vpnDisconnected) {
       final configData =
@@ -74,7 +72,7 @@ class HomeController extends GetxController {
   }
 
   /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
-  void _incrementConnectionAttempts() {
+  void incrementConnectionAttempts() {
     // Chỉ hiển thị rating nếu chưa hiển thị trước đây
     if (!Pref.hasShownRating) {
       int attempts = Pref.connectionAttempts + 1;
@@ -84,14 +82,14 @@ class HomeController extends GetxController {
       if (attempts >= 3) {
         // Đặt lịch hiển thị màn hình rating sau 1 giây
         Future.delayed(Duration(seconds: 1), () {
-          _showRatingScreen();
+          showRatingScreen();
         });
       }
     }
   }
 
   /// Hiển thị màn hình rating
-  void _showRatingScreen() {
+  void showRatingScreen() {
     // Đánh dấu đã hiển thị rating
     Pref.hasShownRating = true;
     

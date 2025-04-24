@@ -249,6 +249,8 @@ class HomeScreen extends StatelessWidget {
                   MyDialogs2.error(msg: 'error_connect_server'.tr);
                   return;
                 }
+                // Đếm số lần người dùng nhấn nút kết nối
+                _controller.incrementConnectionAttempts();
                 _controller.connectToVpn(); // Tiếp tục kết nối nếu có mạng
               },
               child: AnimatedContainer(
