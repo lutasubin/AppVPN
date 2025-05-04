@@ -197,7 +197,7 @@ class HomeScreen extends StatelessWidget {
                       _adController.adLoaded.isTrue) {
                     return SafeArea(
                       child: SizedBox(
-                          height: 85, child: AdWidget(ad: _adController.ad!)),
+                          height: 120, child: AdWidget(ad: _adController.ad!)),
                     );
                   } else {
                     return SizedBox.shrink(); // không hiển thị gì

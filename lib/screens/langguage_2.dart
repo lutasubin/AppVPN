@@ -162,7 +162,7 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
             : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
       }),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
         child: ListView.builder(
           itemCount: languages.length,
           itemBuilder: (context, index) {

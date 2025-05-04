@@ -48,133 +48,120 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Lấy kích thước màn hình
     final screenSize = MediaQuery.of(context).size;
-    final isSmallScreen = screenSize.height < 600; // Màn hình nhỏ (dưới 600px chiều cao)
+    final isSmallScreen = screenSize.height < 600;
 
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
       body: Stack(
         children: [
-          PageView.builder(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            itemCount: onboardingItems.length,
-            itemBuilder: (context, index) {
-              return LayoutBuilder(
-                builder: (context, constraints) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: screenSize.height * 0.1), // 10% chiều cao màn hình
-                      // Hình ảnh responsive
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
-                          padding: EdgeInsets.all(screenSize.width * 0.05), // Padding 5% chiều rộng
-                          child: Image.asset(
-                            onboardingItems[index].assetImage,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      // Tiêu đề
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
-                        child: Text(
-                          onboardingItems[index].title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 16 : 20, // Font nhỏ hơn cho màn hình nhỏ
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFFFFFFFF),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenSize.height * 0.03), // Khoảng cách 3% chiều cao
-                      // Nút và chấm điều hướng
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            children: [
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemCount: onboardingItems.length,
+                  itemBuilder: (context, index) {
+                    return LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            // Chấm điều hướng
-                            Row(
-                              children: List.generate(
-                                onboardingItems.length,
-                                (i) => buildDot(i, screenSize),
+                            SizedBox(height: screenSize.height * 0.1),
+                            Expanded(
+                              flex: 3,
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.all(screenSize.width * 0.05),
+                                child: Image.asset(
+                                  onboardingItems[index].assetImage,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
-                            // Nút điều hướng
-                            ElevatedButton(
-                              onPressed: () {
-                                if (index == onboardingItems.length - 1) {
-                                  Get.offAll(() => HomeScreen(),
-                                      transition: Transition.fade,
-                                      duration: Duration(milliseconds: 500));
-                                } else {
-                                  _pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeIn,
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFF15E24),
-                                foregroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: screenSize.width * 0.05,
-                                  vertical: screenSize.height * 0.015,
-                                ),
-                                textStyle: TextStyle(
-                                  fontSize: isSmallScreen ? 14 : 16,
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenSize.width * 0.05),
+                              child: Text(
+                                onboardingItems[index].title,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: isSmallScreen ? 16 : 20,
                                   fontWeight: FontWeight.bold,
+                                  color: const Color(0xFFFFFFFF),
                                 ),
                               ),
-                              child: Text(onboardingItems[index].buttonText),
                             ),
+                            SizedBox(height: screenSize.height * 0.03),
                           ],
-                        ),
-                      ),
-                      SizedBox(height: screenSize.height * 0.05), // Khoảng cách dưới cùng
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          // Nút Skip
-          Positioned(
-            top: screenSize.height * 0.05,
-            right: screenSize.width * 0.05,
-            child: TextButton(
-              onPressed: () {
-                Get.offAll(() => HomeScreen(),
-                    transition: Transition.fade,
-                    duration: Duration(milliseconds: 500));
-              },
-              child: Text(
-                "Skip",
-                style: TextStyle(
-                  fontSize: isSmallScreen ? 14 : 16,
-                  color: const Color(0xFFF15E24),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
-            ),
+              // Chấm điều hướng và nút
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: List.generate(
+                        onboardingItems.length,
+                        (i) => GestureDetector(
+                          onTap: () {
+                            _pageController.animateToPage(
+                              i,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          child: buildDot(i, screenSize),
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        if (_currentPage == onboardingItems.length - 1) {
+                          Get.offAll(() => HomeScreen(),
+                              transition: Transition.fade,
+                              duration: Duration(milliseconds: 500));
+                        } else {
+                          _pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      },
+                      child: Text(
+                        onboardingItems[_currentPage].buttonText,
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 14 : 16,
+                          color: const Color(0xFFF15E24),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
-      // Quảng cáo responsive
       bottomNavigationBar: Obx(() {
         return _adController1.ad != null && _adController1.adLoaded.isTrue
             ? Container(
                 constraints: BoxConstraints(
-                  maxHeight: screenSize.height * 0.4, // Tối đa 40% chiều cao màn hình
-                  minHeight: screenSize.height * 0.2, // Tối thiểu 20% chiều cao
+                  maxHeight: screenSize.height * 0.4,
+                  minHeight: screenSize.height * 0.2,
                 ),
                 child: AdWidget(ad: _adController1.ad!),
               )
