@@ -143,6 +143,8 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                 Get.updateLocale(selectedLanguage.value == 'default'
                     ? (Get.deviceLocale ?? const Locale('en'))
                     : Locale(selectedLanguage.value));
+                // Đánh dấu đã xem onboarding
+                Pref.hasSeenOnboarding = true;
                 Get.offAll(() => OnboardingScreen());
               }
             },

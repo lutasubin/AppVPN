@@ -10,8 +10,6 @@ class Pref {
     _box = await Hive.openBox('data');
   }
 
-  
-
   static Vpn get vpn => Vpn.fromJson(jsonDecode(_box.get('vpn') ?? '{}'));
   static set vpn(Vpn v) => _box.put('vpn', jsonEncode(v));
 
@@ -29,13 +27,16 @@ class Pref {
   static set vpnList(List<Vpn> vpn) =>
       _box.put('vpnList', jsonEncode(vpn));
 
-// Ngôn ngữ đã chọn
+  // Ngôn ngữ đã chọn
   static String get selectedLanguage => _box.get('selectedLanguage') ?? '';
   static set selectedLanguage(String value) => _box.put('selectedLanguage', value);
 
-  
+  // Kiểm tra xem đã hiển thị onboarding chưa
+  static bool get hasSeenOnboarding => _box.get('hasSeenOnboarding') ?? false;
+  static set hasSeenOnboarding(bool value) => _box.put('hasSeenOnboarding', value);
+
   static Future<void> storeCountryFlags(List<String> flags) async {
-    await initializeHive(); // Ensure Hive is initialized
+    await initializeHive();
     await _box.put('countryFlags', jsonEncode(flags));
   }
 
@@ -45,7 +46,7 @@ class Pref {
   }
 
   static Future<void> storeCountries(List<String> countries) async {
-    await initializeHive(); // Ensure Hive is initialized
+    await initializeHive();
     await _box.put('countries', jsonEncode(countries));
   }
 
@@ -54,7 +55,7 @@ class Pref {
     return data != null ? List<String>.from(jsonDecode(data)) : [];
   }
 
-   // Đếm số lần nhấn nút kết nối
+  // Đếm số lần nhấn nút kết nối
   static int get connectionAttempts => _box.get('connectionAttempts') ?? 0;
   static set connectionAttempts(int count) => _box.put('connectionAttempts', count);
   
@@ -70,5 +71,4 @@ class Pref {
     _box.put('connectionAttempts', 0);
     _box.put('hasShownRating', false);
   }
-
 }
