@@ -11,7 +11,6 @@ import 'package:vpn_basic_project/models/vpn_config.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/widgets/cowndowncircle.dart';
 
-import '../helpers/ad_helper.dart';
 import '../screens/rate_screen.dart';
 
 class LocalController extends GetxController {
@@ -144,9 +143,9 @@ class LocalController extends GetxController {
       _startWaitingTimer();
       await VpnEngine.startVpn(vpnConfig);
     } else {
-      AdHelper.showInterstitialAd(onComplete: () {
+      
       _disconnectVpn(showWarning: false);
-      });
+      
     }
   }
 
