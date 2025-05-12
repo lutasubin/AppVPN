@@ -14,6 +14,9 @@ class Vpn {
   // late final String Operator;
   // late final String Message;
   late final String OpenVPNConfigDataBase64;
+  // New field to store the config file name
+  late final String ConfigFileName;
+  
   Vpn({
     required this.HostName,
     required this.IP,
@@ -30,24 +33,26 @@ class Vpn {
     // required this.Operator,
     // required this.Message,
     required this.OpenVPNConfigDataBase64,
+    this.ConfigFileName = '', // Optional with default empty value
   });
 
   Vpn.fromJson(Map<String, dynamic> json) {
     HostName = json['HostName'] ?? '';
     IP = json['IP'] ?? '';
     Score = json['Score'] ?? 0;
-    Ping = json['Ping'].toString();
+    Ping = json['Ping']?.toString() ?? '0';
     Speed = json['Speed'] ?? 0;
     CountryLong = json['CountryLong'] ?? '';
     CountryShort = json['CountryShort'] ?? '';
     NumVpnSessions = json['NumVpnSessions'] ?? 0;
-    Uptime = json['Uptime']?? 0;
-    TotalUsers = json['TotalUsers']??0;
-    TotalTraffic = json['TotalTraffic']??0;
-    // LogType = json['LogType']??'';
-    // Operator = json['Operator']??'';
-    // Message = json['Message']??'';
+    Uptime = json['Uptime'] ?? 0;
+    TotalUsers = json['TotalUsers'] ?? 0;
+    TotalTraffic = json['TotalTraffic'] ?? 0;
+    // LogType = json['LogType'] ?? '';
+    // Operator = json['Operator'] ?? '';
+    // Message = json['Message'] ?? '';
     OpenVPNConfigDataBase64 = json['OpenVPN_ConfigData_Base64'] ?? '';
+    ConfigFileName = json['ConfigFileName'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +72,7 @@ class Vpn {
     // data['Operator'] = Operator;
     // data['Message'] = Message;
     data['OpenVPN_ConfigData_Base64'] = OpenVPNConfigDataBase64;
+    data['ConfigFileName'] = ConfigFileName;
     return data;
   }
 }

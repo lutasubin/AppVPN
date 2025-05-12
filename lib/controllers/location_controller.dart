@@ -7,6 +7,8 @@ class LocationController extends GetxController {
   var vpnList = Pref.vpnList;
   var filteredVpnList = <Vpn>[].obs;
   var isLoading = false.obs;
+  var isShareFreeMode = false.obs;
+
 
   
   // Theo dõi các quốc gia đã mở rộng

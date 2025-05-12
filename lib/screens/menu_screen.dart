@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vpn_basic_project/controllers/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-// import 'package:url_launcher/url_launcher.dart';
-import 'package:vpn_basic_project/helpers/pref.dart'; // Bỏ comment để sử dụng Pref
+import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/Privacy_policy.dart';
 import 'package:vpn_basic_project/screens/language_screen.dart';
-// import 'package:vpn_basic_project/screens/rate_screen.dart';
 import 'rate_screen.dart';
-import 'share_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   final _baController = BannerAdController();
@@ -54,8 +52,8 @@ class MenuScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF02091A), // Mã màu mới
         leading: IconButton(
           onPressed: () {
-             AdHelper.showInterstitialAd(onComplete: ()=>Get.back());
-            },
+            AdHelper.showInterstitialAd(onComplete: () => Get.back());
+          },
           icon: Icon(
             Icons.arrow_back,
             color: const Color(0xFFFFFFFF),
@@ -105,8 +103,7 @@ class MenuScreen extends StatelessWidget {
               icon: Icons.star,
               iconColor: Colors.yellow,
               title: 'Rate us'.tr,
-              onTap: () =>
-                  Get.to(() => RatingScreen(), transition: Transition.upToDown),
+              onTap: () => showRatingBottomSheet(context),
             ),
             const SizedBox(height: 8),
             _buildMenuItem(
@@ -114,7 +111,20 @@ class MenuScreen extends StatelessWidget {
               icon: Icons.share,
               iconColor: Colors.blueAccent,
               title: 'Share with friend'.tr,
-              onTap: () => ShareBottomSheet.show(),
+              onTap: () async {
+                /// Share APP with other users
+
+                /// Set the app link and the message to be shared
+                final String appLink =
+                    'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn';
+                final String message = 'Check out Our app: $appLink';
+
+                /// Share the app link and message using the share dialog
+                await Share.share(
+                  message,
+                  subject: 'Share App',
+                );
+              },
             ),
             const SizedBox(height: 8),
             _buildMenuItem(
@@ -183,6 +193,18 @@ class MenuScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showRatingBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: Colors.transparent,
+      builder: (_) => const RatingBottomSheet(),
     );
   }
 }

@@ -213,37 +213,37 @@ class AdHelper {
 
   //*****************Rewarded Ad******************
 
-  // /// Hiển thị quảng cáo có thưởng.
-  // /// [onComplete] được gọi khi người dùng nhận được phần thưởng.
-  // static void showRewardedAd({required VoidCallback onComplete}) {
-  //   log('Rewarded Ad Id: ${Config.rewardedAd}');
+  /// Hiển thị quảng cáo có thưởng.
+  /// [onComplete] được gọi khi người dùng nhận được phần thưởng.
+  static void showRewardedAd({required VoidCallback onComplete}) {
+    log('Rewarded Ad Id: ${Config.rewardedAd}');
 
-  //   if (Config.hideAds) {
-  //     onComplete();
-  //     return;
-  //   }
+    if (Config.hideAds) {
+      onComplete();
+      return;
+    }
 
-  //   MyDialogs.showProgress();
+    MyDialogs.showProgress();
 
-  //   RewardedAd.load(
-  //     adUnitId: Config.rewardedAd,
-  //     request: AdRequest(),
-  //     rewardedAdLoadCallback: RewardedAdLoadCallback(
-  //       onAdLoaded: (ad) {
-  //         Get.back();
-  //         ad.show(
-  //             onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
-  //           onComplete();
-  //         });
-  //       },
-  //       onAdFailedToLoad: (err) {
-  //         Get.back();
-  //         log('Failed to load an interstitial ad: ${err.message}');
-  //         // onComplete();
-  //       },
-  //     ),
-  //   );
-  // }
+    RewardedAd.load(
+      adUnitId: Config.rewardedAd,
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          Get.back();
+          ad.show(
+              onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
+            onComplete();
+          });
+        },
+        onAdFailedToLoad: (err) {
+          Get.back();
+          log('Failed to load an interstitial ad: ${err.message}');
+          // onComplete();
+        },
+      ),
+    );
+  }
 
   //*****************Native Ad1******************
 

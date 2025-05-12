@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_review/in_app_review.dart';
 
-class RatingScreen extends StatefulWidget {
-  const RatingScreen({super.key});
+class RatingBottomSheet extends StatefulWidget {
+  const RatingBottomSheet({super.key});
 
   @override
-  State<RatingScreen> createState() => _RatingScreenState();
+  State<RatingBottomSheet> createState() => _RatingBottomSheetState();
 }
 
-class _RatingScreenState extends State<RatingScreen> {
+class _RatingBottomSheetState extends State<RatingBottomSheet> {
   int _rating = 0;
 
   final Map<int, Map<String, String>> ratingContent = {
@@ -54,106 +54,98 @@ class _RatingScreenState extends State<RatingScreen> {
               "We are working hard for a better user experience.\nWe’d greatly appreciate it if you can rate us.",
         };
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF1E1E1E),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          width: 300,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(content["emoji"]!, style: const TextStyle(fontSize: 48)),
-              const SizedBox(height: 12),
-              Text(
-                content["title"]!,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                content["message"]!,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  final starIndex = index + 1;
-                  return IconButton(
-                      onPressed: () => setState(() => _rating = starIndex),
-                      icon: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: Icon(
-                          _rating >= starIndex ? Icons.star : Icons.star_border,
-                          key: ValueKey(_rating >= starIndex),
-                          color: Colors.orange,
-                          size: 32,
-                        ),
-                      ));
-                }),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                      (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.disabled)) {
-                          return Colors.deepOrange
-                              .withOpacity(0.4); // màu mờ khi disabled
-                        }
-                        return Colors.deepOrange; // màu thường khi enabled
-                      },
-                    ),
-                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+    return SafeArea(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(content["emoji"]!, style: const TextStyle(fontSize: 48)),
+            const SizedBox(height: 12),
+            Text(
+              content["title"]!,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              content["message"]!,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(5, (index) {
+                final starIndex = index + 1;
+                return IconButton(
+                  onPressed: () => setState(() => _rating = starIndex),
+                  icon: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Icon(
+                      _rating >= starIndex ? Icons.star : Icons.star_border,
+                      key: ValueKey(_rating >= starIndex),
+                      color: Colors.orange,
+                      size: 32,
                     ),
                   ),
-                  onPressed: _rating == 0
-                      ? null // Vô hiệu hóa nếu chưa chọn sao
-                      : () {
-                          if (_rating >= 4) {
-                            // Gửi tới Google Play
-                            _launchInAppReviewOrStore();
-                          } else {
-                            // Hiển thị phản hồi
-                            Get.back();
-                          }
-                        },
-                  child: Text(
-                    _rating >= 4 ? 'Rate On Google Play' : 'Rate Us',
-                    style: const TextStyle(color: Colors.white),
+                );
+              }),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.disabled)) {
+                        return Colors.deepOrange.withOpacity(0.4);
+                      }
+                      return Colors.deepOrange;
+                    },
+                  ),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
+                onPressed: _rating == 0
+                    ? null
+                    : () {
+                        if (_rating >= 4) {
+                          _launchInAppReviewOrStore();
+                        } else {
+                          Get.back(); // Close bottom sheet
+                        }
+                      },
+                child: Text(
+                  _rating >= 4 ? 'Rate On Google Play' : 'Rate Us',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-Future<void> _launchInAppReviewOrStore() async {
-  final InAppReview inAppReview = InAppReview.instance;
+  Future<void> _launchInAppReviewOrStore() async {
+    final InAppReview inAppReview = InAppReview.instance;
 
-  try {
-    // Kiểm tra nếu review trong app khả dụng
-    if (await inAppReview.isAvailable()) {
-      await inAppReview.requestReview(); // Ưu tiên dùng popup trong app
-    } else {
-      await inAppReview.openStoreListing(); // Fallback: mở trang app trên CH Play
+    try {
+      if (await inAppReview.isAvailable()) {
+        await inAppReview.requestReview();
+      } else {
+        await inAppReview.openStoreListing();
+      }
+    } catch (e) {
+      throw Exception('Không thể mở đánh giá: $e');
     }
-  } catch (e) {
-    throw Exception('Không thể mở đánh giá: $e');
   }
-}
 }

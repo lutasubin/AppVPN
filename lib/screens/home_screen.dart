@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/apis/apis.dart';
-import 'package:vpn_basic_project/controllers/home_controller.dart';
+import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/network_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
   final ipData = IPDetails.fromJson({}).obs;
 
   /// Bộ điều khiển chính cho màn hình Home.
-  final _controller = Get.put(HomeController());
+  final _controller = Get.put(LocalController());
 
   /// Bộ điều khiển quảng cáo tự nhiên.
   final _adController = NativeAdController();
@@ -218,7 +218,6 @@ class HomeScreen extends StatelessWidget {
             print('VPN State: ${_controller.vpnState.value}');
             final isRunning =
                 _controller.vpnState.value == VpnEngine.vpnConnected;
-            // _controller.vpnState.value == VpnEngine.vpnConnecting;
             return Column(
               children: [
                 if (_controller.vpnState.value == VpnEngine.vpnDisconnected)
@@ -250,8 +249,8 @@ class HomeScreen extends StatelessWidget {
                   return;
                 }
                 // Đếm số lần người dùng nhấn nút kết nối
-                _controller.incrementConnectionAttempts();
-                _controller.connectToVpn(); // Tiếp tục kết nối nếu có mạng
+                _controller.incrementConnectionAttempts(context);
+                _controller.connectToVpnFree(); // Tiếp tục kết nối nếu có mạng
               },
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
@@ -310,7 +309,7 @@ class HomeScreen extends StatelessWidget {
             child: Obx(() => Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   color: Color(0xFF172032),
-                  height: 50,
+                  height: 60,
                   child: Row(
                     children: [
                       Expanded(

@@ -35,7 +35,7 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
       {
         'code': 'en',
         'name': 'English',
-        'flag': 'assets/flags/UK.png',
+        'flag': 'assets/flags/gb.png',
       },
       {
         'code': 'hi',

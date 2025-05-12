@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
+import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
@@ -13,12 +14,15 @@ import 'package:vpn_basic_project/widgets/cowndowncircle.dart';
 import '../helpers/ad_helper.dart';
 import '../screens/rate_screen.dart';
 
-class HomeController extends GetxController {
+class LocalController extends GetxController {
   // VPN đang chọn
   final Rx<Vpn> vpn = Pref.vpn.obs;
 
   // Trạng thái VPN hiện tại
   final vpnState = VpnEngine.vpnDisconnected.obs;
+
+  // List of available local VPN servers
+  final RxList<LocalVpnServer> availableServers = <LocalVpnServer>[].obs;
 
   // Timer chờ kết nối
   Timer? _waitingTimer;
@@ -34,6 +38,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _listenVpnStage();
+    loadAvailableServers();
   }
 
   @override
@@ -43,23 +48,99 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  /// Kết nối hoặc ngắt VPN
-  void connectToVpn() async {
+  /// Load available servers from predefined list
+  /// In a real app, you might want to load this from a JSON file in assets
+  void loadAvailableServers() {
+    availableServers.value = [
+      LocalVpnServer(
+        countryName: 'United States',
+        countryCode: 'us',
+        ip: '134.209.119.77',
+        ping: '',
+        configFileName: 'us_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'United Kingdom',
+        countryCode: 'gb',
+        ip: ' 178.128.164.174',
+        ping: '',
+        configFileName: 'uk_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'Japan',
+        countryCode: 'jp',
+        ip: '219.100.37.169',
+        ping: '',
+        configFileName: 'jp_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'Germany',
+        countryCode: 'de',
+        ip: '178.128.207.219',
+        ping: '',
+        configFileName: 'de_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'Singapore',
+        countryCode: 'sg',
+        ip: '165.22.96.219',
+        ping: '',
+        configFileName: 'sg_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'Canada',
+        countryCode: 'ca',
+        ip: '68.183.203.154',
+        ping: '',
+        configFileName: 'ca_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'Australia',
+        countryCode: 'au',
+        ip: '170.64.162.198',
+        ping: '',
+        configFileName: 'au_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'India',
+        countryCode: 'in',
+        ip: '142.93.219.152',
+        ping: '',
+        configFileName: 'in_fast.ovpn',
+      ),
+      LocalVpnServer(
+        countryName: 'French',
+        countryCode: 'fr',
+        ip: '62.171.171.217 ',
+        ping: '',
+        configFileName: 'eu_fast.ovpn',
+      ),
+    ];
+
+    // If no VPN is selected, select the first one by default
+    if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
+        availableServers.isNotEmpty) {
+      setVpnFromLocalServer(availableServers[0]);
+    }
+  }
+
+  /// Kết nối hoặc ngắt VPNFree
+  void connectToVpnFree() async {
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
       MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
       return;
     }
-
 
     if (vpnState.value == VpnEngine.vpnDisconnected) {
       final configData =
           utf8.decode(base64Decode(vpn.value.OpenVPNConfigDataBase64));
       final vpnConfig = VpnConfig(
         country: vpn.value.CountryLong,
-        username: 'vpn',
-        password: 'vpn',
+        username: '',
+        password: '',
         config: configData,
       );
+
       AdHelper.showInterstitialAd(onComplete: () async {
         _startWaitingTimer();
         await VpnEngine.startVpn(vpnConfig);
@@ -71,37 +152,72 @@ class HomeController extends GetxController {
     }
   }
 
+  /// Kết nối hoặc ngắt VPN(High speed)
+  void connectToVpnHigh() async {
+    if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
+      MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
+      return;
+    }
+
+    if (vpnState.value == VpnEngine.vpnDisconnected) {
+      final configData =
+          utf8.decode(base64Decode(vpn.value.OpenVPNConfigDataBase64));
+      final vpnConfig = VpnConfig(
+        country: vpn.value.CountryLong,
+        username: '',
+        password: '',
+        config: configData,
+      );
+
+      _startWaitingTimer();
+      await VpnEngine.startVpn(vpnConfig);
+    } else {
+      // AdHelper.showInterstitialAd(onComplete: () {
+      _disconnectVpn(showWarning: false);
+      // });
+    }
+  }
+
   /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
-  void incrementConnectionAttempts() {
+  void incrementConnectionAttempts(BuildContext context) {
     // Chỉ hiển thị rating nếu chưa hiển thị trước đây
     if (!Pref.hasShownRating) {
       int attempts = Pref.connectionAttempts + 1;
       Pref.connectionAttempts = attempts;
-      
+
       // Kiểm tra nếu đã nhấn nút kết nối 3 lần
       if (attempts >= 3) {
         // Đặt lịch hiển thị màn hình rating sau 1 giây
         Future.delayed(Duration(seconds: 1), () {
-          showRatingScreen();
+          showRatingScreen(context);
         });
       }
     }
   }
 
   /// Hiển thị màn hình rating
-  void showRatingScreen() {
+  void showRatingScreen(BuildContext context) {
     // Đánh dấu đã hiển thị rating
     Pref.hasShownRating = true;
-    
+
     // Reset số lần nhấn nút kết nối
     Pref.resetConnectionAttempts();
-    
+
     // Hiển thị màn hình rating
-    Get.to(() => RatingScreen());
+    showRatingBottomSheet2(context);
   }
 
-
-
+  void showRatingBottomSheet2(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: Colors.transparent,
+      builder: (_) => const RatingBottomSheet(),
+    );
+  }
 
   /// Ngắt kết nối VPN
   void _disconnectVpn({bool showWarning = false}) async {
@@ -153,6 +269,18 @@ class HomeController extends GetxController {
       }
       update();
     });
+  }
+
+  /// Đổi VPN server từ LocalVpnServer
+  Future<void> setVpnFromLocalServer(LocalVpnServer server) async {
+    if (vpnState.value == VpnEngine.vpnConnected) {
+      VpnEngine.stopVpn();
+    }
+    final newVpn = await server.toVpn();
+    vpn.value = newVpn;
+    Pref.vpn = newVpn;
+    _cancelWaitingTimer();
+    update();
   }
 
   /// Đổi VPN server

@@ -23,12 +23,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
     OnboardingItem(
       title: "Diverse VPNs In Many Different Countries.",
-      assetImage: "assets/images/Frame 634360 (2).png",
+      assetImage: "assets/images/Frame 634360 (1).png",
       buttonText: "Next",
     ),
     OnboardingItem(
       title: "Protect Your Online Private",
-      assetImage: "assets/images/Frame 634360 (1).png",
+      assetImage: "assets/images/Frame 634360 (2).png",
       buttonText: "Get Start",
     ),
   ];

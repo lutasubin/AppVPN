@@ -25,7 +25,7 @@ class LanguageScreen extends StatelessWidget {
       {
         'code': 'en',
         'name': 'English',
-        'flag': 'assets/flags/UK.png',
+        'flag': 'assets/flags/gb.png',
       },
       {
         'code': 'hi',
@@ -129,11 +129,6 @@ class LanguageScreen extends StatelessWidget {
               size: 25,
             ),
             onPressed: () {
-              // Get.dialog(WatchAdDialog(onComplete: () {
-              //   AdHelper.showRewardedAd(onComplete: () {
-              //     // Get.back();
-              //   });
-              // }));
               Get.back();
             },
           ),
