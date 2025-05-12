@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
@@ -29,14 +30,16 @@ class VpnCart extends StatelessWidget {
               Pref.vpn = vpn;
               Get.back();
 
-              if (controller.vpnState.value == VpnEngine.vpnConnected) {
-                VpnEngine.stopVpn();
-                Future.delayed(Duration(seconds: 2), () {
-                  controller.connectToVpnFree();
-                });
-              } else {
-                controller.connectToVpnFree();
-              }
+              AdHelper.showInterstitialAd(onComplete: () async {
+                if (controller.vpnState.value == VpnEngine.vpnConnected) {
+                  VpnEngine.stopVpn();
+                  Future.delayed(Duration(seconds: 2), () {
+                    controller.connectToVpn();
+                  });
+                } else {
+                  controller.connectToVpn();
+                }
+              });
             },
             title: Text(
               vpn.CountryLong,

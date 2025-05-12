@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:in_app_review/in_app_review.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RatingBottomSheet extends StatefulWidget {
   const RatingBottomSheet({super.key});
@@ -118,7 +118,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     ? null
                     : () {
                         if (_rating >= 4) {
-                          _launchInAppReviewOrStore();
+                          _launchPlayStore();
                         } else {
                           Get.back(); // Close bottom sheet
                         }
@@ -135,17 +135,14 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
     );
   }
 
-  Future<void> _launchInAppReviewOrStore() async {
-    final InAppReview inAppReview = InAppReview.instance;
+  Future<void> _launchPlayStore() async {
+  final Uri uri = Uri.parse(
+      'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn'); // thay bằng package ID của bạn
 
-    try {
-      if (await inAppReview.isAvailable()) {
-        await inAppReview.requestReview();
-      } else {
-        await inAppReview.openStoreListing();
-      }
-    } catch (e) {
-      throw Exception('Không thể mở đánh giá: $e');
-    }
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    throw Exception('Không thể mở đường dẫn đánh giá');
   }
+}
 }

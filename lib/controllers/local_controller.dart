@@ -62,7 +62,7 @@ class LocalController extends GetxController {
       LocalVpnServer(
         countryName: 'United Kingdom',
         countryCode: 'gb',
-        ip: ' 178.128.164.174',
+        ip: '178.128.164.174',
         ping: '',
         configFileName: 'uk_fast.ovpn',
       ),
@@ -124,36 +124,8 @@ class LocalController extends GetxController {
     }
   }
 
-  /// Kết nối hoặc ngắt VPNFree
-  void connectToVpnFree() async {
-    if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
-      MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
-      return;
-    }
-
-    if (vpnState.value == VpnEngine.vpnDisconnected) {
-      final configData =
-          utf8.decode(base64Decode(vpn.value.OpenVPNConfigDataBase64));
-      final vpnConfig = VpnConfig(
-        country: vpn.value.CountryLong,
-        username: '',
-        password: '',
-        config: configData,
-      );
-
-      AdHelper.showInterstitialAd(onComplete: () async {
-        _startWaitingTimer();
-        await VpnEngine.startVpn(vpnConfig);
-      });
-    } else {
-      AdHelper.showInterstitialAd(onComplete: () {
-        _disconnectVpn(showWarning: false);
-      });
-    }
-  }
-
-  /// Kết nối hoặc ngắt VPN(High speed)
-  void connectToVpnHigh() async {
+  //connect vpn
+  void connectToVpn() async {
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
       MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
       return;
@@ -172,11 +144,14 @@ class LocalController extends GetxController {
       _startWaitingTimer();
       await VpnEngine.startVpn(vpnConfig);
     } else {
-      // AdHelper.showInterstitialAd(onComplete: () {
+      AdHelper.showInterstitialAd(onComplete: () {
       _disconnectVpn(showWarning: false);
-      // });
+      });
     }
   }
+
+
+
 
   /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
   void incrementConnectionAttempts(BuildContext context) {

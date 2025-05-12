@@ -33,10 +33,10 @@ class VpnCardLocal extends StatelessWidget {
                   if (controller.vpnState.value == VpnEngine.vpnConnected) {
                     VpnEngine.stopVpn();
                     Future.delayed(Duration(seconds: 2), () {
-                      controller.connectToVpnHigh();
+                      controller.connectToVpn();
                     });
                   } else {
-                    controller.connectToVpnHigh();
+                      controller.connectToVpn();
                   }
                 });
               });

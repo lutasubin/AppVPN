@@ -250,7 +250,10 @@ class HomeScreen extends StatelessWidget {
                 }
                 // Đếm số lần người dùng nhấn nút kết nối
                 _controller.incrementConnectionAttempts(context);
-                _controller.connectToVpnFree(); // Tiếp tục kết nối nếu có mạng
+
+                AdHelper.showInterstitialAd(onComplete: () async {
+                  _controller.connectToVpn();
+                });
               },
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
