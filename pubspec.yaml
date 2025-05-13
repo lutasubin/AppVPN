@@ -5,7 +5,7 @@ description: Ứng dụng VPN Android được xây dựng bằng Flutter dựa 
 publish_to: 'none' # Ngăn việc vô tình xuất bản lên pub.dev
 
 # Phiên bản ứng dụng
-version: 1.1.0
+version: 2.0.0+10
 
 # Yêu cầu phiên bản Dart SDK
 environment:

@@ -10,11 +10,7 @@ class Vpn {
   late final int Uptime;
   late final int TotalUsers;
   late final int TotalTraffic;
-  // late final String LogType;
-  // late final String Operator;
-  // late final String Message;
   late final String OpenVPNConfigDataBase64;
-  // New field to store the config file name
   late final String ConfigFileName;
   
   Vpn({
@@ -29,9 +25,7 @@ class Vpn {
     required this.Uptime,
     required this.TotalUsers,
     required this.TotalTraffic,
-    // required this.LogType,
-    // required this.Operator,
-    // required this.Message,
+   
     required this.OpenVPNConfigDataBase64,
     this.ConfigFileName = '', // Optional with default empty value
   });
@@ -48,9 +42,7 @@ class Vpn {
     Uptime = json['Uptime'] ?? 0;
     TotalUsers = json['TotalUsers'] ?? 0;
     TotalTraffic = json['TotalTraffic'] ?? 0;
-    // LogType = json['LogType'] ?? '';
-    // Operator = json['Operator'] ?? '';
-    // Message = json['Message'] ?? '';
+   
     OpenVPNConfigDataBase64 = json['OpenVPN_ConfigData_Base64'] ?? '';
     ConfigFileName = json['ConfigFileName'] ?? '';
   }
@@ -68,9 +60,7 @@ class Vpn {
     data['Uptime'] = Uptime;
     data['TotalUsers'] = TotalUsers;
     data['TotalTraffic'] = TotalTraffic;
-    // data['LogType'] = LogType;
-    // data['Operator'] = Operator;
-    // data['Message'] = Message;
+    
     data['OpenVPN_ConfigData_Base64'] = OpenVPNConfigDataBase64;
     data['ConfigFileName'] = ConfigFileName;
     return data;

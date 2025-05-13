@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'OpenVpn Demo',
+      title: 'AI VPN Fast Safe',
       home: const SplashScreen(),
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFF02091A),

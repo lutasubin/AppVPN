@@ -131,13 +131,14 @@ class LocalController extends GetxController {
     }
 
     if (vpnState.value == VpnEngine.vpnDisconnected) {
-      final configData =
-          utf8.decode(base64Decode(vpn.value.OpenVPNConfigDataBase64));
+      final data = Base64Decoder().convert(vpn.value.OpenVPNConfigDataBase64);
+      final config = Utf8Decoder().convert(data);
+          
       final vpnConfig = VpnConfig(
         country: vpn.value.CountryLong,
         username: '',
         password: '',
-        config: configData,
+        config: config,
       );
 
       _startWaitingTimer();
@@ -257,17 +258,7 @@ class LocalController extends GetxController {
     update();
   }
 
-  /// Đổi VPN server
-  void setVpn(Vpn newVpn) {
-    if (vpnState.value == VpnEngine.vpnConnected) {
-      VpnEngine.stopVpn();
-    }
-    vpn.value = newVpn;
-    Pref.vpn = newVpn;
-    _cancelWaitingTimer();
-    update();
-  }
-
+ 
   /// Màu nút kết nối
   Color get getButtonColor {
     return vpnState.value == VpnEngine.vpnConnected

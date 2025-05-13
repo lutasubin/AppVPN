@@ -16,6 +16,23 @@
 #   public *;
 #}
 
+# Keep all VPN classes
+-keep class de.blinkt.openvpn.** { *; }
+-keep class org.spongycastle.** { *; }
+-keep class net.openvpn.** { *; }
 
+# Keep JNI methods
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# Keep chart library
 -keep class com.github.mikephil.charting.** { *; }
 -dontwarn io.realm.**
+
+# Keep model classes
+-keep class **.model.** { *; }
+-keep class **.models.** { *; }
+
+# OpenVPN specific
+-dontwarn de.blinkt.openvpn.**

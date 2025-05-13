@@ -8,27 +8,21 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-        <!-- ads permisson for Android 12 or higher -->
-     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
-    <!-- Đặt queries ở đây, TRƯỚC thẻ application -->
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="https" />
-        </intent>
-    </queries>
+     <!-- Ads Permission for Android 12 or higher -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <application
         android:name="${applicationName}"
         android:label="AI VPN Fast Safe"
         android:icon="@mipmap/ic_launcher"
+        android:extractNativeLibs="true"
+        android:allowBackup="false"
         tools:ignore="AllowBackup">
 
        <!-- for ads -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6249555933736346~5693810225"/>
-            <!-- ca-app-pub-6249555933736346~5693810225 -->
              
          
         <!-- Disable Impeller -->

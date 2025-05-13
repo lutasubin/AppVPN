@@ -86,6 +86,9 @@ public class MainActivity extends FlutterActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // Khởi tạo thư viện native
+        NativeLibInitializer.initializeNativeLibs(this);
+        
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -241,11 +244,20 @@ public class MainActivity extends FlutterActivity {
                 vpnProfile.mAllowAppVpnBypass = true;
             }
 
+            Log.d(TAG, "Starting VPN with profile: " + vpnProfile.mName);
+            
             ProfileManager.setTemporaryProfile(this, vpnProfile);
             VPNLaunchHelper.startOpenVpn(vpnProfile, this);
+            
+            Log.d(TAG, "VPN Start initiated");
         } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException in startVPN: " + e.getMessage(), e);
             setStage("disconnected");
-            e.printStackTrace();
+            Toast.makeText(this, "Failed to start VPN: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in startVPN: " + e.getMessage(), e);
+            setStage("disconnected");
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
