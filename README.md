@@ -91,6 +91,28 @@ AI VPN Fast Safe là ứng dụng VPN mạnh mẽ, an toàn và thân thiện v�
 4. Thiết lập các ID quảng cáo trong Firebase Remote Config
 5. Chạy `flutter run` để khởi chạy ứng dụng
 
+### Cấu hình VPN
+
+Vì lý do bảo mật, các file cấu hình VPN không được đưa vào repository. Bạn cần thiết lập như sau:
+
+1. Tạo thư mục `assets/vpn` trong project của bạn
+2. Thêm các file cấu hình OpenVPN (.ovpn) vào thư mục này, đặt tên theo quốc gia:
+
+   - `us_fast.ovpn` - Máy chủ Mỹ
+   - `uk_fast.ovpn` - Máy chủ Anh
+   - `jp_fast.ovpn` - Máy chủ Nhật Bản
+   - `de_fast.ovpn` - Máy chủ Đức
+   - `sg_fast.ovpn` - Máy chủ Singapore
+   - `ca_fast.ovpn` - Máy chủ Canada
+   - `au_fast.ovpn` - Máy chủ Úc
+   - `in_fast.ovpn` - Máy chủ Ấn Độ
+   - `eu_fast.ovpn` - Máy chủ Pháp
+
+3. Đảm bảo các file cấu hình có định dạng OpenVPN hợp lệ
+4. Thư mục `assets/vpn` đã được thêm vào `.gitignore` để không đưa lên GitHub
+
+> **Lưu ý**: Bạn có thể tìm các file cấu hình OpenVPN miễn phí từ các nhà cung cấp VPN đáng tin cậy, hoặc tạo máy chủ VPN của riêng bạn.
+
 ## 📄 License
 
 Ứng dụng này được phát hành dưới giấy phép [MIT License](LICENSE).
