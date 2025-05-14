@@ -5,6 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:vpn_basic_project/controllers/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
+import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/Privacy_policy.dart';
 import 'package:vpn_basic_project/screens/language_screen.dart';
@@ -95,7 +96,12 @@ class MenuScreen extends StatelessWidget {
               iconColor: Colors.purpleAccent,
               title: 'Language'.tr,
               trailingText: currentLanguage,
-              onTap: () => Get.to(() => LanguageScreen()),
+              onTap: () {
+                // Track language setting access
+                AnalyticsHelper.logSettingChange(
+                    'open_language_settings', 'clicked');
+                Get.to(() => LanguageScreen());
+              },
             ),
             const SizedBox(height: 8),
             _buildMenuItem(
@@ -103,7 +109,11 @@ class MenuScreen extends StatelessWidget {
               icon: Icons.star,
               iconColor: Colors.yellow,
               title: 'Rate us'.tr,
-              onTap: () => showRatingBottomSheet(context),
+              onTap: () {
+                // Track rating dialog open
+                AnalyticsHelper.logSettingChange('open_rating', 'clicked');
+                showRatingBottomSheet(context);
+              },
             ),
             const SizedBox(height: 8),
             _buildMenuItem(
@@ -112,6 +122,9 @@ class MenuScreen extends StatelessWidget {
               iconColor: Colors.blueAccent,
               title: 'Share with friend'.tr,
               onTap: () async {
+                // Track app sharing
+                AnalyticsHelper.logSettingChange('share_app', 'clicked');
+
                 /// Share APP with other users
 
                 /// Set the app link and the message to be shared
@@ -133,6 +146,9 @@ class MenuScreen extends StatelessWidget {
                 iconColor: Color(0xFF03C343),
                 title: 'Privacy Policy'.tr,
                 onTap: () {
+                  // Track privacy policy access
+                  AnalyticsHelper.logSettingChange(
+                      'open_privacy_policy', 'clicked');
                   Get.to(() => PrivacyPolicy());
                 }),
           ],

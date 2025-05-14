@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
@@ -32,6 +33,9 @@ class LocalController extends GetxController {
 
   // Lắng nghe stage từ native
   StreamSubscription<String>? _vpnStageSub;
+
+  // Thời gian bắt đầu kết nối
+  DateTime? _connectionStartTime;
 
   @override
   void onInit() {
@@ -133,7 +137,7 @@ class LocalController extends GetxController {
     if (vpnState.value == VpnEngine.vpnDisconnected) {
       final data = Base64Decoder().convert(vpn.value.OpenVPNConfigDataBase64);
       final config = Utf8Decoder().convert(data);
-          
+
       final vpnConfig = VpnConfig(
         country: vpn.value.CountryLong,
         username: '',
@@ -144,14 +148,9 @@ class LocalController extends GetxController {
       _startWaitingTimer();
       await VpnEngine.startVpn(vpnConfig);
     } else {
-      
       _disconnectVpn(showWarning: false);
-      
     }
   }
-
-
-
 
   /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
   void incrementConnectionAttempts(BuildContext context) {
@@ -197,6 +196,16 @@ class LocalController extends GetxController {
   /// Ngắt kết nối VPN
   void _disconnectVpn({bool showWarning = false}) async {
     _manuallyDisconnected = true;
+
+    // Log disconnect event nếu có thời gian bắt đầu kết nối
+    if (_connectionStartTime != null &&
+        vpnState.value == VpnEngine.vpnConnected) {
+      final durationInSeconds =
+          DateTime.now().difference(_connectionStartTime!).inSeconds;
+      AnalyticsHelper.logVpnDisconnect(
+          vpn.value.CountryLong, durationInSeconds);
+    }
+
     await VpnEngine.stopVpn();
     _cancelWaitingTimer(showWarning: showWarning);
   }
@@ -238,7 +247,22 @@ class LocalController extends GetxController {
       if (stageLower == VpnEngine.vpnConnected) {
         vpnState.value = VpnEngine.vpnConnected;
         _cancelWaitingTimer();
+
+        // Ghi nhận thời gian bắt đầu kết nối và log sự kiện
+        _connectionStartTime = DateTime.now();
+        AnalyticsHelper.logVpnConnect(
+            vpn.value.CountryLong, vpn.value.CountryShort);
       } else if (stageLower == VpnEngine.vpnDisconnected) {
+        // Log disconnect event nếu có thời gian bắt đầu kết nối
+        if (_connectionStartTime != null &&
+            vpnState.value == VpnEngine.vpnConnected) {
+          final durationInSeconds =
+              DateTime.now().difference(_connectionStartTime!).inSeconds;
+          AnalyticsHelper.logVpnDisconnect(
+              vpn.value.CountryLong, durationInSeconds);
+          _connectionStartTime = null;
+        }
+
         vpnState.value = VpnEngine.vpnDisconnected;
         _cancelWaitingTimer();
       }
@@ -255,10 +279,13 @@ class LocalController extends GetxController {
     vpn.value = newVpn;
     Pref.vpn = newVpn;
     _cancelWaitingTimer();
+
+    // Log server selection event
+    AnalyticsHelper.logServerSelection(server.countryName, server.countryCode);
+
     update();
   }
 
- 
   /// Màu nút kết nối
   Color get getButtonColor {
     return vpnState.value == VpnEngine.vpnConnected

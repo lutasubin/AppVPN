@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 
 class RatingBottomSheet extends StatefulWidget {
   const RatingBottomSheet({super.key});
@@ -51,7 +52,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
           "emoji": "😊",
           "title": "Rate Us",
           "message":
-              "We are working hard for a better user experience.\nWe’d greatly appreciate it if you can rate us.",
+              "We are working hard for a better user experience.\nWe'd greatly appreciate it if you can rate us.",
         };
 
     return SafeArea(
@@ -82,7 +83,12 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               children: List.generate(5, (index) {
                 final starIndex = index + 1;
                 return IconButton(
-                  onPressed: () => setState(() => _rating = starIndex),
+                  onPressed: () => setState(() {
+                    _rating = starIndex;
+                    // Track selected rating value
+                    AnalyticsHelper.logSettingChange(
+                        'rate_stars_selected', starIndex.toString());
+                  }),
                   icon: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: Icon(
@@ -118,8 +124,14 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     ? null
                     : () {
                         if (_rating >= 4) {
+                          // Track high rating with Google Play redirection
+                          AnalyticsHelper.logSettingChange(
+                              'rate_on_play_store', _rating.toString());
                           _launchPlayStore();
                         } else {
+                          // Track low rating without redirection
+                          AnalyticsHelper.logSettingChange(
+                              'rate_feedback_only', _rating.toString());
                           Get.back(); // Close bottom sheet
                         }
                       },
@@ -136,13 +148,13 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
   }
 
   Future<void> _launchPlayStore() async {
-  final Uri uri = Uri.parse(
-      'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn'); // thay bằng package ID của bạn
+    final Uri uri = Uri.parse(
+        'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn'); // thay bằng package ID của bạn
 
-  if (await canLaunchUrl(uri)) {
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  } else {
-    throw Exception('Không thể mở đường dẫn đánh giá');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw Exception('Không thể mở đường dẫn đánh giá');
+    }
   }
-}
 }

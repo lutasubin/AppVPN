@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/dependency_injection.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
+import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/app_translations.dart';
 import 'package:vpn_basic_project/helpers/config.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
@@ -45,6 +46,9 @@ Future<void> main() async {
     await Config.initConfig();
     await Pref.initializeHive();
     await AdHelper.initAds();
+
+    // Ghi nhận sự kiện mở ứng dụng
+    await AnalyticsHelper.logAppOpen();
   } catch (e) {
     debugPrint("Lỗi trong quá trình khởi tạo: $e");
   }
@@ -79,6 +83,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
+      navigatorObservers: [AnalyticsHelper.observer],
     );
   }
 }

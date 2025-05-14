@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
+import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 // import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
 
@@ -198,6 +199,10 @@ class LanguageScreen extends StatelessWidget {
                     if (value != null) {
                       selectedLanguage.value = value;
                       Pref.selectedLanguage = value;
+
+                      // Track language change event
+                      AnalyticsHelper.logSettingChange('language_change',
+                          value == 'default' ? 'default' : value);
 
                       if (value == 'default') {
                         Get.updateLocale(

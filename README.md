@@ -1,78 +1,100 @@
-<h1 align="center">Hi 👋, I'm Lutasubin</h1>
-<h3 align="center">A passionate mobile developer from Vietnam 🇻🇳</h3>
+# AI VPN Fast Safe
 
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=lutasubin&label=Profile%20views&color=0e75b6&style=flat" alt="lutasubin" />
+  <img src="screenshot/image.png" width="200" />
+  <img src="screenshot/image1.png" width="200" />
+  <img src="screenshot/image2.png" width="200" />
 </p>
 
-<p align="center">
-  <a href="https://github.com/ryo-ma/github-profile-trophy">
-    <img src="https://github-profile-trophy.vercel.app/?username=lutasubin&theme=gruvbox&margin-w=15" alt="Trophies" />
-  </a>
-</p>
+## 📋 Tổng quan
 
----
+AI VPN Fast Safe là ứng dụng VPN mạnh mẽ, an toàn và thân thiện với người dùng được xây dựng bằng Flutter. Ứng dụng cung cấp kết nối VPN bảo mật, đa dạng máy chủ và giao diện hiện đại, đồng thời tích hợp nhiều tính năng hữu ích cho người dùng.
 
-- 🔭 I’m currently working on [AppVPN](https://github.com/lutasubin/AppVPN)
-- 🌱 I’m currently learning **Flutter**
-- 👯 I’m looking to collaborate on [AppVPN](https://github.com/lutasubin/AppVPN)
-- 🤝 I’m looking for help with [AppVPN](https://github.com/lutasubin/AppVPN)
-- 💬 Ask me about **Flutter**
+## ✨ Tính năng chính
 
----
+### 🔒 Kết nối VPN
 
-### 🛠️ Languages & Tools
-<p>
-  <img src="https://www.vectorlogo.zone/logos/flutterio/flutterio-icon.svg" alt="Flutter" width="40" height="40"/>
-  <img src="https://www.vectorlogo.zone/logos/dartlang/dartlang-icon.svg" alt="Dart" width="40" height="40"/>
-  <img src="https://www.vectorlogo.zone/logos/firebase/firebase-icon.svg" alt="Firebase" width="40" height="40"/>
-  <img src="https://www.vectorlogo.zone/logos/figma/figma-icon.svg" alt="Figma" width="40" height="40"/>
-  <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="Git" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" width="40" height="40"/>
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="Linux" width="40" height="40"/>
-</p>
+- **Kết nối nhanh chóng**: Chỉ cần một lần chạm để kết nối đến máy chủ VPN
+- **Nhiều máy chủ toàn cầu**: Hỗ trợ nhiều máy chủ từ nhiều quốc gia khác nhau (Mỹ, Anh, Nhật, Đức, Singapore, Canada, Úc, Ấn Độ, Pháp,...)
+- **Hiển thị thông tin**: Hiển thị dữ liệu tải lên/tải xuống trong thời gian thực
+- **Đếm ngược thời gian kết nối**: Theo dõi thời gian đã kết nối với VPN
 
----
+### 🌐 Quản lý máy chủ
 
-### 📊 GitHub Stats
+- **Chọn vị trí**: Người dùng có thể dễ dàng thay đổi máy chủ VPN
+- **Hiển thị quốc gia**: Mỗi máy chủ được hiển thị với quốc kỳ tương ứng
+- **Hiển thị địa chỉ IP**: Xem địa chỉ IP hiện tại sau khi kết nối
 
-<p align="left">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs?username=lutasubin&show_icons=true&locale=en&layout=compact" alt="Top Languages" />
-</p>
+### 🔍 Kiểm tra mạng
 
-<p align="left">
-  <img src="https://github-readme-stats.vercel.app/api?username=lutasubin&show_icons=true&locale=en" alt="GitHub Stats" />
-</p>
+- **Kiểm tra tốc độ mạng**: Đo tốc độ mạng Internet
+- **Kiểm tra kết nối**: Xác minh kết nối trước khi sử dụng VPN
 
-<p align="left">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=lutasubin" alt="GitHub Streak" />
-</p>
+### 🌍 Đa ngôn ngữ
 
----
+- **Hỗ trợ 16+ ngôn ngữ**: Tiếng Anh, Việt Nam, Tây Ban Nha, Pháp, Đức, Trung Quốc, Nhật Bản, Hàn Quốc, Ả Rập, Hindi, Bồ Đào Nha, Nga, Thổ Nhĩ Kỳ, Đan Mạch, Thái Lan, Indonesia,...
+- **Lựa chọn ngôn ngữ**: Người dùng có thể thay đổi ngôn ngữ theo ý thích
 
-### 📱 Screenshots of My VPN App
+### 📊 Phân tích dữ liệu
 
-> 🚀 Built with Flutter — UI powered by GetX, ads by Google Mobile Ads, VPN powered by OpenVPN/WireGuard.
+- **Firebase Analytics**: Theo dõi hành vi người dùng để cải thiện ứng dụng
+- **Hiệu suất sử dụng**: Phân tích các mẫu sử dụng VPN
 
-<p align="center">
-  <img src="https://github.com/lutasubin/AppVPN/blob/master/screenshot/image.png" width="200" />
-  <img src="https://github.com/lutasubin/AppVPN/blob/master/screenshot/image1.png" width="200" />
-  <img src="https://github.com/lutasubin/AppVPN/blob/master/screenshot/image2.png" width="200" />
-  <img src="https://github.com/lutasubin/AppVPN/blob/master/screenshot/image3.png" width="200" />
-  <img src="https://github.com/lutasubin/AppVPN/blob/master/screenshot/image4.png" width="200" />
-  <img src="https://github.com/lutasubin/AppVPN/blob/master/screenshot/image5.png" width="200" />
-  <img src="https://github.com/lutasubin/AppVPN/blob/master/screenshot/image6.png" width="200" />
-</p>
+### 🛠️ Tính năng khác
 
----
+- **Đánh giá ứng dụng**: Người dùng có thể đánh giá và gửi phản hồi
+- **Chia sẻ ứng dụng**: Chia sẻ ứng dụng với bạn bè và người thân
+- **Chính sách bảo mật**: Thông tin đầy đủ về chính sách bảo mật
 
-### 🔗 Connect with me
+## 🔧 Công nghệ sử dụng
 
-<p align="left">
-  <a href="mailto:your@email.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/></a>
-  <a href="https://www.linkedin.com/in/your-linkedin"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
-  <a href="https://facebook.com/your-facebook"><img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white"/></a>
-</p>
+- **Flutter & Dart**: Framework phát triển giao diện đa nền tảng
+- **GetX**: Quản lý trạng thái, điều hướng và tiêm phụ thuộc
+- **Firebase**:
+  - Firebase Core: Nền tảng cho các dịch vụ Firebase
+  - Firebase Analytics: Thu thập và phân tích dữ liệu người dùng
+  - Firebase Remote Config: Cấu hình ứng dụng từ xa
+- **OpenVPN**: Thư viện kết nối VPN bảo mật
+- **Google Mobile Ads**: Tích hợp quảng cáo (Banner, Native, Interstitial)
+- **Hive**: Lưu trữ dữ liệu cục bộ nhẹ và nhanh
+- **Shared Preferences**: Lưu trữ cài đặt ứng dụng
+- **Flutter SVG**: Hiển thị hình ảnh vector
+- **Lottie**: Hoạt ảnh đẹp mắt
+- **Connectivity Plus**: Kiểm tra trạng thái kết nối mạng
+- **URL Launcher**: Mở URL trong trình duyệt hoặc ứng dụng khác
+
+## 📱 Màn hình chính
+
+1. **Splash Screen**: Màn hình khởi động với animation đẹp mắt
+2. **Home Screen**: Màn hình chính với nút kết nối VPN và thông tin tải lên/xuống
+3. **Location Screen**: Màn hình chọn máy chủ VPN với các quốc gia khác nhau
+4. **Settings Screen**: Các cài đặt ứng dụng (ngôn ngữ, đánh giá, chia sẻ, chính sách)
+5. **Language Screen**: Chọn ngôn ngữ hiển thị cho ứng dụng
+6. **Network Test Screen**: Kiểm tra tốc độ và chất lượng mạng
+7. **Rating Screen**: Cho phép người dùng đánh giá ứng dụng
+8. **Privacy Policy**: Thông tin về chính sách bảo mật
+
+## ⚙️ Cài đặt và Thiết lập
+
+### Yêu cầu
+
+- Flutter SDK: ≥3.6.0
+- Dart SDK: ≥3.6.0
+- Android Studio hoặc VS Code
+- Firebase project đã thiết lập
+
+### Cài đặt
+
+1. Clone repository
+2. Chạy `flutter pub get` để cài đặt các phụ thuộc
+3. Kết nối project với Firebase của bạn
+4. Thiết lập các ID quảng cáo trong Firebase Remote Config
+5. Chạy `flutter run` để khởi chạy ứng dụng
+
+## 📄 License
+
+Ứng dụng này được phát hành dưới giấy phép [MIT License](LICENSE).
+
+## 👨‍💻 Nhà phát triển
+
+Ứng dụng được phát triển bởi DucThanhNguyen.
