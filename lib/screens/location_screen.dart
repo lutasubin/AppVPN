@@ -6,8 +6,9 @@ import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/widgets/vpn_cart.dart';
-import 'package:vpn_basic_project/widgets/vpn_cart_highspeed.dart';
+import 'package:vpn_basic_project/widgets/vpn_card.dart';
+import 'package:vpn_basic_project/widgets/vpn_card_highspeed.dart';
+
 
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});

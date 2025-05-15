@@ -15,7 +15,7 @@ import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
 import 'package:vpn_basic_project/widgets/change_location.dart';
-import 'package:vpn_basic_project/widgets/count_down_time .dart';
+import 'package:vpn_basic_project/widgets/count_down_time.dart';
 import 'package:vpn_basic_project/widgets/home_card.dart';
 import 'package:vpn_basic_project/widgets/home_card2.dart';
 import '../services/vpn_engine.dart';
