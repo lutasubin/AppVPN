@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/apis/local_vpn_sever.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/mydilog2.dart';
@@ -10,7 +11,7 @@ import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
-import 'package:vpn_basic_project/widgets/cowndowncircle.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/cowndowncircle.dart';
 
 import '../screens/rate_screen.dart';
 
@@ -54,72 +55,9 @@ class LocalController extends GetxController {
   /// Load available servers from predefined list
   /// In a real app, you might want to load this from a JSON file in assets
   void loadAvailableServers() {
-    availableServers.value = [
-      LocalVpnServer(
-        countryName: 'United States',
-        countryCode: 'us',
-        ip: '134.209.119.77',
-        ping: '',
-        configFileName: 'us_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'United Kingdom',
-        countryCode: 'gb',
-        ip: '178.128.164.174',
-        ping: '',
-        configFileName: 'uk_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'Japan',
-        countryCode: 'jp',
-        ip: '219.100.37.169',
-        ping: '',
-        configFileName: 'jp_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'Germany',
-        countryCode: 'de',
-        ip: '178.128.207.219',
-        ping: '',
-        configFileName: 'de_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'Singapore',
-        countryCode: 'sg',
-        ip: '165.22.96.219',
-        ping: '',
-        configFileName: 'sg_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'Canada',
-        countryCode: 'ca',
-        ip: '68.183.203.154',
-        ping: '',
-        configFileName: 'ca_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'Australia',
-        countryCode: 'au',
-        ip: '170.64.162.198',
-        ping: '',
-        configFileName: 'au_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'India',
-        countryCode: 'in',
-        ip: '142.93.219.152',
-        ping: '',
-        configFileName: 'in_fast.ovpn',
-      ),
-      LocalVpnServer(
-        countryName: 'French',
-        countryCode: 'fr',
-        ip: '62.171.171.217 ',
-        ping: '',
-        configFileName: 'eu_fast.ovpn',
-      ),
-    ];
-
+    // Load predefined VPN servers
+    // In a real app, you might want to load this from a JSON file in assets
+    availableServers.value = predefinedVpnServers;
     // If no VPN is selected, select the first one by default
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
         availableServers.isNotEmpty) {
@@ -127,7 +65,7 @@ class LocalController extends GetxController {
     }
   }
 
-  //connect vpn
+  //Connect vpn
   void connectToVpn() async {
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
       MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
@@ -247,7 +185,6 @@ class LocalController extends GetxController {
       if (stageLower == VpnEngine.vpnConnected) {
         vpnState.value = VpnEngine.vpnConnected;
         _cancelWaitingTimer();
-
         // Ghi nhận thời gian bắt đầu kết nối và log sự kiện
         _connectionStartTime = DateTime.now();
         AnalyticsHelper.logVpnConnect(
@@ -288,7 +225,10 @@ class LocalController extends GetxController {
 
   /// Màu nút kết nối
   Color get getButtonColor {
-    return vpnState.value == VpnEngine.vpnConnected
+    return vpnState.value == VpnEngine.vpnConnected ||
+            vpnState.value == VpnEngine.vpnConnecting ||
+            vpnState.value == VpnEngine.vpnWaitConnection ||
+            vpnState.value == VpnEngine.vpnAuthenticating
         ? Color(0xFFF15E24)
         : Color(0xFF343A4B);
   }

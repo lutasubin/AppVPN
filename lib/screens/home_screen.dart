@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,10 +15,10 @@ import 'package:vpn_basic_project/models/vpn_status.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
-import 'package:vpn_basic_project/widgets/change_location.dart';
-import 'package:vpn_basic_project/widgets/count_down_time.dart';
-import 'package:vpn_basic_project/widgets/home_card.dart';
-import 'package:vpn_basic_project/widgets/home_card2.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/change_location.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/count_down_time.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/home_card.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/home_card2.dart';
 import '../services/vpn_engine.dart';
 
 /// Màn hình chính của ứng dụng VPN.
@@ -38,6 +39,9 @@ class HomeScreen extends StatelessWidget {
   // Lấy NetworkController
   final _networkController = Get.find<NetworkController>();
 
+  // Biến để theo dõi trạng thái hiển thị quảng cáo cho kết nối hiện tại
+  final _adShownForCurrentConnection = false.obs;
+
   @override
   Widget build(BuildContext context) {
     // Lấy thông tin IP ban đầu
@@ -46,16 +50,37 @@ class HomeScreen extends StatelessWidget {
     // Tải quảng cáo tự nhiên
     _adController.ad = AdHelper.loadNativeAd(adController: _adController);
 
+    // Tải trước quảng cáo toàn màn hình
+    AdHelper.precacheInterstitialAd();
+
+    // Biến để ngăn chặn nhiều lần xử lý trạng thái VPN
+    Timer? debounceTimer;
+
     /// Lắng nghe trạng thái VPN và cập nhật thông tin IP khi kết nối thành công.
     VpnEngine.vpnStageSnapshot().listen((event) {
-      _controller.vpnState.value = event;
-      if (event == VpnEngine.vpnConnected) {
-        Apis.getIPDetails(ipData: ipData).then((_) {
-          ipData.refresh();
-        }).catchError((e) {
-          print('Lỗi khi lấy IP: $e');
-        });
-      }
+      // Debounce để tránh xử lý nhiều sự kiện liên tiếp
+      debounceTimer?.cancel();
+      debounceTimer = Timer(Duration(milliseconds: 500), () {
+        _controller.vpnState.value = event;
+        if (event == VpnEngine.vpnConnected) {
+          Apis.getIPDetails(ipData: ipData).then((_) {
+            ipData.refresh();
+            // Hiển thị quảng cáo toàn màn hình khi VPN kết nối thành công
+            if (!_adShownForCurrentConnection.value) {
+              print('Attempting to show interstitial ad');
+              AdHelper.showInterstitialAd(onComplete: () {
+                print('Interstitial ad shown or failed');
+                _adShownForCurrentConnection.value = true;
+              });
+            }
+          }).catchError((e) {
+            print('Lỗi khi lấy IP: $e');
+          });
+        } else if (event == VpnEngine.vpnDisconnected) {
+          _adShownForCurrentConnection.value =
+              false; // Đặt lại trạng thái khi ngắt kết nối
+        }
+      });
     });
 
     return SafeArea(
@@ -99,13 +124,13 @@ class HomeScreen extends StatelessWidget {
                                     title: snapshot.data?.byteOut ?? '---',
                                     icon: CircleAvatar(
                                       backgroundColor: const Color(0xFF4684F6),
-                                      radius: constraints.maxWidth * 0.08 > 30.0
-                                          ? 30.0
+                                      radius: constraints.maxWidth * 0.08 > 25.0
+                                          ? 25.0
                                           : constraints.maxWidth * 0.08,
                                       child: Icon(
                                         Icons.arrow_upward_rounded,
-                                        size: constraints.maxWidth * 0.06 > 24.0
-                                            ? 24.0
+                                        size: constraints.maxWidth * 0.06 > 18.0
+                                            ? 18.0
                                             : constraints.maxWidth * 0.06,
                                         color: Color(0xFFFFFFFF),
                                       ),
@@ -118,13 +143,13 @@ class HomeScreen extends StatelessWidget {
                                     title: snapshot.data?.byteIn ?? '---',
                                     icon: CircleAvatar(
                                       backgroundColor: const Color(0xFF03C343),
-                                      radius: constraints.maxWidth * 0.08 > 30.0
-                                          ? 30.0
+                                      radius: constraints.maxWidth * 0.08 > 25.0
+                                          ? 25.0
                                           : constraints.maxWidth * 0.08,
                                       child: Icon(
                                         Icons.arrow_downward_rounded,
-                                        size: constraints.maxWidth * 0.06 > 24.0
-                                            ? 24.0
+                                        size: constraints.maxWidth * 0.06 > 18.0
+                                            ? 18.0
                                             : constraints.maxWidth * 0.06,
                                         color: Color(0xFFFFFFFF),
                                       ),
@@ -192,7 +217,6 @@ class HomeScreen extends StatelessWidget {
                   height: 5,
                 ),
                 Obx(() {
-                  //!boc obx thang vao ads luon
                   if (_adController.ad != null &&
                       _adController.adLoaded.isTrue) {
                     return SafeArea(
@@ -200,7 +224,7 @@ class HomeScreen extends StatelessWidget {
                           height: 120, child: AdWidget(ad: _adController.ad!)),
                     );
                   } else {
-                    return SizedBox.shrink(); // không hiển thị gì
+                    return SizedBox.shrink();
                   }
                 })
               ],
@@ -236,32 +260,25 @@ class HomeScreen extends StatelessWidget {
             );
           }),
           SizedBox(height: 8),
-          // update lai trang thai ket noi
           _controller.getButtonContent,
-
           SizedBox(height: 80),
           Center(
             child: GestureDetector(
               onTap: () async {
-                // Kiểm tra kết nối mạng trước khi kết nối VPN
                 if (!await _networkController.checkConnection()) {
                   MyDialogs2.error(msg: 'error_connect_server'.tr);
                   return;
                 }
-                // Đếm số lần người dùng nhấn nút kết nối
                 _controller.incrementConnectionAttempts(context);
-
-                AdHelper.showInterstitialAd(onComplete: () async {
-                  _controller.connectToVpn();
-                });
+                _controller.connectToVpn();
               },
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
-                width: constraints.maxWidth * 0.4 > 148.0
-                    ? 148.0
+                width: constraints.maxWidth * 0.4 > 150.0
+                    ? 150.0
                     : constraints.maxWidth * 0.4,
-                height: (constraints.maxWidth * 0.4 > 148.0
-                        ? 148.0
+                height: (constraints.maxWidth * 0.4 > 150.0
+                        ? 150.0
                         : constraints.maxWidth * 0.4) *
                     0.54,
                 decoration: BoxDecoration(
@@ -269,19 +286,24 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50.0),
                 ),
                 child: Align(
-                  alignment: _controller.vpnState.value ==
-                          VpnEngine.vpnConnected
-                      //|| _controller.vpnState.value == VpnEngine.vpnConnecting
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
+                  alignment:
+                      _controller.vpnState.value == VpnEngine.vpnConnected ||
+                              _controller.vpnState.value ==
+                                  VpnEngine.vpnConnecting ||
+                              _controller.vpnState.value ==
+                                  VpnEngine.vpnWaitConnection ||
+                              _controller.vpnState.value ==
+                                  VpnEngine.vpnAuthenticating
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
                   child: Container(
                     margin: EdgeInsets.all(6.0),
-                    width: (constraints.maxWidth * 0.4 > 148.0
-                            ? 148.0
+                    width: (constraints.maxWidth * 0.4 > 150.0
+                            ? 150.0
                             : constraints.maxWidth * 0.4) *
                         0.46,
-                    height: (constraints.maxWidth * 0.4 > 148.0
-                            ? 148.0
+                    height: (constraints.maxWidth * 0.4 > 150.0
+                            ? 150.0
                             : constraints.maxWidth * 0.4) *
                         0.46,
                     decoration: BoxDecoration(

@@ -4,7 +4,7 @@ import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
-import 'package:vpn_basic_project/widgets/watcch_video.dart';
+import 'package:vpn_basic_project/widgets/LocationWidgets/watcch_video.dart';
 
 class VpnCardLocal extends StatelessWidget {
   final LocalVpnServer server;
@@ -27,7 +27,6 @@ class VpnCardLocal extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             onTap: () {
               WatchAdDialog.show(context, server, () async {
-                AdHelper.showRewardedAd(onComplete: () async {
                   await controller.setVpnFromLocalServer(server);
                   Get.back();
                   if (controller.vpnState.value == VpnEngine.vpnConnected) {
@@ -38,7 +37,6 @@ class VpnCardLocal extends StatelessWidget {
                   } else {
                       controller.connectToVpn();
                   }
-                });
               });
             },
 
@@ -54,14 +52,7 @@ class VpnCardLocal extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(
-                  Icons.play_circle_fill,
-                  color: Color(0xFFF15E24),
-                  size: 15,
-                ),
+               
               ],
             ),
             subtitle: Text(

@@ -32,6 +32,9 @@ class AdHelper {
   static NativeAd? _nativeAd2;
   static bool _nativeAdLoaded2 = false;
 
+  static AppOpenAd? _appOpenAd;
+  static bool _isAppOpenAdShowing = false;
+
   //*****************Interstitial Ad******************
 
   /// Tải trước quảng cáo toàn màn hình để sẵn sàng hiển thị khi cần.
@@ -136,13 +139,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFF02091A),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
+              textColor: Color(0xFFFFFFFF),
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
+              textColor:  Color(0xFF767C8A),
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -150,6 +153,10 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
+            ),
+            tertiaryTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFF767C8A),
+              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -192,13 +199,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFF02091A),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
+              textColor: Color(0xFFFFFFFF),
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
+              textColor:  Color(0xFF767C8A),
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -206,6 +213,10 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
+            ),
+            tertiaryTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFF767C8A),
+              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -268,13 +279,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFF02091A),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
+              textColor: Color(0xFFFFFFFF),
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
+              textColor:  Color(0xFF767C8A),
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -282,6 +293,10 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
+            ),
+            tertiaryTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFF767C8A),
+              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.medium))
       ..load();
@@ -324,13 +339,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFF02091A),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
+              textColor: Color(0xFFFFFFFF),
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
+              textColor:  Color(0xFF767C8A),
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -338,6 +353,10 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
+            ),
+            tertiaryTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFF767C8A),
+              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.medium))
       ..load();
@@ -366,13 +385,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFF02091A),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
+              textColor: Color(0xFFFFFFFF),
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
+              textColor:  Color(0xFF767C8A),
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -380,6 +399,10 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
+            ),
+            tertiaryTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFF767C8A),
+              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -422,13 +445,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFF02091A),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
+              textColor: Color(0xFFFFFFFF),
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
+              textColor:  Color(0xFF767C8A),
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -436,6 +459,10 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
+            ),
+            tertiaryTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFF767C8A),
+              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -497,5 +524,85 @@ class AdHelper {
         ),
         request: AdRequest())
       ..load();
+  }
+
+  //***************** App Open Ad ******************
+  /// Tải trước quảng cáo toàn màn hình để sẵn sàng hiển thị khi cần.
+  /// Quảng cáo sẽ tự động tải lại sau khi được hiển thị hoặc thất bại.
+  static void precacheOpenAd() {
+    log('Precache Open Ad - Id: ${Config.openAd}');
+
+    if (Config.hideAds) return;
+
+    AppOpenAd.load(
+      adUnitId: Config.openAd,
+      request: AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+        onAdLoaded: (ad) {
+          // Lắng nghe sự kiện khi quảng cáo được hiển thị hoặc đóng
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            _resetOpenAd();
+            precacheOpenAd();
+          });
+          _appOpenAd = ad;
+          _isAppOpenAdShowing = true;
+        },
+        onAdFailedToLoad: (err) {
+          _resetOpenAd();
+          log('Failed to load an open ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
+  /// Đặt lại trạng thái quảng cáo toàn màn hình về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
+  static void _resetOpenAd() {
+    _appOpenAd?.dispose();
+    _appOpenAd = null;
+    _isAppOpenAdShowing = false;
+  }
+
+  /// Hiển thị quảng cáo toàn màn hình.
+  /// Nếu quảng cáo chưa sẵn sàng, sẽ tải và hiển thị ngay khi hoàn tất.
+  /// [onComplete] được gọi sau khi quảng cáo hiển thị hoặc thất bại.
+  static void showOpenAd({required VoidCallback onComplete}) {
+    log('Open Ad Id: ${Config.openAd}');
+
+    if (Config.hideAds) {
+      onComplete();
+      return;
+    }
+
+    if (_isAppOpenAdShowing && _appOpenAd != null) {
+      _appOpenAd?.show();
+      onComplete();
+      return;
+    }
+
+    MyDialogs.showProgress();
+
+    AppOpenAd.load(
+      adUnitId: Config.openAd,
+      request: AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            onComplete();
+            _resetOpenAd();
+            precacheOpenAd();
+          });
+          Get.back();
+          ad.show();
+        },
+        onAdFailedToLoad: (err) {
+          Get.back();
+          log('Failed to load an open ad: ${err.message}');
+          onComplete();
+        },
+      ),
+    );
   }
 }

@@ -6,9 +6,8 @@ import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/widgets/vpn_card.dart';
-import 'package:vpn_basic_project/widgets/vpn_card_highspeed.dart';
-
+import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card.dart';
+import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card_highspeed.dart';
 
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
@@ -58,15 +57,22 @@ class LocationScreen extends StatelessWidget {
                 : null,
         body: Column(
           children: [
-            _buildModeSelector(),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                "select_vpn_servers".tr,
+                style: const TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  fontSize: 15,
+                ),
+              ),
+            ),
             Expanded(
               child: _controller.isLoading.value
                   ? _loadingWidget(context)
                   : _controller.vpnList.isEmpty
                       ? _noVPNFound(context)
-                      : _controller.isShareFreeMode.value
-                          ? _freeVpnList()
-                          : _highSpeedVpn(),
+                      : _highSpeedVpn(), // Only show high-speed VPNs
             ),
           ],
         ),
@@ -74,54 +80,54 @@ class LocationScreen extends StatelessWidget {
     );
   }
 
-  // Thanh chọn chế độ hiển thị VPN
-  Widget _buildModeSelector() {
-    return Obx(() => Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                  onTap: () => _controller.isShareFreeMode.value = false,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Fast speed',
-                        style: TextStyle(
-                          color: !_controller.isShareFreeMode.value
-                              ? Color(0xFFFFFFFF)
-                              : Color(0xFF767C8A),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  )),
-              Text('|',
-                  style: TextStyle(color: Color(0xFF03C343), fontSize: 18)),
-              GestureDetector(
-                onTap: () => _controller.isShareFreeMode.value = true,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Share free',
-                      style: TextStyle(
-                        color: _controller.isShareFreeMode.value
-                            ? Color(0xFFFFFFFF)
-                            : Color(0xFF767C8A),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ));
-  }
+  // // Thanh chọn chế độ hiển thị VPN
+  // Widget _buildModeSelector() {
+  //   return Obx(() => Container(
+  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //           children: [
+  //             GestureDetector(
+  //                 onTap: () => _controller.isShareFreeMode.value = false,
+  //                 child: Row(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     Text(
+  //                       'Fast speed',
+  //                       style: TextStyle(
+  //                         color: !_controller.isShareFreeMode.value
+  //                             ? Color(0xFFFFFFFF)
+  //                             : Color(0xFF767C8A),
+  //                         fontSize: 18,
+  //                         fontWeight: FontWeight.w600,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 )),
+  //             Text('|',
+  //                 style: TextStyle(color: Color(0xFF03C343), fontSize: 18)),
+  //             GestureDetector(
+  //               onTap: () => _controller.isShareFreeMode.value = true,
+  //               child: Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Text(
+  //                     'Share free',
+  //                     style: TextStyle(
+  //                       color: _controller.isShareFreeMode.value
+  //                           ? Color(0xFFFFFFFF)
+  //                           : Color(0xFF767C8A),
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ));
+  // }
 
 // Nội dung chế độ "high speed", hiển thị theo nhóm quốc gia
   Widget _highSpeedVpn() {
@@ -208,100 +214,100 @@ class LocationScreen extends StatelessWidget {
     });
   }
 
-  // Nội dung chế độ "Share free", hiển thị theo nhóm quốc gia
-  Widget _freeVpnList() {
-    final Map<String, List<dynamic>> groupedVpns = {};
+  // // Nội dung chế độ "Share free", hiển thị theo nhóm quốc gia
+  // Widget _freeVpnList() {
+  //   final Map<String, List<dynamic>> groupedVpns = {};
 
-    for (var vpn in _controller.filteredVpnList) {
-      if (!groupedVpns.containsKey(vpn.CountryLong)) {
-        groupedVpns[vpn.CountryLong] = [vpn.CountryShort, <dynamic>[]];
-      }
-      groupedVpns[vpn.CountryLong]![1].add(vpn);
-    }
+  //   for (var vpn in _controller.filteredVpnList) {
+  //     if (!groupedVpns.containsKey(vpn.CountryLong)) {
+  //       groupedVpns[vpn.CountryLong] = [vpn.CountryShort, <dynamic>[]];
+  //     }
+  //     groupedVpns[vpn.CountryLong]![1].add(vpn);
+  //   }
 
-    final countries = groupedVpns.keys.toList();
+  //   final countries = groupedVpns.keys.toList();
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text(
-            "👉 \"Each time you access, please reload to use a new VPN server.\"",
-            style: const TextStyle(
-              color: Color(0xFFFFFFFF),
-              fontSize: 15,
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-            itemCount: countries.length,
-            itemBuilder: (context, index) {
-              final country = countries[index];
-              final countryInfo = groupedVpns[country]!;
-              final countryCode = countryInfo[0].toString().toLowerCase();
-              final vpnList = countryInfo[1] as List;
+  //   return Column(
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //         child: Text(
+  //           "👉 \"Each time you access, please reload to use a new VPN server.\"",
+  //           style: const TextStyle(
+  //             color: Color(0xFFFFFFFF),
+  //             fontSize: 15,
+  //           ),
+  //         ),
+  //       ),
+  //       Expanded(
+  //         child: ListView.builder(
+  //           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+  //           itemCount: countries.length,
+  //           itemBuilder: (context, index) {
+  //             final country = countries[index];
+  //             final countryInfo = groupedVpns[country]!;
+  //             final countryCode = countryInfo[0].toString().toLowerCase();
+  //             final vpnList = countryInfo[1] as List;
 
-              return _buildCountrySection(country, countryCode, vpnList);
-            },
-          ),
-        ),
-      ],
-    );
-  }
+  //             return _buildCountrySection(country, countryCode, vpnList);
+  //           },
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget _buildCountrySection(
-      String country, String countryCode, List vpnList) {
-    return Obx(() {
-      final isExpanded = _controller.isCountryExpanded(country);
+  // Widget _buildCountrySection(
+  //     String country, String countryCode, List vpnList) {
+  //   return Obx(() {
+  //     final isExpanded = _controller.isCountryExpanded(country);
 
-      return Container(
-        margin: EdgeInsets.only(bottom: 8),
-        decoration: BoxDecoration(
-          color: Color(0xFF141C31),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: [
-            InkWell(
-              onTap: () => _controller.toggleCountryExpansion(country),
-              child: Container(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundImage: AssetImage(
-                        'assets/flags/$countryCode.png',
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Text(
-                      country,
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Spacer(),
-                    Icon(
-                      isExpanded
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (isExpanded) ...vpnList.map((vpn) => VpnCart(vpn: vpn)).toList(),
-          ],
-        ),
-      );
-    });
-  }
+  //     return Container(
+  //       margin: EdgeInsets.only(bottom: 8),
+  //       decoration: BoxDecoration(
+  //         color: Color(0xFF141C31),
+  //         borderRadius: BorderRadius.circular(12),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           InkWell(
+  //             onTap: () => _controller.toggleCountryExpansion(country),
+  //             child: Container(
+  //               padding: EdgeInsets.all(16),
+  //               child: Row(
+  //                 children: [
+  //                   CircleAvatar(
+  //                     radius: 15,
+  //                     backgroundImage: AssetImage(
+  //                       'assets/flags/$countryCode.png',
+  //                     ),
+  //                   ),
+  //                   SizedBox(width: 15),
+  //                   Text(
+  //                     country,
+  //                     style: TextStyle(
+  //                       color: Color(0xFFFFFFFF),
+  //                       fontWeight: FontWeight.bold,
+  //                       fontSize: 16,
+  //                     ),
+  //                   ),
+  //                   Spacer(),
+  //                   Icon(
+  //                     isExpanded
+  //                         ? Icons.keyboard_arrow_up
+  //                         : Icons.keyboard_arrow_down,
+  //                     color: Color(0xFFFFFFFF),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           if (isExpanded) ...vpnList.map((vpn) => VpnCart(vpn: vpn)).toList(),
+  //         ],
+  //       ),
+  //     );
+  //   });
+  // }
 
   Widget _loadingWidget(BuildContext context) => SizedBox(
         width: double.infinity,

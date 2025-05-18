@@ -21,8 +21,9 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
+    // Animation chỉ chạy 3 giây
     _controller = AnimationController(
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 7),
       vsync: this,
     );
 
@@ -32,19 +33,18 @@ class _SplashScreenState extends State<SplashScreen>
       });
 
     _controller.forward();
+
     _navigateAfterDelay();
   }
 
   Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 7));
     if (!mounted) return;
 
     try {
-      // Precache ads
       AdHelper.precacheInterstitialAd();
       AdHelper.precacheNativeAd();
 
-      // Update locale if language is saved
       final savedLanguage = Pref.selectedLanguage;
       if (savedLanguage.isNotEmpty) {
         Get.updateLocale(savedLanguage == 'default'
@@ -52,23 +52,40 @@ class _SplashScreenState extends State<SplashScreen>
             : Locale(savedLanguage));
       }
 
-      // Navigate based on onboarding status
-      if (Pref.hasSeenOnboarding) {
-        AdHelper.showInterstitialAd(onComplete: () {
-          Get.offAll(() =>  HomeScreen(),
+      // Hiển thị Open Ad rồi mới điều hướng
+      bool navigated = false;
+      AdHelper.showOpenAd(onComplete: () {
+        if (!navigated) {
+          navigated = true;
+          if (Pref.hasSeenOnboarding) {
+            Get.offAll(() => HomeScreen(),
+                transition: Transition.fade,
+                duration: const Duration(milliseconds: 500));
+          } else {
+            Get.offAll(() => LanguageScreen2(),
+                transition: Transition.fade,
+                duration: const Duration(milliseconds: 500));
+          }
+        }
+      });
+
+      // Timeout nếu quảng cáo không chạy hoặc quá lâu thì vẫn điều hướng
+      await Future.delayed(const Duration(seconds: 5));
+      if (!navigated) {
+        navigated = true;
+        if (Pref.hasSeenOnboarding) {
+          Get.offAll(() => HomeScreen(),
               transition: Transition.fade,
               duration: const Duration(milliseconds: 500));
-        });
-      } else {
-        AdHelper.showInterstitialAd(onComplete: () {
-          Get.offAll(() =>  LanguageScreen2(),
+        } else {
+          Get.offAll(() => LanguageScreen2(),
               transition: Transition.fade,
               duration: const Duration(milliseconds: 500));
-        });
+        }
       }
     } catch (e) {
       print('Error in navigation: $e');
-      Get.offAll(() =>  HomeScreen(),
+      Get.offAll(() => HomeScreen(),
           transition: Transition.fade,
           duration: const Duration(milliseconds: 500));
     }
@@ -133,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 16,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],

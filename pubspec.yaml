@@ -48,6 +48,9 @@ dependencies:
   store_redirect: ^2.0.1
   rating_dialog: ^2.0.4
 
+  # Hieu ung muot ma
+  liquid_swipe: ^3.1.0
+
 # Các thư viện dùng trong quá trình phát triển
 dev_dependencies:
   flutter_test:

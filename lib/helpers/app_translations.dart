@@ -4,9 +4,13 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
-          'warning':"The server is overloaded, please reconnect or switch to another IP address.",
+          'select_vpn_servers':
+              "👉 Select VPN servers located in countries near your current location for a faster and more stable connection.",
+          'warning':
+              "The server is overloaded, please reconnect or switch to another IP address.",
           'connection_restored': 'Connection has been restored',
-          'waiting_time':'Please wait 20s to connect. If not, please check your network or switch to another country...',
+          'waiting_time':
+              'Please wait 20s to connect. If not, please check your network or switch to another country...',
           'no_internet': 'No Internet!',
           'no_internet_title': 'Connection Error',
           'change_theme': 'Change Theme',
@@ -56,9 +60,13 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
-          'warning':"Máy chủ đang quá tải, vui lòng kết nối lại hoặc chuyển sang địa chỉ IP khác.",
+          'select_vpn_servers':
+              "👉 Chọn máy chủ VPN nằm ở các quốc gia gần vị trí hiện tại của bạn để có kết nối nhanh hơn và ổn định hơn.",
+          'warning':
+              "Máy chủ đang quá tải, vui lòng kết nối lại hoặc chuyển sang địa chỉ IP khác.",
           'connection_restored': 'Kết nối đã được khôi phục',
-          'waiting_time':'Vui lòng đợi 20 giây để kết nối. Nếu không, vui lòng kiểm tra mạng của bạn hoặc chuyển sang quốc gia khác...',
+          'waiting_time':
+              'Vui lòng đợi 20 giây để kết nối. Nếu không, vui lòng kiểm tra mạng của bạn hoặc chuyển sang quốc gia khác...',
           'no_internet': 'Không có Internet!',
           'no_internet_title': 'Lỗi kết nối',
           'change_theme': 'Thay đổi chủ đề',
@@ -108,9 +116,13 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
-          'warning':"सर्वर ओवरलोड हो गया है, कृपया पुनः कनेक्ट करें या किसी अन्य आईपी पते पर स्विच करें।",
+          'select_vpn_servers':
+              "👉 अपने वर्तमान स्थान के करीब स्थित देशों में VPN सर्वर चुनें ताकि कनेक्शन तेज और अधिक स्थिर हो सके।",
+          'warning':
+              "सर्वर ओवरलोड हो गया है, कृपया पुनः कनेक्ट करें या किसी अन्य आईपी पते पर स्विच करें।",
           'connection_restored': 'कनेक्शन बहाल हो गया है',
-          'waiting_time': 'कृपया 20 सेकंड तक कनेक्ट होने की प्रतीक्षा करें। यदि नहीं, तो कृपया अपने नेटवर्क की जाँच करें या किसी अन्य देश में स्विच करें...',
+          'waiting_time':
+              'कृपया 20 सेकंड तक कनेक्ट होने की प्रतीक्षा करें। यदि नहीं, तो कृपया अपने नेटवर्क की जाँच करें या किसी अन्य देश में स्विच करें...',
           'change_theme': 'थीम बदलें',
           'watch_ad_message': 'ऐप थीम बदलने के लिए एक विज्ञापन देखें।',
           'watch_ad': 'विज्ञापन देखें',
@@ -158,9 +170,12 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
-          'warning':"서버가 과부하 상태입니다. 다시 연결하거나 다른 IP 주소로 전환하세요.",
+          'select_vpn_servers':
+              "👉 현재 위치에 가까운 국가에 위치한 VPN 서버를 선택하여 더 빠르고 안정적인 연결을 제공합니다.",
+          'warning': "서버가 과부하 상태입니다. 다시 연결하거나 다른 IP 주소로 전환하세요.",
           'connection_restored': '연결이 복구되었습니다',
-          'waiting_time':'20초 동안 연결될 때까지 기다려 주세요. 그렇지 않으면 네트워크를 확인하거나 다른 나라로 전환해 주세요...',
+          'waiting_time':
+              '20초 동안 연결될 때까지 기다려 주세요. 그렇지 않으면 네트워크를 확인하거나 다른 나라로 전환해 주세요...',
           'change_theme': '테마 변경',
           'watch_ad_message': '광고를 보고 앱 테마를 변경하세요.',
           'watch_ad': '광고 보기',
@@ -206,9 +221,13 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
-          'warning':"O servidor está sobrecarregado, por favor, reconecte ou mude para outro endereço IP.",
+          'select_vpn_servers':
+              "👉 Selecione servidores VPN localizados em países próximos à sua localização atual para uma conexão mais rápida e estável.",
+          'warning':
+              "O servidor está sobrecarregado, por favor, reconecte ou mude para outro endereço IP.",
           'connection_restored': 'A conexão foi restaurada',
-          'waiting_time': 'Por favor, aguarde 20 segundos para conectar. Se não, verifique sua rede ou mude para outro país...',
+          'waiting_time':
+              'Por favor, aguarde 20 segundos para conectar. Se não, verifique sua rede ou mude para outro país...',
           'change_theme': 'Mudar Tema',
           'watch_ad_message':
               'Assista a um anúncio para mudar o tema do aplicativo.',
@@ -257,9 +276,11 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Não foi possível abrir o URL da loja',
         },
         'ja': {
-          'warning':"サーバーが過負荷状態です。再接続するか、別のIPアドレスに切り替えてください。",
+          'select_vpn_servers': "👉 現在の位置に近い国にあるVPNサーバーを選択して、より速く安定した接続を実現します。",
+          'warning': "サーバーが過負荷状態です。再接続するか、別のIPアドレスに切り替えてください。",
           'connection_restored': '接続が復元されました',
-          'waiting_time': '20秒間接続するのを待ってください。そうでない場合は、ネットワークを確認するか、別の国に切り替えてください...',
+          'waiting_time':
+              '20秒間接続するのを待ってください。そうでない場合は、ネットワークを確認するか、別の国に切り替えてください...',
           'change_theme': 'テーマを変更',
           'watch_ad_message': '広告を見てアプリのテーマを変更します。',
           'watch_ad': '広告を見る',
@@ -305,9 +326,10 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
-          'warning':"服务器超载，请重新连接或切换到另一个IP地址。",
+          'select_vpn_servers': "👉 选择位于您当前位置附近的国家的VPN服务器，以获得更快和更稳定的连接。",
+          'warning': "服务器超载，请重新连接或切换到另一个IP地址。",
           'connection_restored': '连接已恢复',
-          'waiting_time':'请等待20秒以连接。如果没有，请检查您的网络或切换到另一个国家...',
+          'waiting_time': '请等待20秒以连接。如果没有，请检查您的网络或切换到另一个国家...',
           'change_theme': '更改主题',
           'watch_ad_message': '观看广告以更改应用主题。',
           'watch_ad': '观看广告',
@@ -353,9 +375,13 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
-          'warning':"El servidor está sobrecargado, por favor reconecta o cambia a otra dirección IP.",
+          'select_vpn_servers':
+              "👉 Selecciona servidores VPN ubicados en países cercanos a tu ubicación actual para una conexión más rápida y estable.",
+          'warning':
+              "El servidor está sobrecargado, por favor reconecta o cambia a otra dirección IP.",
           'connection_restored': 'La conexión ha sido restaurada',
-          'waiting_time': 'Por favor, espera 20 segundos para conectar. Si no, revisa tu red o cambia a otro país...',
+          'waiting_time':
+              'Por favor, espera 20 segundos para conectar. Si no, revisa tu red o cambia a otro país...',
           'change_theme': 'Cambiar tema',
           'watch_ad_message':
               'Mira un anuncio para cambiar el tema de la aplicación.',
@@ -404,9 +430,13 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
-          'warning':"Der Server ist überlastet, bitte erneut verbinden oder zu einer anderen IP-Adresse wechseln.",
+          'select_vpn_servers':
+              "👉 Wählen Sie VPN-Server in Ländern aus, die sich in der Nähe Ihres aktuellen Standorts befinden, um eine schnellere und stabilere Verbindung zu erhalten.",
+          'warning':
+              "Der Server ist überlastet, bitte erneut verbinden oder zu einer anderen IP-Adresse wechseln.",
           'connection_restored': 'Die Verbindung wurde wiederhergestellt',
-          'waiting_time': 'Bitte warte 20 Sekunden, um eine Verbindung herzustellen. Falls nicht, überprüfe dein Netzwerk oder wechsle in ein anderes Land...',
+          'waiting_time':
+              'Bitte warte 20 Sekunden, um eine Verbindung herzustellen. Falls nicht, überprüfe dein Netzwerk oder wechsle in ein anderes Land...',
           'change_theme': 'Thema ändern',
           'watch_ad_message':
               'Sehen Sie sich eine Anzeige an, um das App-Thema zu ändern.',
@@ -455,9 +485,13 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
-          'warning':"Сервер перегружен, пожалуйста, переподключитесь или смените IP-адрес.",
+          'select_vpn_servers':
+              "👉 Выберите VPN-серверы, расположенные в странах, близких к вашему текущему местоположению, для более быстрого и стабильного соединения.",
+          'warning':
+              "Сервер перегружен, пожалуйста, переподключитесь или смените IP-адрес.",
           'connection_restored': 'Соединение восстановлено',
-          'waiting_time': 'Пожалуйста, подождите 20 секунд для подключения. Если нет, проверьте сеть или переключитесь на другую страну...',
+          'waiting_time':
+              'Пожалуйста, подождите 20 секунд для подключения. Если нет, проверьте сеть или переключитесь на другую страну...',
           'change_theme': 'Сменить тему',
           'watch_ad_message':
               'Посмотрите рекламу, чтобы изменить тему приложения.',
@@ -506,6 +540,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Не удается открыть URL магазина',
         },
         'ar': {
+          'select_vpn_servers':
+              "👉 اختر خوادم VPN الموجودة في البلدان القريبة من موقعك الحالي للحصول على اتصال أسرع وأكثر استقرارًا.",
           'error_connect_server':
               'غير قادر على الاتصال بالخادم. يرجى التحقق من اتصال الشبكة والمحاولة مرة أخرى.',
           'Choose location': 'اختر الموقع',
@@ -550,9 +586,13 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
-          'warning':"Le serveur est surchargé, veuillez vous reconnecter ou passer à une autre adresse IP.",
+          'select_vpn_servers':
+              "👉 Sélectionnez des serveurs VPN situés dans des pays proches de votre emplacement actuel pour une connexion plus rapide et plus stable.",
+          'warning':
+              "Le serveur est surchargé, veuillez vous reconnecter ou passer à une autre adresse IP.",
           'connection_restored': 'La connexion a été rétablie',
-          'waiting_time': 'Veuillez attendre 20 secondes pour vous connecter. Sinon, vérifiez votre réseau ou changez de pays...',
+          'waiting_time':
+              'Veuillez attendre 20 secondes pour vous connecter. Sinon, vérifiez votre réseau ou changez de pays...',
           'change_theme': 'Changer de thème',
           'watch_ad_message':
               'Regardez une pub pour changer le thème de l’application.',
@@ -602,9 +642,13 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
-          'warning':"Serveren er overbelastet, vær venlig at genoprette forbindelsen eller skifte til en anden IP-adresse.",
+          'select_vpn_servers':
+              "👉 Vælg VPN-servere, der ligger i lande nær din nuværende placering for en hurtigere og mere stabil forbindelse.",
+          'warning':
+              "Serveren er overbelastet, vær venlig at genoprette forbindelsen eller skifte til en anden IP-adresse.",
           'connection_restored': 'Forbindelsen er blevet gendannet',
-          'waiting_time': 'Vent venligst 20 sekunder for at oprette forbindelse. Hvis ikke, tjek dit netværk eller skift til et andet land...',
+          'waiting_time':
+              'Vent venligst 20 sekunder for at oprette forbindelse. Hvis ikke, tjek dit netværk eller skift til et andet land...',
           'change_theme': 'Skift tema',
           'watch_ad_message': 'Se en annonce for at ændre app-temaet.',
           'watch_ad': 'Se annonce',
@@ -653,9 +697,13 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
-          'warning':"الخادم مثقل، يرجى إعادة الاتصال أو التبديل إلى عنوان IP آخر.",
+          'select_vpn_servers':
+              "👉 اختر خوادم VPN الموجودة في البلدان القريبة من موقعك الحالي للحصول على اتصال أسرع وأكثر استقرارًا.",
+          'warning':
+              "الخادم مثقل، يرجى إعادة الاتصال أو التبديل إلى عنوان IP آخر.",
           'connection_restored': 'تم استعادة الاتصال',
-          'waiting_time': 'يرجى الانتظار 20 ثانية للاتصال. إذا لم يحدث ذلك، تحقق من شبكتك أو انتقل إلى بلد آخر...',
+          'waiting_time':
+              'يرجى الانتظار 20 ثانية للاتصال. إذا لم يحدث ذلك، تحقق من شبكتك أو انتقل إلى بلد آخر...',
           'change_theme': 'تغيير السمة',
           'watch_ad_message': 'شاهد إعلانًا لتغيير سمة التطبيق.',
           'watch_ad': 'مشاهدة الإعلان',
@@ -704,9 +752,13 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
-          'warning':"เซิร์ฟเวอร์ทำงานหนักเกินไป โปรดเชื่อมต่อใหม่หรือเปลี่ยนไปใช้ที่อยู่ IP อื่น",
+          'select_vpn_servers':
+              "👉 เลือกเซิร์ฟเวอร์ VPN ที่ตั้งอยู่ในประเทศใกล้ตำแหน่งปัจจุบันของคุณเพื่อการเชื่อมต่อที่เร็วและเสถียรมากขึ้น.",
+          'warning':
+              "เซิร์ฟเวอร์ทำงานหนักเกินไป โปรดเชื่อมต่อใหม่หรือเปลี่ยนไปใช้ที่อยู่ IP อื่น",
           'connection_restored': 'การเชื่อมต่อได้รับการกู้คืน',
-          'waiting_time': 'กรุณารอ 20 วินาทีเพื่อเชื่อมต่อ หากไม่สำเร็จ กรุณาตรวจสอบเครือข่ายของคุณหรือเปลี่ยนไปยังประเทศอื่น...',
+          'waiting_time':
+              'กรุณารอ 20 วินาทีเพื่อเชื่อมต่อ หากไม่สำเร็จ กรุณาตรวจสอบเครือข่ายของคุณหรือเปลี่ยนไปยังประเทศอื่น...',
           'change_theme': 'เปลี่ยนธีม',
           'watch_ad_message': 'ดูโฆษณาเพื่อเปลี่ยนธีมของแอป',
           'watch_ad': 'ดูโฆษณา',
@@ -755,9 +807,13 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
-          'warning':"Server sedang kelebihan beban, silakan sambungkan kembali atau ganti ke alamat IP lain.",
+          'select_vpn_servers':
+              "👉 Pilih server VPN yang terletak di negara-negara dekat lokasi Anda saat ini untuk koneksi yang lebih cepat dan stabil.",
+          'warning':
+              "Server sedang kelebihan beban, silakan sambungkan kembali atau ganti ke alamat IP lain.",
           'connection_restored': 'Koneksi telah dipulihkan',
-          'waiting_time': 'Harap tunggu 20 detik untuk terhubung. Jika tidak, periksa jaringan Anda atau ganti ke negara lain...',
+          'waiting_time':
+              'Harap tunggu 20 detik untuk terhubung. Jika tidak, periksa jaringan Anda atau ganti ke negara lain...',
           'change_theme': 'Ubah Tema',
           'watch_ad_message': 'Tonton iklan untuk mengubah tema aplikasi.',
           'watch_ad': 'Tonton Iklan',
@@ -806,9 +862,13 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
-          'warning':"Sunucu aşırı yüklendi, lütfen yeniden bağlanın veya başka bir IP adresine geçin.",
+          'select_vpn_servers':
+              "👉 Mevcut konumunuza yakın ülkelerde bulunan VPN sunucularını seçin, böylece daha hızlı ve daha stabil bir bağlantı elde edin.",
+          'warning':
+              "Sunucu aşırı yüklendi, lütfen yeniden bağlanın veya başka bir IP adresine geçin.",
           'connection_restored': 'Bağlantı geri yüklendi',
-          'waiting_time': 'Lütfen bağlantı için 20 saniye bekleyin. Olmazsa, ağınızı kontrol edin veya başka bir ülkeye geçin...',
+          'waiting_time':
+              'Lütfen bağlantı için 20 saniye bekleyin. Olmazsa, ağınızı kontrol edin veya başka bir ülkeye geçin...',
           'change_theme': 'Temayı Değiştir',
           'watch_ad_message':
               'Uygulama temasını değiştirmek için bir reklam izleyin.',

@@ -9,7 +9,7 @@ import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import '../main.dart';
 import '../models/ip_details.dart';
 import '../models/network_data.dart';
-import '../widgets/network_card.dart';
+import '../widgets/NetworkWidgets/network_card.dart';
 import '../apis/apis.dart';
 
 class NetworkTestScreen extends StatelessWidget {

@@ -8,6 +8,7 @@ class Config {
     "interstitial_ad": "",
     "native_ad": "",
     "banner_ad": "",
+    "open_ad": "",
     "show_ads": true
   };
   static Future<void> initConfig() async {
@@ -35,6 +36,8 @@ class Config {
   static String get interstitialAd => _config.getString('interstitial_ad');
 
   static String get bannerAd => _config.getString('banner_ad');
+
+  static String get openAd => _config.getString('open_ad');
 
   static bool get hideAds => !_showAd;
 }

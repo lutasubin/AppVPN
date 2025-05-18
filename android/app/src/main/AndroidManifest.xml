@@ -23,6 +23,7 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6249555933736346~5693810225"/>
+             <!-- android:value="ca-app-pub-6249555933736346~5693810225"/> -->
              
          
         <!-- Disable Impeller -->

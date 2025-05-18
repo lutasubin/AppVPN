@@ -1,0 +1,81 @@
+import 'package:vpn_basic_project/models/local_vpn.dart';
+
+final List<LocalVpnServer> predefinedVpnServers = [
+  LocalVpnServer(
+    countryName: 'United States',
+    countryCode: 'us',
+    ip: '165.232.141.11',
+    ping: '',
+    configFileName: 'vpn-usasan.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'United States',
+    countryCode: 'us',
+    ip: '108.181.199.29',
+    ping: '',
+    configFileName: 'us_fast2.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'United Kingdom',
+    countryCode: 'gb',
+    ip: '178.128.164.174',
+    ping: '',
+    configFileName: 'uk_fast.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Japan',
+    countryCode: 'jp',
+    ip: '219.100.37.169',
+    ping: '',
+    configFileName: 'jp_fast.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Germany',
+    countryCode: 'de',
+    ip: '178.128.207.219',
+    ping: '',
+    configFileName: 'de_fast.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Singapore',
+    countryCode: 'sg',
+    ip: '165.22.96.219',
+    ping: '',
+    configFileName: 'sg_fast.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Canada',
+    countryCode: 'ca',
+    ip: '68.183.203.154',
+    ping: '',
+    configFileName: 'ca_fast.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Canada',
+    countryCode: 'ca',
+    ip: '103.98.215.244',
+    ping: '',
+    configFileName: 'vpn-torano.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Australia',
+    countryCode: 'au',
+    ip: '170.64.162.198',
+    ping: '',
+    configFileName: 'au_fast.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'India',
+    countryCode: 'in',
+    ip: '142.93.219.152',
+    ping: '',
+    configFileName: 'in_fast.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'French',
+    countryCode: 'fr',
+    ip: '62.171.171.217',
+    ping: '',
+    configFileName: 'eu_fast.ovpn',
+  ),
+];
