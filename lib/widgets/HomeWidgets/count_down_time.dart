@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 
 class CountDownTimer extends StatefulWidget {
   final bool startTimer;
+  // Add a callback function to report duration changes
+  final Function(Duration duration)? onDurationChanged;
 
-  const CountDownTimer({super.key, required this.startTimer});
+  const CountDownTimer({
+    super.key, 
+    required this.startTimer, 
+    this.onDurationChanged,
+  });
 
   @override
   State<CountDownTimer> createState() => _CountDownTimerState();
@@ -47,6 +53,10 @@ class _CountDownTimerState extends State<CountDownTimer> {
         // Kiểm tra xem widget còn được gắn kết không
         setState(() {
           _duration = Duration(seconds: _duration.inSeconds + 1);
+          // Call the callback function if provided
+          if (widget.onDurationChanged != null) {
+            widget.onDurationChanged!(_duration);
+          }
         });
       }
     });

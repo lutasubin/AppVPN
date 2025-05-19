@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 
-class WatchAdDialog {
+class WatchAdDialogPro {
   static void show(
       BuildContext context, LocalVpnServer server, VoidCallback onComplete) {
     final countryCode = server.countryCode.toLowerCase(); // ví dụ: "us", "vn"
@@ -46,7 +46,14 @@ class WatchAdDialog {
                     color: Color(0xFF767C8A),
                   ),
                 ),
-               
+                trailing: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('👑', style: TextStyle(fontSize: 15)),
+                    SizedBox(width: 5),
+                    Text("pro", style: TextStyle(color: Color(0xFFF15E24))),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
@@ -54,11 +61,10 @@ class WatchAdDialog {
                   Get.back(); // Đóng bottom sheet
                   onComplete(); // Gọi callback
                 },
+                icon: const Icon(Icons.play_arrow, color: Colors.white),
                 label: const Text("VPN Connection",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold
-                    )),
+                        color: Colors.white, fontWeight: FontWeight.bold)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFF15E24),
                   minimumSize: const Size(double.infinity, 50),

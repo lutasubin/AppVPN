@@ -6,8 +6,9 @@ import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card.dart';
+// import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card.dart';
 import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card_highspeed.dart';
+import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card_pro.dart';
 
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
@@ -72,7 +73,12 @@ class LocationScreen extends StatelessWidget {
                   ? _loadingWidget(context)
                   : _controller.vpnList.isEmpty
                       ? _noVPNFound(context)
-                      : _highSpeedVpn(), // Only show high-speed VPNs
+                      : Column(
+                          children: [
+                            Expanded(flex: 3, child: _highSpeedVpn()),
+                            Expanded(flex: 1, child: _highSpeedVpnPro()),
+                          ],
+                        ),
             ),
           ],
         ),
@@ -208,6 +214,90 @@ class LocationScreen extends StatelessWidget {
             ),
             if (isExpanded)
               ...vpnList.map((vpn) => VpnCardLocal(server: vpn)).toList(),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _highSpeedVpnPro() {
+    final Map<String, List<dynamic>> groupedVpns = {};
+
+    for (var server in controller.availableServersPro) {
+      final countryName =
+          server.countryName; // hoặc server.countryLong tuỳ cấu trúc
+      final countryCode = server.countryCode.toLowerCase(); // ví dụ: "us", "vn"
+
+      if (!groupedVpns.containsKey(countryName)) {
+        groupedVpns[countryName] = [countryCode, <dynamic>[]];
+      }
+
+      groupedVpns[countryName]![1].add(server);
+    }
+
+    final countries = groupedVpns.keys.toList();
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+      itemCount: countries.length,
+      itemBuilder: (context, index) {
+        final country = countries[index];
+        final countryInfo = groupedVpns[country]!;
+        final countryCode = countryInfo[0];
+        final vpnList = countryInfo[1];
+
+        return _buildHighSpeedCountrySectionPro(country, countryCode, vpnList);
+      },
+    );
+  }
+
+  Widget _buildHighSpeedCountrySectionPro(
+      String country, String countryCode, List vpnList) {
+    return Obx(() {
+      final isExpanded = _controller.isCountryExpanded(country);
+
+      return Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF141C31),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            InkWell(
+              onTap: () => _controller.toggleCountryExpansion(country),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: AssetImage(
+                        'assets/flags/$countryCode.png',
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      "$country 👑",
+                      style: const TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const Spacer(),
+                    Icon(
+                      isExpanded
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: const Color(0xFFFFFFFF),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (isExpanded)
+              ...vpnList.map((vpn) => VpnCardLocalPro(server: vpn)).toList(),
           ],
         ),
       );

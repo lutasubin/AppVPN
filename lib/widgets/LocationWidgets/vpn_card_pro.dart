@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 // import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
-import 'package:vpn_basic_project/widgets/LocationWidgets/watcch_video.dart';
+import 'package:vpn_basic_project/widgets/LocationWidgets/watch_video_pro.dart';
 
-class VpnCardLocal extends StatelessWidget {
+class VpnCardLocalPro extends StatelessWidget {
   final LocalVpnServer server;
-  const VpnCardLocal({super.key, required this.server});
+  const VpnCardLocalPro({super.key, required this.server});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,8 @@ class VpnCardLocal extends StatelessWidget {
           child: ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             onTap: () {
-              WatchAdDialog.show(context, server, () async {
+              WatchAdDialogPro.show(context, server, () async {
+                AdHelper.showRewardedAd(onComplete: () async {
                   await controller.setVpnFromLocalServer(server);
                   Get.back();
                   if (controller.vpnState.value == VpnEngine.vpnConnected) {
@@ -35,13 +37,11 @@ class VpnCardLocal extends StatelessWidget {
                       controller.connectToVpn();
                     });
                   } else {
-                      controller.connectToVpn();
+                    controller.connectToVpn();
                   }
+                });
               });
             },
-
-            // Add country flag as leading widget
-
             title: Row(
               children: [
                 Text(
@@ -52,7 +52,6 @@ class VpnCardLocal extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-               
               ],
             ),
             subtitle: Text(
@@ -65,12 +64,11 @@ class VpnCardLocal extends StatelessWidget {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Icon(
-                //   Icons.workspace_premium,
-                //   color: Color(0xFFF15E24),
-                //   size: 16,
-                // ),
-                // SizedBox(width: 12),
+                Text('👑',
+                    style: TextStyle(
+                      fontSize: 13,
+                    )),
+                SizedBox(width: 12),
                 Container(
                   width: 22,
                   height: 22,

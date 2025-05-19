@@ -4,9 +4,9 @@ final List<LocalVpnServer> predefinedVpnServers = [
   LocalVpnServer(
     countryName: 'United States',
     countryCode: 'us',
-    ip: '165.232.141.11',
+    ip: '66.55.74.53',
     ping: '',
-    configFileName: 'vpn-usasan.ovpn',
+    configFileName: 'vpn-miami.ovpn',
   ),
   LocalVpnServer(
     countryName: 'United States',

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/apis/local_vpn_pro.dart';
 import 'package:vpn_basic_project/apis/local_vpn_sever.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
@@ -25,6 +26,8 @@ class LocalController extends GetxController {
   // List of available local VPN servers
   final RxList<LocalVpnServer> availableServers = <LocalVpnServer>[].obs;
 
+    final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
+
   // Timer chờ kết nối
   Timer? _waitingTimer;
   final RxInt _remainingSeconds = 20.obs;
@@ -43,6 +46,7 @@ class LocalController extends GetxController {
     super.onInit();
     _listenVpnStage();
     loadAvailableServers();
+    loadAvailableServersPro() ;
   }
 
   @override
@@ -61,6 +65,17 @@ class LocalController extends GetxController {
     // If no VPN is selected, select the first one by default
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
         availableServers.isNotEmpty) {
+      setVpnFromLocalServer(availableServers[0]);
+    }
+  }
+
+   void loadAvailableServersPro() {
+    // Load predefined VPN servers
+    // In a real app, you might want to load this from a JSON file in assets
+    availableServersPro.value = proVPN;
+    // If no VPN is selected, select the first one by default
+    if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
+        availableServersPro.isNotEmpty) {
       setVpnFromLocalServer(availableServers[0]);
     }
   }
@@ -273,4 +288,14 @@ class LocalController extends GetxController {
         );
     }
   }
+
+
+    // Helper method to format duration as HH:MM:SS
+      String formatDuration(Duration duration) {
+        String twoDigit(int n) => n.toString().padLeft(2, '0');
+        final hours = twoDigit(duration.inHours);
+        final minutes = twoDigit(duration.inMinutes.remainder(60));
+        final seconds = twoDigit(duration.inSeconds.remainder(60));
+        return '$hours:$minutes:$seconds';
+      }
 }

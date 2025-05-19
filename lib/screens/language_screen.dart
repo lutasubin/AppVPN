@@ -117,7 +117,8 @@ class LanguageScreen extends StatelessWidget {
               'Language'.tr,
               style: const TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
