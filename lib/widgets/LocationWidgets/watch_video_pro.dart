@@ -19,8 +19,8 @@ class WatchAdDialogPro {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "VPN Server",
+              Text(
+                "sever".tr,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
@@ -46,14 +46,7 @@ class WatchAdDialogPro {
                     color: Color(0xFF767C8A),
                   ),
                 ),
-                trailing: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('👑', style: TextStyle(fontSize: 15)),
-                    SizedBox(width: 5),
-                    Text("pro", style: TextStyle(color: Color(0xFFF15E24))),
-                  ],
-                ),
+                trailing: Text('👑', style: TextStyle(fontSize: 15)),
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
@@ -62,7 +55,7 @@ class WatchAdDialogPro {
                   onComplete(); // Gọi callback
                 },
                 icon: const Icon(Icons.play_arrow, color: Colors.white),
-                label: const Text("VPN Connection",
+                label: Text('watch_ads'.tr,
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
                 style: ElevatedButton.styleFrom(

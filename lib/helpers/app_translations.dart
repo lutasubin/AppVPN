@@ -4,6 +4,20 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
+          'disconnect': "Disconnect",
+          'disconnected_log': 'Disconnected VPN',
+          'disconnected_log_message': 'Are you sure you want to disconnect?',
+          'cancel': 'Cancel',
+          'sever': 'Vpn Server',
+          'vpn_connection': 'VPN Connection',
+          'watch_ads': "Watch Ads To Connect",
+          'connection_report': 'Connection report',
+          'time': 'Time',
+          'upload_speed': 'Upload',
+          'download_speed': 'Download',
+          'connection_again': 'Connection again',
+          'rate_message':
+              'If you feel satisfied, please rate 5 stars so we can continue to strive to bring you the best experience.',
           'select_vpn_servers':
               "👉 Select VPN servers located in countries near your current location for a faster and more stable connection.",
           'warning':
@@ -60,6 +74,21 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
+          'disconnect': "Ngắt kết nối",
+          'disconnected_log': 'Ngắt kết nối VPN',
+          'disconnected_log_message':
+              'Bạn có chắc chắn muốn ngắt kết nối không?',
+          'cancel': 'Hủy',
+          'sever': 'Máy chủ VPN',
+          'vpn_connection': 'Kết nối',
+          'watch_ads': "Xem quảng cáo để kết nối",
+          'connection_report': 'Báo cáo kết nối',
+          'time': 'Thời gian',
+          'upload_speed': 'Tải lên',
+          'download_speed': 'Tải xuống',
+          'connection_again': 'Kết nối lại',
+          'rate_message':
+              'Nếu bạn cảm thấy hài lòng, hãy đánh giá 5 sao để chúng tôi có thể tiếp tục cố gắng mang đến cho bạn trải nghiệm tốt nhất.',
           'select_vpn_servers':
               "👉 Chọn máy chủ VPN nằm ở các quốc gia gần vị trí hiện tại của bạn để có kết nối nhanh hơn và ổn định hơn.",
           'warning':
@@ -116,6 +145,21 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
+          'disconnect': "डिस्कनेक्ट",
+          'disconnected_log': 'वीपीएन डिस्कनेक्ट किया गया',
+          'disconnected_log_message':
+              'क्या आप वास्तव में डिस्कनेक्ट करना चाहते हैं?',
+          'cancel': 'रद्द करें',
+          'sever': 'वीपीएन सर्वर',
+          'vpn_connection': 'वीपीएन कनेक्शन',
+          'watch_ads': "कनेक्ट करने के लिए विज्ञापन देखें",
+          'connection_report': 'कनेक्शन रिपोर्ट',
+          'time': 'समय',
+          'upload_speed': ' अपलोड',
+          'download_speed': ' डाउनलोड',
+          'connection_again': ' फिर से कनेक्ट करें',
+          'rate_message':
+              'यदि आप संतुष्ट हैं, तो कृपया 5 सितारे रेटिंग दें ताकि हम आपको सबसे अच्छा अनुभव देने के लिए प्रयास करते रहें।',
           'select_vpn_servers':
               "👉 अपने वर्तमान स्थान के करीब स्थित देशों में VPN सर्वर चुनें ताकि कनेक्शन तेज और अधिक स्थिर हो सके।",
           'warning':
@@ -170,6 +214,20 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
+          'disconnect': "연결 끊기",
+          'disconnected_log': 'VPN 연결 끊김',
+          'disconnected_log_message': '정말로 연결을 끊으시겠습니까?',
+          'cancel': '취소',
+          'sever': 'VPN 서버',
+          'vpn_connection': 'VPN 연결',
+          'watch_ads': "연결하려면 광고를 시청하세요",
+          'connection_report': '연결 보고서',
+          'time': '시간',
+          'upload_speed': '업로드',
+          'download_speed': '다운로드',
+          'connection_again': '다시 연결',
+          'rate_message':
+              '만족하신다면 5성급 평가를 해주시면 저희가 계속해서 최고의 경험을 제공할 수 있도록 노력하겠습니다.',
           'select_vpn_servers':
               "👉 현재 위치에 가까운 국가에 위치한 VPN 서버를 선택하여 더 빠르고 안정적인 연결을 제공합니다.",
           'warning': "서버가 과부하 상태입니다. 다시 연결하거나 다른 IP 주소로 전환하세요.",
@@ -221,6 +279,21 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
+          'disconnect': "Desconectar",
+          'disconnected_log': 'VPN desconectado',
+          'disconnected_log_message':
+              'Você tem certeza de que deseja desconectar?',
+          'cancel': 'Cancelar',
+          'sever': 'Servidor VPN',
+          'vpn_connection': 'Conexão VPN',
+          'watch_ads': "Assistir anúncios para conectar",
+          'connection_report': 'Relatório de Conexão',
+          'time': 'Tempo',
+          'upload_speed': 'Upload',
+          'download_speed': 'Download',
+          'connection_again': 'Conectar novamente',
+          'rate_message':
+              'Se você se sentir satisfeito, por favor, avalie com 5 estrelas para que possamos continuar nos esforçando para trazer a melhor experiência.',
           'select_vpn_servers':
               "👉 Selecione servidores VPN localizados em países próximos à sua localização atual para uma conexão mais rápida e estável.",
           'warning':
@@ -276,6 +349,20 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Não foi possível abrir o URL da loja',
         },
         'ja': {
+          'disconnect': "切断",
+          'disconnected_log': 'VPNが切断されました',
+          'disconnected_log_message': '本当に切断しますか？',
+          'cancel': 'キャンセル',
+          'sever': 'VPNサーバー',
+          'vpn_connection': 'VPN接続',
+          'watch_ads': "接続するには広告を視聴してください",
+          'connection_report': '接続レポート',
+          'time': '時間',
+          'upload_speed': 'アップロード',
+          'download_speed': 'ダウンロード',
+          'connection_again': '再接続',
+          'rate_message':
+              '満足している場合は、5つ星を評価してください。そうすれば、私たちは引き続き最高の体験を提供するために努力できます。',
           'select_vpn_servers': "👉 現在の位置に近い国にあるVPNサーバーを選択して、より速く安定した接続を実現します。",
           'warning': "サーバーが過負荷状態です。再接続するか、別のIPアドレスに切り替えてください。",
           'connection_restored': '接続が復元されました',
@@ -326,6 +413,19 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
+          'disconnect': "断开连接",
+          'disconnected_log': 'VPN已断开连接',
+          'disconnected_log_message': '您确定要断开连接吗？',
+          'cancel': '取消',
+          'sever': 'VPN服务器',
+          'vpn_connection': 'VPN连接',
+          'watch_ads': "观看广告以连接",
+          'connection_report': '连接报告',
+          'time': '时间',
+          'upload_speed': '上传',
+          'download_speed': '下载',
+          'connection_again': '重新连接',
+          'rate_message': '如果您感到满意，请评分5颗星，以便我们继续努力为您带来最佳体验。',
           'select_vpn_servers': "👉 选择位于您当前位置附近的国家的VPN服务器，以获得更快和更稳定的连接。",
           'warning': "服务器超载，请重新连接或切换到另一个IP地址。",
           'connection_restored': '连接已恢复',
@@ -375,6 +475,21 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
+          'disconnect': "Desconectar",
+          'disconnected_log': 'VPN desconectado',
+          'disconnected_log_message':
+              '¿Estás seguro de que deseas desconectar?',
+          'cancel': 'Cancelar',
+          'sever': 'Servidor VPN',
+          'vpn_connection': 'Conexión VPN',
+          'watch_ads': "Ver anuncios para conectar",
+          'connection_report': 'Informe de conexión',
+          'time': 'Tiempo',
+          'upload_speed': 'Subida',
+          'download_speed': 'Descarga',
+          'connection_again': 'Conectar de nuevo',
+          'rate_message':
+              'Si te sientes satisfecho, por favor califica con 5 estrellas para que podamos seguir esforzándonos por ofrecerte la mejor experiencia.',
           'select_vpn_servers':
               "👉 Selecciona servidores VPN ubicados en países cercanos a tu ubicación actual para una conexión más rápida y estable.",
           'warning':
@@ -430,6 +545,20 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
+          'disconnect': "Trennen",
+          'disconnected_log': 'VPN getrennt',
+          'disconnected_log_message': 'Möchten Sie sich wirklich trennen?',
+          'cancel': 'Abbrechen',
+          'sever': 'VPN-Server',
+          'vpn_connection': 'VPN-Verbindung',
+          'watch_ads': "Werbung ansehen, um zu verbinden",
+          'connection_report': 'Verbindungsbericht',
+          'time': 'Zeit',
+          'upload_speed': 'Upload',
+          'download_speed': 'Download',
+          'connection_again': 'Erneut verbinden',
+          'rate_message':
+              'Wenn Sie zufrieden sind, bewerten Sie bitte mit 5 Sternen, damit wir weiterhin unser Bestes geben können, um Ihnen die beste Erfahrung zu bieten.',
           'select_vpn_servers':
               "👉 Wählen Sie VPN-Server in Ländern aus, die sich in der Nähe Ihres aktuellen Standorts befinden, um eine schnellere und stabilere Verbindung zu erhalten.",
           'warning':
@@ -485,6 +614,20 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
+          'disconnect': "Отключить",
+          'disconnected_log': 'VPN отключен',
+          'disconnected_log_message': 'Вы уверены, что хотите отключиться?',
+          'cancel': 'Отмена',
+          'sever': 'VPN-сервер',
+          'vpn_connection': 'VPN-соединение',
+          'watch_ads': "Смотреть рекламу, чтобы подключиться",
+          'connection_report': 'Отчет о подключении',
+          'time': 'Время',
+          'upload_speed': 'Загрузка',
+          'download_speed': 'Скачивание',
+          'connection_again': 'Подключиться снова',
+          'rate_message':
+              'Если вы удовлетворены, пожалуйста, поставьте 5 звезд, чтобы мы могли продолжать стараться предоставить вам лучший опыт.',
           'select_vpn_servers':
               "👉 Выберите VPN-серверы, расположенные в странах, близких к вашему текущему местоположению, для более быстрого и стабильного соединения.",
           'warning':
@@ -540,6 +683,20 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Не удается открыть URL магазина',
         },
         'ar': {
+          'disconnect': "قطع الاتصال",
+          'disconnected_log': 'تم قطع اتصال VPN',
+          'disconnected_log_message': 'هل أنت متأكد أنك تريد قطع الاتصال؟',
+          'cancel': 'إلغاء',
+          'sever': 'خادم VPN',
+          'vpn_connection': 'اتصال VPN',
+          'watch_ads': "شاهد الإعلانات للاتصال",
+          'connection_report': 'تقرير الاتصال',
+          'time': 'الوقت',
+          'upload_speed': 'رفع',
+          'download_speed': 'تنزيل',
+          'connection_again': 'إعادة الاتصال',
+          'rate_message':
+              'إذا كنت راضيًا، يرجى تقييمنا بـ 5 نجوم حتى نتمكن من الاستمرار في تقديم أفضل تجربة ممكنة.',
           'select_vpn_servers':
               "👉 اختر خوادم VPN الموجودة في البلدان القريبة من موقعك الحالي للحصول على اتصال أسرع وأكثر استقرارًا.",
           'error_connect_server':
@@ -586,6 +743,21 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
+          'disconnect': "Déconnecter",
+          'disconnected_log': 'VPN déconnecté',
+          'disconnected_log_message':
+              'Êtes-vous sûr de vouloir vous déconnecter ?',
+          'cancel': 'Annuler',
+          'sever': 'Serveur VPN',
+          'vpn_connection': 'Connexion VPN',
+          'watch_ads': "Regarder des annonces pour se connecter",
+          'connection_report': 'Rapport de connexion',
+          'time': 'Temps',
+          'upload_speed': 'Téléversement',
+          'download_speed': 'Téléchargement',
+          'connection_again': 'Reconnecter',
+          'rate_message':
+              'Si vous êtes satisfait, veuillez évaluer avec 5 étoiles afin que nous puissions continuer à nous efforcer de vous offrir la meilleure expérience.',
           'select_vpn_servers':
               "👉 Sélectionnez des serveurs VPN situés dans des pays proches de votre emplacement actuel pour une connexion plus rapide et plus stable.",
           'warning':
@@ -642,6 +814,20 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
+          'disconnect': "Frakobling",
+          'disconnected_log': 'VPN afbrudt',
+          'disconnected_log_message': 'Er du sikker på, at du vil afbryde?',
+          'cancel': 'Annuller',
+          'sever': 'VPN-server',
+          'vpn_connection': 'VPN-forbindelse',
+          'watch_ads': "Se annoncer for at oprette forbindelse",
+          'connection_report': 'Forbindelsesrapport',
+          'time': 'Tid',
+          'upload_speed': 'Upload',
+          'download_speed': 'Download',
+          'connection_again': 'Genopret forbindelse',
+          'rate_message':
+              'Hvis du er tilfreds, bedes du bedømme med 5 stjerner, så vi kan fortsætte med at stræbe efter at give dig den bedste oplevelse.',
           'select_vpn_servers':
               "👉 Vælg VPN-servere, der ligger i lande nær din nuværende placering for en hurtigere og mere stabil forbindelse.",
           'warning':
@@ -697,6 +883,20 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
+          'disconnect': "قطع الاتصال",
+          'disconnected_log': 'تم قطع اتصال VPN',
+          'disconnected_log_message': 'هل أنت متأكد أنك تريد قطع الاتصال؟',
+          'cancel': 'إلغاء',
+          'sever': 'خادم VPN',
+          'vpn_connection': 'اتصال VPN',
+          'watch_ads': "شاهد الإعلانات للاتصال",
+          'connection_report': 'تقرير الاتصال',
+          'time': 'الوقت',
+          'upload_speed': 'رفع',
+          'download_speed': 'تنزيل',
+          'connection_again': 'إعادة الاتصال',
+          'rate_message':
+              'إذا كنت راضيًا، يرجى تقييمنا بـ 5 نجوم حتى نتمكن من الاستمرار في تقديم أفضل تجربة ممكنة.',
           'select_vpn_servers':
               "👉 اختر خوادم VPN الموجودة في البلدان القريبة من موقعك الحالي للحصول على اتصال أسرع وأكثر استقرارًا.",
           'warning':
@@ -752,6 +952,20 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
+          'disconnect': "ตัดการเชื่อมต่อ",
+          'disconnected_log': 'VPN ถูกตัดการเชื่อมต่อ',
+          'disconnected_log_message': 'คุณแน่ใจหรือว่าต้องการตัดการเชื่อมต่อ?',
+          'cancel': 'ยกเลิก',
+          'sever': 'เซิร์ฟเวอร์ VPN',
+          'vpn_connection': 'การเชื่อมต่อ VPN',
+          'watch_ads': "ดูโฆษณาเพื่อเชื่อมต่อ",
+          'connection_report': 'รายงานการเชื่อมต่อ',
+          'time': 'เวลา',
+          'upload_speed': 'อัปโหลด',
+          'download_speed': 'ดาวน์โหลด',
+          'connection_again': 'เชื่อมต่ออีกครั้ง',
+          'rate_message':
+              'หากคุณรู้สึกพอใจ กรุณาให้คะแนน 5 ดาวเพื่อที่เราจะได้พยายามอย่างเต็มที่เพื่อมอบประสบการณ์ที่ดีที่สุดให้กับคุณ',
           'select_vpn_servers':
               "👉 เลือกเซิร์ฟเวอร์ VPN ที่ตั้งอยู่ในประเทศใกล้ตำแหน่งปัจจุบันของคุณเพื่อการเชื่อมต่อที่เร็วและเสถียรมากขึ้น.",
           'warning':
@@ -807,6 +1021,21 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
+          'disconnect': "Putuskan sambungan",
+          'disconnected_log': 'VPN terputus',
+          'disconnected_log_message':
+              'Apakah Anda yakin ingin memutuskan sambungan?',
+          'cancel': 'Batalkan',
+          'sever': 'Server VPN',
+          'vpn_connection': 'Koneksi VPN',
+          'watch_ads': "Tonton iklan untuk terhubung",
+          'connection_report': 'Laporan Koneksi',
+          'time': 'Waktu',
+          'upload_speed': 'Unggah',
+          'download_speed': 'Unduh',
+          'connection_again': 'Sambungkan lagi',
+          'rate_message':
+              'Jika Anda puas, silakan beri nilai 5 bintang agar kami dapat terus berusaha memberikan pengalaman terbaik untuk Anda.',
           'select_vpn_servers':
               "👉 Pilih server VPN yang terletak di negara-negara dekat lokasi Anda saat ini untuk koneksi yang lebih cepat dan stabil.",
           'warning':
@@ -862,6 +1091,21 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
+          'disconnect': "Bağlantıyı kes",
+          'disconnected_log': 'VPN bağlantısı kesildi',
+          'disconnected_log_message':
+              'Bağlantıyı kesmek istediğinizden emin misiniz?',
+          'cancel': 'İptal',
+          'sever': 'VPN sunucusu',
+          'vpn_connection': 'VPN bağlantısı',
+          'watch_ads': "Bağlanmak için reklamları izleyin",
+          'connection_report': 'Bağlantı raporu',
+          'time': 'Zaman',
+          'upload_speed': 'Yükleme',
+          'download_speed': 'İndirme',
+          'connection_again': 'Bağlan tekrar',
+          'rate_message':
+              'Eğer memnunsanız, lütfen 5 yıldız verin ki biz de size en iyi deneyimi sunmaya devam edelim.',
           'select_vpn_servers':
               "👉 Mevcut konumunuza yakın ülkelerde bulunan VPN sunucularını seçin, böylece daha hızlı ve daha stabil bir bağlantı elde edin.",
           'warning':

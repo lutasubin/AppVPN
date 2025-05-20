@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/local_vpn_pro.dart';
 import 'package:vpn_basic_project/apis/local_vpn_sever.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/mydilog2.dart';
@@ -11,8 +12,10 @@ import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
+import 'package:vpn_basic_project/screens/disconected_screen.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/cowndowncircle.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/watch_video_disconnect.dart';
 
 import '../screens/rate_screen.dart';
 
@@ -26,7 +29,7 @@ class LocalController extends GetxController {
   // List of available local VPN servers
   final RxList<LocalVpnServer> availableServers = <LocalVpnServer>[].obs;
 
-    final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
+  final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
 
   // Timer chờ kết nối
   Timer? _waitingTimer;
@@ -41,12 +44,14 @@ class LocalController extends GetxController {
   // Thời gian bắt đầu kết nối
   DateTime? _connectionStartTime;
 
+  final connectionDuration = Duration().obs;
+
   @override
   void onInit() {
     super.onInit();
     _listenVpnStage();
     loadAvailableServers();
-    loadAvailableServersPro() ;
+    loadAvailableServersPro();
   }
 
   @override
@@ -69,7 +74,7 @@ class LocalController extends GetxController {
     }
   }
 
-   void loadAvailableServersPro() {
+  void loadAvailableServersPro() {
     // Load predefined VPN servers
     // In a real app, you might want to load this from a JSON file in assets
     availableServersPro.value = proVPN;
@@ -101,7 +106,23 @@ class LocalController extends GetxController {
       _startWaitingTimer();
       await VpnEngine.startVpn(vpnConfig);
     } else {
-      _disconnectVpn(showWarning: false);
+      Get.dialog(WatchAdDialogDisconnect(onComplete: () {
+        _disconnectVpn(showWarning: false);
+        AdHelper.showInterstitialAd(onComplete: () {
+          // Format the connection time as HH:MM:SS
+          String formattedTime = formatDuration(connectionDuration.value);
+
+          Get.to(() => DisconnectedScreen(
+                country: vpn.value.CountryLong,
+                ip: vpn.value.IP,
+                connectionTime: formattedTime,
+                uploadSpeed: '45mb/s',
+                downloadSpeed: '45mb/s',
+                flagUrl:
+                    'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
+              ));
+        });
+      }));
     }
   }
 
@@ -289,13 +310,12 @@ class LocalController extends GetxController {
     }
   }
 
-
-    // Helper method to format duration as HH:MM:SS
-      String formatDuration(Duration duration) {
-        String twoDigit(int n) => n.toString().padLeft(2, '0');
-        final hours = twoDigit(duration.inHours);
-        final minutes = twoDigit(duration.inMinutes.remainder(60));
-        final seconds = twoDigit(duration.inSeconds.remainder(60));
-        return '$hours:$minutes:$seconds';
-      }
+  // Helper method to format duration as HH:MM:SS
+  String formatDuration(Duration duration) {
+    String twoDigit(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigit(duration.inHours);
+    final minutes = twoDigit(duration.inMinutes.remainder(60));
+    final seconds = twoDigit(duration.inSeconds.remainder(60));
+    return '$hours:$minutes:$seconds';
+  }
 }

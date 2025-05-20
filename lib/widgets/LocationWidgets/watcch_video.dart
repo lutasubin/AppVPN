@@ -19,8 +19,8 @@ class WatchAdDialog {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "VPN Server",
+               Text(
+                "sever".tr,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
@@ -54,7 +54,7 @@ class WatchAdDialog {
                   Get.back(); // Đóng bottom sheet
                   onComplete(); // Gọi callback
                 },
-                label: const Text("VPN Connection",
+                label:  Text( 'vpn_connection'.tr,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold

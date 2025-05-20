@@ -12,7 +12,6 @@ import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn_status.dart';
-import 'package:vpn_basic_project/screens/disconected_screen.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
@@ -43,8 +42,7 @@ class HomeScreen extends StatelessWidget {
   // Biến để theo dõi trạng thái hiển thị quảng cáo cho kết nối hiện tại
   final _adShownForCurrentConnection = false.obs;
 
-  // Add a new variable to track connection time
-  final _connectionDuration = Duration().obs;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +79,8 @@ class HomeScreen extends StatelessWidget {
             print('Lỗi khi lấy IP: $e');
           });
         } else if (event == VpnEngine.vpnDisconnected) {
-          // Format the connection time as HH:MM:SS
-          String formattedTime =
-              _controller.formatDuration(_connectionDuration.value);
-
-          Get.to(() => DisconnectedScreen(
-                country: _controller.vpn.value.CountryLong,
-                ip: _controller.vpn.value.IP,
-                connectionTime: formattedTime, // Thay bằng dữ liệu thực nếu có
-                uploadSpeed: '45mb/s', // Thay bằng dữ liệu thực nếu có
-                downloadSpeed: '45mb/s', // Thay bằng dữ liệu thực nếu có
-                flagUrl:
-                    'assets/flags/${_controller.vpn.value.CountryShort.toLowerCase()}.png',
-              ));
-
           // Reset connection duration and ad shown status
-          _connectionDuration.value = Duration();
+          _controller.connectionDuration.value = Duration();
           _adShownForCurrentConnection.value =
               false; // Đặt lại trạng thái khi ngắt kết nối
         }
@@ -279,7 +263,7 @@ class HomeScreen extends StatelessWidget {
                   CountDownTimer(
                     startTimer: true,
                     onDurationChanged: (duration) {
-                      _connectionDuration.value = duration;
+                      _controller.connectionDuration.value = duration;
                     },
                   ),
               ],
