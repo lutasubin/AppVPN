@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Lớp hỗ trợ Firebase Analytics để theo dõi sự kiện trong ứng dụng.
 class AnalyticsHelper {
@@ -20,6 +21,12 @@ class AnalyticsHelper {
         'timestamp': DateTime.now().toIso8601String(),
       },
     );
+
+    // Cập nhật thống kê kết nối trong SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'vpn_count_$serverName';
+    int currentCount = prefs.getInt(key) ?? 0;
+    await prefs.setInt(key, currentCount + 1);
   }
 
   /// Ghi nhận sự kiện khi người dùng ngắt kết nối VPN
@@ -75,4 +82,30 @@ class AnalyticsHelper {
       {required String name, required String value}) async {
     await _analytics.setUserProperty(name: name, value: value);
   }
+
+
+  
+   static Future<Map<String, dynamic>?> getMostConnectedVpn() async {
+  final prefs = await SharedPreferences.getInstance();
+  final allKeys = prefs.getKeys().where((k) => k.startsWith('vpn_count_'));
+
+  if (allKeys.isEmpty) return null;
+
+  String topServer = '';
+  int topCount = 0;
+
+  for (String key in allKeys) {
+    int count = prefs.getInt(key) ?? 0;
+    if (count > topCount) {
+      topCount = count;
+      topServer = key.replaceFirst('vpn_count_', '');
+    }
+  }
+
+  return {
+    'server_name': topServer, // String
+    'count': topCount         // int
+  };
+}
+
 }

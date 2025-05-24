@@ -139,13 +139,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFF02091A),
+            mainBackgroundColor: Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
+              textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor:  Color(0xFF767C8A),
+              textColor: Colors.grey,
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -153,10 +153,6 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
-            ),
-            tertiaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFF767C8A),
-              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -199,13 +195,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFF02091A),
+            mainBackgroundColor: Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
+              textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor:  Color(0xFF767C8A),
+              textColor: Colors.grey,
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -213,10 +209,6 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
-            ),
-            tertiaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFF767C8A),
-              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -279,13 +271,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFF02091A),
+            mainBackgroundColor: Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
+              textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor:  Color(0xFF767C8A),
+              textColor: Colors.grey,
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -293,10 +285,6 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
-            ),
-            tertiaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFF767C8A),
-              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.medium))
       ..load();
@@ -339,13 +327,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFF02091A),
+            mainBackgroundColor: Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
+              textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor:  Color(0xFF767C8A),
+              textColor: Colors.grey,
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -353,10 +341,6 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
-            ),
-            tertiaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFF767C8A),
-              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.medium))
       ..load();
@@ -385,13 +369,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFF02091A),
+            mainBackgroundColor: Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
+              textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor:  Color(0xFF767C8A),
+              textColor: Colors.grey,
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -399,10 +383,6 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
-            ),
-            tertiaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFF767C8A),
-              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -445,13 +425,13 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFF02091A),
+            mainBackgroundColor: Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
+              textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
             ),
             secondaryTextStyle: NativeTemplateTextStyle(
-              textColor:  Color(0xFF767C8A),
+              textColor: Colors.grey,
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -459,10 +439,6 @@ class AdHelper {
               backgroundColor: Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
-            ),
-            tertiaryTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFF767C8A),
-              style: NativeTemplateFontStyle.normal,
             ),
             templateType: TemplateType.small))
       ..load();
@@ -526,7 +502,9 @@ class AdHelper {
       ..load();
   }
 
-  //***************** App Open Ad ******************
+
+  
+   //***************** App Open Ad ******************
   /// Tải trước quảng cáo toàn màn hình để sẵn sàng hiển thị khi cần.
   /// Quảng cáo sẽ tự động tải lại sau khi được hiển thị hoặc thất bại.
   static void precacheOpenAd() {

@@ -44,13 +44,22 @@ class VpnCardLocalPro extends StatelessWidget {
             },
             title: Row(
               children: [
-                Text(
-                  server.countryName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: const Color(0xFFFFFFFF),
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      server.countryName,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: const Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.play_arrow,
+                      color: Color(0xFFF15E24),
+                      size: 20,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -64,11 +73,6 @@ class VpnCardLocalPro extends StatelessWidget {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('👑',
-                    style: TextStyle(
-                      fontSize: 13,
-                    )),
-                SizedBox(width: 12),
                 Container(
                   width: 22,
                   height: 22,

@@ -284,8 +284,8 @@ public class MainActivity extends FlutterActivity {
             if (resultCode == RESULT_OK) {
                 startVPN();
             } else {
-                setStage("denied");
-                Toast.makeText(this, "Permission is denied!", Toast.LENGTH_SHORT).show();
+                setStage("disconnected");
+            Toast.makeText(this, "Permission is denied! VPN disconnected.", Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

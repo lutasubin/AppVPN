@@ -4,6 +4,8 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
+          'next': 'Next',
+          'get_started': 'Get Started',
           'disconnect': "Disconnect",
           'disconnected_log': 'Disconnected VPN',
           'disconnected_log_message': 'Are you sure you want to disconnect?',
@@ -74,6 +76,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
+          'next': 'Tiếp theo',
+          'get_started': 'Bắt đầu',
           'disconnect': "Ngắt kết nối",
           'disconnected_log': 'Ngắt kết nối VPN',
           'disconnected_log_message':
@@ -145,6 +149,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
+          'next': 'अगला',
+          'get_started': 'शुरू करें',
           'disconnect': "डिस्कनेक्ट",
           'disconnected_log': 'वीपीएन डिस्कनेक्ट किया गया',
           'disconnected_log_message':
@@ -214,6 +220,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
+          'next': '다음',
+          'get_started': '시작하기',
           'disconnect': "연결 끊기",
           'disconnected_log': 'VPN 연결 끊김',
           'disconnected_log_message': '정말로 연결을 끊으시겠습니까?',
@@ -279,6 +287,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
+          'next': 'Próximo',
+          'get_started': 'Começar',
           'disconnect': "Desconectar",
           'disconnected_log': 'VPN desconectado',
           'disconnected_log_message':
@@ -349,6 +359,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Não foi possível abrir o URL da loja',
         },
         'ja': {
+          'next': '次へ',
+          'get_started': '始める',
           'disconnect': "切断",
           'disconnected_log': 'VPNが切断されました',
           'disconnected_log_message': '本当に切断しますか？',
@@ -413,6 +425,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
+          'next': '下一步',
+          'get_started': '开始',
           'disconnect': "断开连接",
           'disconnected_log': 'VPN已断开连接',
           'disconnected_log_message': '您确定要断开连接吗？',
@@ -475,6 +489,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
+          'next': 'Siguiente',
+          'get_started': 'Comenzar',
           'disconnect': "Desconectar",
           'disconnected_log': 'VPN desconectado',
           'disconnected_log_message':
@@ -545,6 +561,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
+          'next': 'Weiter',
+          'get_started': 'Loslegen',
           'disconnect': "Trennen",
           'disconnected_log': 'VPN getrennt',
           'disconnected_log_message': 'Möchten Sie sich wirklich trennen?',
@@ -614,6 +632,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
+          'next': 'Далее',
+          'get_started': 'Начать',
           'disconnect': "Отключить",
           'disconnected_log': 'VPN отключен',
           'disconnected_log_message': 'Вы уверены, что хотите отключиться?',
@@ -683,6 +703,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Не удается открыть URL магазина',
         },
         'ar': {
+          'next': 'التالي',
+          'get_started': 'البدء',
           'disconnect': "قطع الاتصال",
           'disconnected_log': 'تم قطع اتصال VPN',
           'disconnected_log_message': 'هل أنت متأكد أنك تريد قطع الاتصال؟',
@@ -743,6 +765,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
+          'next': 'Suivant',
+          'get_started': 'Commencer',
           'disconnect': "Déconnecter",
           'disconnected_log': 'VPN déconnecté',
           'disconnected_log_message':
@@ -814,6 +838,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
+          'next': 'Næste',
+          'get_started': 'Kom i gang',
           'disconnect': "Frakobling",
           'disconnected_log': 'VPN afbrudt',
           'disconnected_log_message': 'Er du sikker på, at du vil afbryde?',
@@ -883,6 +909,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
+          'next': 'التالي',
+          'get_started': 'البدء',
           'disconnect': "قطع الاتصال",
           'disconnected_log': 'تم قطع اتصال VPN',
           'disconnected_log_message': 'هل أنت متأكد أنك تريد قطع الاتصال؟',
@@ -952,6 +980,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
+          'next': 'ถัดไป',
+          'get_started': 'เริ่มต้น',
           'disconnect': "ตัดการเชื่อมต่อ",
           'disconnected_log': 'VPN ถูกตัดการเชื่อมต่อ',
           'disconnected_log_message': 'คุณแน่ใจหรือว่าต้องการตัดการเชื่อมต่อ?',
@@ -1021,6 +1051,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
+          'next': 'Berikutnya',
+          'get_started': 'Mulai',
           'disconnect': "Putuskan sambungan",
           'disconnected_log': 'VPN terputus',
           'disconnected_log_message':
@@ -1091,6 +1123,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
+          'next': 'Sonraki',
+          'get_started': 'Başla',
           'disconnect': "Bağlantıyı kes",
           'disconnected_log': 'VPN bağlantısı kesildi',
           'disconnected_log_message':

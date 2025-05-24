@@ -69,29 +69,31 @@ class LocationScreen extends StatelessWidget {
                         height: 120, child: AdWidget(ad: _adController2.ad!)))
                 : null,
         // Nội dung chính của màn hình
-        body: Column(
-          children: [
-            // Hiển thị tiêu đề "Chọn máy chủ VPN"
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                "select_vpn_servers".tr,
-                style: const TextStyle(
-                  color: Color(0xFFFFFFFF),
-                  fontSize: 15,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Hiển thị tiêu đề "Chọn máy chủ VPN"
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  "select_vpn_servers".tr,
+                  style: const TextStyle(
+                    color: Color(0xFFFFFFFF),
+                    fontSize: 15,
+                  ),
                 ),
               ),
-            ),
-            // Phần nội dung chính, tùy thuộc vào trạng thái
-            Expanded(
-              child: _controller.isLoading.value
-                  ? _loadingWidget(context) // Hiển thị hoạt ảnh đang tải
-                  : _controller.vpnList.isEmpty
-                      ? _noVPNFound(
-                          context) // Hiển thị thông báo không tìm thấy VPN
-                      : _buildCombinedListView(), // Hiển thị danh sách VPN
-            ),
-          ],
+              // Phần nội dung chính, tùy thuộc vào trạng thái
+              Expanded(
+                child: _controller.isLoading.value
+                    ? _loadingWidget(context) // Hiển thị hoạt ảnh đang tải
+                    : _controller.vpnList.isEmpty
+                        ? _noVPNFound(
+                            context) // Hiển thị thông báo không tìm thấy VPN
+                        : _buildCombinedListView(), // Hiển thị danh sách VPN
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -102,10 +104,10 @@ class LocationScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
-        // Phần VPN cao cấp
-        _buildHighSpeedVpnProContent(),
         // Phần VPN tốc độ cao
         _buildHighSpeedVpnContent(),
+        // Phần VPN cao cấp
+        _buildHighSpeedVpnProContent(),
       ],
     );
   }
@@ -270,7 +272,7 @@ class LocationScreen extends StatelessWidget {
                     const SizedBox(width: 15),
                     // Hiển thị tên quốc gia với biểu tượng vương miện
                     Text(
-                      "$country 👑",
+                      country,
                       style: const TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontWeight: FontWeight.bold,

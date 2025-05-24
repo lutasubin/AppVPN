@@ -27,7 +27,7 @@ class DisconnectedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _adController5.ad = AdHelper.loadNativeAd1(adController: _adController5);
+    _adController5.ad = AdHelper.loadNativeAd2(adController: _adController5);
     final LocalController controller = Get.find<LocalController>();
 
     return Scaffold(
@@ -59,7 +59,7 @@ class DisconnectedScreen extends StatelessWidget {
         return _adController5.ad != null && _adController5.adLoaded.isTrue
             ? SafeArea(
                 child: SizedBox(
-                  height: 350,
+                  height: 120,
                   child: AdWidget(ad: _adController5.ad!),
                 ),
               )
@@ -95,7 +95,7 @@ class DisconnectedScreen extends StatelessWidget {
                           country,
                           style: const TextStyle(
                               color: Color(0xFFFFFFFF),
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -103,18 +103,25 @@ class DisconnectedScreen extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       ip,
-                      style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 16),
+                      style: TextStyle(
+                          color: Color(0xFFFFFFFF),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('time'.tr,
                             style: TextStyle(
-                                color: Color(0xFF767C8A), fontSize: 16)),
+                                color: Color(0xFF767C8A),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold)),
                         Text(
                           connectionTime,
                           style: const TextStyle(
-                              color: Color(0xFFFFFFFF), fontSize: 16),
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -123,11 +130,15 @@ class DisconnectedScreen extends StatelessWidget {
                       children: [
                         Text('upload_speed'.tr,
                             style: TextStyle(
-                                color: Color(0xFF767C8A), fontSize: 16)),
+                                color: Color(0xFF767C8A),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold)),
                         Text(
                           uploadSpeed,
                           style: const TextStyle(
-                              color: Color(0xFFFFFFFF), fontSize: 16),
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -136,10 +147,14 @@ class DisconnectedScreen extends StatelessWidget {
                       children: [
                         Text('download_speed'.tr,
                             style: TextStyle(
-                                color: Color(0xFF767C8A), fontSize: 16)),
+                                color: Color(0xFF767C8A),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold)),
                         Text(downloadSpeed,
                             style: const TextStyle(
-                                color: Color(0xFFFFFFFF), fontSize: 16)),
+                                color: Color(0xFFFFFFFF),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 15),

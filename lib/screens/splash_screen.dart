@@ -21,9 +21,8 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // Animation chỉ chạy 3 giây
     _controller = AnimationController(
-      duration: const Duration(seconds: 7),
+      duration: const Duration(seconds: 5),
       vsync: this,
     );
 
@@ -33,7 +32,6 @@ class _SplashScreenState extends State<SplashScreen>
       });
 
     _controller.forward();
-
     _navigateAfterDelay();
   }
 
@@ -52,40 +50,31 @@ class _SplashScreenState extends State<SplashScreen>
             : Locale(savedLanguage));
       }
 
-      // Hiển thị Open Ad rồi mới điều hướng
       bool navigated = false;
-      AdHelper.showOpenAd(onComplete: () {
-        if (!navigated) {
-          navigated = true;
-          if (Pref.hasSeenOnboarding) {
-            Get.offAll(() => HomeScreen(),
-                transition: Transition.fade,
-                duration: const Duration(milliseconds: 500));
-          } else {
-            Get.offAll(() => LanguageScreen2(),
-                transition: Transition.fade,
-                duration: const Duration(milliseconds: 500));
-          }
-        }
-      });
 
-      // Timeout nếu quảng cáo không chạy hoặc quá lâu thì vẫn điều hướng
-      await Future.delayed(const Duration(seconds: 5));
-      if (!navigated) {
+      void navigate() {
+        if (navigated) return;
         navigated = true;
-        if (Pref.hasSeenOnboarding) {
-          Get.offAll(() => HomeScreen(),
-              transition: Transition.fade,
-              duration: const Duration(milliseconds: 500));
-        } else {
-          Get.offAll(() => LanguageScreen2(),
-              transition: Transition.fade,
-              duration: const Duration(milliseconds: 500));
-        }
+        final nextPage = Pref.hasSeenOnboarding
+            ?  HomeScreen()
+            :  LanguageScreen2();
+        Get.offAll(() => nextPage,
+            transition: Transition.fade,
+            duration: const Duration(milliseconds: 500));
+      }
+
+      // Nếu là lần đầu mở app => không hiển thị quảng cáo
+      if (Pref.isFirstLaunch) {
+        Pref.isFirstLaunch = false; // đánh dấu đã vào app lần đầu
+        navigate();
+      } else {
+        AdHelper.showOpenAd(onComplete: navigate);
+        await Future.delayed(const Duration(seconds: 5));
+        navigate();
       }
     } catch (e) {
       print('Error in navigation: $e');
-      Get.offAll(() => HomeScreen(),
+      Get.offAll(() =>  HomeScreen(),
           transition: Transition.fade,
           duration: const Duration(milliseconds: 500));
     }

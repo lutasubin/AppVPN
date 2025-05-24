@@ -115,115 +115,117 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
       },
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false, // Tắt nút thoát mặc định
-        backgroundColor: const Color(0xFF02091A),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Language'.tr,
-              style: const TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false, // Tắt nút thoát mặc định
+          backgroundColor: const Color(0xFF02091A),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Language'.tr,
+                style: const TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.check,
+                color: Color(0xFFFFFFFF),
+                size: 25,
+              ),
+              onPressed: () {
+                if (selectedLanguage.value.isNotEmpty) {
+                  Get.updateLocale(selectedLanguage.value == 'default'
+                      ? (Get.deviceLocale ?? const Locale('en'))
+                      : Locale(selectedLanguage.value));
+                  // Đánh dấu đã xem onboarding
+                  Pref.hasSeenOnboarding = true;
+                  Get.offAll(() => OnboardingScreen());
+                }
+              },
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.check,
-              color: Color(0xFFFFFFFF),
-              size: 25,
-            ),
-            onPressed: () {
-              if (selectedLanguage.value.isNotEmpty) {
-                Get.updateLocale(selectedLanguage.value == 'default'
-                    ? (Get.deviceLocale ?? const Locale('en'))
-                    : Locale(selectedLanguage.value));
-                // Đánh dấu đã xem onboarding
-                Pref.hasSeenOnboarding = true;
-                Get.offAll(() => OnboardingScreen());
-              }
+        backgroundColor: const Color(0xFF02091A),
+        bottomNavigationBar: Obx(() {
+          //! boc lai obx
+          return _adController4.ad != null && _adController4.adLoaded.isTrue
+              ? SafeArea(
+                  child: SizedBox(
+                    height: 120,
+                    child: AdWidget(ad: _adController4.ad!),
+                  ),
+                )
+              : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+        }),
+        body: Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+          child: ListView.builder(
+            itemCount: languages.length,
+            itemBuilder: (context, index) {
+              final language = languages[index];
+      
+              return Obx(() {
+                final isSelected = selectedLanguage.value == language['code'];
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isSelected
+                          ? const Color(0xFFF15E24)
+                          : const Color(0xFF172032),
+                      width: 2.0,
+                    ),
+                    color: const Color(0xFF172032),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: RadioListTile<String>(
+                    value: language['code'],
+                    groupValue: selectedLanguage.value,
+                    activeColor: const Color(0xFFF15E24),
+                    title: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 16,
+                          backgroundImage: AssetImage(language['flag']),
+                        ),
+                        const SizedBox(width: 20),
+                        Text(
+                          language['name'],
+                          style: const TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onChanged: (value) {
+                      if (value != null) {
+                        selectedLanguage.value = value; // Cập nhật giá trị
+                        Pref.selectedLanguage = value; // Lưu vào Pref
+      
+                        // Cập nhật locale ngay khi chọn
+                        if (value == 'default') {
+                          Get.updateLocale(
+                              Get.deviceLocale ?? const Locale('en'));
+                        } else {
+                          Get.updateLocale(Locale(value));
+                        }
+                      }
+                    },
+                  ),
+                );
+              });
             },
           ),
-        ],
-      ),
-      backgroundColor: const Color(0xFF02091A),
-      bottomNavigationBar: Obx(() {
-        //! boc lai obx
-        return _adController4.ad != null && _adController4.adLoaded.isTrue
-            ? SafeArea(
-                child: SizedBox(
-                  height: 120,
-                  child: AdWidget(ad: _adController4.ad!),
-                ),
-              )
-            : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
-      }),
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-        child: ListView.builder(
-          itemCount: languages.length,
-          itemBuilder: (context, index) {
-            final language = languages[index];
-
-            return Obx(() {
-              final isSelected = selectedLanguage.value == language['code'];
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: isSelected
-                        ? const Color(0xFFF15E24)
-                        : const Color(0xFF172032),
-                    width: 2.0,
-                  ),
-                  color: const Color(0xFF172032),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: RadioListTile<String>(
-                  value: language['code'],
-                  groupValue: selectedLanguage.value,
-                  activeColor: const Color(0xFFF15E24),
-                  title: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 16,
-                        backgroundImage: AssetImage(language['flag']),
-                      ),
-                      const SizedBox(width: 20),
-                      Text(
-                        language['name'],
-                        style: const TextStyle(
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  onChanged: (value) {
-                    if (value != null) {
-                      selectedLanguage.value = value; // Cập nhật giá trị
-                      Pref.selectedLanguage = value; // Lưu vào Pref
-
-                      // Cập nhật locale ngay khi chọn
-                      if (value == 'default') {
-                        Get.updateLocale(
-                            Get.deviceLocale ?? const Locale('en'));
-                      } else {
-                        Get.updateLocale(Locale(value));
-                      }
-                    }
-                  },
-                ),
-              );
-            });
-          },
         ),
       ),
     );

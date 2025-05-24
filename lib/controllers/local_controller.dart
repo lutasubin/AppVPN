@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/local_vpn_pro.dart';
 import 'package:vpn_basic_project/apis/local_vpn_sever.dart';
+import 'package:vpn_basic_project/apis/upload_downkoad.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
@@ -29,6 +30,7 @@ class LocalController extends GetxController {
   // List of available local VPN servers
   final RxList<LocalVpnServer> availableServers = <LocalVpnServer>[].obs;
 
+  // List of available local VPN pro servers
   final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
 
   // Timer chờ kết nối
@@ -66,7 +68,7 @@ class LocalController extends GetxController {
   void loadAvailableServers() {
     // Load predefined VPN servers
     // In a real app, you might want to load this from a JSON file in assets
-    availableServers.value = predefinedVpnServers;
+    availableServers.value = highVpn;
     // If no VPN is selected, select the first one by default
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
         availableServers.isNotEmpty) {
@@ -81,50 +83,73 @@ class LocalController extends GetxController {
     // If no VPN is selected, select the first one by default
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
         availableServersPro.isNotEmpty) {
-      setVpnFromLocalServer(availableServers[0]);
+      setVpnFromLocalServer(availableServersPro[0]);
     }
   }
 
   //Connect vpn
   void connectToVpn() async {
-    if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
-      MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
-      return;
-    }
-
-    if (vpnState.value == VpnEngine.vpnDisconnected) {
-      final data = Base64Decoder().convert(vpn.value.OpenVPNConfigDataBase64);
-      final config = Utf8Decoder().convert(data);
-
-      final vpnConfig = VpnConfig(
-        country: vpn.value.CountryLong,
-        username: '',
-        password: '',
-        config: config,
-      );
-
-      _startWaitingTimer();
-      await VpnEngine.startVpn(vpnConfig);
-    } else {
-      Get.dialog(WatchAdDialogDisconnect(onComplete: () {
-        _disconnectVpn(showWarning: false);
-        AdHelper.showInterstitialAd(onComplete: () {
-          // Format the connection time as HH:MM:SS
-          String formattedTime = formatDuration(connectionDuration.value);
-
-          Get.to(() => DisconnectedScreen(
-                country: vpn.value.CountryLong,
-                ip: vpn.value.IP,
-                connectionTime: formattedTime,
-                uploadSpeed: '45mb/s',
-                downloadSpeed: '45mb/s',
-                flagUrl:
-                    'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
-              ));
-        });
-      }));
-    }
+  // Nếu chưa chọn location VPN
+  if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
+    MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
+    return;
   }
+
+  // Nếu VPN đang ở trạng thái ngắt kết nối → kết nối mới
+  if (vpnState.value == VpnEngine.vpnDisconnected) {
+    final data = Base64Decoder().convert(vpn.value.OpenVPNConfigDataBase64);
+    final config = Utf8Decoder().convert(data);
+
+    final vpnConfig = VpnConfig(
+      country: vpn.value.CountryLong,
+      username: '',
+      password: '',
+      config: config,
+    );
+
+    _startWaitingTimer(); // Hiển thị UI chờ kết nối
+    await VpnEngine.startVpn(vpnConfig); // Kết nối VPN
+  } else {
+    // Nếu đang kết nối VPN → hiển thị dialog ngắt kết nối
+    _showDisconnectDialogWithAd();
+  }
+}
+
+
+
+/// Hiển thị dialog ngắt kết nối với quảng cáo
+void _showDisconnectDialogWithAd() {
+  Get.dialog(
+    WatchAdDialogDisconnect(
+      onComplete: () async {
+        Get.back(); // Đóng dialog
+        await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
+
+        _disconnectVpn(showWarning: false); // Ngắt VPN
+
+        AdHelper.showInterstitialAd(
+          onComplete: ()  {
+            // Format thời gian kết nối
+            String formattedTime = formatDuration(connectionDuration.value);
+
+            // Điều hướng đến màn hình ngắt kết nối
+            Get.to(() => DisconnectedScreen(
+                  country: vpn.value.CountryLong,
+                  ip: vpn.value.IP,
+                  connectionTime: formattedTime,
+                  uploadSpeed: getRandomUploadSpeed(),
+                  downloadSpeed: getRandomDownloadSpeed(),
+                  flagUrl:
+                      'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
+                ));
+          },
+        );
+      },
+    ),
+  );
+}
+
+
 
   /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
   void incrementConnectionAttempts(BuildContext context) {

@@ -19,17 +19,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     OnboardingItem(
       title: "Just One Touch To Connect.",
       assetImage: "assets/images/Frame 634360.png",
-      buttonText: "Next",
+      buttonText: 'next'.tr,
     ),
     OnboardingItem(
       title: "Diverse VPNs In Many Different Countries.",
       assetImage: "assets/images/Frame 634360 (1).png",
-      buttonText: "Next",
+      buttonText: "next".tr,
     ),
     OnboardingItem(
       title: "Protect Your Online Private",
       assetImage: "assets/images/Frame 634360 (2).png",
-      buttonText: "Get Start",
+      buttonText: 'get_started'.tr,
     ),
   ];
 
@@ -51,123 +51,125 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.height < 600;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF02091A),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                  },
-                  itemCount: onboardingItems.length,
-                  itemBuilder: (context, index) {
-                    return LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height: screenSize.height * 0.1),
-                            Expanded(
-                              flex: 3,
-                              child: Padding(
-                                padding:
-                                    EdgeInsets.all(screenSize.width * 0.05),
-                                child: Image.asset(
-                                  onboardingItems[index].assetImage,
-                                  fit: BoxFit.contain,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xFF02091A),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                    itemCount: onboardingItems.length,
+                    itemBuilder: (context, index) {
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(height: screenSize.height * 0.1),
+                              Expanded(
+                                flex: 3,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.all(screenSize.width * 0.05),
+                                  child: Image.asset(
+                                    onboardingItems[index].assetImage,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: screenSize.width * 0.05),
-                              child: Text(
-                                onboardingItems[index].title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: isSmallScreen ? 16 : 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFFFFFFFF),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: screenSize.width * 0.05),
+                                child: Text(
+                                  onboardingItems[index].title,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: isSmallScreen ? 16 : 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFFFFFFFF),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: screenSize.height * 0.03),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                              SizedBox(height: screenSize.height * 0.03),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-              // Chấm điều hướng và nút
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: List.generate(
-                        onboardingItems.length,
-                        (i) => GestureDetector(
-                          onTap: () {
-                            _pageController.animateToPage(
-                              i,
+                // Chấm điều hướng và nút
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: List.generate(
+                          onboardingItems.length,
+                          (i) => GestureDetector(
+                            onTap: () {
+                              _pageController.animateToPage(
+                                i,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn,
+                              );
+                            },
+                            child: buildDot(i, screenSize),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          if (_currentPage == onboardingItems.length - 1) {
+                            Get.offAll(() => HomeScreen(),
+                                transition: Transition.fade,
+                                duration: Duration(milliseconds: 500));
+                          } else {
+                            _pageController.nextPage(
                               duration: Duration(milliseconds: 300),
                               curve: Curves.easeIn,
                             );
-                          },
-                          child: buildDot(i, screenSize),
+                          }
+                        },
+                        child: Text(
+                          onboardingItems[_currentPage].buttonText,
+                          style: TextStyle(
+                            fontSize: isSmallScreen ? 14 : 16,
+                            color: const Color(0xFFF15E24),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (_currentPage == onboardingItems.length - 1) {
-                          Get.offAll(() => HomeScreen(),
-                              transition: Transition.fade,
-                              duration: Duration(milliseconds: 500));
-                        } else {
-                          _pageController.nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeIn,
-                          );
-                        }
-                      },
-                      child: Text(
-                        onboardingItems[_currentPage].buttonText,
-                        style: TextStyle(
-                          fontSize: isSmallScreen ? 14 : 16,
-                          color: const Color(0xFFF15E24),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
+        bottomNavigationBar:
+            //ads native
+            Obx(() {
+          return _adController1.ad != null && _adController1.adLoaded.isTrue
+              ? SafeArea(
+                  child: SizedBox(
+                    height: 350,
+                    child: AdWidget(ad: _adController1.ad!),
+                  ),
+                )
+              : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+        }),
       ),
-      bottomNavigationBar:
-      //ads native
-       Obx(() {
-        return _adController1.ad != null && _adController1.adLoaded.isTrue
-            ? SafeArea(
-                child: SizedBox(
-                  height: 350,
-                  child: AdWidget(ad: _adController1.ad!),
-                ),
-              )
-            : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
-      }),
     );
   }
 

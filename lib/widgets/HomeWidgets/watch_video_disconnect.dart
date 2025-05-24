@@ -9,36 +9,42 @@ class WatchAdDialogDisconnect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoAlertDialog(
-      title: Text(
-        'disconnected_log'.tr,
-        style: TextStyle(color: Colors.black, fontSize: 16),
+    return CupertinoTheme(
+      data: CupertinoThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: Color(0xFFFFFFFF),
+        barBackgroundColor: Color(0xFFFFFFFF),
       ),
-      content: Text(
-        'disconnected_log_message'.tr,
-        style: TextStyle(color: Color(0xFF767C8A)),
-      ),
-      actions: [
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          textStyle: TextStyle(color: Color(0xFF767C8A), fontSize: 14),
-          child: Text('cancel'.tr),
-          onPressed: () {
-            Get.back();
-          },
+      child: CupertinoAlertDialog(
+        title: Text(
+          'disconnected_log'.tr,
+          style: TextStyle(color: Colors.black, fontSize: 16),
         ),
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          textStyle: TextStyle(color: Color(0xFFF15E24), fontSize: 14),
-          child: Text(
-            'disconnect'.tr,
+        content: Text(
+          'disconnected_log_message'.tr,
+          style: TextStyle(color: Color(0xFF767C8A)),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            textStyle: TextStyle(color: Color(0xFF767C8A), fontSize: 14),
+            child: Text('cancel'.tr),
+            onPressed: () {
+              Get.back();
+            },
           ),
-          onPressed: () {
-            Get.back();
-            onComplete();
-          },
-        ),
-      ],
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            textStyle: TextStyle(color: Color(0xFFF15E24), fontSize: 14),
+            child: Text(
+              'disconnect'.tr,
+            ),
+            onPressed: () {
+              onComplete();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

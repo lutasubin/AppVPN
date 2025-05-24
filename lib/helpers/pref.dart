@@ -20,20 +20,21 @@ class Pref {
     for (var i in data) {
       temp.add(Vpn.fromJson(i));
     }
-    
+
     return temp;
   }
 
-  static set vpnList(List<Vpn> vpn) =>
-      _box.put('vpnList', jsonEncode(vpn));
+  static set vpnList(List<Vpn> vpn) => _box.put('vpnList', jsonEncode(vpn));
 
   // Ngôn ngữ đã chọn
   static String get selectedLanguage => _box.get('selectedLanguage') ?? '';
-  static set selectedLanguage(String value) => _box.put('selectedLanguage', value);
+  static set selectedLanguage(String value) =>
+      _box.put('selectedLanguage', value);
 
   // Kiểm tra xem đã hiển thị onboarding chưa
   static bool get hasSeenOnboarding => _box.get('hasSeenOnboarding') ?? false;
-  static set hasSeenOnboarding(bool value) => _box.put('hasSeenOnboarding', value);
+  static set hasSeenOnboarding(bool value) =>
+      _box.put('hasSeenOnboarding', value);
 
   static Future<void> storeCountryFlags(List<String> flags) async {
     await initializeHive();
@@ -57,18 +58,23 @@ class Pref {
 
   // Đếm số lần nhấn nút kết nối
   static int get connectionAttempts => _box.get('connectionAttempts') ?? 0;
-  static set connectionAttempts(int count) => _box.put('connectionAttempts', count);
-  
+  static set connectionAttempts(int count) =>
+      _box.put('connectionAttempts', count);
+
   // Kiểm tra xem đã hiển thị màn hình đánh giá chưa
   static bool get hasShownRating => _box.get('hasShownRating') ?? false;
   static set hasShownRating(bool value) => _box.put('hasShownRating', value);
-  
+
   // Reset số lần nhấn nút kết nối
   static void resetConnectionAttempts() => _box.put('connectionAttempts', 0);
-  
+
   // Phương thức để reset tất cả dữ liệu liên quan đến tính năng đánh giá
   static void resetRatingData() {
     _box.put('connectionAttempts', 0);
     _box.put('hasShownRating', false);
   }
+
+  // Đánh dấu lần đầu mở app
+  static bool get isFirstLaunch => _box.get('isFirstLaunch') ?? true;
+  static set isFirstLaunch(bool value) => _box.put('isFirstLaunch', value);
 }

@@ -128,6 +128,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                           AnalyticsHelper.logSettingChange(
                               'rate_on_play_store', _rating.toString());
                           _launchPlayStore();
+                          Get.back();
                         } else {
                           // Track low rating without redirection
                           AnalyticsHelper.logSettingChange(
