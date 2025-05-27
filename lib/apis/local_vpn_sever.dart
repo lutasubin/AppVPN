@@ -23,6 +23,13 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'uk_fast.ovpn',
   ),
   LocalVpnServer(
+    countryName: 'Poland-Warsaw',
+    countryCode: 'pl',
+    ip: '70.34.254.154',
+    ping: '',
+    configFileName: 'vpn-paland.ovpn',
+  ),
+  LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
     ip: '178.128.207.219',

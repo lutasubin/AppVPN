@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/dependency_injection.dart';
+import 'package:vpn_basic_project/helpers/AppLifecycleHandler.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/app_translations.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
   await DependencyInjection.init();
 
   WidgetsFlutterBinding.ensureInitialized();
+   WidgetsBinding.instance.addObserver(AppLifecycleHandler());
 
   // Khởi tạo kích thước màn hình (mq)
   mq = WidgetsBinding.instance.window.physicalSize /

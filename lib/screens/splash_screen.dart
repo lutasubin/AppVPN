@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 6),
       vsync: this,
     );
 
@@ -36,12 +36,14 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(seconds: 7));
+    await Future.delayed(const Duration(seconds: 5));
     if (!mounted) return;
 
     try {
       AdHelper.precacheInterstitialAd();
       AdHelper.precacheNativeAd();
+      AdHelper.precacheOpenAd();
+      AdHelper.precacheBannerAd();
 
       final savedLanguage = Pref.selectedLanguage;
       if (savedLanguage.isNotEmpty) {
@@ -55,9 +57,8 @@ class _SplashScreenState extends State<SplashScreen>
       void navigate() {
         if (navigated) return;
         navigated = true;
-        final nextPage = Pref.hasSeenOnboarding
-            ?  HomeScreen()
-            :  LanguageScreen2();
+        final nextPage =
+            Pref.hasSeenOnboarding ? HomeScreen() : LanguageScreen2();
         Get.offAll(() => nextPage,
             transition: Transition.fade,
             duration: const Duration(milliseconds: 500));
@@ -74,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen>
       }
     } catch (e) {
       print('Error in navigation: $e');
-      Get.offAll(() =>  HomeScreen(),
+      Get.offAll(() => HomeScreen(),
           transition: Transition.fade,
           duration: const Duration(milliseconds: 500));
     }
