@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/apis/local_vpn.dart';
 import 'package:vpn_basic_project/apis/local_vpn_pro.dart';
-import 'package:vpn_basic_project/apis/local_vpn_sever.dart';
 import 'package:vpn_basic_project/apis/upload_downkoad.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
@@ -15,7 +15,6 @@ import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
 import 'package:vpn_basic_project/screens/disconected_screen.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
-import 'package:vpn_basic_project/widgets/HomeWidgets/cowndowncircle.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/watch_video_disconnect.dart';
 
 import '../screens/rate_screen.dart';
@@ -35,7 +34,7 @@ class LocalController extends GetxController {
 
   // Timer chờ kết nối
   Timer? _waitingTimer;
-  final RxInt _remainingSeconds = 20.obs;
+  final RxInt remainingSeconds = 20.obs;
 
   // Check ngắt kết nối thủ công
   bool _manuallyDisconnected = false;
@@ -89,67 +88,62 @@ class LocalController extends GetxController {
 
   //Connect vpn
   void connectToVpn() async {
-  // Nếu chưa chọn location VPN
-  if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
-    MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
-    return;
+    // Nếu chưa chọn location VPN
+    if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
+      MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
+      return;
+    }
+
+    // Nếu VPN đang ở trạng thái ngắt kết nối → kết nối mới
+    if (vpnState.value == VpnEngine.vpnDisconnected) {
+      final data = Base64Decoder().convert(vpn.value.OpenVPNConfigDataBase64);
+      final config = Utf8Decoder().convert(data);
+
+      final vpnConfig = VpnConfig(
+        country: vpn.value.CountryLong,
+        username: '',
+        password: '',
+        config: config,
+      );
+
+      _startWaitingTimer(); // Hiển thị UI chờ kết nối
+      await VpnEngine.startVpn(vpnConfig); // Kết nối VPN
+    } else {
+      // Nếu đang kết nối VPN → hiển thị dialog ngắt kết nối
+      showDisconnectDialogWithAd();
+    }
   }
 
-  // Nếu VPN đang ở trạng thái ngắt kết nối → kết nối mới
-  if (vpnState.value == VpnEngine.vpnDisconnected) {
-    final data = Base64Decoder().convert(vpn.value.OpenVPNConfigDataBase64);
-    final config = Utf8Decoder().convert(data);
+  /// Hiển thị dialog ngắt kết nối với quảng cáo
+  void showDisconnectDialogWithAd() async {
+    //   Get.dialog(
+    //     WatchAdDialogDisconnect(
+    //       onComplete: () async {
+    //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
+    //         Get.back(); // Đóng dialog
+    //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
+    _disconnectVpn(showWarning: false); // Ngắt VPN
+    //       AdHelper.showInterstitialAd(
+    //         onComplete: () {
+    //           // Format thời gian kết nối
+    //           String formattedTime = formatDuration(connectionDuration.value);
 
-    final vpnConfig = VpnConfig(
-      country: vpn.value.CountryLong,
-      username: '',
-      password: '',
-      config: config,
-    );
-
-    _startWaitingTimer(); // Hiển thị UI chờ kết nối
-    await VpnEngine.startVpn(vpnConfig); // Kết nối VPN
-  } else {
-    // Nếu đang kết nối VPN → hiển thị dialog ngắt kết nối
-    _showDisconnectDialogWithAd();
+    //           // Điều hướng đến màn hình ngắt kết nối
+    //           Get.to(() => DisconnectedScreen(
+    //                 country: vpn.value.CountryLong,
+    //                 ip: vpn.value.IP,
+    //                 connectionTime: formattedTime,
+    //                 uploadSpeed: getRandomUploadSpeed(),
+    //                 downloadSpeed: getRandomDownloadSpeed(),
+    //                 flagUrl:
+    //                     'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
+    //               ));
+    //         },
+    //       );
+    //     },
+    //   ),
+    // );
   }
-}
-
-
-
-/// Hiển thị dialog ngắt kết nối với quảng cáo
-void _showDisconnectDialogWithAd() {
-  Get.dialog(
-    WatchAdDialogDisconnect(
-      onComplete: () async {
-        Get.back(); // Đóng dialog
-        await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
-
-        _disconnectVpn(showWarning: false); // Ngắt VPN
-
-        AdHelper.showInterstitialAd(
-          onComplete: ()  {
-            // Format thời gian kết nối
-            String formattedTime = formatDuration(connectionDuration.value);
-
-            // Điều hướng đến màn hình ngắt kết nối
-            Get.to(() => DisconnectedScreen(
-                  country: vpn.value.CountryLong,
-                  ip: vpn.value.IP,
-                  connectionTime: formattedTime,
-                  uploadSpeed: getRandomUploadSpeed(),
-                  downloadSpeed: getRandomDownloadSpeed(),
-                  flagUrl:
-                      'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
-                ));
-          },
-        );
-      },
-    ),
-  );
-}
-
-
 
   /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
   void incrementConnectionAttempts(BuildContext context) {
@@ -213,11 +207,11 @@ void _showDisconnectDialogWithAd() {
   void _startWaitingTimer() {
     _cancelWaitingTimer();
     _manuallyDisconnected = false;
-    _remainingSeconds.value = 20;
+    remainingSeconds.value = 20;
 
     _waitingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_remainingSeconds.value > 0) {
-        _remainingSeconds.value--;
+      if (remainingSeconds.value > 0) {
+        remainingSeconds.value--;
         update();
       } else {
         if (vpnState.value != VpnEngine.vpnConnected &&
@@ -270,69 +264,12 @@ void _showDisconnectDialogWithAd() {
 
   /// Đổi VPN server từ LocalVpnServer
   Future<void> setVpnFromLocalServer(LocalVpnServer server) async {
-    if (vpnState.value == VpnEngine.vpnConnected) {
-      VpnEngine.stopVpn();
-    }
     final newVpn = await server.toVpn();
     vpn.value = newVpn;
     Pref.vpn = newVpn;
     _cancelWaitingTimer();
-
     // Log server selection event
     AnalyticsHelper.logServerSelection(server.countryName, server.countryCode);
-
-    update();
-  }
-
-  /// Màu nút kết nối
-  Color get getButtonColor {
-    return vpnState.value == VpnEngine.vpnConnected ||
-            vpnState.value == VpnEngine.vpnConnecting ||
-            vpnState.value == VpnEngine.vpnWaitConnection ||
-            vpnState.value == VpnEngine.vpnAuthenticating
-        ? Color(0xFFF15E24)
-        : Color(0xFF343A4B);
-  }
-
-  /// Nội dung nút kết nối
-  Widget get getButtonContent {
-    switch (vpnState.value) {
-      case VpnEngine.vpnDisconnected:
-        return Text(
-          'TAP TO CONNECT'.tr,
-          style: TextStyle(color: Color(0xFF03C343), fontSize: 12.0),
-        );
-      case VpnEngine.vpnConnected:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.privacy_tip, color: Color(0xFF03C343), size: 12),
-            SizedBox(width: 5),
-            Text(
-              'CONNECTED'.tr,
-              style: TextStyle(color: Color(0xFF03C343), fontSize: 12.0),
-            ),
-          ],
-        );
-      default:
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Connecting....'.tr,
-              style: TextStyle(color: Color(0xFF03C343), fontSize: 12.0),
-            ),
-            SizedBox(width: 5),
-            Obx(() => CountdownCircle(
-                  remainingSeconds: _remainingSeconds.value,
-                  totalSeconds: 20,
-                  size: 30,
-                  progressColor: Color(0xFF03C343),
-                  backgroundColor: Color(0xFF767C8A),
-                )),
-          ],
-        );
-    }
   }
 
   // Helper method to format duration as HH:MM:SS
@@ -342,5 +279,81 @@ void _showDisconnectDialogWithAd() {
     final minutes = twoDigit(duration.inMinutes.remainder(60));
     final seconds = twoDigit(duration.inSeconds.remainder(60));
     return '$hours:$minutes:$seconds';
+  }
+
+  /// Nội dung nút kết nối - Updated for new design
+  Widget get getButtonContent {
+    switch (vpnState.value) {
+      case VpnEngine.vpnDisconnected:
+      case VpnEngine.vpnPrepare:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Connect'.tr,
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        );
+      case VpnEngine.vpnConnected:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 12),
+            Text(
+              'Connected'.tr,
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        );
+      default:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Connecting....'.tr,
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        );
+    }
+  }
+
+  /// Get button gradient based on VPN state
+  LinearGradient getButtonGradient() {
+    switch (vpnState.value) {
+      case VpnEngine.vpnConnected:
+        return LinearGradient(
+          colors: [Color(0xFF4CAF50), Color(0xFF1976D2)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        );
+      case VpnEngine.vpnConnecting:
+      case VpnEngine.vpnWaitConnection:
+      case VpnEngine.vpnAuthenticating:
+        return LinearGradient(
+          colors: [Color(0xFF2196F3), Color(0xFF1976D2)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        );
+      default:
+        return LinearGradient(
+          colors: [Color(0xFF4CAF50), Color(0xFF1976D2)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        );
+    }
   }
 }

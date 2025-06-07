@@ -58,8 +58,8 @@ android {
         applicationId = "com.Lutasubin.freeVpn"
         minSdk = 21
         targetSdk = flutter.targetSdkVersion
-        versionCode 11
-        versionName "2.0.1"
+        versionCode 12
+        versionName "2.0.2"
         
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'

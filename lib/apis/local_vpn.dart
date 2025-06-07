@@ -2,14 +2,21 @@ import 'package:vpn_basic_project/models/local_vpn.dart';
 
 final List<LocalVpnServer> highVpn = [
   LocalVpnServer(
-    countryName: 'United States',
+    countryName: 'Poland-Warsaw',
+    countryCode: 'pl',
+    ip: '70.34.254.154',
+    ping: '',
+    configFileName: 'vpn-paland.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'United States - Taxas',
     countryCode: 'us',
     ip: '66.55.74.53',
     ping: '',
     configFileName: 'vpn-miami.ovpn',
   ),
   LocalVpnServer(
-    countryName: 'United States',
+    countryName: 'United States - Miami',
     countryCode: 'us',
     ip: '108.181.199.29',
     ping: '',
@@ -23,13 +30,6 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'uk_fast.ovpn',
   ),
   LocalVpnServer(
-    countryName: 'Poland-Warsaw',
-    countryCode: 'pl',
-    ip: '70.34.254.154',
-    ping: '',
-    configFileName: 'vpn-paland.ovpn',
-  ),
-  LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
     ip: '178.128.207.219',
@@ -37,7 +37,7 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'de_fast.ovpn',
   ),
   LocalVpnServer(
-    countryName: 'French',
+    countryName: 'French - Paris',
     countryCode: 'fr',
     ip: '62.171.171.217',
     ping: '',
@@ -79,7 +79,7 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'ca_fast.ovpn',
   ),
   LocalVpnServer(
-    countryName: 'Canada',
+    countryName: 'Canada - Torano',
     countryCode: 'ca',
     ip: '103.98.215.244',
     ping: '',

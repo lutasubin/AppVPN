@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
-// import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
-import 'package:vpn_basic_project/widgets/LocationWidgets/watcch_video.dart';
+import 'package:vpn_basic_project/widgets/LocationWidgets/SignalStrengthIcon.dart';
 
 class VpnCardLocal extends StatelessWidget {
   final LocalVpnServer server;
@@ -15,62 +14,61 @@ class VpnCardLocal extends StatelessWidget {
     final controller = Get.find<LocalController>();
 
     return Obx(() => Container(
+          margin: EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Color(0xFF2F3A51),
-                width: 0.5,
-              ),
+            color:
+                const Color(0xFF172032), // Background màu tối giống trong hình
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Color(0xFF2F3A51),
+              width: 1,
             ),
           ),
           child: ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            onTap: () {
-              WatchAdDialog.show(context, server, () async {
-                  await controller.setVpnFromLocalServer(server);
-                  Get.back();
-                  if (controller.vpnState.value == VpnEngine.vpnConnected) {
-                    VpnEngine.stopVpn();
-                    Future.delayed(Duration(seconds: 2), () {
-                      controller.connectToVpn();
-                    });
-                  } else {
-                      controller.connectToVpn();
-                  }
-              });
+            onTap: () async {
+              await Future.delayed(Duration(milliseconds: 300));
+              await controller.setVpnFromLocalServer(server);
+              Get.back();
+              if (controller.vpnState.value == VpnEngine.vpnConnected) {
+                VpnEngine.stopVpn();
+                Future.delayed(Duration(seconds: 2), () {
+                  controller.connectToVpn();
+                });
+              } else {
+                controller.connectToVpn();
+              }
             },
 
-            // Add country flag as leading widget
-
+            // Thêm cờ quốc gia làm leading widget
+            leading: CircleAvatar(
+              radius: 18,
+              backgroundColor: Colors.transparent,
+              backgroundImage: AssetImage(
+                'assets/flags/${server.countryCode.toLowerCase()}.png',
+              ),
+            ),
             title: Row(
               children: [
-                Text(
-                  server.countryName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: const Color(0xFFFFFFFF),
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      server.countryName,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: const Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
-               
               ],
-            ),
-            subtitle: Text(
-              server.ip,
-              style: TextStyle(
-                fontSize: 13,
-                color: Color(0xFF767C8A),
-              ),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Icon(
-                //   Icons.workspace_premium,
-                //   color: Color(0xFFF15E24),
-                //   size: 16,
-                // ),
-                // SizedBox(width: 12),
+                SignalStrengthIcon(level: 3),
+                SizedBox(width: 12),
                 Container(
                   width: 22,
                   height: 22,

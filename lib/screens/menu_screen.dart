@@ -7,57 +7,52 @@ import 'package:vpn_basic_project/controllers/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
+import 'package:vpn_basic_project/helpers/setting_languae.dart';
 import 'package:vpn_basic_project/screens/Privacy_policy.dart';
 import 'package:vpn_basic_project/screens/language_screen.dart';
 import 'rate_screen.dart';
 
-class MenuScreen extends StatelessWidget {
-  final _baController = BannerAdController();
-
+class MenuScreen extends StatefulWidget {
   MenuScreen({super.key});
 
-  // Bản đồ ánh xạ mã ngôn ngữ sang tên đầy đủ
-  final Map<String, String> languageMap = {
-    'default': 'Default',
-    'en': 'English',
-    'hi': 'Hindi',
-    'ko': 'Korean',
-    'pt': 'Portuguese (Brazil)',
-    'vi': 'Vietnamese',
-    'ja': 'Japanese',
-    'zh': 'Chinese',
-    'fr': 'French',
-    'es': 'Spanish',
-    'de': 'German',
-    'ru': 'Russian',
-    'ar': 'Arabic',
-    'tr': 'Turkish',
-    'da': 'Danish',
-    'th': 'Thailand',
-    'id': 'Indonesian',
-    'ss': 'Arabic'
-  };
+  @override
+  State<MenuScreen> createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  final _baController = BannerAdController();
+
+ 
+
+  
+
+  @override
+  void initState() {
+    super.initState();
+    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
+   
+  }
+
+ 
 
   @override
   Widget build(BuildContext context) {
-    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
-    // Lấy ngôn ngữ hiện tại từ Pref hoặc Get.locale
     final currentLanguageCode = Pref.selectedLanguage.isNotEmpty
         ? Pref.selectedLanguage
         : Get.locale?.languageCode ?? 'default';
     final currentLanguage = languageMap[currentLanguageCode] ?? 'Default';
 
     return Scaffold(
-      backgroundColor: const Color(0xFF02091A), // Mã màu mới
+      backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF02091A), // Mã màu mới
+        backgroundColor: const Color(0xFF02091A),
         leading: IconButton(
           onPressed: () {
             AdHelper.showInterstitialAd(onComplete: () => Get.back());
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
-            color: const Color(0xFFFFFFFF),
+            color: Color(0xFFFFFFFF),
             size: 25,
           ),
         ),
@@ -77,7 +72,7 @@ class MenuScreen extends StatelessWidget {
                 height: 120,
                 child: AdWidget(ad: _baController.ba!),
               ))
-            : SizedBox.shrink();
+            : const SizedBox.shrink();
       }),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
@@ -88,9 +83,10 @@ class MenuScreen extends StatelessWidget {
               height: 173,
               width: double.infinity,
             ),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
+
+            
+            // Các mục menu cũ
             _buildMenuItem(
               context: context,
               icon: Icons.language,
@@ -98,7 +94,6 @@ class MenuScreen extends StatelessWidget {
               title: 'Language'.tr,
               trailingText: currentLanguage,
               onTap: () {
-                // Track language setting access
                 AnalyticsHelper.logSettingChange(
                     'open_language_settings', 'clicked');
                 Get.to(() => LanguageScreen());
@@ -111,7 +106,6 @@ class MenuScreen extends StatelessWidget {
               iconColor: Colors.yellow,
               title: 'Rate us'.tr,
               onTap: () {
-                // Track rating dialog open
                 AnalyticsHelper.logSettingChange('open_rating', 'clicked');
                 showRatingBottomSheet(context);
               },
@@ -123,17 +117,10 @@ class MenuScreen extends StatelessWidget {
               iconColor: Colors.blueAccent,
               title: 'Share with friend'.tr,
               onTap: () async {
-                // Track app sharing
                 AnalyticsHelper.logSettingChange('share_app', 'clicked');
-
-                /// Share APP with other users
-
-                /// Set the app link and the message to be shared
                 final String appLink =
                     'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn';
                 final String message = 'Check out Our app: $appLink';
-
-                /// Share the app link and message using the share dialog
                 await Share.share(
                   message,
                   subject: 'Share App',
@@ -144,10 +131,9 @@ class MenuScreen extends StatelessWidget {
             _buildMenuItem(
                 context: context,
                 icon: Icons.privacy_tip,
-                iconColor: Color(0xFF03C343),
+                iconColor: const Color(0xFF03C343),
                 title: 'Privacy Policy'.tr,
                 onTap: () {
-                  // Track privacy policy access
                   AnalyticsHelper.logSettingChange(
                       'open_privacy_policy', 'clicked');
                   Get.to(() => PrivacyPolicy());

@@ -54,22 +54,6 @@ class NetworkTestScreen extends StatelessWidget {
               ))
             : SizedBox.shrink();
       }),
-      //refresh button
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10, right: 10),
-        child: FloatingActionButton(
-            backgroundColor: Color(0xFFF15E24),
-            onPressed: () {
-              ipData.value = IPDetails.fromJson({});
-              Apis.getIPDetails(ipData: ipData);
-            },
-            child: Icon(
-              CupertinoIcons.refresh,
-              color: const Color(0xFFFFFFFF),
-              size: 30,
-            )),
-      ),
-
       body: Obx(
         () => ListView(
             physics: BouncingScrollPhysics(),

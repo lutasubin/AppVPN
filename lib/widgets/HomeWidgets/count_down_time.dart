@@ -7,8 +7,8 @@ class CountDownTimer extends StatefulWidget {
   final Function(Duration duration)? onDurationChanged;
 
   const CountDownTimer({
-    super.key, 
-    required this.startTimer, 
+    super.key,
+    required this.startTimer,
     this.onDurationChanged,
   });
 
@@ -83,7 +83,7 @@ class _CountDownTimerState extends State<CountDownTimer> {
     return Text(
       '$hours:$minutes:$seconds',
       style: const TextStyle(
-          fontSize: 40,
+          fontSize: 50,
           color: const Color(0xFFFFFFFF),
           fontWeight: FontWeight.bold),
     );

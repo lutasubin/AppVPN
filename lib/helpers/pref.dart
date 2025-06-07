@@ -77,4 +77,11 @@ class Pref {
   // Đánh dấu lần đầu mở app
   static bool get isFirstLaunch => _box.get('isFirstLaunch') ?? true;
   static set isFirstLaunch(bool value) => _box.put('isFirstLaunch', value);
+
+  
+  // isVpnReminderEnabled lưu trữ trong Hive
+  static bool get isVpnReminderEnabled => _box.get('vpnReminderEnabled') ?? false;
+  static set isVpnReminderEnabled(bool value) => _box.put('vpnReminderEnabled', value);
+
+  
 }

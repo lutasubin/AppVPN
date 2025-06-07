@@ -15,8 +15,8 @@ import 'package:vpn_basic_project/models/vpn_status.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/VpnControlButon.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/change_location.dart';
-import 'package:vpn_basic_project/widgets/HomeWidgets/count_down_time.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/home_card.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/home_card2.dart';
 import '../services/vpn_engine.dart';
@@ -41,8 +41,6 @@ class HomeScreen extends StatelessWidget {
 
   // Biến để theo dõi trạng thái hiển thị quảng cáo cho kết nối hiện tại
   final _adShownForCurrentConnection = false.obs;
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -88,245 +86,159 @@ class HomeScreen extends StatelessWidget {
     });
 
     return SafeArea(
-      child: Scaffold(
-          body: LayoutBuilder(
-            builder: (context, constraints) {
-              return Stack(
-                children: [
-                  // Hình nền SVG
-                  SvgPicture.asset(
-                    'assets/svg/Group 17.svg',
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      Color(0xFF02091A), // Mã màu nền
-                      BlendMode.dstATop,
+        child: Scaffold(
+            body: LayoutBuilder(
+              builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    // Hình nền SVG
+                    SvgPicture.asset(
+                      'assets/svg/Group 17.svg',
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight,
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Color(0xFF02091A), // Mã màu nền
+                        BlendMode.dstATop,
+                      ),
                     ),
-                  ),
-                  // Nội dung giao diện
-                  Column(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Center(
-                            child: Obx(() => _vpnButton(context, constraints))),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: StreamBuilder<VpnStatus?>(
-                          initialData: VpnStatus(byteIn: '---', byteOut: '---'),
-                          stream: VpnEngine.vpnStatusSnapshot(),
-                          builder: (context, snapshot) {
-                            print(
-                                'Snapshot data: ${snapshot.data?.byteIn}, ${snapshot.data?.byteOut}');
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Flexible(
-                                  child: HomeCard2(
-                                    title: snapshot.data?.byteOut ?? '---',
-                                    icon: CircleAvatar(
-                                      backgroundColor: const Color(0xFF4684F6),
-                                      radius: constraints.maxWidth * 0.08 > 25.0
-                                          ? 25.0
-                                          : constraints.maxWidth * 0.08,
-                                      child: Icon(
-                                        Icons.arrow_upward_rounded,
-                                        size: constraints.maxWidth * 0.06 > 18.0
-                                            ? 18.0
-                                            : constraints.maxWidth * 0.06,
-                                        color: Color(0xFFFFFFFF),
-                                      ),
-                                    ),
-                                    subtitle: 'Uploads'.tr,
-                                  ),
-                                ),
-                                Flexible(
-                                  child: HomeCard(
-                                    title: snapshot.data?.byteIn ?? '---',
-                                    icon: CircleAvatar(
-                                      backgroundColor: const Color(0xFF03C343),
-                                      radius: constraints.maxWidth * 0.08 > 25.0
-                                          ? 25.0
-                                          : constraints.maxWidth * 0.08,
-                                      child: Icon(
-                                        Icons.arrow_downward_rounded,
-                                        size: constraints.maxWidth * 0.06 > 18.0
-                                            ? 18.0
-                                            : constraints.maxWidth * 0.06,
-                                        color: Color(0xFFFFFFFF),
-                                      ),
-                                    ),
-                                    subtitle: 'Download'.tr,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                    // Nội dung giao diện
+                    Column(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Center(
+                            child: _changeLocation(context),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-          appBar: AppBar(
-            backgroundColor: const Color(0xFF02091A),
-            leading: IconButton(
-              onPressed: () async {
-                if (!await _networkController.checkConnection()) {
-                  MyDialogs2.error(msg: 'error_connect_server'.tr);
-                  return;
-                }
-                Get.to(() => MenuScreen());
+                        Expanded(
+                          flex: 3,
+                          child: Center(
+                            child: VpnControlButton(
+                              networkController: _networkController,
+                              controller: _controller,
+                              constraints: constraints,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: StreamBuilder<VpnStatus?>(
+                            initialData:
+                                VpnStatus(byteIn: '---', byteOut: '---'),
+                            stream: VpnEngine.vpnStatusSnapshot(),
+                            builder: (context, snapshot) {
+                              print(
+                                  'Snapshot data: ${snapshot.data?.byteIn}, ${snapshot.data?.byteOut}');
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                    child: HomeCard2(
+                                      title: snapshot.data?.byteOut ?? '---',
+                                      icon: CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xFF4684F6),
+                                        radius:
+                                            constraints.maxWidth * 0.08 > 25.0
+                                                ? 25.0
+                                                : constraints.maxWidth * 0.08,
+                                        child: Icon(
+                                          Icons.arrow_upward_rounded,
+                                          size:
+                                              constraints.maxWidth * 0.06 > 18.0
+                                                  ? 18.0
+                                                  : constraints.maxWidth * 0.06,
+                                          color: Color(0xFFFFFFFF),
+                                        ),
+                                      ),
+                                      subtitle: 'Uploads'.tr,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: HomeCard(
+                                      title: snapshot.data?.byteIn ?? '---',
+                                      icon: CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xFF03C343),
+                                        radius:
+                                            constraints.maxWidth * 0.08 > 25.0
+                                                ? 25.0
+                                                : constraints.maxWidth * 0.08,
+                                        child: Icon(
+                                          Icons.arrow_downward_rounded,
+                                          size:
+                                              constraints.maxWidth * 0.06 > 18.0
+                                                  ? 18.0
+                                                  : constraints.maxWidth * 0.06,
+                                          color: Color(0xFFFFFFFF),
+                                        ),
+                                      ),
+                                      subtitle: 'Download'.tr,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
               },
-              icon: Icon(
-                Icons.menu,
-                size: 25.0,
-                color: const Color(0xFFFFFFFF),
-              ),
             ),
-            title: SvgPicture.asset(
-              'assets/svg/logo.svg',
-              width: 158.0,
-              height: 35.0,
-            ),
-            actions: [
-              IconButton(
-                padding: EdgeInsets.only(right: 8.0),
+            appBar: AppBar(
+              backgroundColor: const Color(0xFF02091A),
+              leading: IconButton(
                 onPressed: () async {
                   if (!await _networkController.checkConnection()) {
                     MyDialogs2.error(msg: 'error_connect_server'.tr);
                     return;
                   }
-                  Get.to(() => NetworkTestScreen());
+                  Get.to(() => MenuScreen());
                 },
                 icon: Icon(
-                  CupertinoIcons.info,
+                  Icons.menu,
                   size: 25.0,
                   color: const Color(0xFFFFFFFF),
                 ),
               ),
-            ],
-          ),
-          bottomNavigationBar: Container(
-            color: const Color(0xFF02091A),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _changeLocation(context),
-                SizedBox(
-                  height: 5,
-                ),
-                Obx(() {
-                  if (_adController.ad != null &&
-                      _adController.adLoaded.isTrue) {
-                    return SafeArea(
-                      child: SizedBox(
-                          height: 120, child: AdWidget(ad: _adController.ad!)),
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                })
-              ],
-            ),
-          )),
-    );
-  }
-
-  /// Tạo nút điều khiển VPN với trạng thái động.
-  /// [context] và [constraints] dùng để điều chỉnh kích thước responsive.
-  Widget _vpnButton(BuildContext context, BoxConstraints constraints) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(() {
-            print('VPN State: ${_controller.vpnState.value}');
-            final isRunning =
-                _controller.vpnState.value == VpnEngine.vpnConnected;
-            return Column(
-              children: [
-                if (_controller.vpnState.value == VpnEngine.vpnDisconnected)
-                  Text(
-                    'Disconnected'.tr,
-                    style: TextStyle(
-                      fontSize: constraints.maxWidth * 0.08 > 40.0
-                          ? 40.0
-                          : constraints.maxWidth * 0.08,
-                      color: const Color(0xFFFFFFFF),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                if (isRunning)
-                  CountDownTimer(
-                    startTimer: true,
-                    onDurationChanged: (duration) {
-                      _controller.connectionDuration.value = duration;
-                    },
-                  ),
-              ],
-            );
-          }),
-          SizedBox(height: 8),
-          _controller.getButtonContent,
-          SizedBox(height: 80),
-          Center(
-            child: GestureDetector(
-              onTap: () async {
-                if (!await _networkController.checkConnection()) {
-                  MyDialogs2.error(msg: 'error_connect_server'.tr);
-                  return;
-                }
-                _controller.incrementConnectionAttempts(context);
-                _controller.connectToVpn();
-              },
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                width: constraints.maxWidth * 0.4 > 150.0
-                    ? 150.0
-                    : constraints.maxWidth * 0.4,
-                height: (constraints.maxWidth * 0.4 > 150.0
-                        ? 150.0
-                        : constraints.maxWidth * 0.4) *
-                    0.54,
-                decoration: BoxDecoration(
-                  color: _controller.getButtonColor,
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                child: Align(
-                  alignment:
-                      _controller.vpnState.value == VpnEngine.vpnConnected ||
-                              _controller.vpnState.value ==
-                                  VpnEngine.vpnConnecting ||
-                              _controller.vpnState.value ==
-                                  VpnEngine.vpnWaitConnection ||
-                              _controller.vpnState.value ==
-                                  VpnEngine.vpnAuthenticating
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                  child: Container(
-                    margin: EdgeInsets.all(6.0),
-                    width: (constraints.maxWidth * 0.4 > 150.0
-                            ? 150.0
-                            : constraints.maxWidth * 0.4) *
-                        0.46,
-                    height: (constraints.maxWidth * 0.4 > 150.0
-                            ? 150.0
-                            : constraints.maxWidth * 0.4) *
-                        0.46,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFFFFF),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
+              title: SvgPicture.asset(
+                'assets/svg/logo.svg',
+                width: 158.0,
+                height: 35.0,
               ),
+              actions: [
+                IconButton(
+                  padding: EdgeInsets.only(right: 8.0),
+                  onPressed: () async {
+                    if (!await _networkController.checkConnection()) {
+                      MyDialogs2.error(msg: 'error_connect_server'.tr);
+                      return;
+                    }
+                    Get.to(() => NetworkTestScreen());
+                  },
+                  icon: Icon(
+                    CupertinoIcons.info,
+                    size: 25.0,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      );
+            bottomNavigationBar: Obx(() {
+              if (_adController.ad != null && _adController.adLoaded.isTrue) {
+                return SafeArea(
+                  child: SizedBox(
+                      height: 120, child: AdWidget(ad: _adController.ad!)),
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            })));
+  }
 
   /// Tạo thanh chọn vị trí VPN với thông tin quốc gia và IP.
   /// [context] dùng để điều hướng khi nhấn vào.
@@ -342,9 +254,12 @@ class HomeScreen extends StatelessWidget {
               Get.to(() => LocationScreen());
             },
             child: Obx(() => Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  color: Color(0xFF172032),
+                  padding: EdgeInsets.symmetric(horizontal: 32.0),
                   height: 60,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF172032), // Move color here
+                    borderRadius: BorderRadius.circular(32.0), // Bo góc
+                  ),
                   child: Row(
                     children: [
                       Expanded(
@@ -359,7 +274,7 @@ class HomeScreen extends StatelessWidget {
                                 ? Icon(
                                     CupertinoIcons.globe,
                                     size: 25.0,
-                                    color: const Color(0xFFFFFFFF),
+                                    color: Color(0xFFFFFFFF),
                                   )
                                 : null,
                             backgroundImage: _controller
@@ -378,7 +293,7 @@ class HomeScreen extends StatelessWidget {
                         radius: 16.0,
                         child: Icon(
                           Icons.keyboard_arrow_right_rounded,
-                          color: const Color(0xFFFFFFFF),
+                          color: Color(0xFFFFFFFF),
                           size: 25.0,
                         ),
                       ),

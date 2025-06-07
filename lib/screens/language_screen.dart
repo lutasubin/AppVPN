@@ -5,7 +5,7 @@ import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
-// import 'package:vpn_basic_project/screens/watch_ad_dialog.dart';
+import 'package:vpn_basic_project/helpers/setting_languae.dart';
 
 class LanguageScreen extends StatelessWidget {
   final _adController1 = NativeAdController();
@@ -17,100 +17,11 @@ class LanguageScreen extends StatelessWidget {
     _adController1.ad = AdHelper.loadNativeAd1(adController: _adController1);
     final RxString selectedLanguage = Pref.selectedLanguage.obs;
 
-    final List<Map<String, dynamic>> languages = [
-      {
-        'code': 'default',
-        'name': 'Default',
-        'flag': 'assets/flags/default.png',
-      },
-      {
-        'code': 'en',
-        'name': 'English',
-        'flag': 'assets/flags/gb.png',
-      },
-      {
-        'code': 'hi',
-        'name': 'Hindi',
-        'flag': 'assets/flags/in.png',
-      },
-      {
-        'code': 'ko',
-        'name': 'Korean',
-        'flag': 'assets/flags/kr.png',
-      },
-      {
-        'code': 'pt',
-        'name': 'Portuguese (Brazil)',
-        'flag': 'assets/flags/br.png',
-      },
-      {
-        'code': 'vi',
-        'name': 'Vietnamese',
-        'flag': 'assets/flags/vn.png',
-      },
-      {
-        'code': 'ja',
-        'name': 'Japanese',
-        'flag': 'assets/flags/jp.png',
-      },
-      {
-        'code': 'zh',
-        'name': 'Chinese',
-        'flag': 'assets/flags/cn.png',
-      },
-      {
-        'code': 'fr',
-        'name': 'French',
-        'flag': 'assets/flags/fr.png',
-      },
-      {
-        'code': 'es',
-        'name': 'Spanish',
-        'flag': 'assets/flags/es.png',
-      },
-      {
-        'code': 'de',
-        'name': 'German',
-        'flag': 'assets/flags/de.png',
-      },
-      {
-        'code': 'ru',
-        'name': 'Russian',
-        'flag': 'assets/flags/ru.png',
-      },
-      {
-        'code': 'da',
-        'name': 'Danish',
-        'flag': 'assets/flags/dk.png', // Cờ Đan Mạch
-      },
-      {
-        'code': 'th',
-        'name': 'Thailand',
-        'flag': 'assets/flags/th.png', // Cờ Thái Lan
-      },
-      {
-        'code': 'id',
-        'name': 'Indonesian',
-        'flag': 'assets/flags/id.png', // Cờ Indonesia
-      },
-      {
-        'code': 'tr',
-        'name': 'Turkish',
-        'flag': 'assets/flags/tr.png', // Cờ Thổ Nhĩ Kỳ
-      },
-      {
-        'code': 'ss',
-        'name': 'Arabic',
-        'flag':
-            'assets/flags/ae.png', // Cờ UAE cho tiếng Ả Rập (có thể thay đổi nếu cần)
-      },
-    ];
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false, // Tắt nút thoát mặc định
-          backgroundColor: const Color(0xFF02091A), // Mã màu mới
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(0xFF02091A),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -139,7 +50,6 @@ class LanguageScreen extends StatelessWidget {
         ),
         backgroundColor: const Color(0xFF02091A),
         bottomNavigationBar: Obx(() {
-          //! boc lai obx
           return _adController1.ad != null && _adController1.adLoaded.isTrue
               ? SafeArea(
                   child: SizedBox(
@@ -147,7 +57,7 @@ class LanguageScreen extends StatelessWidget {
                     child: AdWidget(ad: _adController1.ad!),
                   ),
                 )
-              : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+              : const SizedBox.shrink();
         }),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
@@ -155,12 +65,12 @@ class LanguageScreen extends StatelessWidget {
             itemCount: languages.length,
             itemBuilder: (context, index) {
               final language = languages[index];
-      
+
               return Obx(() {
-                //! obx boc o day
                 final isSelected = selectedLanguage.value == language['code'] ||
                     (language['code'] == 'default' &&
                         selectedLanguage.value.isEmpty);
+
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 4.0),
                   decoration: BoxDecoration(
@@ -168,52 +78,73 @@ class LanguageScreen extends StatelessWidget {
                       color: isSelected
                           ? const Color(0xFFF15E24)
                           : const Color(0xFF172032),
-                      width: 2.0, // Tăng độ rộng viền để nổi bật hơn
+                      width: 2.0,
                     ),
                     color: const Color(0xFF172032),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: RadioListTile<String>(
-                    value: language['code'],
-                    groupValue: selectedLanguage.value.isEmpty
-                        ? 'default'
-                        : selectedLanguage.value,
-                    activeColor: const Color(
-                        0xFFF15E24), // Thay đổi radio button thành màu vàng
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    onTap: () {
+                      selectedLanguage.value = language['code'];
+                      Pref.selectedLanguage = language['code'];
+
+                      // Track language change event
+                      AnalyticsHelper.logSettingChange('language_change',
+                          language['code'] == 'default' ? 'default' : language['code']);
+
+                      if (language['code'] == 'default') {
+                        Get.updateLocale(
+                            Get.deviceLocale ?? const Locale('en'));
+                      } else {
+                        Get.updateLocale(Locale(language['code']));
+                      }
+                    },
+                    leading: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: AssetImage(language['flag']),
+                    ),
                     title: Row(
                       children: [
-                        CircleAvatar(
-                          radius: 16,
-                          backgroundImage: AssetImage(language['flag']),
-                        ),
-                        const SizedBox(width: 20),
                         Text(
                           language['name'],
-                          style: const TextStyle(
-                            color: Color(0xFFFFFFFF),
+                          style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
-                    onChanged: (value) {
-                      if (value != null) {
-                        selectedLanguage.value = value;
-                        Pref.selectedLanguage = value;
-      
-                        // Track language change event
-                        AnalyticsHelper.logSettingChange('language_change',
-                            value == 'default' ? 'default' : value);
-      
-                        if (value == 'default') {
-                          Get.updateLocale(
-                              Get.deviceLocale ?? const Locale('en'));
-                        } else {
-                          Get.updateLocale(Locale(value));
-                        }
-                      }
-                    },
+                    trailing: Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isSelected
+                              ? const Color(0xFFF15E24)
+                              : Color(0xFFFFFFFF),
+                          width: 2,
+                        ),
+                        color: isSelected
+                            ? const Color(0xFFF15E24)
+                            : Colors.transparent,
+                      ),
+                      child: isSelected
+                          ? Center(
+                              child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
                   ),
                 );
               });
