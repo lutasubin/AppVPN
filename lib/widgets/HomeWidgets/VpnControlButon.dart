@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
-import 'package:vpn_basic_project/controllers/network_controller.dart';
-import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/count_down_time.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/disconnect_button.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/rotaltingcircle.dart';
 
 class VpnControlButton extends StatefulWidget {
-  final NetworkController networkController;
   final LocalController controller;
   final BoxConstraints constraints;
 
   const VpnControlButton({
     Key? key,
-    required this.networkController,
     required this.controller,
     required this.constraints,
   }) : super(key: key);
@@ -24,8 +21,12 @@ class VpnControlButton extends StatefulWidget {
 }
 
 class _VpnControlButtonState extends State<VpnControlButton> {
+  // Biến trạng thái để bật/tắt hiệu ứng phát sáng
+  bool _isGlowing = false;
+
   @override
   Widget build(BuildContext context) {
+    // Tính kích thước nút, tối đa 220
     final buttonSize = widget.constraints.maxWidth * 0.5 > 220.0
         ? 220.0
         : widget.constraints.maxWidth * 0.5;
@@ -37,21 +38,33 @@ class _VpnControlButtonState extends State<VpnControlButton> {
         Obx(() {
           final vpnState = widget.controller.vpnState.value;
 
+          // Nếu đã kết nối VPN, nút kết nối ẩn đi
           if (vpnState == VpnEngine.vpnConnected) {
             return const SizedBox.shrink();
           }
 
+          // Kiểm tra trạng thái đang kết nối để hiện hiệu ứng loading
           final isConnecting = vpnState == VpnEngine.vpnConnecting ||
               vpnState == VpnEngine.vpnWaitConnection ||
               vpnState == VpnEngine.vpnAuthenticating;
 
           return Center(
             child: GestureDetector(
-              onTap: () async {
-                if (!await widget.networkController.checkConnection()) {
-                  MyDialogs2.error(msg: 'error_connect_server'.tr);
-                  return;
-                }
+              onTap: () {
+                // Bật hiệu ứng phát sáng
+                setState(() {
+                  _isGlowing = true;
+                });
+                // Tắt hiệu ứng sau 400ms
+                Future.delayed(const Duration(milliseconds: 400), () {
+                  if (mounted) {
+                    setState(() {
+                      _isGlowing = false;
+                    });
+                  }
+                });
+
+                // Gọi các hàm kết nối VPN từ controller
                 widget.controller.incrementConnectionAttempts(context);
                 widget.controller.connectToVpn();
               },
@@ -62,22 +75,38 @@ class _VpnControlButtonState extends State<VpnControlButton> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
+                    // Hiển thị vòng xoay nếu đang kết nối
                     isConnecting
                         ? RotatingGradientCircle(
                             size: buttonSize,
                             colors: const [
                               Color(0xFF4CAF50),
-                              Color(0xFF1976D2)
+                              Color(0xFF1976D2),
+                              Color(0xFF02091A),
                             ],
                           )
-                        : Container(
+                        // Nếu không kết nối, hiện nút với hiệu ứng phát sáng
+                        : AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
                             width: buttonSize,
                             height: buttonSize,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: widget.controller.getButtonGradient(),
+                              // Hiệu ứng bóng phát sáng màu cyan
+                              boxShadow: _isGlowing
+                                  ? [
+                                      BoxShadow(
+                                        color:
+                                            Colors.cyanAccent.withOpacity(0.6),
+                                        blurRadius: 20,
+                                        spreadRadius: 8,
+                                      ),
+                                    ]
+                                  : [],
                             ),
                           ),
+                    // Vòng tròn màu tối bên trong nút chứa icon/text
                     Container(
                       margin: const EdgeInsets.all(12),
                       decoration: const BoxDecoration(
@@ -95,7 +124,7 @@ class _VpnControlButtonState extends State<VpnControlButton> {
           );
         }),
 
-        /// Bộ đếm thời gian khi đã kết nối
+        /// Bộ đếm thời gian khi đã kết nối VPN
         Obx(() {
           if (widget.controller.vpnState.value == VpnEngine.vpnConnected) {
             return CountDownTimer(
@@ -109,34 +138,13 @@ class _VpnControlButtonState extends State<VpnControlButton> {
         }),
         const SizedBox(height: 5),
 
-        /// Nút Disconnect khi đã kết nối
+        /// Nút Disconnect khi đã kết nối VPN
         Obx(() {
           if (widget.controller.vpnState.value == VpnEngine.vpnConnected) {
-            return Container(
-              width: 140,
-              height: 44,
-              margin: const EdgeInsets.only(top: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(color: const Color(0xFFF15E24), width: 1.5),
-                color: Colors.transparent,
-              ),
-              child: MaterialButton(
-                onPressed: () {
-                  widget.controller.showDisconnectDialogWithAd();
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(22),
-                ),
-                child: Text(
-                  'disconnect'.tr,
-                  style: TextStyle(
-                    color: const Color(0xFFF15E24),
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+            return DisconnectButton(
+              onPressed: () {
+                widget.controller.disconnectVpn();
+              },
             );
           }
           return const SizedBox.shrink();

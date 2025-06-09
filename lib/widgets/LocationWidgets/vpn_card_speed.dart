@@ -4,14 +4,13 @@ import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/widgets/LocationWidgets/SignalStrengthIcon.dart';
 
-class VpnCardLocal extends StatelessWidget {
+class VpnCardLocalSpeed extends StatelessWidget {
   final LocalVpnServer server;
-   VpnCardLocal({super.key, required this.server});
-    final controller = Get.find<LocalController>();
+  VpnCardLocalSpeed({super.key, required this.server});
+  final controller = Get.find<LocalController>();
 
   @override
   Widget build(BuildContext context) {
-
     return Obx(() => Container(
           margin: EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
@@ -29,13 +28,13 @@ class VpnCardLocal extends StatelessWidget {
               await controller.setVpnFromLocalServer(server);
               Get.back();
             },
-
-            // Thêm cờ quốc gia làm leading widget
             leading: CircleAvatar(
               radius: 18,
-              backgroundColor: Colors.transparent,
-              backgroundImage: AssetImage(
-                'assets/flags/${server.countryCode.toLowerCase()}.png',
+              backgroundColor: Color(0xFF02091A),
+              child: Icon(
+                Icons.public, // icon quả cầu thế giới
+                color: Color(0xFF1976D2),
+                size: 30,
               ),
             ),
             title: Row(
@@ -43,7 +42,7 @@ class VpnCardLocal extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      server.countryName,
+                      "Fast sever",
                       style: TextStyle(
                         fontSize: 16,
                         color: const Color(0xFFFFFFFF),

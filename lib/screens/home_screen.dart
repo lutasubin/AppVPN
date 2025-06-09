@@ -7,9 +7,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/apis/apis.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
-import 'package:vpn_basic_project/controllers/network_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn_status.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
@@ -30,14 +28,11 @@ class HomeScreen extends StatelessWidget {
   /// Dữ liệu chi tiết IP, được quản lý bằng Obx để theo dõi thay đổi.
   final ipData = IPDetails.fromJson({}).obs;
 
-  /// Bộ điều khiển chính cho màn hình Home.
-  final _controller = Get.put(LocalController());
+  /// Bộ điều khiển chính cho màn hình Home - SỬ DỤNG Get.find thay vì Get.put
+  final _controller = Get.find<LocalController>();
 
   /// Bộ điều khiển quảng cáo tự nhiên.
   final _adController = NativeAdController();
-
-  // Lấy NetworkController
-  final _networkController = Get.find<NetworkController>();
 
   // Biến để theo dõi trạng thái hiển thị quảng cáo cho kết nối hiện tại
   final _adShownForCurrentConnection = false.obs;
@@ -115,7 +110,6 @@ class HomeScreen extends StatelessWidget {
                           flex: 3,
                           child: Center(
                             child: VpnControlButton(
-                              networkController: _networkController,
                               controller: _controller,
                               constraints: constraints,
                             ),
@@ -192,11 +186,7 @@ class HomeScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: const Color(0xFF02091A),
               leading: IconButton(
-                onPressed: () async {
-                  if (!await _networkController.checkConnection()) {
-                    MyDialogs2.error(msg: 'error_connect_server'.tr);
-                    return;
-                  }
+                onPressed: () {
                   Get.to(() => MenuScreen());
                 },
                 icon: Icon(
@@ -213,11 +203,7 @@ class HomeScreen extends StatelessWidget {
               actions: [
                 IconButton(
                   padding: EdgeInsets.only(right: 8.0),
-                  onPressed: () async {
-                    if (!await _networkController.checkConnection()) {
-                      MyDialogs2.error(msg: 'error_connect_server'.tr);
-                      return;
-                    }
+                  onPressed: () {
                     Get.to(() => NetworkTestScreen());
                   },
                   icon: Icon(
@@ -246,11 +232,7 @@ class HomeScreen extends StatelessWidget {
         child: Semantics(
           button: true,
           child: InkWell(
-            onTap: () async {
-              if (!await _networkController.checkConnection()) {
-                MyDialogs2.error(msg: 'error_connect_server'.tr);
-                return;
-              }
+            onTap: () {
               Get.to(() => LocationScreen());
             },
             child: Obx(() => Container(
@@ -268,17 +250,17 @@ class HomeScreen extends StatelessWidget {
                               ? 'Choose location'.tr
                               : _controller.vpn.value.CountryLong,
                           icon: CircleAvatar(
-                            backgroundColor: Color(0xFF172032),
-                            radius: 24.0,
-                            child: _controller.vpn.value.CountryLong.isEmpty
+                            backgroundColor: Color(0xFF02091A),
+                            radius: 18.0,
+                            child: _controller.vpn.value.CountryShort.isEmpty
                                 ? Icon(
-                                    CupertinoIcons.globe,
-                                    size: 25.0,
-                                    color: Color(0xFFFFFFFF),
+                                    Icons.public, // icon quả cầu thế giới
+                                    color: Color(0xFF1976D2),
+                                    size: 30,
                                   )
                                 : null,
                             backgroundImage: _controller
-                                    .vpn.value.CountryLong.isEmpty
+                                    .vpn.value.CountryShort.isEmpty
                                 ? null
                                 : AssetImage(
                                     'assets/flags/${_controller.vpn.value.CountryShort.toLowerCase()}.png'),

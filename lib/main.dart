@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/appVpn.dart';
-import 'package:vpn_basic_project/controllers/dependency_injection.dart';
 import 'package:vpn_basic_project/helpers/AppLifecycleHandler.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
@@ -17,10 +16,8 @@ late Size mq;
 /// Hàm khởi tạo chính của ứng dụng.
 /// Thiết lập các dịch vụ cần thiết trước khi chạy ứng dụng.
 Future<void> main() async {
-  // debugPaintSizeEnabled = true; // Hiển thị viền widget để debug
   WidgetsFlutterBinding.ensureInitialized();
-  // Khởi tạo Dependency Injection
-  await DependencyInjection.init();
+  
 
   WidgetsBinding.instance.addObserver(AppLifecycleHandler());
 
@@ -50,7 +47,6 @@ Future<void> main() async {
   } catch (e) {
     debugPrint("Lỗi trong quá trình khởi tạo: $e");
   }
-  
   // Thiết lập hướng thiết bị (chỉ hỗ trợ dọc)
   await SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])

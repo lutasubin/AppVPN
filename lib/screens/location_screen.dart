@@ -1,34 +1,27 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
-import 'package:vpn_basic_project/controllers/location_controller.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card_highspeed.dart';
 import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card_pro.dart';
+import 'package:vpn_basic_project/widgets/LocationWidgets/vpn_card_speed.dart';
 
 /// Màn hình hiển thị danh sách máy chủ VPN
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
 
-  // Khởi tạo controller cho màn hình Location
-  final LocationController _controller = Get.put(LocationController());
-
-  // Khởi tạo controller cho quảng cáo native
   final _adController2 = NativeAdController();
 
-  // Khởi tạo controller local để quản lý dữ liệu máy chủ
-  final controller = Get.put(LocalController()); // Đảm bảo không bị lỗi null
+  final controller = Get.find<LocalController>();
 
   @override
   Widget build(BuildContext context) {
-    // Nếu danh sách VPN trống, lấy dữ liệu VPN từ API
-    if (_controller.vpnList.isEmpty) _controller.getVpnData();
 
     // Nạp quảng cáo native
     _adController2.ad = AdHelper.loadNativeAd2(adController: _adController2);
-
     // Sử dụng Obx để theo dõi thay đổi trạng thái
     return Obx(
       () => SafeArea(
@@ -85,13 +78,19 @@ class LocationScreen extends StatelessWidget {
       ),
     );
   }
-
+  
   /// Phương thức hiển thị danh sách VPN dạng phẳng (không nhóm theo quốc gia)
   Widget _buildFlatListView() {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
-
+         // Hiển thị tất cả VPN Fast
+         ...controller.availableServersFast
+            .map((server) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: VpnCardLocalSpeed(server: server),
+                ))
+            .toList(),
         // Hiển thị tất cả VPN Pro
         ...controller.availableServersPro
             .map((server) => Padding(
@@ -103,10 +102,11 @@ class LocationScreen extends StatelessWidget {
         ...controller.availableServers
             .map((server) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: VpnCardLocal(server: server,),
+                  child: VpnCardLocal(
+                    server: server,
+                  ),
                 ))
             .toList(),
-
       ],
     );
   }

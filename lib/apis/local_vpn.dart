@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:vpn_basic_project/models/local_vpn.dart';
 
 final List<LocalVpnServer> highVpn = [
@@ -11,16 +13,16 @@ final List<LocalVpnServer> highVpn = [
   LocalVpnServer(
     countryName: 'United States - Taxas',
     countryCode: 'us',
-    ip: '66.55.74.53',
+    ip: '108.181.199.29',
     ping: '',
-    configFileName: 'vpn-miami.ovpn',
+    configFileName: 'us_fast2.ovpn',
   ),
   LocalVpnServer(
     countryName: 'United States - Miami',
     countryCode: 'us',
-    ip: '108.181.199.29',
+    ip: '66.55.74.53',
     ping: '',
-    configFileName: 'us_fast2.ovpn',
+    configFileName: 'vpn-miami.ovpn',
   ),
   LocalVpnServer(
     countryName: 'United Kingdom',
@@ -86,3 +88,32 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'vpn-torano.ovpn',
   ),
 ];
+
+final List<LocalVpnServer> proVPN = [
+  LocalVpnServer(
+    countryName: 'Mexico - Mexicocity',
+    countryCode: 'mx',
+    ip: '216.238.70.29',
+    ping: '',
+    configFileName: 'vpn-mexicocity.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Brazil - São Paulo',
+    countryCode: 'br',
+    ip: '216.238.122.7',
+    ping: '',
+    configFileName: 'vpn-saopaulo.ovpn',
+  ),
+];
+
+final List<LocalVpnServer> fastVpn = [
+  LocalVpnServer(
+    countryName: 'Fast Speed',
+    countryCode: '',
+    ip: '222.222.222.2',
+    ping: '',
+    configFileName: highVpn[randomIndex(highVpn.length)].configFileName,
+  ),
+];
+// Hàm random index
+int randomIndex(int length) => Random().nextInt(length);

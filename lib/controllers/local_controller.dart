@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/local_vpn.dart';
-import 'package:vpn_basic_project/apis/local_vpn_pro.dart';
 import 'package:vpn_basic_project/apis/upload_downkoad.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
-import 'package:vpn_basic_project/helpers/mydilog2.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
@@ -32,12 +30,8 @@ class LocalController extends GetxController {
   // List of available local VPN pro servers
   final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
 
-  // Timer chờ kết nối
-  Timer? _waitingTimer;
-  final RxInt remainingSeconds = 20.obs;
-
-  // Check ngắt kết nối thủ công
-  bool _manuallyDisconnected = false;
+  // List of available local VPN fast servers
+  final RxList<LocalVpnServer> availableServersFast = <LocalVpnServer>[].obs;
 
   // Lắng nghe stage từ native
   StreamSubscription<String>? _vpnStageSub;
@@ -53,36 +47,38 @@ class LocalController extends GetxController {
     _listenVpnStage();
     loadAvailableServers();
     loadAvailableServersPro();
+    loadAvailableServersFast();
   }
 
   @override
   void onClose() {
-    _cancelWaitingTimer();
     _vpnStageSub?.cancel();
     super.onClose();
   }
 
-  /// Load available servers from predefined list
-  /// In a real app, you might want to load this from a JSON file in assets
+  //Load highVpn
   void loadAvailableServers() {
-    // Load predefined VPN servers
-    // In a real app, you might want to load this from a JSON file in assets
     availableServers.value = highVpn;
-    // If no VPN is selected, select the first one by default
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
         availableServers.isNotEmpty) {
       setVpnFromLocalServer(availableServers[0]);
     }
   }
 
+  //Load vpnPro
   void loadAvailableServersPro() {
-    // Load predefined VPN servers
-    // In a real app, you might want to load this from a JSON file in assets
     availableServersPro.value = proVPN;
-    // If no VPN is selected, select the first one by default
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
         availableServersPro.isNotEmpty) {
       setVpnFromLocalServer(availableServersPro[0]);
+    }
+  }
+
+  void loadAvailableServersFast() {
+    availableServersFast.value = fastVpn;
+    if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
+        availableServersPro.isNotEmpty) {
+      setVpnFromLocalServer(availableServersFast[0]);
     }
   }
 
@@ -105,44 +101,54 @@ class LocalController extends GetxController {
         password: '',
         config: config,
       );
-
-      _startWaitingTimer(); // Hiển thị UI chờ kết nối
       await VpnEngine.startVpn(vpnConfig); // Kết nối VPN
     } else {
-      // Nếu đang kết nối VPN → hiển thị dialog ngắt kết nối
-      showDisconnectDialogWithAd();
+      disconnectVpn();
     }
   }
 
-  /// Hiển thị dialog ngắt kết nối với quảng cáo
-  void showDisconnectDialogWithAd() async {
-    //   Get.dialog(
-    //     WatchAdDialogDisconnect(
-    //       onComplete: () async {
-    //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
-    //         Get.back(); // Đóng dialog
-    //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
-    _disconnectVpn(showWarning: false); // Ngắt VPN
-    //       AdHelper.showInterstitialAd(
-    //         onComplete: () {
-    //           // Format thời gian kết nối
-    //           String formattedTime = formatDuration(connectionDuration.value);
+  // /// Hiển thị dialog ngắt kết nối với quảng cáo
+  // void showDisconnectDialogWithAd() async {
+  //   Get.dialog(
+  //     WatchAdDialogDisconnect(
+  //       onComplete: () async {
+  //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
+  //         Get.back(); // Đóng dialog
+  //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
+  //        disconnectVpn();
+  //         AdHelper.showInterstitialAd(
+  //           onComplete: () {
+  //             // Format thời gian kết nối
+  //             String formattedTime = formatDuration(connectionDuration.value);
+  //             // Điều hướng đến màn hình ngắt kết nối
+  //             Get.to(() => DisconnectedScreen(
+  //                   country: vpn.value.CountryLong,
+  //                   ip: vpn.value.IP,
+  //                   connectionTime: formattedTime,
+  //                   uploadSpeed: getRandomUploadSpeed(),
+  //                   downloadSpeed: getRandomDownloadSpeed(),
+  //                   flagUrl:
+  //                       'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
+  //                 ));
+  //           },
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
-    //           // Điều hướng đến màn hình ngắt kết nối
-    //           Get.to(() => DisconnectedScreen(
-    //                 country: vpn.value.CountryLong,
-    //                 ip: vpn.value.IP,
-    //                 connectionTime: formattedTime,
-    //                 uploadSpeed: getRandomUploadSpeed(),
-    //                 downloadSpeed: getRandomDownloadSpeed(),
-    //                 flagUrl:
-    //                     'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
-    //               ));
-    //         },
-    //       );
-    //     },
-    //   ),
-    // );
+  /// Ngắt kết nối VPN
+  void disconnectVpn() async {
+    // Log disconnect event nếu có thời gian bắt đầu kết nối
+    if (_connectionStartTime != null &&
+        vpnState.value == VpnEngine.vpnConnected) {
+      final durationInSeconds =
+          DateTime.now().difference(_connectionStartTime!).inSeconds;
+      AnalyticsHelper.logVpnDisconnect(
+          vpn.value.CountryLong, durationInSeconds);
+    }
+
+    await VpnEngine.stopVpn();
   }
 
   /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
@@ -186,52 +192,6 @@ class LocalController extends GetxController {
     );
   }
 
-  /// Ngắt kết nối VPN
-  void _disconnectVpn({bool showWarning = false}) async {
-    _manuallyDisconnected = true;
-
-    // Log disconnect event nếu có thời gian bắt đầu kết nối
-    if (_connectionStartTime != null &&
-        vpnState.value == VpnEngine.vpnConnected) {
-      final durationInSeconds =
-          DateTime.now().difference(_connectionStartTime!).inSeconds;
-      AnalyticsHelper.logVpnDisconnect(
-          vpn.value.CountryLong, durationInSeconds);
-    }
-
-    await VpnEngine.stopVpn();
-    _cancelWaitingTimer(showWarning: showWarning);
-  }
-
-  /// Hẹn giờ đợi kết nối VPN (20s)
-  void _startWaitingTimer() {
-    _cancelWaitingTimer();
-    _manuallyDisconnected = false;
-    remainingSeconds.value = 20;
-
-    _waitingTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (remainingSeconds.value > 0) {
-        remainingSeconds.value--;
-        update();
-      } else {
-        if (vpnState.value != VpnEngine.vpnConnected &&
-            !_manuallyDisconnected) {
-          VpnEngine.stopVpn();
-          _cancelWaitingTimer(showWarning: true);
-        }
-      }
-    });
-  }
-
-  /// Hủy timer + hiện cảnh báo nếu cần
-  void _cancelWaitingTimer({bool showWarning = false}) {
-    _waitingTimer?.cancel();
-    _waitingTimer = null;
-    if (showWarning) {
-      MyDialogs2.warning(msg: 'warning'.tr);
-    }
-  }
-
   /// Lắng nghe sự kiện stage từ native
   void _listenVpnStage() {
     _vpnStageSub?.cancel();
@@ -239,7 +199,6 @@ class LocalController extends GetxController {
       final stageLower = stage.toLowerCase();
       if (stageLower == VpnEngine.vpnConnected) {
         vpnState.value = VpnEngine.vpnConnected;
-        _cancelWaitingTimer();
         // Ghi nhận thời gian bắt đầu kết nối và log sự kiện
         _connectionStartTime = DateTime.now();
         AnalyticsHelper.logVpnConnect(
@@ -254,9 +213,7 @@ class LocalController extends GetxController {
               vpn.value.CountryLong, durationInSeconds);
           _connectionStartTime = null;
         }
-
         vpnState.value = VpnEngine.vpnDisconnected;
-        _cancelWaitingTimer();
       }
       update();
     });
@@ -264,12 +221,16 @@ class LocalController extends GetxController {
 
   /// Đổi VPN server từ LocalVpnServer
   Future<void> setVpnFromLocalServer(LocalVpnServer server) async {
+    if (vpnState.value == VpnEngine.vpnConnected) {
+      VpnEngine.stopVpn();
+    }
     final newVpn = await server.toVpn();
     vpn.value = newVpn;
     Pref.vpn = newVpn;
-    _cancelWaitingTimer();
     // Log server selection event
     AnalyticsHelper.logServerSelection(server.countryName, server.countryCode);
+
+    update();
   }
 
   // Helper method to format duration as HH:MM:SS
@@ -314,12 +275,29 @@ class LocalController extends GetxController {
             ),
           ],
         );
+      case VpnEngine.vpnConnecting ||
+            VpnEngine.vpnWaitConnection ||
+            VpnEngine.vpnAuthenticating:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 12),
+            Text(
+              'Connecting....'.tr,
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        );
       default:
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Connecting....'.tr,
+              'Waiting....'.tr,
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
                 fontSize: 20,
@@ -333,24 +311,25 @@ class LocalController extends GetxController {
 
   /// Get button gradient based on VPN state
   LinearGradient getButtonGradient() {
+    List<Color> connectedColors = [
+      Color(0xFF4CAF50),
+      Color(0xFF1976D2),
+    ];
+
     switch (vpnState.value) {
       case VpnEngine.vpnConnected:
         return LinearGradient(
-          colors: [Color(0xFF4CAF50), Color(0xFF1976D2)],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        );
-      case VpnEngine.vpnConnecting:
-      case VpnEngine.vpnWaitConnection:
-      case VpnEngine.vpnAuthenticating:
-        return LinearGradient(
-          colors: [Color(0xFF2196F3), Color(0xFF1976D2)],
+          colors: connectedColors,
+          stops: List.generate(
+              connectedColors.length, (i) => i / (connectedColors.length - 1)),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         );
       default:
         return LinearGradient(
-          colors: [Color(0xFF4CAF50), Color(0xFF1976D2)],
+          stops: List.generate(
+              connectedColors.length, (i) => i / (connectedColors.length - 1)),
+          colors: connectedColors,
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         );

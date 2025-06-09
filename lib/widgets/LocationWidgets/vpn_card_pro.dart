@@ -3,18 +3,15 @@ import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
-import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/widgets/LocationWidgets/SignalStrengthIcon.dart';
 import 'package:vpn_basic_project/widgets/LocationWidgets/watch_video_pro.dart';
 
 class VpnCardLocalPro extends StatelessWidget {
   final LocalVpnServer server;
-  const VpnCardLocalPro({super.key, required this.server});
-
+  VpnCardLocalPro({super.key, required this.server});
+  final controller = Get.find<LocalController>();
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<LocalController>();
-
     return Obx(() => Container(
           margin: EdgeInsets.only(bottom: 8),
           decoration: BoxDecoration(
@@ -31,17 +28,8 @@ class VpnCardLocalPro extends StatelessWidget {
             onTap: () async {
               WatchAdDialogPro.show(context, server, () async {
                 AdHelper.showRewardedAd(onComplete: () async {
-                  await Future.delayed(Duration(milliseconds: 300));
                   await controller.setVpnFromLocalServer(server);
                   Get.back();
-                  if (controller.vpnState.value == VpnEngine.vpnConnected) {
-                    VpnEngine.stopVpn();
-                    Future.delayed(Duration(seconds: 2), () {
-                      controller.connectToVpn();
-                    });
-                  } else {
-                    controller.connectToVpn();
-                  }
                 });
               });
             },
