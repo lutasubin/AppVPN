@@ -30,7 +30,7 @@ class PrivacyPolicy extends StatelessWidget {
           ),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(26), // Padding for content
+          padding: const EdgeInsets.all(18), // Padding for content
           child: Column(
             crossAxisAlignment:
                 CrossAxisAlignment.start, // Align text to the left

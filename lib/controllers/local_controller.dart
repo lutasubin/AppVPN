@@ -312,8 +312,8 @@ class LocalController extends GetxController {
   /// Get button gradient based on VPN state
   LinearGradient getButtonGradient() {
     List<Color> connectedColors = [
-      Color(0xFF4CAF50),
-      Color(0xFF1976D2),
+      Color(0xFF03C343),
+      Color(0xFF4684F6),
     ];
 
     switch (vpnState.value) {

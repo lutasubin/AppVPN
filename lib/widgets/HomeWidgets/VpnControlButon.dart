@@ -80,9 +80,9 @@ class _VpnControlButtonState extends State<VpnControlButton> {
                         ? RotatingGradientCircle(
                             size: buttonSize,
                             colors: const [
-                              Color(0xFF4CAF50),
-                              Color(0xFF1976D2),
                               Color(0xFF02091A),
+                              Color(0xFF03C343),
+                              Color(0xFF4684F6),
                             ],
                           )
                         // Nếu không kết nối, hiện nút với hiệu ứng phát sáng
