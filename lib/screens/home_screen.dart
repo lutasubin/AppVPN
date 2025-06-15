@@ -253,10 +253,10 @@ class HomeScreen extends StatelessWidget {
                             backgroundColor: Color(0xFF02091A),
                             radius: 18.0,
                             child: _controller.vpn.value.CountryShort.isEmpty
-                                ? Icon(
-                                    Icons.public, // icon quả cầu thế giới
-                                    color: Color(0xFF1976D2),
-                                    size: 30,
+                                ? SvgPicture.asset(
+                                    'assets/svg/earth.svg',
+                                    width: 30,
+                                    height: 30,
                                   )
                                 : null,
                             backgroundImage: _controller

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -88,7 +89,11 @@ class DisconnectedScreen extends StatelessWidget {
                           height: 30,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.error, color: Colors.red),
+                              SvgPicture.asset(
+                            'assets/svg/earth.svg',
+                            width: 30,
+                            height: 30,
+                          ),
                         ),
                         const SizedBox(width: 10),
                         Text(

@@ -77,7 +77,7 @@ class LocalController extends GetxController {
   void loadAvailableServersFast() {
     availableServersFast.value = fastVpn;
     if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
-        availableServersPro.isNotEmpty) {
+        availableServersFast.isNotEmpty) {
       setVpnFromLocalServer(availableServersFast[0]);
     }
   }
@@ -103,42 +103,43 @@ class LocalController extends GetxController {
       );
       await VpnEngine.startVpn(vpnConfig); // Kết nối VPN
     } else {
-      disconnectVpn();
+      showDisconnectDialogWithAd();
     }
   }
 
-  // /// Hiển thị dialog ngắt kết nối với quảng cáo
-  // void showDisconnectDialogWithAd() async {
-  //   Get.dialog(
-  //     WatchAdDialogDisconnect(
-  //       onComplete: () async {
-  //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
-  //         Get.back(); // Đóng dialog
-  //         await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
-  //        disconnectVpn();
-  //         AdHelper.showInterstitialAd(
-  //           onComplete: () {
-  //             // Format thời gian kết nối
-  //             String formattedTime = formatDuration(connectionDuration.value);
-  //             // Điều hướng đến màn hình ngắt kết nối
-  //             Get.to(() => DisconnectedScreen(
-  //                   country: vpn.value.CountryLong,
-  //                   ip: vpn.value.IP,
-  //                   connectionTime: formattedTime,
-  //                   uploadSpeed: getRandomUploadSpeed(),
-  //                   downloadSpeed: getRandomDownloadSpeed(),
-  //                   flagUrl:
-  //                       'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
-  //                 ));
-  //           },
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
+  /// Hiển thị dialog ngắt kết nối với quảng cáo
+  void showDisconnectDialogWithAd() async {
+    Get.dialog(
+      WatchAdDialogDisconnect(
+        onComplete: () async {
+          await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
+          Get.back(); // Đóng dialog
+          await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
+          _disconnectVpn(); // Ngắt kết nối VPN
+
+          AdHelper.showInterstitialAd(
+            onComplete: () {
+              // Format thời gian kết nối
+              String formattedTime = formatDuration(connectionDuration.value);
+              // Điều hướng đến màn hình ngắt kết nối
+              Get.to(() => DisconnectedScreen(
+                    country: vpn.value.CountryLong,
+                    ip: vpn.value.IP,
+                    connectionTime: formattedTime,
+                    uploadSpeed: getRandomUploadSpeed(),
+                    downloadSpeed: getRandomDownloadSpeed(),
+                    flagUrl:
+                        'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
+                  ));
+            },
+          );
+        },
+      ),
+    );
+  }
 
   /// Ngắt kết nối VPN
-  void disconnectVpn() async {
+  void _disconnectVpn() async {
     // Log disconnect event nếu có thời gian bắt đầu kết nối
     if (_connectionStartTime != null &&
         vpnState.value == VpnEngine.vpnConnected) {
@@ -269,7 +270,7 @@ class LocalController extends GetxController {
               'Connected'.tr,
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -286,7 +287,7 @@ class LocalController extends GetxController {
               'Connecting....'.tr,
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -300,7 +301,7 @@ class LocalController extends GetxController {
               'Waiting....'.tr,
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -312,8 +313,8 @@ class LocalController extends GetxController {
   /// Get button gradient based on VPN state
   LinearGradient getButtonGradient() {
     List<Color> connectedColors = [
-      Color(0xFF03C343),
-      Color(0xFF4684F6),
+      Color(0xFF15EDB3),
+      Color(0xFF2484F1),
     ];
 
     switch (vpnState.value) {

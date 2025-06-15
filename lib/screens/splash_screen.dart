@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:vpn_basic_project/controllers/network_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/home_screen.dart';
+import 'package:vpn_basic_project/screens/internet.dart';
 import 'package:vpn_basic_project/screens/langguage_2.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  bool _isOnNoInternetScreen = false; // thêm vào class để theo dõi trạng thái
 
   @override
   void initState() {
@@ -32,12 +36,47 @@ class _SplashScreenState extends State<SplashScreen>
       });
 
     _controller.forward();
-    _navigateAfterDelay();
+
+    final networkController = Get.find<NetworkController>();
+
+    ever(networkController.hasInternet, (hasInternet) {
+      if (!hasInternet) {
+        if (!_isOnNoInternetScreen) {
+          _isOnNoInternetScreen = true;
+          Get.dialog(const NoInternetPopup(), barrierDismissible: false);
+        }
+      } else {
+        if (_isOnNoInternetScreen) {
+          _isOnNoInternetScreen = false;
+          if (Get.isDialogOpen ?? false) {
+            Get.back(); // Đóng popup
+          }
+          // ✅ Gọi lại hàm điều hướng sau khi có mạng
+          _navigateAfterDelay();
+        }
+      }
+    });
+
+    // 👇 Kiểm tra lúc vừa mở app
+    if (!networkController.hasInternet.value) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _isOnNoInternetScreen = true;
+        Get.offAll(() => const NoInternetPopup());
+      });
+    } else {
+      _navigateAfterDelay();
+    }
   }
 
   Future<void> _navigateAfterDelay() async {
     await Future.delayed(const Duration(seconds: 4));
     if (!mounted) return;
+
+    final networkController = Get.find<NetworkController>();
+    if (!networkController.hasInternet.value) {
+      // Nếu vẫn không có mạng, không điều hướng
+      return;
+    }
 
     try {
       AdHelper.precacheInterstitialAd();
@@ -45,13 +84,7 @@ class _SplashScreenState extends State<SplashScreen>
       AdHelper.precacheOpenAd();
       AdHelper.precacheBannerAd();
 
-      final savedLanguage = Pref.selectedLanguage;
-      if (savedLanguage.isNotEmpty) {
-        Get.updateLocale(savedLanguage == 'default'
-            ? (Get.deviceLocale ?? const Locale('en'))
-            : Locale(savedLanguage));
-      }
-
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       bool navigated = false;
 
       void navigate() {
@@ -64,9 +97,8 @@ class _SplashScreenState extends State<SplashScreen>
             duration: const Duration(milliseconds: 500));
       }
 
-      // Nếu là lần đầu mở app => không hiển thị quảng cáo
       if (Pref.isFirstLaunch) {
-        Pref.isFirstLaunch = false; // đánh dấu đã vào app lần đầu
+        Pref.isFirstLaunch = false;
         navigate();
       } else {
         AdHelper.showOpenAd(onComplete: navigate);

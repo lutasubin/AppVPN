@@ -75,40 +75,54 @@ class _VpnControlButtonState extends State<VpnControlButton> {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    // Hiển thị vòng xoay nếu đang kết nối
-                    isConnecting
-                        ? RotatingGradientCircle(
-                            size: buttonSize,
-                            colors: const [
-                              Color(0xFF02091A),
-                              Color(0xFF03C343),
-                              Color(0xFF4684F6),
-                            ],
-                          )
-                        // Nếu không kết nối, hiện nút với hiệu ứng phát sáng
-                        : AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            width: buttonSize,
-                            height: buttonSize,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: widget.controller.getButtonGradient(),
-                              // Hiệu ứng bóng phát sáng màu cyan
-                              boxShadow: _isGlowing
-                                  ? [
-                                      BoxShadow(
-                                        color:
-                                            Colors.cyanAccent.withOpacity(0.6),
-                                        blurRadius: 20,
-                                        spreadRadius: 8,
-                                      ),
-                                    ]
-                                  : [],
-                            ),
-                          ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 500),
+                          switchInCurve: Curves.easeInOut,
+                          switchOutCurve: Curves.easeInOut,
+                          child: isConnecting
+                              ? RotatingGradientCircle(
+                                  key: const ValueKey('rotating'),
+                                  size: buttonSize,
+                                  colors: const [
+                                    Color(0xFF02091A),
+                                    Color(0xFF15EDB3),
+                                    Color(0xFF2484F1),
+                                  ],
+                                )
+                              : AnimatedScale(
+                                  scale: _isGlowing ? 0.95 : 1.0,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeOut,
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    width: buttonSize,
+                                    height: buttonSize,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      gradient:
+                                          widget.controller.getButtonGradient(),
+                                      boxShadow: _isGlowing
+                                          ? [
+                                              BoxShadow(
+                                                color: Colors.cyanAccent
+                                                    .withOpacity(0.6),
+                                                blurRadius: 20,
+                                                spreadRadius: 8,
+                                              ),
+                                            ]
+                                          : [],
+                                    ),
+                                  ),
+                                ),
+                        );
+                      },
+                    ),
+
                     // Vòng tròn màu tối bên trong nút chứa icon/text
                     Container(
-                      margin: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(15),
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Color(0xFF02091A),
@@ -143,7 +157,7 @@ class _VpnControlButtonState extends State<VpnControlButton> {
           if (widget.controller.vpnState.value == VpnEngine.vpnConnected) {
             return DisconnectButton(
               onPressed: () {
-                widget.controller.disconnectVpn();
+                widget.controller.showDisconnectDialogWithAd();
               },
             );
           }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
@@ -31,10 +32,10 @@ class VpnCardLocalSpeed extends StatelessWidget {
             leading: CircleAvatar(
               radius: 18,
               backgroundColor: Color(0xFF02091A),
-              child: Icon(
-                Icons.public, // icon quả cầu thế giới
-                color: Color(0xFF1976D2),
-                size: 30,
+              child: SvgPicture.asset(
+                'assets/svg/earth.svg',
+                width: 30,
+                height: 30,
               ),
             ),
             title: Row(

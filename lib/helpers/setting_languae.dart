@@ -10,6 +10,26 @@ final List<Map<String, dynamic>> languages = [
     'flag': 'assets/flags/gb.png',
   },
   {
+    'code': 'pl',
+    'name': 'Poland',
+    'flag': 'assets/flags/pl.png',
+  },
+  {
+    'code': 'ss',
+    'name': 'Arabic',
+    'flag': 'assets/flags/ae.png',
+  },
+  {
+    'code': 'eg',
+    'name': 'Egypt',
+    'flag': 'assets/flags/eg.png',
+  },
+   {
+    'code': 'tr',
+    'name': 'Turkish',
+    'flag': 'assets/flags/tr.png',
+  },
+  {
     'code': 'hi',
     'name': 'Hindi',
     'flag': 'assets/flags/in.png',
@@ -74,30 +94,11 @@ final List<Map<String, dynamic>> languages = [
     'name': 'Indonesian',
     'flag': 'assets/flags/id.png',
   },
-  {
-    'code': 'eg',
-    'name': 'Egypt',
-    'flag': 'assets/flags/eg.png',
-  },
-  {
-    'code': 'tr',
-    'name': 'Turkish',
-    'flag': 'assets/flags/tr.png',
-  },
-  {
-    'code': 'ss',
-    'name': 'Arabic',
-    'flag': 'assets/flags/ae.png',
-  },
+ 
   {
     'code': 'cs',
     'name': 'Czech',
     'flag': 'assets/flags/cz.png',
-  },
-  {
-    'code': 'pl',
-    'name': 'Poland',
-    'flag': 'assets/flags/pl.png',
   },
   {
     'code': 'ua',
@@ -114,6 +115,10 @@ final List<Map<String, dynamic>> languages = [
 final Map<String, String> languageMap = {
   'default': 'Default',
   'en': 'English',
+  'ar': 'Arabic',
+  'eg': 'Egypt',
+  'tr': 'Turkish',
+  'pl': 'Poland',
   'hi': 'Hindi',
   'ko': 'Korean',
   'pt': 'Portuguese (Brazil)',
@@ -124,15 +129,11 @@ final Map<String, String> languageMap = {
   'es': 'Spanish',
   'de': 'German',
   'ru': 'Russian',
-  'ar': 'Arabic',
-  'eg': 'Egypt',
-  'tr': 'Turkish',
   'da': 'Danish',
   'th': 'Thailand',
   'id': 'Indonesian',
   'ss': 'Arabic',
   'cs': 'Czech',
-  'pl': 'Poland',
   'ua': 'Ukrainian',
   'ro': 'Romanian',
 };

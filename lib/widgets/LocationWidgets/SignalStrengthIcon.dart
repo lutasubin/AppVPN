@@ -7,20 +7,21 @@ class SignalStrengthIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<double> heights = [8, 14, 20, 26]; // Chiều cao 4 cột sóng
+    List<double> heights = [4, 7, 10, 13]; // Chiều cao thu nhỏ
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: List.generate(4, (index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 1.5),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 0.8), // giảm khoảng cách
           child: Container(
-            width: 4,
+            width: 3,
             height: heights[index],
             decoration: BoxDecoration(
               color: const Color(0xFF03C343),
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(1.2), // làm mềm góc tương ứng
             ),
           ),
         );

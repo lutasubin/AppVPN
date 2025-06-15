@@ -12,20 +12,31 @@ class Config {
     "show_ads": true
   };
   static Future<void> initConfig() async {
-    await _config.setConfigSettings(RemoteConfigSettings(
-      fetchTimeout: const Duration(minutes: 1),
-      minimumFetchInterval: const Duration(minutes: 30),
-    ));
+  await _config.setConfigSettings(RemoteConfigSettings(
+    fetchTimeout: const Duration(minutes: 1),
+    minimumFetchInterval: const Duration(minutes: 30),
+  ));
 
-    await _config.setDefaults(_defaultValues);
-    await _config.fetchAndActivate();
-    log('Remote config data:${_config.getBool('show_ads')}');
+  await _config.setDefaults(_defaultValues);
 
-    _config.onConfigUpdated.listen((event) async {
-      await _config.activate();
-      log('updated:${_config.getBool('show_ads')}');
-    });
+  try {
+    final activated = await _config.fetchAndActivate();
+    log('✅ Remote config fetched: $activated');
+    log('Remote config show_ads: ${_config.getBool('show_ads')}');
+  } catch (e) {
+    log('⚠️ Không thể fetch remote config: $e');
   }
+
+  _config.onConfigUpdated.listen((event) async {
+    try {
+      await _config.activate();
+      log('🔄 Remote config updated: ${_config.getBool('show_ads')}');
+    } catch (e) {
+      log('⚠️ Lỗi khi activate remote config update: $e');
+    }
+  });
+}
+
 
   static bool get _showAd => _config.getBool('show_ads');
   //ad ids

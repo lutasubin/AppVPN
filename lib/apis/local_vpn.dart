@@ -27,16 +27,16 @@ final List<LocalVpnServer> highVpn = [
   LocalVpnServer(
     countryName: 'United Kingdom',
     countryCode: 'gb',
-    ip: '178.128.164.174',
+    ip: '81.0.220.147',
     ping: '',
-    configFileName: 'uk_fast.ovpn',
+    configFileName: 'vpn-UK.ovpn',
   ),
   LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
-    ip: '178.128.207.219',
+    ip: '54.38.158.136',
     ping: '',
-    configFileName: 'de_fast.ovpn',
+    configFileName: 'vpn-germany.ovpn',
   ),
   LocalVpnServer(
     countryName: 'French - Paris',
@@ -44,6 +44,14 @@ final List<LocalVpnServer> highVpn = [
     ip: '62.171.171.217',
     ping: '',
     configFileName: 'eu_fast.ovpn',
+  ),
+
+   LocalVpnServer(
+    countryName: 'Turkish',
+    countryCode: 'tr',
+    ip: '185.123.100.216',
+    ping: '',
+    configFileName: 'vpn-turkey.ovpn',
   ),
   LocalVpnServer(
     countryName: 'India',

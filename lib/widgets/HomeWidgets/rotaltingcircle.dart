@@ -22,7 +22,7 @@ class _RotatingGradientCircleState extends State<RotatingGradientCircle>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 1200),
       vsync: this,
     )..repeat(); // Lặp vô tận
   }
@@ -67,7 +67,7 @@ class _GradientCirclePainter extends CustomPainter {
     final glowPaint = Paint()
       ..shader = gradient.createShader(rect)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 14.0
+      ..strokeWidth = 15.0
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 10);
 
     canvas.drawCircle(center, radius, glowPaint);
@@ -76,7 +76,7 @@ class _GradientCirclePainter extends CustomPainter {
     final paint = Paint()
       ..shader = gradient.createShader(rect)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 12.0;
+      ..strokeWidth = 15.0;
 
     canvas.drawCircle(center, radius, paint);
   }

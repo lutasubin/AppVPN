@@ -17,42 +17,29 @@ late Size mq;
 /// Thiết lập các dịch vụ cần thiết trước khi chạy ứng dụng.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
+  // Gắn observer để xử lý lifecycle nếu cần
   WidgetsBinding.instance.addObserver(AppLifecycleHandler());
 
-  // Khởi tạo kích thước màn hình (mq)
   mq = WidgetsBinding.instance.window.physicalSize /
       WidgetsBinding.instance.window.devicePixelRatio;
 
-  // Tải biến môi trường từ file .env
   await dotenv.load();
+  await Firebase.initializeApp();
+  await Config.initConfig();
+  await Pref.initializeHive();
+  await AdHelper.initAds();
+  await AnalyticsHelper.logAppOpen();
 
-  // ✅ Khai báo thiết bị test
   MobileAds.instance.updateRequestConfiguration(
     RequestConfiguration(testDeviceIds: ['EMULATOR']),
   );
 
-  // Thiết lập chế độ giao diện người dùng (edge-to-edge)
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-  // Khởi tạo Firebase, Config, Hive, và quảng cáo
-  try {
-    await Firebase.initializeApp();
-    await Config.initConfig();
-    await Pref.initializeHive();
-    await AdHelper.initAds();
-    // Ghi nhận sự kiện mở ứng dụng
-    await AnalyticsHelper.logAppOpen();
-  } catch (e) {
-    debugPrint("Lỗi trong quá trình khởi tạo: $e");
-  }
-  // Thiết lập hướng thiết bị (chỉ hỗ trợ dọc)
-  await SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((value) {
-    runApp(const App());
-  });
+  runApp(const App());
 }
-
-
