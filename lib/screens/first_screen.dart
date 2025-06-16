@@ -18,17 +18,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   List<OnboardingItem> onboardingItems = [
     OnboardingItem(
       title: "Just One Touch To Connect.",
-      assetImage: "assets/images/Frame 634360.png",
+      assetImage: "assets/images/image1.png",
       buttonText: 'next'.tr,
     ),
     OnboardingItem(
       title: "Diverse VPNs In Many Different Countries.",
-      assetImage: "assets/images/Frame 634360 (1).png",
+      assetImage: "assets/images/image2.png",
       buttonText: "next".tr,
     ),
     OnboardingItem(
       title: "Protect Your Online Private",
-      assetImage: "assets/images/Frame 634360 (2).png",
+      assetImage: "assets/images/image3.png",
       buttonText: 'get_started'.tr,
     ),
   ];

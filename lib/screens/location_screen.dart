@@ -91,13 +91,13 @@ class LocationScreen extends StatelessWidget {
                   child: VpnCardLocalSpeed(server: server),
                 ))
             .toList(),
-        // Hiển thị tất cả VPN Pro
-        ...controller.availableServersPro
-            .map((server) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: VpnCardLocalPro(server: server),
-                ))
-            .toList(),
+        // // Hiển thị tất cả VPN Pro
+        // ...controller.availableServersPro
+        //     .map((server) => Padding(
+        //           padding: const EdgeInsets.only(bottom: 8),
+        //           child: VpnCardLocalPro(server: server),
+        //         ))
+        //     .toList(),
         // Hiển thị tất cả VPN thường
         ...controller.availableServers
             .map((server) => Padding(
