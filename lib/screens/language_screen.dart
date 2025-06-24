@@ -84,14 +84,18 @@ class LanguageScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     onTap: () {
                       selectedLanguage.value = language['code'];
                       Pref.selectedLanguage = language['code'];
 
                       // Track language change event
-                      AnalyticsHelper.logSettingChange('language_change',
-                          language['code'] == 'default' ? 'default' : language['code']);
+                      AnalyticsHelper.logSettingChange(
+                          'language_change',
+                          language['code'] == 'default'
+                              ? 'default'
+                              : language['code']);
 
                       if (language['code'] == 'default') {
                         Get.updateLocale(

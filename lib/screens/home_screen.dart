@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,10 @@ import 'package:vpn_basic_project/models/vpn_status.dart';
 import 'package:vpn_basic_project/screens/location_screen.dart';
 import 'package:vpn_basic_project/screens/menu_screen.dart';
 import 'package:vpn_basic_project/screens/network_test_screen.dart';
+import 'package:vpn_basic_project/screens/paywall_page.dart';
+import 'package:vpn_basic_project/screens/speed_test.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/VpnControlButon.dart';
+import 'package:vpn_basic_project/widgets/HomeWidgets/button_speed_map.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/change_location.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/home_card.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/home_card2.dart';
@@ -135,14 +137,14 @@ class HomeScreen extends StatelessWidget {
                                         backgroundColor:
                                             const Color(0xFF4684F6),
                                         radius:
-                                            constraints.maxWidth * 0.08 > 25.0
-                                                ? 25.0
+                                            constraints.maxWidth * 0.08 > 18.0
+                                                ? 18.0
                                                 : constraints.maxWidth * 0.08,
                                         child: Icon(
                                           Icons.arrow_upward_rounded,
                                           size:
-                                              constraints.maxWidth * 0.06 > 18.0
-                                                  ? 18.0
+                                              constraints.maxWidth * 0.06 > 15.0
+                                                  ? 15.0
                                                   : constraints.maxWidth * 0.06,
                                           color: Color(0xFFFFFFFF),
                                         ),
@@ -157,14 +159,14 @@ class HomeScreen extends StatelessWidget {
                                         backgroundColor:
                                             const Color(0xFF03C343),
                                         radius:
-                                            constraints.maxWidth * 0.08 > 25.0
-                                                ? 25.0
+                                            constraints.maxWidth * 0.08 > 18.0
+                                                ? 18.0
                                                 : constraints.maxWidth * 0.08,
                                         child: Icon(
                                           Icons.arrow_downward_rounded,
                                           size:
-                                              constraints.maxWidth * 0.06 > 18.0
-                                                  ? 18.0
+                                              constraints.maxWidth * 0.06 > 15.0
+                                                  ? 15.0
                                                   : constraints.maxWidth * 0.06,
                                           color: Color(0xFFFFFFFF),
                                         ),
@@ -177,6 +179,29 @@ class HomeScreen extends StatelessWidget {
                             },
                           ),
                         ),
+                        Expanded(
+                          flex: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconTextButton(
+                                svgAsset: 'assets/svg/map.svg', // icon Check IP
+                                label: 'ip'.tr,
+                                onTap: () {
+                                  Get.to(() => NetworkTestScreen());
+                                },
+                              ),
+                              IconTextButton(
+                                svgAsset:
+                                    'assets/svg/speed.svg', // icon Speed test
+                                label: 'speed'.tr,
+                                onTap: () {
+                                  Get.to(() => SpeedTestScreen());
+                                },
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ],
@@ -200,19 +225,14 @@ class HomeScreen extends StatelessWidget {
                 width: 158.0,
                 height: 35.0,
               ),
-              actions: [
-                IconButton(
-                  padding: EdgeInsets.only(right: 8.0),
-                  onPressed: () {
-                    Get.to(() => NetworkTestScreen());
-                  },
-                  icon: Icon(
-                    CupertinoIcons.info,
-                    size: 25.0,
-                    color: const Color(0xFFFFFFFF),
-                  ),
-                ),
-              ],
+              // actions: [
+              //   InkWell(
+              //     onTap: () {
+              //       Get.to(() => PaywallPage());
+              //     },
+              //     child: SvgPicture.asset('assets/svg/vip.svg'),
+              //   )
+              // ],
             ),
             bottomNavigationBar: Obx(() {
               if (_adController.ad != null && _adController.adLoaded.isTrue) {

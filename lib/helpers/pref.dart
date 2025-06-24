@@ -84,4 +84,19 @@ class Pref {
   static set isVpnReminderEnabled(bool value) => _box.put('vpnReminderEnabled', value);
 
   
+  // Thời gian mua VIP (timestamp)
+static int get vipPurchaseTime => _box.get('vip_purchase_time') ?? 0;
+static set vipPurchaseTime(int time) => _box.put('vip_purchase_time', time);
+
+// Hàm kiểm tra còn hạn VIP không
+static bool get isVip {
+  if (vipPurchaseTime == 0) return false;
+
+  final now = DateTime.now().millisecondsSinceEpoch;
+  final duration = now - vipPurchaseTime;
+  const threeMonthsInMs = 90 * 24 * 60 * 60 * 1000;
+
+  return duration < threeMonthsInMs;
+}
+
 }

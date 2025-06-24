@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/local_controller.dart';
 import 'package:vpn_basic_project/controllers/location_controller.dart';
 import 'package:vpn_basic_project/controllers/network_controller.dart';
+import 'package:vpn_basic_project/controllers/speed_test_controller.dart';
+// import 'package:vpn_basic_project/controllers/purchase_controller.dart';
 
 /// Class quản lý tất cả dependencies của ứng dụng
 /// Đảm bảo các controller được khởi tạo trước khi app chạy
@@ -20,5 +22,13 @@ class AppBinding extends Bindings {
 
     // Gọi kiểm tra mạng ban đầu
     networkController.checkInitialConnectivity();
+
+     // Khởi tạo SpeedTestController
+    Get.put<SpeedTestController>(SpeedTestController(), permanent: true);
+
+    //  // Khởi tạo PurchaseController (VIP)
+    // Get.put<PurchaseController>(PurchaseController(), permanent: true);
+
+
   }
 }

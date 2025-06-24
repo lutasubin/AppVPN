@@ -22,18 +22,11 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   final _baController = BannerAdController();
 
- 
-
-  
-
   @override
   void initState() {
     super.initState();
     _baController.ba = AdHelper.loadBannerAd(baController: _baController);
-   
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +78,6 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             const SizedBox(height: 20),
 
-            
             // Các mục menu cũ
             _buildMenuItem(
               context: context,
@@ -96,7 +88,7 @@ class _MenuScreenState extends State<MenuScreen> {
               onTap: () {
                 AnalyticsHelper.logSettingChange(
                     'open_language_settings', 'clicked');
-                Get.to(() => LanguageScreen());
+                Get.off(() => LanguageScreen());
               },
             ),
             const SizedBox(height: 8),

@@ -18,11 +18,11 @@ final List<LocalVpnServer> highVpn = [
   //   configFileName: 'us_fast2.ovpn',
   // ),
   LocalVpnServer(
-    countryName: 'United States - Miami',
+    countryName: 'United States',
     countryCode: 'us',
-    ip: '66.55.74.53',
+    ip: '144.126.138.95',
     ping: '',
-    configFileName: 'vpn-miami.ovpn',
+    configFileName: 'vpn-US.ovpn',
   ),
   LocalVpnServer(
     countryName: 'United Kingdom',

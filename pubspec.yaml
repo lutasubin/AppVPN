@@ -2,7 +2,7 @@
 # Được tạo bởi DucThanhNguyen
 name: vpn_basic_project
 description: Ứng dụng VPN Android được xây dựng bằng Flutter dựa trên thư viện OpenVPN.
-publish_to: 'none' # Ngăn việc vô tình xuất bản lên pub.dev
+publish_to: "none" # Ngăn việc vô tình xuất bản lên pub.dev
 
 # Phiên bản ứng dụng
 version: 2.0.0+10
@@ -32,7 +32,7 @@ dependencies:
   http: ^1.2.2 # Thư viện để thực hiện các yêu cầu HTTP
   csv: ^6.0.0 # Hỗ trợ phân tích và tạo tệp CSV
   url_launcher: ^6.2.5 # Mở URL trong trình duyệt hoặc ứng dụng khác
-  connectivity_plus: ^6.1.3 # Kiểm tra trạng thái kết nối mạng
+  connectivity_plus: ^5.0.2 # Kiểm tra trạng thái kết nối mạng
 
   # Kiếm tiền và phân tích
   google_mobile_ads: ^5.3.0 # Google AdMob để hiển thị quảng cáo
@@ -55,6 +55,19 @@ dependencies:
   permission_handler: ^11.3.1
   device_info_plus: ^9.0.2
   android_intent_plus: ^5.3.0
+
+  # Thanh toan app
+  in_app_purchase: ^3.2.3
+
+  # Speed test
+  percent_indicator: ^4.2.5
+  syncfusion_flutter_gauges: ^29.2.11
+  flutter_internet_speed_test:
+    path: package/flutter_internet_speed_test-1.5.0
+  dio: ^5.8.0+1
+
+  
+  
   
 
 # Các thư viện dùng trong quá trình phát triển

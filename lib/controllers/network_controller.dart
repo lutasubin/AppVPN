@@ -12,7 +12,7 @@ class NetworkController extends GetxController {
     checkInitialConnectivity();
     Connectivity()
         .onConnectivityChanged
-        .listen((List<ConnectivityResult> result) {
+        .listen((ConnectivityResult result) {
       _updateConnectionStatus(result);
     });
   }
@@ -22,7 +22,7 @@ class NetworkController extends GetxController {
     _updateConnectionStatus(result);
   }
 
-  void _updateConnectionStatus(List<ConnectivityResult> result) async {
+  void _updateConnectionStatus(ConnectivityResult result) async {
     try {
       final lookupResult = await InternetAddress.lookup('example.com');
       final isConnected =

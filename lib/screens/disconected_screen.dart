@@ -32,7 +32,7 @@ class DisconnectedScreen extends StatelessWidget {
     final LocalController controller = Get.find<LocalController>();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F111A),
+      backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(
@@ -52,7 +52,7 @@ class DisconnectedScreen extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        backgroundColor: const Color(0xFF0F111A),
+        backgroundColor: const Color(0xFF02091A),
         elevation: 0,
       ),
       bottomNavigationBar: Obx(() {
@@ -75,7 +75,7 @@ class DisconnectedScreen extends StatelessWidget {
               // Thẻ thông tin kết nối
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1B1E2E),
+                  color: const Color(0xFF172032),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.all(16),
@@ -185,7 +185,7 @@ class DisconnectedScreen extends StatelessWidget {
               // Đánh giá ứng dụng
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1B1E2E),
+                  color: Color(0xFF172032),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.all(16),

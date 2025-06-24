@@ -4,6 +4,8 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
+          'ip': 'Check IP',
+          'speed': 'Speed test',
           'Connect': 'Connect',
           'next': 'Next',
           'get_started': 'Get Started',
@@ -77,6 +79,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
+          'ip': 'Kiểm tra IP',
+          'speed': 'Kiểm tra tốc độ',
           'Connect': 'Kết nối',
           'next': 'Tiếp theo',
           'get_started': 'Bắt đầu',
@@ -151,6 +155,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
+          'ip': 'आईपी जांचें',
+          'speed': 'गति परीक्षण',
           'Connect': 'कनेक्ट करें',
           'next': 'अगला',
           'get_started': 'शुरू करें',
@@ -223,6 +229,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
+          'ip': 'IP 확인',
+          'speed': '속도 테스트',
           'Connect': '연결하기',
           'next': '다음',
           'get_started': '시작하기',
@@ -291,6 +299,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
+          'ip': 'Verificar IP',
+          'speed': 'Teste de velocidade',
           'Connect': 'Connect',
           'next': 'Próximo',
           'get_started': 'Conectar',
@@ -365,6 +375,8 @@ class AppTranslations extends Translations {
         },
 
         'ja': {
+          'ip': 'IP確認',
+          'speed': 'スピードテスト',
           'Connect': '接続',
           'next': '次へ',
           'get_started': '始める',
@@ -432,6 +444,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
+          'ip': '检查 IP',
+          'speed': '速度测试',
           'Connect': '连接',
           'next': '下一步',
           'get_started': '开始',
@@ -497,6 +511,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
+          'ip': 'Verificar IP',
+          'speed': 'Prueba de velocidad',
           'Connect': 'Conectar',
           'next': 'Siguiente',
           'get_started': 'Comenzar',
@@ -570,6 +586,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
+          'ip': 'IP prüfen	',
+          'speed': 'Geschwindigkeitstest',
           'Connect': 'Verbinden',
           'next': 'Weiter',
           'get_started': 'Loslegen',
@@ -642,6 +660,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
+          'ip': 'Проверить IP',
+          'speed': 'Тест скорости',
           'Connect': 'Подключить',
           'next': 'Далее',
           'get_started': 'Начать',
@@ -714,6 +734,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Не удается открыть URL магазина',
         },
         'ar': {
+          'ip': 'تحقق من IP',
+          'speed': 'اختبار السرعة',
           'Connect': 'اتصال',
           'next': 'التالي',
           'get_started': 'البدء',
@@ -777,6 +799,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
+          'ip': 'Vérifier IP',
+          'speed': 'Test de vitesse',
           'Connect': 'Connecter',
           'next': 'Suivant',
           'get_started': 'Commencer',
@@ -851,6 +875,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
+          'ip': 'Tjek IP',
+          'speed': 'Hastighedstest',
           'Connect': 'Forbind',
           'next': 'Næste',
           'get_started': 'Kom i gang',
@@ -923,6 +949,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
+          'ip': 'تحقق من IP',
+          'speed': 'اختبار السرعة',
           'Connect': 'اتصال',
           'next': 'التالي',
           'get_started': 'البدء',
@@ -995,6 +1023,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
+          'ip': 'ตรวจสอบ IP',
+          'speed': 'ทดสอบความเร็ว',
           'Connect': 'เชื่อมต่อ',
           'next': 'ถัดไป',
           'get_started': 'เริ่มต้น',
@@ -1067,6 +1097,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
+          'ip': 'Periksa IP',
+          'speed': 'Tes kecepatan',
           'Connect': 'Hubungkan',
           'next': 'Berikutnya',
           'get_started': 'Mulai',
@@ -1140,6 +1172,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
+          'ip': 'IP Kontrolü',
+          'speed': 'Hız testi',
           'Connect': 'Bağlan',
           'next': 'Sonraki',
           'get_started': 'Başla',
@@ -1214,6 +1248,8 @@ class AppTranslations extends Translations {
         },
 //cong hoa Sec
         'cs': {
+          'ip': 'Zkontrolovat IP',
+          'speed': 'Test rychlosti',
           'Connect': 'Připojit',
           'next': 'Další',
           'get_started': 'Začít',
@@ -1288,6 +1324,8 @@ class AppTranslations extends Translations {
         },
 //palan
         'pl': {
+          'ip': 'Sprawdź IP',
+          'speed': 'Test prędkości',
           'Connect': 'Połącz',
           'next': 'Dalej',
           'get_started': 'Zaczynamy',
@@ -1362,6 +1400,8 @@ class AppTranslations extends Translations {
         },
 //tieng ukraina
         'ua': {
+          'ip': 'Перевірити IP',
+          'speed': 'Тест швидкості',
           'Connect': 'Підключити',
           'next': 'Далі',
           'get_started': 'Почати',
@@ -1436,6 +1476,8 @@ class AppTranslations extends Translations {
         },
 //romani
         'ro': {
+          'ip': 'Verifică IP',
+          'speed': 'Test de viteză',
           'Connect': 'Conectare',
           'next': 'Următorul',
           'get_started': 'Începe',
@@ -1511,6 +1553,8 @@ class AppTranslations extends Translations {
         },
 //Ai cap
         'eg': {
+          'ip': 'تحقق من IP',
+          'speed': 'اختبار السرعة',
           'Connect': 'اتصال',
           'disconnect': 'قطع الاتصال',
           'disconnected_log': 'تم فصل VPN',
