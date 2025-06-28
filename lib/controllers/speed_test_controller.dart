@@ -23,11 +23,8 @@ class SpeedTestController extends GetxController {
 
   var isButtonVisible = true.obs;
 
- 
-
   Future<void> startTesting() async {
     isTestingStarted.value = true;
-    
 
     final completer = Completer<void>();
 
@@ -114,5 +111,6 @@ class SpeedTestController extends GetxController {
     asn.value = null;
     country.value = null;
     isButtonVisible.value = true;
+    currentTestType.value = TestType.download;
   }
 }

@@ -57,7 +57,7 @@ class WatchAdDialogPro {
                     onComplete(); // Gọi callback
                   },
                   icon: const Icon(Icons.play_arrow, color:Color(0xFFFFFFFF),),
-                  label: Text('watch_ads'.tr,
+                  label: Text('Watch ads to unlock',
                       style: TextStyle(
                           color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold)),
                   style: ElevatedButton.styleFrom(

@@ -56,17 +56,17 @@ class LocationScreen extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                // Hiển thị tiêu đề "Chọn máy chủ VPN"
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    "select_vpn_servers".tr,
-                    style: const TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
+                // // Hiển thị tiêu đề "Chọn máy chủ VPN"
+                // Padding(
+                //   padding: const EdgeInsets.all(8),
+                //   child: Text(
+                //     "select_vpn_servers".tr,
+                //     style: const TextStyle(
+                //       color: Color(0xFFFFFFFF),
+                //       fontSize: 15,
+                //     ),
+                //   ),
+                // ),
                 // Phần nội dung chính, tùy thuộc vào trạng thái
                 Expanded(
                   child: _buildFlatListView(),
@@ -91,13 +91,13 @@ class LocationScreen extends StatelessWidget {
                   child: VpnCardLocalSpeed(server: server),
                 ))
             .toList(),
-        // // Hiển thị tất cả VPN Pro
-        // ...controller.availableServersPro
-        //     .map((server) => Padding(
-        //           padding: const EdgeInsets.only(bottom: 8),
-        //           child: VpnCardLocalPro(server: server),
-        //         ))
-        //     .toList(),
+        // Hiển thị tất cả VPN Pro
+        ...controller.availableServersPro
+            .map((server) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: VpnCardLocalPro(server: server),
+                ))
+            .toList(),
         // Hiển thị tất cả VPN thường
         ...controller.availableServers
             .map((server) => Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_internet_speed_test/flutter_internet_speed_test.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -131,7 +132,7 @@ class SpeedTestScreen extends StatelessWidget {
 
   // Gauge Widget
   Widget _buildGauge(SpeedTestController controller) {
-    final isDownload = controller.currentTestType.value == 'download';
+    final isDownload = controller.currentTestType.value == TestType.download;
 
     return SfRadialGauge(
       axes: [

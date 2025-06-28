@@ -34,9 +34,9 @@ final List<LocalVpnServer> highVpn = [
   LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
-    ip: '54.38.158.136',
+    ip: '161.97.120.90',
     ping: '',
-    configFileName: 'vpn-germany.ovpn',
+    configFileName: 'vpn-germany5.ovpn',
   ),
   LocalVpnServer(
     countryName: 'French - Paris',
@@ -46,27 +46,27 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'eu_fast.ovpn',
   ),
 
-   LocalVpnServer(
+  LocalVpnServer(
     countryName: 'Turkish',
     countryCode: 'tr',
     ip: '185.123.100.216',
     ping: '',
     configFileName: 'vpn-turkey.ovpn',
   ),
-  LocalVpnServer(
-    countryName: 'India',
-    countryCode: 'in',
-    ip: '142.93.219.152',
-    ping: '',
-    configFileName: 'in_fast.ovpn',
-  ),
-  LocalVpnServer(
-    countryName: 'Australia',
-    countryCode: 'au',
-    ip: '170.64.162.198',
-    ping: '',
-    configFileName: 'au_fast.ovpn',
-  ),
+  // LocalVpnServer(
+  //   countryName: 'India',
+  //   countryCode: 'in',
+  //   ip: '142.93.219.152',
+  //   ping: '',
+  //   configFileName: 'in_fast.ovpn',
+  // ),
+  // LocalVpnServer(
+  //   countryName: 'Australia',
+  //   countryCode: 'au',
+  //   ip: '170.64.162.198',
+  //   ping: '',
+  //   configFileName: 'au_fast.ovpn',
+  // ),
   LocalVpnServer(
     countryName: 'Japan',
     countryCode: 'jp',
@@ -74,20 +74,20 @@ final List<LocalVpnServer> highVpn = [
     ping: '',
     configFileName: 'jp_fast.ovpn',
   ),
-  LocalVpnServer(
-    countryName: 'Singapore',
-    countryCode: 'sg',
-    ip: '165.22.96.219',
-    ping: '',
-    configFileName: 'sg_fast.ovpn',
-  ),
-  LocalVpnServer(
-    countryName: 'Canada',
-    countryCode: 'ca',
-    ip: '68.183.203.154',
-    ping: '',
-    configFileName: 'ca_fast.ovpn',
-  ),
+  // LocalVpnServer(
+  //   countryName: 'Singapore',
+  //   countryCode: 'sg',
+  //   ip: '165.22.96.219',
+  //   ping: '',
+  //   configFileName: 'sg_fast.ovpn',
+  // ),
+  // LocalVpnServer(
+  //   countryName: 'Canada',
+  //   countryCode: 'ca',
+  //   ip: '68.183.203.154',
+  //   ping: '',
+  //   configFileName: 'ca_fast.ovpn',
+  // ),
   // LocalVpnServer(
   //   countryName: 'Canada - Torano',
   //   countryCode: 'ca',
@@ -98,19 +98,47 @@ final List<LocalVpnServer> highVpn = [
 ];
 
 final List<LocalVpnServer> proVPN = [
+  // LocalVpnServer(
+  //   countryName: 'Mexico - Mexicocity',
+  //   countryCode: 'mx',
+  //   ip: '216.238.70.29',
+  //   ping: '',
+  //   configFileName: 'vpn-mexicocity.ovpn',
+  // ),
+  // LocalVpnServer(
+  //   countryName: 'Brazil - São Paulo',
+  //   countryCode: 'br',
+  //   ip: '216.238.122.7',
+  //   ping: '',
+  //   configFileName: 'vpn-saopaulo.ovpn',
+  // ),
   LocalVpnServer(
-    countryName: 'Mexico - Mexicocity',
-    countryCode: 'mx',
-    ip: '216.238.70.29',
+    countryName: 'Germany',
+    countryCode: 'de',
+    ip: '161.97.120.90.1',
     ping: '',
-    configFileName: 'vpn-mexicocity.ovpn',
+    configFileName: 'vpn-germanypro.ovpn',
   ),
   LocalVpnServer(
-    countryName: 'Brazil - São Paulo',
-    countryCode: 'br',
-    ip: '216.238.122.7',
+    countryName: 'French - Paris',
+    countryCode: 'fr',
+    ip: ' 161.97.120.90.1',
     ping: '',
-    configFileName: 'vpn-saopaulo.ovpn',
+    configFileName: 'vpn-francePro.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'United Kingdom',
+    countryCode: 'gb',
+    ip: '81.0.220.147.1',
+    ping: '',
+    configFileName: 'vpn-UKPro.ovpn',
+  ),
+  LocalVpnServer(
+    countryName: 'United States',
+    countryCode: 'us',
+    ip: '144.126.138.95.1',
+    ping: '',
+    configFileName: 'vpn-UsPro.ovpn',
   ),
 ];
 
