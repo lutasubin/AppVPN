@@ -4,6 +4,9 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
+          'test1': 'Speed Test',
+          'test2': 'START SPEED TEST',
+          'test3': 'Speed Test Info',
           'ip': 'Check IP',
           'speed': 'Speed test',
           'Connect': 'Connect',
@@ -79,6 +82,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
+          'test1': 'Kiểm tra tốc độ',
+          'test2': 'BẮT ĐẦU KIỂM TRA TỐC ĐỘ',
+          'test3': 'Thông tin kiểm tra tốc độ',
           'ip': 'Kiểm tra IP',
           'speed': 'Kiểm tra tốc độ',
           'Connect': 'Kết nối',
@@ -155,6 +161,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
+          'test1': 'गति परीक्षण',
+          'test2': 'गति परीक्षण शुरू करें',
+          'test3': 'गति परीक्षण जानकारी',
           'ip': 'आईपी जांचें',
           'speed': 'गति परीक्षण',
           'Connect': 'कनेक्ट करें',
@@ -229,6 +238,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
+          'test1': '속도 테스트',
+          'test2': '속도 테스트 시작',
+          'test3': '속도 테스트 정보',
           'ip': 'IP 확인',
           'speed': '속도 테스트',
           'Connect': '연결하기',
@@ -299,6 +311,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
+          'test1': 'Teste de velocidade',
+          'test2': 'Iniciar teste de velocidade',
+          'test3': 'Informações do teste de velocidade',
           'ip': 'Verificar IP',
           'speed': 'Teste de velocidade',
           'Connect': 'Connect',
@@ -375,6 +390,9 @@ class AppTranslations extends Translations {
         },
 
         'ja': {
+          'test1': '速度テスト',
+          'test2': '速度テストを開始',
+          'test3': '速度テスト情報',
           'ip': 'IP確認',
           'speed': 'スピードテスト',
           'Connect': '接続',
@@ -444,6 +462,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
+          'test1': '速度测试',
+          'test2': '开始速度测试',
+          'test3': '速度测试信息',
           'ip': '检查 IP',
           'speed': '速度测试',
           'Connect': '连接',
@@ -511,6 +532,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
+          'test1': 'Prueba de velocidad',
+          'test2': 'INICIAR PRUEBA DE VELOCIDAD',
+          'test3': 'INFORMACIÓN DE LA PRUEBA DE VELOCIDAD',
           'ip': 'Verificar IP',
           'speed': 'Prueba de velocidad',
           'Connect': 'Conectar',
@@ -586,6 +610,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
+          'test1': 'Geschwindigkeitstest',
+          'test2': 'GESCHWINDIGKEITSTEST STARTEN',
+          'test3': 'GESCHWINDIGKEITSTEST INFORMATIONEN',
           'ip': 'IP prüfen	',
           'speed': 'Geschwindigkeitstest',
           'Connect': 'Verbinden',
@@ -660,6 +687,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
+          'test1': 'Тест скорости',
+          'test2': 'НАЧАТЬ ТЕСТ СКОРОСТИ',
+          'test3': 'ИНФОРМАЦИЯ О ТЕСТЕ СКОРОСТИ',
           'ip': 'Проверить IP',
           'speed': 'Тест скорости',
           'Connect': 'Подключить',
@@ -734,6 +764,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Не удается открыть URL магазина',
         },
         'ar': {
+          'test1': 'اختبار السرعة',
+          'test2': 'بدء اختبار السرعة',
+          'test3': 'معلومات اختبار السرعة',
           'ip': 'تحقق من IP',
           'speed': 'اختبار السرعة',
           'Connect': 'اتصال',
@@ -799,6 +832,9 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
+          'test1': 'Test de vitesse',
+          'test2': 'DÉMARRER LE TEST DE VITESSE',
+          'test3': 'INFORMATIONS SUR LE TEST DE VITESSE',
           'ip': 'Vérifier IP',
           'speed': 'Test de vitesse',
           'Connect': 'Connecter',
@@ -875,6 +911,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
+          'test1': 'Hastighedstest',
+          'test2': 'START HASTIGHEDSTEST',
+          'test3': 'HASTIGHEDSTEST INFORMATIONER',
           'ip': 'Tjek IP',
           'speed': 'Hastighedstest',
           'Connect': 'Forbind',
@@ -949,6 +988,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
+          'test1': 'اختبار السرعة',
+          'test2': 'بدء اختبار السرعة',
+          'test3': 'معلومات اختبار السرعة',
           'ip': 'تحقق من IP',
           'speed': 'اختبار السرعة',
           'Connect': 'اتصال',
@@ -1023,6 +1065,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
+          'test1': 'ทดสอบความเร็ว',
+          'test2': 'เริ่มทดสอบความเร็ว',
+          'test3': 'ข้อมูลการทดสอบความเร็ว',
           'ip': 'ตรวจสอบ IP',
           'speed': 'ทดสอบความเร็ว',
           'Connect': 'เชื่อมต่อ',
@@ -1097,6 +1142,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
+          'test1': 'Tes Kecepatan',
+          'test2': 'MULAI TES KECEPATAN',
+          'test3': 'INFORMASI TES KECEPATAN',
           'ip': 'Periksa IP',
           'speed': 'Tes kecepatan',
           'Connect': 'Hubungkan',
@@ -1172,6 +1220,9 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
+          'test1': 'Hız testi',
+          'test2': 'HIZ TESTINI BAŞLAT',
+          'test3': 'HIZ TESTI BILGILERI',
           'ip': 'IP Kontrolü',
           'speed': 'Hız testi',
           'Connect': 'Bağlan',
@@ -1248,6 +1299,9 @@ class AppTranslations extends Translations {
         },
 //cong hoa Sec
         'cs': {
+          'test1': 'Test rychlosti',
+          'test2': 'SPUSTIT TEST RYCHLOSTI',
+          'test3': 'INFORMACE O TESTU RYCHLOSTI',
           'ip': 'Zkontrolovat IP',
           'speed': 'Test rychlosti',
           'Connect': 'Připojit',
@@ -1324,6 +1378,9 @@ class AppTranslations extends Translations {
         },
 //palan
         'pl': {
+          'test1': 'Test prędkości',
+          'test2': 'ROZPOCZNIJ TEST PRĘDKOŚCI',
+          'test3': 'INFORMACJE O TEŚCIE PRĘDKOŚCI',
           'ip': 'Sprawdź IP',
           'speed': 'Test prędkości',
           'Connect': 'Połącz',
@@ -1400,6 +1457,9 @@ class AppTranslations extends Translations {
         },
 //tieng ukraina
         'ua': {
+          'test1': 'Тест швидкості',
+          'test2': 'ПОЧАТИ ТЕСТ ШВИДКОСТІ',
+          'test3': 'ІНФОРМАЦІЯ ПРО ТЕСТ ШВИДКОСТІ',
           'ip': 'Перевірити IP',
           'speed': 'Тест швидкості',
           'Connect': 'Підключити',
@@ -1476,6 +1536,9 @@ class AppTranslations extends Translations {
         },
 //romani
         'ro': {
+          'test1': 'Test de viteză',
+          'test2': 'ÎNCEPE TESTUL DE VITEZĂ',
+          'test3': 'INFORMII DESPRE TESTUL DE VITEZĂ',
           'ip': 'Verifică IP',
           'speed': 'Test de viteză',
           'Connect': 'Conectare',
@@ -1553,6 +1616,9 @@ class AppTranslations extends Translations {
         },
 //Ai cap
         'eg': {
+          'test1': 'اختبار السرعة',
+          'test2': 'ابدأ اختبار السرعة',
+          'test3': 'معلومات اختبار السرعة',
           'ip': 'تحقق من IP',
           'speed': 'اختبار السرعة',
           'Connect': 'اتصال',

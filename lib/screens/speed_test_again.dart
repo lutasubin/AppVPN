@@ -15,13 +15,14 @@ class SpeedTestAgain extends StatelessWidget {
   Widget build(BuildContext context) {
     _adController5.ad = AdHelper.loadNativeAd1(adController: _adController5);
     final SpeedTestController controller = Get.find();
+
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(
         backgroundColor: const Color(0xFF02091A),
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Speed Test Info',
+        title: Text(
+          'test3'.tr, // "Speed Test Information"
           style: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -44,7 +45,7 @@ class SpeedTestAgain extends StatelessWidget {
         }
       }),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -62,22 +63,19 @@ class SpeedTestAgain extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoColum('assets/svg/ip.svg', 'IP Address'.tr,
-              controller.ip.value ?? '__'),
+          _buildInfoColum(
+              'assets/svg/ip.svg', 'IP Address'.tr, controller.ip.value ?? ''),
           const SizedBox(height: 15),
           _buildInfoColum('assets/svg/net.svg', 'Internet Provider'.tr,
-              controller.isp.value ?? '__'),
+              controller.isp.value ?? ''),
           const SizedBox(height: 15),
           _buildInfoColum('assets/svg/location.svg', 'Location'.tr,
-              controller.country.value ?? '__'),
+              controller.country.value ?? ''),
           const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

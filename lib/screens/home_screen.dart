@@ -285,7 +285,7 @@ class HomeScreen extends StatelessWidget {
                                 : AssetImage(
                                     'assets/flags/${_controller.vpn.value.CountryShort.toLowerCase()}.png'),
                           ),
-                          ip: '',
+                          ip: 'Ultra-Fast',
                         ),
                       ),
                       CircleAvatar(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_internet_speed_test/flutter_internet_speed_test.dart';
+import 'package:flutter_speed_test_plus/flutter_speed_test_plus.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -17,15 +17,14 @@ class SpeedTestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _adController.ad = AdHelper.loadNativeAd2(adController: _adController);
-
     final SpeedTestController controller = Get.find();
 
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(
         backgroundColor: const Color(0xFF02091A),
-        title: const Text(
-          'Speed Test',
+        title: Text(
+          'test1'.tr, // "Speed Test"
           style: TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -40,9 +39,8 @@ class SpeedTestScreen extends StatelessWidget {
       bottomNavigationBar: Obx(() {
         if (_adController.ad != null && _adController.adLoaded.isTrue) {
           return SafeArea(
-            child:
-                SizedBox(height: 120, child: AdWidget(ad: _adController.ad!)),
-          );
+              child: SizedBox(
+                  height: 120, child: AdWidget(ad: _adController.ad!)));
         } else {
           return const SizedBox.shrink();
         }
@@ -52,9 +50,8 @@ class SpeedTestScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Progress bar
             Obx(() => LinearPercentIndicator(
-                  backgroundColor: Color(0xFF172032),
+                  backgroundColor: const Color(0xFF172032),
                   percent: controller.displayProcess.value / 100.0,
                   lineHeight: 18,
                   center: Text(
@@ -66,23 +63,15 @@ class SpeedTestScreen extends StatelessWidget {
                     colors: [
                       Color(0xFF2484F1),
                       Color(0xFF00E5FF),
-                      Color(0xFF15EDB3),
+                      Color(0xFF15EDB3)
                     ],
                   ),
                 )),
             const SizedBox(height: 10),
-
-            // Gauge
             Obx(() => _buildGauge(controller)),
-
             const SizedBox(height: 20),
-
-            // Info Card
             Obx(() => _buildInfoCard(controller)),
-
             const SizedBox(height: 30),
-
-            // Start Button
             _buildButtons(controller),
           ],
         ),
@@ -90,13 +79,13 @@ class SpeedTestScreen extends StatelessWidget {
     );
   }
 
-//button
+  // Start Button
   Widget _buildButtons(SpeedTestController controller) {
     return Obx(() {
       return controller.isButtonVisible.value
           ? GestureDetector(
               onTap: () async {
-                controller.isButtonVisible.value = false; // Ẩn nút
+                controller.isButtonVisible.value = false;
                 await controller.startTesting();
                 Get.off(() => SpeedTestAgain());
               },
@@ -105,18 +94,15 @@ class SpeedTestScreen extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF15EDB3),
-                      Color(0xFF2484F1),
-                    ],
+                    colors: [Color(0xFF15EDB3), Color(0xFF2484F1)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  'START SPEED TEST',
+                child: Text(
+                  'test2'.tr, // "Start Speed Test"
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -126,14 +112,13 @@ class SpeedTestScreen extends StatelessWidget {
                 ),
               ),
             )
-          : const SizedBox(); // Trả về widget rỗng khi nút ẩn
+          : const SizedBox();
     });
   }
 
   // Gauge Widget
   Widget _buildGauge(SpeedTestController controller) {
     final isDownload = controller.currentTestType.value == TestType.download;
-
     return SfRadialGauge(
       axes: [
         RadialAxis(
@@ -142,23 +127,18 @@ class SpeedTestScreen extends StatelessWidget {
           radiusFactor: 0.9,
           minimum: 0,
           maximum: 100,
-          interval: 15, // hiển thị số cách nhau 10 đơn vị
-          showTicks: true, // hiện vạch nhỏ
-          showLabels: true, // hiện số
+          interval: 15,
+          showTicks: true,
+          showLabels: true,
           majorTickStyle: const MajorTickStyle(
-            length: 8,
-            thickness: 2,
-            color: Colors.white,
-          ),
+              length: 8, thickness: 2, color: Colors.white),
           minorTicksPerInterval: 0,
-          axisLabelStyle: const GaugeTextStyle(
-            color: Colors.white,
-            fontSize: 14,
-          ),
+          axisLabelStyle:
+              const GaugeTextStyle(color: Colors.white, fontSize: 14),
           axisLineStyle: const AxisLineStyle(
             thickness: 15,
             cornerStyle: CornerStyle.bothCurve,
-            color: Color(0xFF172032), // phần chưa chạy
+            color: Color(0xFF172032),
           ),
           pointers: [
             RangePointer(
@@ -169,29 +149,24 @@ class SpeedTestScreen extends StatelessWidget {
                 colors: [
                   Color(0xFF2484F1),
                   Color(0xFF00E5FF),
-                  Color(0xFF15EDB3),
+                  Color(0xFF15EDB3)
                 ],
-                stops: [0.0, 0.5, 1.0],
               ),
             ),
             NeedlePointer(
               value: controller.displayRate.value.clamp(0, 100),
               enableAnimation: true,
-              needleLength: 0.6, // dài hơn 1 chút
-              needleStartWidth: 4, // đầu gốc to
-              needleEndWidth: 9, // đầu kim nhỏ lại
-              needleColor: Colors.white, // Màu trắng làm base
+              needleLength: 0.6,
+              needleStartWidth: 4,
+              needleEndWidth: 9,
+              needleColor: Colors.white,
               gradient: const LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  Colors.white54,
-                  Colors.white,
-                ],
+                colors: [Colors.transparent, Colors.white54, Colors.white],
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
               ),
               knobStyle: const KnobStyle(
-                color: Colors.transparent, // làm trong suốt
+                color: Colors.transparent,
                 borderWidth: 0,
                 knobRadius: 0.06,
               ),
@@ -210,7 +185,7 @@ class SpeedTestScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "${controller.displayRate.value.toStringAsFixed(2)}",
+                    controller.displayRate.value.toStringAsFixed(2),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 36,
@@ -231,17 +206,14 @@ class SpeedTestScreen extends StatelessWidget {
     );
   }
 
-  // Info Card Widget
+  // Info Card
   Widget _buildInfoCard(SpeedTestController controller) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,22 +226,23 @@ class SpeedTestScreen extends StatelessWidget {
               _buildSpeedColumn(Icons.arrow_upward_rounded, 'Uploads'.tr,
                   controller.uploadRate.value.toStringAsFixed(2)),
             ],
-          )
+          ),
         ],
       ),
     );
   }
 
-  // Download/Upload Column
   Widget _buildSpeedColumn(IconData icon, String label, String value) {
     return Column(
       children: [
         Row(
           children: [
-            Icon(icon,
-                color: icon == Icons.arrow_downward_rounded
-                    ? const Color(0xFF03C343)
-                    : const Color(0xFF4684F6)),
+            Icon(
+              icon,
+              color: icon == Icons.arrow_downward_rounded
+                  ? const Color(0xFF03C343)
+                  : const Color(0xFF4684F6),
+            ),
             const SizedBox(width: 5),
             Text(
               '$label Mbps',
@@ -281,7 +254,10 @@ class SpeedTestScreen extends StatelessWidget {
         Text(
           value,
           style: const TextStyle(
-              color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

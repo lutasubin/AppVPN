@@ -100,11 +100,11 @@ final List<Map<String, dynamic>> languages = [
     'name': 'Czech',
     'flag': 'assets/flags/cz.png',
   },
-  {
-    'code': 'ua',
-    'name': 'Ukrainian',
-    'flag': 'assets/flags/ua.png',
-  },
+  // {
+  //   'code': 'ua',
+  //   'name': 'Ukrainian',
+  //   'flag': 'assets/flags/ua.png',
+  // },
   {
     'code': 'ro',
     'name': 'Romanian',
@@ -134,6 +134,6 @@ final Map<String, String> languageMap = {
   'id': 'Indonesian',
   'ss': 'Arabic',
   'cs': 'Czech',
-  'ua': 'Ukrainian',
+  // 'ua': 'Ukrainian',
   'ro': 'Romanian',
 };

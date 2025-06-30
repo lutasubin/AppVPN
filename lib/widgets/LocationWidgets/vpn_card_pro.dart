@@ -52,7 +52,7 @@ class VpnCardLocalPro extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 5),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
