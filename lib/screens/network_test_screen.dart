@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:vpn_basic_project/controllers/banner%20_ad_controller.dart';
+import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-
-// import '../helpers/pref.dart';
 import '../main.dart';
 import '../models/ip_details.dart';
 import '../models/network_data.dart';
@@ -13,13 +11,13 @@ import '../widgets/NetworkWidgets/network_card.dart';
 import '../apis/apis.dart';
 
 class NetworkTestScreen extends StatelessWidget {
-  final _baController = BannerAdController();
+  final _adController4 = NativeAdController();
 
   NetworkTestScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
+    _adController4.ad = AdHelper.loadNativeAd2(adController: _adController4);
 
     final ipData = IPDetails.fromJson({}).obs;
     Apis.getIPDetails(ipData: ipData);
@@ -46,13 +44,14 @@ class NetworkTestScreen extends StatelessWidget {
           )),
 
       bottomNavigationBar: Obx(() {
-        return _baController.ba != null && _baController.baLoaded.isTrue
-            ? SafeArea(
-                child: SizedBox(
-                height: 120,
-                child: AdWidget(ad: _baController.ba!),
-              ))
-            : SizedBox.shrink();
+        if (_adController4.ad != null && _adController4.adLoaded.isTrue) {
+          return SafeArea(
+            child:
+                SizedBox(height: 120, child: AdWidget(ad: _adController4.ad!)),
+          );
+        } else {
+          return SizedBox.shrink();
+        }
       }),
       body: Obx(
         () => ListView(

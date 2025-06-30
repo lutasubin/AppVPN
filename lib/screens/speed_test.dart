@@ -68,7 +68,7 @@ class SpeedTestScreen extends StatelessWidget {
                   ),
                 )),
             const SizedBox(height: 10),
-            Obx(() => _buildGauge(controller)),
+            _buildGauge(controller),
             const SizedBox(height: 20),
             Obx(() => _buildInfoCard(controller)),
             const SizedBox(height: 30),
@@ -117,93 +117,97 @@ class SpeedTestScreen extends StatelessWidget {
   }
 
   // Gauge Widget
+  // Gauge Widget đã sửa hoàn chỉnh để theo dõi currentTestType
   Widget _buildGauge(SpeedTestController controller) {
-    final isDownload = controller.currentTestType.value == TestType.download;
-    return SfRadialGauge(
-      axes: [
-        RadialAxis(
-          startAngle: 135,
-          endAngle: 45,
-          radiusFactor: 0.9,
-          minimum: 0,
-          maximum: 100,
-          interval: 15,
-          showTicks: true,
-          showLabels: true,
-          majorTickStyle: const MajorTickStyle(
-              length: 8, thickness: 2, color: Colors.white),
-          minorTicksPerInterval: 0,
-          axisLabelStyle:
-              const GaugeTextStyle(color: Colors.white, fontSize: 14),
-          axisLineStyle: const AxisLineStyle(
-            thickness: 15,
-            cornerStyle: CornerStyle.bothCurve,
-            color: Color(0xFF172032),
-          ),
-          pointers: [
-            RangePointer(
-              value: controller.displayRate.value.clamp(0, 100),
-              width: 15,
+    return Obx(() {
+      final isDownload = controller.currentTestType.value == TestType.download;
+
+      return SfRadialGauge(
+        axes: [
+          RadialAxis(
+            startAngle: 135,
+            endAngle: 45,
+            radiusFactor: 0.9,
+            minimum: 0,
+            maximum: 100,
+            interval: 15,
+            showTicks: true,
+            showLabels: true,
+            majorTickStyle: const MajorTickStyle(
+                length: 8, thickness: 2, color: Colors.white),
+            minorTicksPerInterval: 0,
+            axisLabelStyle:
+                const GaugeTextStyle(color: Colors.white, fontSize: 14),
+            axisLineStyle: const AxisLineStyle(
+              thickness: 15,
               cornerStyle: CornerStyle.bothCurve,
-              gradient: const SweepGradient(
-                colors: [
-                  Color(0xFF2484F1),
-                  Color(0xFF00E5FF),
-                  Color(0xFF15EDB3)
-                ],
-              ),
+              color: Color(0xFF172032),
             ),
-            NeedlePointer(
-              value: controller.displayRate.value.clamp(0, 100),
-              enableAnimation: true,
-              needleLength: 0.6,
-              needleStartWidth: 4,
-              needleEndWidth: 9,
-              needleColor: Colors.white,
-              gradient: const LinearGradient(
-                colors: [Colors.transparent, Colors.white54, Colors.white],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
+            pointers: [
+              RangePointer(
+                value: controller.displayRate.value.clamp(0, 100),
+                width: 15,
+                cornerStyle: CornerStyle.bothCurve,
+                gradient: const SweepGradient(
+                  colors: [
+                    Color(0xFF2484F1),
+                    Color(0xFF00E5FF),
+                    Color(0xFF15EDB3)
+                  ],
+                ),
               ),
-              knobStyle: const KnobStyle(
-                color: Colors.transparent,
-                borderWidth: 0,
-                knobRadius: 0.06,
-              ),
-            )
-          ],
-          annotations: [
-            GaugeAnnotation(
-              angle: 90,
-              positionFactor: 0.8,
-              widget: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    isDownload ? 'Download speed' : 'Upload speed',
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    controller.displayRate.value.toStringAsFixed(2),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
+              NeedlePointer(
+                value: controller.displayRate.value.clamp(0, 100),
+                enableAnimation: true,
+                needleLength: 0.6,
+                needleStartWidth: 4,
+                needleEndWidth: 9,
+                needleColor: Colors.white,
+                gradient: const LinearGradient(
+                  colors: [Colors.transparent, Colors.white54, Colors.white],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+                knobStyle: const KnobStyle(
+                  color: Colors.transparent,
+                  borderWidth: 0,
+                  knobRadius: 0.06,
+                ),
+              )
+            ],
+            annotations: [
+              GaugeAnnotation(
+                angle: 90,
+                positionFactor: 0.8,
+                widget: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isDownload ? 'Download speed' : 'Upload speed',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "Mbps",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      controller.displayRate.value.toStringAsFixed(2),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Mbps",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
-    );
+            ],
+          ),
+        ],
+      );
+    });
   }
 
   // Info Card

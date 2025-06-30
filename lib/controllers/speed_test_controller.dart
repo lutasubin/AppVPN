@@ -11,16 +11,19 @@ class SpeedTestController extends GetxController {
   var displayRate = 0.0.obs;
   var displayProcess = 0.0.obs;
   var isTestingStarted = false.obs;
+
+  /// ✅ Theo dõi giai đoạn hiện tại: download hoặc upload
   var currentTestType = Rxn<TestType>();
 
   var ip = RxnString();
   var isp = RxnString();
   var asn = RxnString();
   var country = RxnString();
-  var unitText = 'Mb/s'.obs; // ✅ vẫn là String
+  var unitText = 'Mb/s'.obs;
 
   var isButtonVisible = true.obs;
 
+  /// ✅ Hàm bắt đầu đo tốc độ
   Future<void> startTesting() async {
     isTestingStarted.value = true;
 
@@ -30,55 +33,63 @@ class SpeedTestController extends GetxController {
       speedTest.startTesting(
         useFastApi: true,
         onStarted: () {
-          print('Speed test started');
+          print('🚀 Speed test started');
           displayProcess.value = 0.0;
+          currentTestType.value = TestType.download; // ✅ Bắt đầu với download
         },
         onProgress: (double percent, TestResult data) {
           displayProcess.value = percent;
           displayRate.value = data.transferRate;
-          unitText.value = data.unit.name; // ✅ fix ở đây
+          unitText.value = data.unit.name;
         },
         onDownloadComplete: (TestResult data) {
+          print('✅ Download complete');
           downloadRate.value = data.transferRate;
           displayRate.value = data.transferRate;
-          unitText.value = data.unit.name; // ✅
+          unitText.value = data.unit.name;
+
+          /// ✅ Chuyển sang upload
+          currentTestType.value = TestType.upload;
         },
         onUploadComplete: (TestResult data) {
+          print('✅ Upload complete');
           uploadRate.value = data.transferRate;
           displayRate.value = data.transferRate;
-          unitText.value = data.unit.name; // ✅
+          unitText.value = data.unit.name;
         },
         onCompleted: (TestResult download, TestResult upload) {
+          print('🎉 Test completed');
           downloadRate.value = download.transferRate;
           uploadRate.value = upload.transferRate;
           displayRate.value = upload.transferRate;
-          unitText.value = upload.unit.name; // ✅
+          unitText.value = upload.unit.name;
           displayProcess.value = 100.0;
           isTestingStarted.value = false;
+
           completer.complete();
         },
         onError: (String errorMessage, String speedTestError) {
-          print('Speed test error: $errorMessage - $speedTestError');
+          print('❌ Speed test error: $errorMessage - $speedTestError');
           isTestingStarted.value = false;
           if (!completer.isCompleted) completer.complete();
         },
         onCancel: () {
-          print('Speed test cancelled');
+          print('⚠️ Speed test cancelled');
           isTestingStarted.value = false;
           if (!completer.isCompleted) completer.complete();
         },
         onDefaultServerSelectionInProgress: () {
-          print('Selecting default server...');
+          print('🌐 Selecting default server...');
         },
         onDefaultServerSelectionDone: (Client? client) {
-          print('Selected server: ${client?.ip}');
+          print('🌐 Selected server: ${client?.ip}');
           if (client?.ip != null) {
             fetchIpDetails(client!.ip!);
           }
         },
       );
     } catch (e) {
-      print('Exception during speed test: $e');
+      print('❗ Exception during speed test: $e');
       isTestingStarted.value = false;
       if (!completer.isCompleted) completer.complete();
     }
@@ -86,6 +97,7 @@ class SpeedTestController extends GetxController {
     return completer.future;
   }
 
+  /// ✅ Gọi API ip-api.com để lấy thông tin IP, ISP, quốc gia...
   Future<void> fetchIpDetails(String ipAddr) async {
     try {
       final response = await Dio().get('http://ip-api.com/json/$ipAddr');
@@ -97,10 +109,11 @@ class SpeedTestController extends GetxController {
         country.value = "${data['city']}, ${data['country']}";
       }
     } catch (e) {
-      print('Error fetching IP info: $e');
+      print('❗ Error fetching IP info: $e');
     }
   }
 
+  /// ✅ Reset trạng thái trước khi test mới
   void resetValues() {
     downloadRate.value = 0.0;
     uploadRate.value = 0.0;
@@ -110,7 +123,8 @@ class SpeedTestController extends GetxController {
     isp.value = null;
     asn.value = null;
     country.value = null;
+    unitText.value = 'Mb/s';
     isButtonVisible.value = true;
-    currentTestType.value = TestType.download;
+    currentTestType.value = null; // Hoặc TestType.download nếu muốn mặc định
   }
 }
