@@ -10,110 +10,111 @@ class VpnCardLocalPro extends StatelessWidget {
   final LocalVpnServer server;
   VpnCardLocalPro({super.key, required this.server});
   final controller = Get.find<LocalController>();
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          margin: EdgeInsets.only(bottom: 8),
-          decoration: BoxDecoration(
-            color:
-                const Color(0xFF172032), // Background màu tối giống trong hình
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Color(0xFF2F3A51),
-              width: 1,
-            ),
+    return Obx(() {
+      // ✅ SỬ DỤNG LOGIC THỐNG NHẤT như VpnCardWireGuard
+      final isSelected = controller.selectedServer.value?.ip == server.ip &&
+          controller.selectedServer.value?.protocol == server.protocol;
+
+      return Container(
+        margin: EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF172032),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Color(0xFF2F3A51),
+            width: 1,
           ),
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            onTap: () async {
-              WatchAdDialogPro.show(context, server, () async {
-                AdHelper.showRewardedAd(onComplete: () async {
-                  await controller.setVpnFromLocalServer(server);
-                  Get.back();
-                });
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          onTap: () async {
+            WatchAdDialogPro.show(context, server, () async {
+              AdHelper.showRewardedAd(onComplete: () async {
+                await controller.setVpnFromLocalServer(server);
+                Get.back();
               });
-            },
-
-            // Thêm cờ quốc gia làm leading widget
-            leading: CircleAvatar(
-              radius: 18,
-              backgroundColor: Colors.transparent,
-              backgroundImage: AssetImage(
-                'assets/flags/${server.countryCode.toLowerCase()}.png',
-              ),
-            ),
-            title: Row(
-              children: [
-                Text(
-                  server.countryName,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 5),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF15E24), // cam đậm
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.bolt, size: 14, color: Color(0xFFFFFFFF)),
-                      SizedBox(width: 4),
-                      Text(
-                        'Ultra-Fast',
-                        style: TextStyle(
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SignalStrengthIcon(level: 3),
-                SizedBox(width: 12),
-                Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: controller.vpn.value.IP == server.ip
-                          ? const Color(0xFFF15E24)
-                          : Color(0xFFFFFFFF),
-                      width: 2,
-                    ),
-                    color: controller.vpn.value.IP == server.ip
-                        ? const Color(0xFFF15E24)
-                        : Colors.transparent,
-                  ),
-                  child: controller.vpn.value.IP == server.ip
-                      ? Center(
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xFFFFFFFF),
-                            ),
-                          ),
-                        )
-                      : null,
-                ),
-              ],
+            });
+          },
+          leading: CircleAvatar(
+            radius: 18,
+            backgroundColor: Colors.transparent,
+            backgroundImage: AssetImage(
+              'assets/flags/${server.countryCode.toLowerCase()}.png',
             ),
           ),
-        ));
+          title: Row(
+            children: [
+              Text(
+                server.countryName,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(width: 3),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF15E24), // cam đậm
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: const [
+                    Icon(Icons.bolt, size: 14, color: Color(0xFFFFFFFF)),
+                    SizedBox(width: 2),
+                    Text(
+                      'Ultra-Fast',
+                      style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SignalStrengthIcon(level: 3),
+              SizedBox(width: 12),
+              Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected
+                        ? const Color(0xFFF15E24)
+                        : Color(0xFFFFFFFF),
+                    width: 2,
+                  ),
+                  color:
+                      isSelected ? const Color(0xFFF15E24) : Colors.transparent,
+                ),
+                child: isSelected
+                    ? Center(
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      )
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

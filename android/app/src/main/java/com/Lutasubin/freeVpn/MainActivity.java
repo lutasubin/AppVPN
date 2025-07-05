@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
@@ -35,7 +36,6 @@ import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 
-
 public class MainActivity extends FlutterActivity {
     private MethodChannel vpnControlMethod;
     private EventChannel vpnControlEvent;
@@ -47,22 +47,24 @@ public class MainActivity extends FlutterActivity {
     private static final String EVENT_CHANNEL_VPN_STATUS = "vpnStatus";
     private static final String METHOD_CHANNEL_VPN_CONTROL = "vpnControl";
     private static final int VPN_REQUEST_ID = 1;
+    private static final int VPN_REQUEST_ID_WG = 1001;
     private static final String TAG = "VPN";
 
     private VpnProfile vpnProfile;
-
-    private String config = "",
-            username = "",
-            password = "",
-            name = "",
-            dns1 = VpnProfile.DEFAULT_DNS1,
-            dns2 = VpnProfile.DEFAULT_DNS2;
-
+    private String config = "", username = "", password = "", name = "";
+    private String dns1 = VpnProfile.DEFAULT_DNS1, dns2 = VpnProfile.DEFAULT_DNS2;
     private ArrayList<String> bypassPackages;
-
     private boolean attached = true;
-
     private JSONObject localJson;
+
+    // WireGuard pending
+    private String pendingWgName = null;
+    private String pendingWgConfig = null;
+    private boolean pendingWireGuard = false;
+    private MethodChannel.Result pendingWireGuardResult = null;
+
+    // Handler for delays
+    private Handler mainHandler = new Handler();
 
     @Override
     public void finish() {
@@ -86,9 +88,8 @@ public class MainActivity extends FlutterActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        // Khởi tạo thư viện native
         NativeLibInitializer.initializeNativeLibs(this);
-        
+
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -97,22 +98,11 @@ public class MainActivity extends FlutterActivity {
 
                 if (vpnStatusSink != null) {
                     try {
-                        String duration = intent.getStringExtra("duration");
-                        String lastPacketReceive = intent.getStringExtra("lastPacketReceive");
-                        String byteIn = intent.getStringExtra("byteIn");
-                        String byteOut = intent.getStringExtra("byteOut");
-
-                        if (duration == null) duration = "00:00:00";
-                        if (lastPacketReceive == null) lastPacketReceive = "0";
-                        if (byteIn == null) byteIn = " ";
-                        if (byteOut == null) byteOut = " ";
-
                         JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("duration", duration);
-                        jsonObject.put("last_packet_receive", lastPacketReceive);
-                        jsonObject.put("byte_in", byteIn);
-                        jsonObject.put("byte_out", byteOut);
-
+                        jsonObject.put("duration", intent.getStringExtra("duration") != null ? intent.getStringExtra("duration") : "00:00:00");
+                        jsonObject.put("last_packet_receive", intent.getStringExtra("lastPacketReceive") != null ? intent.getStringExtra("lastPacketReceive") : "0");
+                        jsonObject.put("byte_in", intent.getStringExtra("byteIn") != null ? intent.getStringExtra("byteIn") : " ");
+                        jsonObject.put("byte_out", intent.getStringExtra("byteOut") != null ? intent.getStringExtra("byteOut") : " ");
                         localJson = jsonObject;
 
                         if (attached) vpnStatusSink.success(jsonObject.toString());
@@ -122,12 +112,14 @@ public class MainActivity extends FlutterActivity {
                 }
             }
         }, new IntentFilter("connectionState"));
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
+
         vpnControlEvent = new EventChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), EVENT_CHANNEL_VPN_STAGE);
         vpnControlEvent.setStreamHandler(new EventChannel.StreamHandler() {
             @Override
@@ -149,27 +141,22 @@ public class MainActivity extends FlutterActivity {
             }
 
             @Override
-            public void onCancel(Object arguments) {
-
-            }
+            public void onCancel(Object arguments) {}
         });
 
         vpnControlMethod = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), METHOD_CHANNEL_VPN_CONTROL);
         vpnControlMethod.setMethodCallHandler((call, result) -> {
             switch (call.method) {
                 case "stop":
-                    OpenVPNThread.stop();
-                    setStage("disconnected");
+                    stopAllVPNs();
                     break;
                 case "start":
                     config = call.argument("config");
                     name = call.argument("country");
                     username = call.argument("username");
                     password = call.argument("password");
-
-                    if (call.argument("dns1") != null) dns1 = call.argument("dns1");
-                    if (call.argument("dns2") != null) dns2 = call.argument("dns2");
-
+                    dns1 = call.argument("dns1") != null ? call.argument("dns1") : dns1;
+                    dns2 = call.argument("dns2") != null ? call.argument("dns2") : dns2;
                     bypassPackages = call.argument("bypass_packages");
 
                     if (config == null || name == null) {
@@ -177,7 +164,16 @@ public class MainActivity extends FlutterActivity {
                         return;
                     }
 
-                    prepareVPN();
+                    // Stop WireGuard before starting OpenVPN
+                    if (isWireGuardConnected()) {
+                        Log.d(TAG, "WireGuard is active, stopping before OpenVPN start");
+                        WireGuardEngine.getInstance(this).stopTunnel();
+                        mainHandler.postDelayed(() -> {
+                            prepareVPN();
+                        }, 2000);
+                    } else {
+                        prepareVPN();
+                    }
                     break;
                 case "refresh":
                     updateVPNStages();
@@ -194,28 +190,85 @@ public class MainActivity extends FlutterActivity {
                         startActivity(intent);
                     }
                     break;
+                case "startWireGuard": {
+                    String wgName = call.argument("name");
+                    String wgConfig = call.argument("config");
+                    
+                    // Stop OpenVPN before starting WireGuard
+                    if (isOpenVPNConnected()) {
+                        Log.d(TAG, "OpenVPN is active, stopping before WireGuard start");
+                        OpenVPNThread.stop();
+                        mainHandler.postDelayed(() -> {
+                            startWireGuardProcess(wgName, wgConfig, result);
+                        }, 2000);
+                    } else {
+                        startWireGuardProcess(wgName, wgConfig, result);
+                    }
+                    break;
+                }
+                case "stopWireGuard": {
+                    boolean stopped = WireGuardEngine.getInstance(this).stopTunnel();
+                    result.success(stopped);
+                    if (stopped) {
+                        setStage("DISCONNECTED");
+                    }
+                    break;
+                }
+                case "getWireGuardState": {
+                    String state = WireGuardEngine.getInstance(this).getTunnelState();
+                    result.success(state);
+                    break;
+                }
             }
         });
+    }
 
+    private void startWireGuardProcess(String wgName, String wgConfig, MethodChannel.Result result) {
+        Intent vpnIntent = VpnService.prepare(this);
+        if (vpnIntent != null) {
+            pendingWgName = wgName;
+            pendingWgConfig = wgConfig;
+            pendingWireGuard = true;
+            pendingWireGuardResult = result;
+            startActivityForResult(vpnIntent, VPN_REQUEST_ID_WG);
+        } else {
+            setStage("CONNECTING");
+            new Thread(() -> {
+                try {
+                    boolean started = WireGuardEngine.getInstance(this).startTunnel(wgName, wgConfig);
+                    runOnUiThread(() -> {
+                        result.success(started);
+                        setStage(started ? "CONNECTED" : "DISCONNECTED");
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, "WireGuard start failed", e);
+                    runOnUiThread(() -> {
+                        result.success(false);
+                        setStage("DISCONNECTED");
+                        Toast.makeText(this, "WireGuard failed to start: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }).start();
+        }
     }
 
     private void prepareVPN() {
         if (isConnected()) {
             setStage("prepare");
-
             try {
-                ConfigParser configParser = new ConfigParser();
-                configParser.parseConfig(new StringReader(config));
-                vpnProfile = configParser.convertProfile();
-            } catch (IOException e) {
+                ConfigParser parser = new ConfigParser();
+                parser.parseConfig(new StringReader(config));
+                vpnProfile = parser.convertProfile();
+            } catch (IOException | ConfigParser.ConfigParseError e) {
                 e.printStackTrace();
-            } catch (ConfigParser.ConfigParseError configParseError) {
-                configParseError.printStackTrace();
             }
 
             Intent vpnIntent = VpnService.prepare(this);
-            if (vpnIntent != null) startActivityForResult(vpnIntent, VPN_REQUEST_ID);
-            else startVPN();
+            if (vpnIntent != null) {
+                startActivityForResult(vpnIntent, VPN_REQUEST_ID);
+            } else {
+                startVPN();
+            }
         } else {
             setStage("nonetwork");
         }
@@ -228,99 +281,145 @@ public class MainActivity extends FlutterActivity {
             if (vpnProfile.checkProfile(this) != de.blinkt.openvpn.R.string.no_error_found) {
                 throw new RemoteException(getString(vpnProfile.checkProfile(this)));
             }
+
             vpnProfile.mName = name;
             vpnProfile.mProfileCreator = getPackageName();
             vpnProfile.mUsername = username;
             vpnProfile.mPassword = password;
             vpnProfile.mDNS1 = dns1;
             vpnProfile.mDNS2 = dns2;
+            vpnProfile.mOverrideDNS = dns1 != null && dns2 != null;
 
-            if (dns1 != null && dns2 != null) {
-                vpnProfile.mOverrideDNS = true;
-            }
-
-            if (bypassPackages != null && bypassPackages.size() > 0) {
+            if (bypassPackages != null && !bypassPackages.isEmpty()) {
                 vpnProfile.mAllowedAppsVpn.addAll(bypassPackages);
                 vpnProfile.mAllowAppVpnBypass = true;
             }
 
-            Log.d(TAG, "Starting VPN with profile: " + vpnProfile.mName);
-            
             ProfileManager.setTemporaryProfile(this, vpnProfile);
             VPNLaunchHelper.startOpenVpn(vpnProfile, this);
-            
-            Log.d(TAG, "VPN Start initiated");
-        } catch (RemoteException e) {
-            Log.e(TAG, "RemoteException in startVPN: " + e.getMessage(), e);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage(), e);
             setStage("disconnected");
             Toast.makeText(this, "Failed to start VPN: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Log.e(TAG, "Exception in startVPN: " + e.getMessage(), e);
-            setStage("disconnected");
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void stopAllVPNs() {
+        Log.d(TAG, "Stopping all VPN connections");
+        
+        // Stop OpenVPN
+        if (isOpenVPNConnected()) {
+            OpenVPNThread.stop();
+            Log.d(TAG, "OpenVPN stopped");
+        }
+        
+        // Stop WireGuard
+        if (isWireGuardConnected()) {
+            WireGuardEngine.getInstance(this).stopTunnel();
+            Log.d(TAG, "WireGuard stopped");
+        }
+        
+        setStage("disconnected");
+    }
+
+    private boolean isOpenVPNConnected() {
+        String status = OpenVPNService.getStatus();
+        return status != null && (status.equals("CONNECTED") || status.equals("LEVEL_CONNECTED"));
+    }
+
+    private boolean isWireGuardConnected() {
+        try {
+            String state = WireGuardEngine.getInstance(this).getTunnelState();
+            return state != null && state.equals("UP");
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking WireGuard state", e);
+            return false;
+        }
+    }
 
     private void updateVPNStages() {
         setStage(OpenVPNService.getStatus());
     }
 
     private void updateVPNStatus() {
-        if (attached) vpnStatusSink.success(localJson.toString());
+        if (attached && localJson != null) {
+            vpnStatusSink.success(localJson.toString());
+        }
     }
-
 
     private boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo nInfo = cm.getActiveNetworkInfo();
-
-        return nInfo != null && nInfo.isConnectedOrConnecting();
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        return info != null && info.isConnectedOrConnecting();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == VPN_REQUEST_ID) {
             if (resultCode == RESULT_OK) {
                 startVPN();
             } else {
                 setStage("disconnected");
-            Toast.makeText(this, "Permission is denied! VPN disconnected.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permission is denied! VPN disconnected.", Toast.LENGTH_SHORT).show();
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VPN_REQUEST_ID_WG) {
+            if (resultCode == RESULT_OK && pendingWireGuard) {
+                setStage("CONNECTING");
+
+                new Thread(() -> {
+                    try {
+                        boolean started = WireGuardEngine.getInstance(this).startTunnel(pendingWgName, pendingWgConfig);
+                        runOnUiThread(() -> {
+                            if (pendingWireGuardResult != null) {
+                                pendingWireGuardResult.success(started);
+                            }
+                            setStage(started ? "CONNECTED" : "DISCONNECTED");
+                            resetPendingWireGuard();
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, "WireGuard start failed in onActivityResult", e);
+                        runOnUiThread(() -> {
+                            if (pendingWireGuardResult != null) {
+                                pendingWireGuardResult.success(false);
+                            }
+                            setStage("DISCONNECTED");
+                            Toast.makeText(this, "WireGuard failed to start: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            resetPendingWireGuard();
+                        });
+                    }
+                }).start();
+            } else if (pendingWireGuardResult != null) {
+                pendingWireGuardResult.success(false);
+                setStage("DISCONNECTED");
+                Toast.makeText(this, "Permission is denied! WireGuard VPN disconnected.", Toast.LENGTH_SHORT).show();
+                resetPendingWireGuard();
+            }
+        }
     }
 
+    private void resetPendingWireGuard() {
+        pendingWireGuard = false;
+        pendingWgName = null;
+        pendingWgConfig = null;
+        pendingWireGuardResult = null;
+    }
 
     private void setStage(String stage) {
+        if (vpnStageSink == null || !attached) return;
         switch (stage.toUpperCase()) {
-            case "CONNECTED":
-                if (vpnStageSink != null && attached) vpnStageSink.success("connected");
-                break;
-            case "DISCONNECTED":
-                if (vpnStageSink != null && attached) vpnStageSink.success("disconnected");
-                break;
-            case "WAIT":
-                if (vpnStageSink != null && attached) vpnStageSink.success("wait_connection");
-                break;
-            case "AUTH":
-                if (vpnStageSink != null && attached) vpnStageSink.success("authenticating");
-                break;
-            case "RECONNECTING":
-                if (vpnStageSink != null && attached) vpnStageSink.success("reconnect");
-                break;
-            case "NONETWORK":
-                if (vpnStageSink != null && attached) vpnStageSink.success("no_connection");
-                break;
-            case "CONNECTING":
-                if (vpnStageSink != null && attached) vpnStageSink.success("connecting");
-                break;
-            case "PREPARE":
-                if (vpnStageSink != null && attached) vpnStageSink.success("prepare");
-                break;
-            case "DENIED":
-                if (vpnStageSink != null && attached) vpnStageSink.success("denied");
-                break;
+            case "CONNECTED": vpnStageSink.success("connected"); break;
+            case "DISCONNECTED": vpnStageSink.success("disconnected"); break;
+            case "WAIT": vpnStageSink.success("wait_connection"); break;
+            case "AUTH": vpnStageSink.success("authenticating"); break;
+            case "RECONNECTING": vpnStageSink.success("reconnect"); break;
+            case "NONETWORK": vpnStageSink.success("no_connection"); break;
+            case "CONNECTING": vpnStageSink.success("connecting"); break;
+            case "PREPARE": vpnStageSink.success("prepare"); break;
+            case "DENIED": vpnStageSink.success("denied"); break;
         }
     }
 }

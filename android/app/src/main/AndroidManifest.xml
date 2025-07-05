@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
 
      <!-- Ads Permission for Android 12 or higher -->
@@ -69,6 +70,22 @@
             android:name="de.blinkt.openvpn.core.OpenVPNService"
             android:exported="true"
             android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
+        <!-- Xóa hoặc comment đoạn GoBackend service này nếu có -->
+        <!--
+        <service
+            android:name="com.wireguard.android.backend.GoBackend"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="true" />
+        -->
+        <service
+            android:name=".MyVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>

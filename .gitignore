@@ -47,3 +47,4 @@ app.*.map.json
 
 # VPN configuration files 
 /assets/vpn
+/assets/wireguard

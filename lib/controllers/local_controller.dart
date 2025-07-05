@@ -1,186 +1,491 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/local_vpn.dart';
-import 'package:vpn_basic_project/apis/upload_downkoad.dart';
-import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
-import 'package:vpn_basic_project/screens/disconected_screen.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/watch_video_disconnect.dart';
+import '../screens/menu/rate/rate_screen.dart';
 
-import '../screens/rate_screen.dart';
-
+/// Enhanced VPN controller with better error handling and organization
 class LocalController extends GetxController {
-  // VPN đang chọn
+  // ===========================================
+  // OBSERVABLE PROPERTIES
+  // ===========================================
+
+  /// Currently selected VPN configuration
   final Rx<Vpn> vpn = Pref.vpn.obs;
 
-  // Trạng thái VPN hiện tại
+  /// Current VPN connection state
   final vpnState = VpnEngine.vpnDisconnected.obs;
 
-  // List of available local VPN servers
-  final RxList<LocalVpnServer> availableServers = <LocalVpnServer>[].obs;
-
-  // List of available local VPN pro servers
-  final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
-
-  // List of available local VPN fast servers
-  final RxList<LocalVpnServer> availableServersFast = <LocalVpnServer>[].obs;
-
-  // Lắng nghe stage từ native
-  StreamSubscription<String>? _vpnStageSub;
-
-  // Thời gian bắt đầu kết nối
-  DateTime? _connectionStartTime;
-
+  /// Connection duration timer
   final connectionDuration = Duration().obs;
+
+  /// Currently selected server (OpenVPN or WireGuard)
+  final Rx<LocalVpnServer?> selectedServer = Rx<LocalVpnServer?>(null);
+
+  /// Connection status for UI feedback
+  final isConnecting = false.obs;
+  final isDisconnecting = false.obs;
+
+  // Server lists
+  final RxList<LocalVpnServer> availableServers = <LocalVpnServer>[].obs;
+  final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
+  final RxList<LocalVpnServer> availableServersFast = <LocalVpnServer>[].obs;
+  final RxList<LocalVpnServer> availableWireGuardServers =
+      <LocalVpnServer>[].obs;
+
+  // ===========================================
+  // PRIVATE PROPERTIES
+  // ===========================================
+
+  StreamSubscription<String>? _vpnStageSub;
+  DateTime? _connectionStartTime;
+  Timer? _connectionTimer;
+  int _retryAttempts = 0;
+  static const int _maxRetryAttempts = 3;
+
+  // ===========================================
+  // LIFECYCLE METHODS
+  // ===========================================
 
   @override
   void onInit() {
     super.onInit();
-    _listenVpnStage();
-    loadAvailableServers();
-    loadAvailableServersPro();
-    loadAvailableServersFast();
+    _initializeController();
   }
 
   @override
   void onClose() {
-    _vpnStageSub?.cancel();
+    _cleanup();
     super.onClose();
   }
 
-  //Load highVpn
+  /// Initialize controller with all necessary setup
+  void _initializeController() {
+    _listenVpnStage();
+    _loadAllServers();
+    _startConnectionTimer();
+  }
+
+  /// Clean up resources
+  void _cleanup() {
+    _vpnStageSub?.cancel();
+    _connectionTimer?.cancel();
+  }
+
+  // ===========================================
+  // SERVER MANAGEMENT
+  // ===========================================
+
+  /// Load all available servers
+  void _loadAllServers() {
+    try {
+      loadAvailableServers();
+      loadAvailableServersPro();
+      loadAvailableServersFast();
+      loadAvailableWireGuardServers();
+    } catch (e) {
+      _handleError('Failed to load servers', e);
+    }
+  }
+
+  /// Load high-speed VPN servers
   void loadAvailableServers() {
-    availableServers.value = highVpn;
-    if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
-        availableServers.isNotEmpty) {
-      setVpnFromLocalServer(availableServers[0]);
+    try {
+      availableServers.value = highVpn;
+      _setDefaultServerIfNeeded(availableServers);
+    } catch (e) {
+      _handleError('Failed to load high-speed servers', e);
     }
   }
 
-  //Load vpnPro
+  /// Load pro VPN servers
   void loadAvailableServersPro() {
-    availableServersPro.value = proVPN;
-    if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
-        availableServersPro.isNotEmpty) {
-      setVpnFromLocalServer(availableServersPro[0]);
+    try {
+      availableServersPro.value = proVPN;
+      _setDefaultServerIfNeeded(availableServersPro);
+    } catch (e) {
+      _handleError('Failed to load pro servers', e);
     }
   }
 
+  /// Load fast VPN servers
   void loadAvailableServersFast() {
-    availableServersFast.value = fastVpn;
-    if (vpn.value.OpenVPNConfigDataBase64.isEmpty &&
-        availableServersFast.isNotEmpty) {
-      setVpnFromLocalServer(availableServersFast[0]);
+    try {
+      availableServersFast.value = fastVpn;
+      _setDefaultServerIfNeeded(availableServersFast);
+    } catch (e) {
+      _handleError('Failed to load fast servers', e);
     }
   }
 
-  //Connect vpn
+  /// Load WireGuard servers
+  void loadAvailableWireGuardServers() {
+    try {
+      availableWireGuardServers.value = wireguardVpn;
+    } catch (e) {
+      _handleError('Failed to load WireGuard servers', e);
+    }
+  }
+
+  /// Set default server if current VPN config is empty
+  void _setDefaultServerIfNeeded(List<LocalVpnServer> servers) {
+    if (vpn.value.OpenVPNConfigDataBase64.isEmpty && servers.isNotEmpty) {
+      setVpnFromLocalServer(servers[0]);
+    }
+  }
+
+  // ===========================================
+  // VPN CONNECTION MANAGEMENT
+  // ===========================================
+
+  /// Main method to connect to VPN
   void connectToVpn() async {
-    // Nếu chưa chọn location VPN
-    if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
-      MyDialogs.info(msg: 'Select a Location by clicking \'Change Location\'');
+    if (isConnecting.value || isDisconnecting.value) {
+      MyDialogs.info(msg: 'VPN operation in progress. Please wait.');
       return;
     }
 
-    // Nếu VPN đang ở trạng thái ngắt kết nối → kết nối mới
-    if (vpnState.value == VpnEngine.vpnDisconnected) {
+    final server = selectedServer.value;
+    if (server == null) {
+      MyDialogs.info(msg: 'Please select a VPN server!');
+      return;
+    }
+
+    try {
+      if (vpnState.value == VpnEngine.vpnConnected) {
+        showDisconnectDialogWithAd();
+        return;
+      }
+
+      isConnecting.value = true;
+      _retryAttempts = 0;
+
+      if (server.protocol == 'wireguard') {
+        await _connectWireGuard(server);
+      } else {
+        await _connectOpenVPN();
+      }
+    } catch (e) {
+      _handleConnectionError('Connection failed', e);
+    } finally {
+      isConnecting.value = false;
+    }
+  }
+
+  /// Connect to WireGuard VPN
+  Future<void> _connectWireGuard(LocalVpnServer server) async {
+    try {
+      final config = await rootBundle
+          .loadString('assets/wireguard/${server.configFileName}');
+
+      if (config.isEmpty) {
+        throw Exception('WireGuard configuration is empty');
+      }
+
+      final success = await VpnEngine.startWireGuard('wg-tunnel', config);
+
+      if (!success) {
+        throw Exception('Failed to start WireGuard tunnel');
+      }
+
+      AnalyticsHelper.logVpnConnect(server.countryName, server.countryCode);
+    } catch (e) {
+      throw Exception('WireGuard connection failed: ${e.toString()}');
+    }
+  }
+
+  /// Connect to OpenVPN
+  Future<void> _connectOpenVPN() async {
+    if (vpn.value.OpenVPNConfigDataBase64.isEmpty) {
+      throw Exception('Select a Location by clicking \'Change Location\'');
+    }
+
+    try {
       final data = Base64Decoder().convert(vpn.value.OpenVPNConfigDataBase64);
       final config = Utf8Decoder().convert(data);
-
       final vpnConfig = VpnConfig(
         country: vpn.value.CountryLong,
         username: '',
         password: '',
         config: config,
       );
-      await VpnEngine.startVpn(vpnConfig); // Kết nối VPN
-    } else {
-      showDisconnectDialogWithAd();
+
+      await VpnEngine.startVpn(vpnConfig);
+    } catch (e) {
+      throw Exception('OpenVPN connection failed: ${e.toString()}');
     }
   }
 
-  /// Hiển thị dialog ngắt kết nối với quảng cáo
+  /// Show disconnect dialog with advertisement
   void showDisconnectDialogWithAd() async {
+    if (isDisconnecting.value) return;
+
     Get.dialog(
       WatchAdDialogDisconnect(
         onComplete: () async {
-          await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
-          Get.back(); // Đóng dialog
-          await Future.delayed(Duration(milliseconds: 300)); // Cho UI ổn định
-          _disconnectVpn(); // Ngắt kết nối VPN
-
-          AdHelper.showInterstitialAd(
-            onComplete: () {
-              // Format thời gian kết nối
-              String formattedTime = formatDuration(connectionDuration.value);
-              // Điều hướng đến màn hình ngắt kết nối
-              Get.to(() => DisconnectedScreen(
-                    country: vpn.value.CountryLong,
-                    ip: vpn.value.IP,
-                    connectionTime: formattedTime,
-                    uploadSpeed: getRandomUploadSpeed(),
-                    downloadSpeed: getRandomDownloadSpeed(),
-                    flagUrl:
-                        'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
-                  ));
-            },
-          );
+          await _disconnectVpn();
         },
       ),
     );
   }
 
-  /// Ngắt kết nối VPN
-  void _disconnectVpn() async {
-    // Log disconnect event nếu có thời gian bắt đầu kết nối
+
+  /// Disconnect VPN based on protocol
+  Future<void> _disconnectVpn() async {
+    final server = selectedServer.value;
+
+    try {
+      if (server != null && server.protocol == 'wireguard') {
+        await VpnEngine.stopWireGuard();
+      } else {
+        await VpnEngine.stopVpn();
+      }
+
+      // Log disconnect analytics
+      if (_connectionStartTime != null &&
+          vpnState.value == VpnEngine.vpnConnected) {
+        final durationInSeconds =
+            DateTime.now().difference(_connectionStartTime!).inSeconds;
+        AnalyticsHelper.logVpnDisconnect(currentCountry, durationInSeconds);
+      }
+    } catch (e) {
+      _handleError('Failed to disconnect VPN', e);
+      rethrow;
+    }
+  }
+
+  // ===========================================
+  // VPN STATE MANAGEMENT
+  // ===========================================
+
+  /// Listen to VPN stage changes from native
+  void _listenVpnStage() {
+    _vpnStageSub?.cancel();
+    _vpnStageSub = VpnEngine.vpnStageSnapshot().listen(
+      _handleStageChange,
+      onError: (error) => _handleError('VPN stage listener error', error),
+    );
+  }
+
+  /// Handle VPN stage changes
+  void _handleStageChange(String stage) {
+    final stageLower = stage.toLowerCase();
+
+    switch (stageLower) {
+      case VpnEngine.vpnConnected:
+        _handleConnectedState();
+        break;
+      case VpnEngine.vpnDisconnected:
+        _handleDisconnectedState();
+        break;
+      case VpnEngine.vpnConnecting:
+        _handleConnectingState();
+        break;
+      default:
+        vpnState.value = stageLower;
+    }
+
+    update();
+  }
+
+  /// Handle connected state
+  void _handleConnectedState() {
+    vpnState.value = VpnEngine.vpnConnected;
+    _connectionStartTime = DateTime.now();
+    isConnecting.value = false;
+    _retryAttempts = 0;
+
+    // Log analytics
+    AnalyticsHelper.logVpnConnect(currentCountry, currentCountryShort);
+  }
+
+  /// Handle disconnected state
+  void _handleDisconnectedState() {
+    // Log disconnect if was previously connected
     if (_connectionStartTime != null &&
         vpnState.value == VpnEngine.vpnConnected) {
       final durationInSeconds =
           DateTime.now().difference(_connectionStartTime!).inSeconds;
-      AnalyticsHelper.logVpnDisconnect(
-          vpn.value.CountryLong, durationInSeconds);
+      AnalyticsHelper.logVpnDisconnect(currentCountry, durationInSeconds);
     }
 
-    await VpnEngine.stopVpn();
+    vpnState.value = VpnEngine.vpnDisconnected;
+    _connectionStartTime = null;
+    isConnecting.value = false;
+    isDisconnecting.value = false;
   }
 
-  /// Đếm số lần nhấn nút kết nối và kiểm tra hiển thị rating
+  /// Handle connecting state
+  void _handleConnectingState() {
+    vpnState.value = VpnEngine.vpnConnecting;
+    isDisconnecting.value = false;
+  }
+
+  // ===========================================
+  // SERVER SELECTION
+  // ===========================================
+
+  /// Change VPN server from LocalVpnServer
+  /// Change VPN server from LocalVpnServer
+  Future<void> setVpnFromLocalServer(LocalVpnServer server) async {
+    try {
+      // ✅ QUAN TRỌNG: Set selectedServer TRƯỚC TIÊN
+      selectedServer.value = server;
+
+      // Disconnect if currently connected
+      if (vpnState.value == VpnEngine.vpnConnected) {
+        await VpnEngine.stopVpn();
+      }
+
+      // Xử lý cả OpenVPN và WireGuard
+      if (server.protocol == 'openvpn' || server.protocol == 'wireguard') {
+        final newVpn = await server.toVpn();
+        vpn.value = newVpn;
+        Pref.vpn = newVpn;
+      }
+
+      // Log server selection
+      AnalyticsHelper.logServerSelection(
+          server.countryName, server.countryCode);
+
+      // Force UI update
+      update();
+    } catch (e) {
+      _handleError('Failed to set VPN server', e);
+    }
+  }
+  // ===========================================
+  // UI HELPERS
+  // ===========================================
+
+  /// Get button content based on VPN state
+  Widget get getButtonContent {
+    switch (vpnState.value) {
+      case VpnEngine.vpnDisconnected:
+      case VpnEngine.vpnPrepare:
+        return _buildButtonText('Connect'.tr, 20);
+
+      case VpnEngine.vpnConnected:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            _buildButtonText('Connected'.tr, 18),
+          ],
+        );
+
+      case VpnEngine.vpnConnecting:
+      case VpnEngine.vpnWaitConnection:
+      case VpnEngine.vpnAuthenticating:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            _buildButtonText('Connecting....'.tr, 18),
+          ],
+        );
+
+      default:
+        return _buildButtonText('Waiting....'.tr, 18);
+    }
+  }
+
+  /// Build button text widget
+  Widget _buildButtonText(String text, double fontSize) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: const Color(0xFFFFFFFF),
+        fontSize: fontSize,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  /// Get button gradient based on VPN state
+  LinearGradient getButtonGradient() {
+    const connectedColors = [Color(0xFF15EDB3), Color(0xFF2484F1)];
+
+    return LinearGradient(
+      colors: connectedColors,
+      stops: List.generate(
+          connectedColors.length, (i) => i / (connectedColors.length - 1)),
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    );
+  }
+
+  // ===========================================
+  // GETTERS FOR CURRENT SERVER INFO
+  // ===========================================
+
+  /// Get current country name (prioritize WireGuard)
+  String get currentCountry {
+    final server = selectedServer.value;
+    if (server != null && server.protocol == 'wireguard') {
+      return server.countryName;
+    }
+    return vpn.value.CountryLong;
+  }
+
+  /// Get current country code (prioritize WireGuard)
+  String get currentCountryShort {
+    final server = selectedServer.value;
+    if (server != null && server.protocol == 'wireguard') {
+      return server.countryCode;
+    }
+    return vpn.value.CountryShort;
+  }
+
+  /// Get current flag asset path (prioritize WireGuard)
+  String get currentFlagAsset {
+    final code = currentCountryShort;
+    if (code.isEmpty) return '';
+    return 'assets/flags/${code.toLowerCase()}.png';
+  }
+
+  /// Check if currently using WireGuard protocol
+  bool get isUsingWireGuard {
+    final server = selectedServer.value;
+    return server != null && server.protocol == 'wireguard';
+  }
+
+  // ===========================================
+  // RATING AND ANALYTICS
+  // ===========================================
+
+  /// Increment connection attempts and check for rating display
   void incrementConnectionAttempts(BuildContext context) {
-    // Chỉ hiển thị rating nếu chưa hiển thị trước đây
     if (!Pref.hasShownRating) {
       int attempts = Pref.connectionAttempts + 1;
       Pref.connectionAttempts = attempts;
 
-      // Kiểm tra nếu đã nhấn nút kết nối 3 lần
       if (attempts >= 3) {
-        // Đặt lịch hiển thị màn hình rating sau 1 giây
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           showRatingScreen(context);
         });
       }
     }
   }
 
-  /// Hiển thị màn hình rating
+  /// Show rating screen
   void showRatingScreen(BuildContext context) {
-    // Đánh dấu đã hiển thị rating
     Pref.hasShownRating = true;
-
-    // Reset số lần nhấn nút kết nối
     Pref.resetConnectionAttempts();
-
-    // Hiển thị màn hình rating
     showRatingBottomSheet2(context);
   }
 
+  /// Show rating bottom sheet
   void showRatingBottomSheet2(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -193,48 +498,24 @@ class LocalController extends GetxController {
     );
   }
 
-  /// Lắng nghe sự kiện stage từ native
-  void _listenVpnStage() {
-    _vpnStageSub?.cancel();
-    _vpnStageSub = VpnEngine.vpnStageSnapshot().listen((stage) {
-      final stageLower = stage.toLowerCase();
-      if (stageLower == VpnEngine.vpnConnected) {
-        vpnState.value = VpnEngine.vpnConnected;
-        // Ghi nhận thời gian bắt đầu kết nối và log sự kiện
-        _connectionStartTime = DateTime.now();
-        AnalyticsHelper.logVpnConnect(
-            vpn.value.CountryLong, vpn.value.CountryShort);
-      } else if (stageLower == VpnEngine.vpnDisconnected) {
-        // Log disconnect event nếu có thời gian bắt đầu kết nối
-        if (_connectionStartTime != null &&
-            vpnState.value == VpnEngine.vpnConnected) {
-          final durationInSeconds =
-              DateTime.now().difference(_connectionStartTime!).inSeconds;
-          AnalyticsHelper.logVpnDisconnect(
-              vpn.value.CountryLong, durationInSeconds);
-          _connectionStartTime = null;
-        }
-        vpnState.value = VpnEngine.vpnDisconnected;
+  // ===========================================
+  // UTILITY METHODS
+  // ===========================================
+
+  /// Start connection duration timer
+  void _startConnectionTimer() {
+    _connectionTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (vpnState.value == VpnEngine.vpnConnected &&
+          _connectionStartTime != null) {
+        connectionDuration.value =
+            DateTime.now().difference(_connectionStartTime!);
+      } else {
+        connectionDuration.value = Duration.zero;
       }
-      update();
     });
   }
 
-  /// Đổi VPN server từ LocalVpnServer
-  Future<void> setVpnFromLocalServer(LocalVpnServer server) async {
-    if (vpnState.value == VpnEngine.vpnConnected) {
-      VpnEngine.stopVpn();
-    }
-    final newVpn = await server.toVpn();
-    vpn.value = newVpn;
-    Pref.vpn = newVpn;
-    // Log server selection event
-    AnalyticsHelper.logServerSelection(server.countryName, server.countryCode);
-
-    update();
-  }
-
-  // Helper method to format duration as HH:MM:SS
+  /// Format duration as HH:MM:SS
   String formatDuration(Duration duration) {
     String twoDigit(int n) => n.toString().padLeft(2, '0');
     final hours = twoDigit(duration.inHours);
@@ -243,97 +524,23 @@ class LocalController extends GetxController {
     return '$hours:$minutes:$seconds';
   }
 
-  /// Nội dung nút kết nối - Updated for new design
-  Widget get getButtonContent {
-    switch (vpnState.value) {
-      case VpnEngine.vpnDisconnected:
-      case VpnEngine.vpnPrepare:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Connect'.tr,
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        );
-      case VpnEngine.vpnConnected:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 12),
-            Text(
-              'Connected'.tr,
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        );
-      case VpnEngine.vpnConnecting ||
-            VpnEngine.vpnWaitConnection ||
-            VpnEngine.vpnAuthenticating:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 12),
-            Text(
-              'Connecting....'.tr,
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        );
-      default:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Waiting....'.tr,
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        );
-    }
+  /// Handle errors with consistent logging and user feedback
+  void _handleError(String message, dynamic error) {
+    print('LocalController Error: $message - $error');
+    // Could also log to analytics or crash reporting service
   }
 
-  /// Get button gradient based on VPN state
-  LinearGradient getButtonGradient() {
-    List<Color> connectedColors = [
-      Color(0xFF15EDB3),
-      Color(0xFF2484F1),
-    ];
+  /// Handle connection-specific errors with retry logic
+  void _handleConnectionError(String message, dynamic error) {
+    _handleError(message, error);
 
-    switch (vpnState.value) {
-      case VpnEngine.vpnConnected:
-        return LinearGradient(
-          colors: connectedColors,
-          stops: List.generate(
-              connectedColors.length, (i) => i / (connectedColors.length - 1)),
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        );
-      default:
-        return LinearGradient(
-          stops: List.generate(
-              connectedColors.length, (i) => i / (connectedColors.length - 1)),
-          colors: connectedColors,
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        );
+    if (_retryAttempts < _maxRetryAttempts) {
+      _retryAttempts++;
+      MyDialogs.info(
+          msg: '$message. Retrying... (${_retryAttempts}/$_maxRetryAttempts)');
+    } else {
+      MyDialogs.info(msg: '$message. Please try again later.');
+      isConnecting.value = false;
     }
   }
 }

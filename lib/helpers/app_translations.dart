@@ -4,6 +4,8 @@ class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         'en': {
+          'app':'App using VPN',
+          'save': 'Save',
           'test1': 'Speed Test',
           'test2': 'START SPEED TEST',
           'test3': 'Speed Test Info',
@@ -82,6 +84,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Cannot launch store URL',
         },
         'vi': {
+          'app': 'Ứng dụng sử dụng VPN',
+          'save': 'Lưu',
           'test1': 'Kiểm tra tốc độ',
           'test2': 'BẮT ĐẦU KIỂM TRA TỐC ĐỘ',
           'test3': 'Thông tin kiểm tra tốc độ',
@@ -161,6 +165,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Không thể mở URL cửa hàng',
         },
         'hi': {
+          'app': 'वीपीएन का उपयोग करने वाला ऐप',
+          'save': 'सहेजें',
           'test1': 'गति परीक्षण',
           'test2': 'गति परीक्षण शुरू करें',
           'test3': 'गति परीक्षण जानकारी',
@@ -238,6 +244,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'स्टोर URL लॉन्च नहीं कर सकता',
         },
         'ko': {
+          'app': 'VPN 사용 앱',
+          'save': '저장',
           'test1': '속도 테스트',
           'test2': '속도 테스트 시작',
           'test3': '속도 테스트 정보',
@@ -311,6 +319,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '스토어 URL을 열 수 없습니다',
         },
         'pt': {
+          'app': 'Aplicativo usando VPN',
+          'save': 'Salvar',
           'test1': 'Teste de velocidade',
           'test2': 'Iniciar teste de velocidade',
           'test3': 'Informações do teste de velocidade',
@@ -390,6 +400,8 @@ class AppTranslations extends Translations {
         },
 
         'ja': {
+          'app': 'VPNを使用するアプリ',
+          'save': '保存',
           'test1': '速度テスト',
           'test2': '速度テストを開始',
           'test3': '速度テスト情報',
@@ -462,6 +474,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'ストアURLを開けません',
         },
         'zh': {
+          'app': '使用VPN的应用',
+          'save': '保存',
           'test1': '速度测试',
           'test2': '开始速度测试',
           'test3': '速度测试信息',
@@ -532,6 +546,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': '无法打开商店URL',
         },
         'es': {
+          'app': 'Aplicación que usa VPN',
+          'save': 'Guardar',
           'test1': 'Prueba de velocidad',
           'test2': 'INICIAR PRUEBA DE VELOCIDAD',
           'test3': 'INFORMACIÓN DE LA PRUEBA DE VELOCIDAD',
@@ -610,6 +626,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'No se puede abrir la URL de la tienda',
         },
         'de': {
+          'app': 'App, die VPN verwendet',
+          'save': 'Speichern',
           'test1': 'Geschwindigkeitstest',
           'test2': 'GESCHWINDIGKEITSTEST STARTEN',
           'test3': 'GESCHWINDIGKEITSTEST INFORMATIONEN',
@@ -687,6 +705,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Kann die Store-URL nicht öffnen',
         },
         'ru': {
+          'app': 'Приложение, использующее VPN',
+          'save': 'Сохранить',
           'test1': 'Тест скорости',
           'test2': 'НАЧАТЬ ТЕСТ СКОРОСТИ',
           'test3': 'ИНФОРМАЦИЯ О ТЕСТЕ СКОРОСТИ',
@@ -764,6 +784,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'Не удается открыть URL магазина',
         },
         'ar': {
+          'app': 'تطبيق يستخدم VPN',
+          'save': 'حفظ',
           'test1': 'اختبار السرعة',
           'test2': 'بدء اختبار السرعة',
           'test3': 'معلومات اختبار السرعة',
@@ -832,6 +854,8 @@ class AppTranslations extends Translations {
           'Cannot launch store URL': 'لا يمكن فتح URL المتجر',
         },
         'fr': {
+          'app': 'Application utilisant VPN',
+          'save': 'Enregistrer',
           'test1': 'Test de vitesse',
           'test2': 'DÉMARRER LE TEST DE VITESSE',
           'test3': 'INFORMATIONS SUR LE TEST DE VITESSE',
@@ -911,6 +935,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Đan Mạch (Danish)
         'da': {
+          'app': 'App, der bruger VPN',
+          'save': 'Gem',
           'test1': 'Hastighedstest',
           'test2': 'START HASTIGHEDSTEST',
           'test3': 'HASTIGHEDSTEST INFORMATIONER',
@@ -988,6 +1014,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Ả Rập UAE (Arabic - UAE, dùng 'ar' làm cơ sở)
         'ss': {
+          'app': 'تطبيق يستخدم VPN',
+          'save': 'حفظ',
           'test1': 'اختبار السرعة',
           'test2': 'بدء اختبار السرعة',
           'test3': 'معلومات اختبار السرعة',
@@ -1065,6 +1093,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thái Lan (Thai)
         'th': {
+          'app': 'แอปที่ใช้ VPN',
+          'save': 'บันทึก',
           'test1': 'ทดสอบความเร็ว',
           'test2': 'เริ่มทดสอบความเร็ว',
           'test3': 'ข้อมูลการทดสอบความเร็ว',
@@ -1142,6 +1172,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Indonesia (Indonesian)
         'id': {
+          'app': 'Aplikasi yang menggunakan VPN',
+          'save': 'Simpan',
           'test1': 'Tes Kecepatan',
           'test2': 'MULAI TES KECEPATAN',
           'test3': 'INFORMASI TES KECEPATAN',
@@ -1220,6 +1252,8 @@ class AppTranslations extends Translations {
         },
         // Thêm ngôn ngữ Thổ Nhĩ Kỳ (Turkish)
         'tr': {
+          'app': 'VPN kullanan uygulama',
+          'save': 'Kaydet',
           'test1': 'Hız testi',
           'test2': 'HIZ TESTINI BAŞLAT',
           'test3': 'HIZ TESTI BILGILERI',
@@ -1299,6 +1333,8 @@ class AppTranslations extends Translations {
         },
 //cong hoa Sec
         'cs': {
+          'app': 'Aplikace používající VPN',
+          'save': 'Uložit',
           'test1': 'Test rychlosti',
           'test2': 'SPUSTIT TEST RYCHLOSTI',
           'test3': 'INFORMACE O TESTU RYCHLOSTI',
@@ -1378,6 +1414,8 @@ class AppTranslations extends Translations {
         },
 //palan
         'pl': {
+          'app': 'Aplikacja używająca VPN',
+          'save': 'Zapisz',
           'test1': 'Test prędkości',
           'test2': 'ROZPOCZNIJ TEST PRĘDKOŚCI',
           'test3': 'INFORMACJE O TEŚCIE PRĘDKOŚCI',
@@ -1457,6 +1495,8 @@ class AppTranslations extends Translations {
         },
 //tieng ukraina
         'ua': {
+          'app': 'Додаток, що використовує VPN',
+          'save': 'Зберегти',
           'test1': 'Тест швидкості',
           'test2': 'ПОЧАТИ ТЕСТ ШВИДКОСТІ',
           'test3': 'ІНФОРМАЦІЯ ПРО ТЕСТ ШВИДКОСТІ',
@@ -1536,6 +1576,8 @@ class AppTranslations extends Translations {
         },
 //romani
         'ro': {
+          'app': 'Aplicație care folosește VPN',
+          'save': 'Salvează',
           'test1': 'Test de viteză',
           'test2': 'ÎNCEPE TESTUL DE VITEZĂ',
           'test3': 'INFORMII DESPRE TESTUL DE VITEZĂ',
@@ -1616,6 +1658,8 @@ class AppTranslations extends Translations {
         },
 //Ai cap
         'eg': {
+          'app': 'تطبيق يستخدم VPN',
+          'save': 'حفظ',
           'test1': 'اختبار السرعة',
           'test2': 'ابدأ اختبار السرعة',
           'test3': 'معلومات اختبار السرعة',

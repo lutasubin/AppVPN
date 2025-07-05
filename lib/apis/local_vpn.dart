@@ -23,6 +23,7 @@ final List<LocalVpnServer> highVpn = [
     ip: '144.126.138.95',
     ping: '',
     configFileName: 'vpn-US.ovpn',
+    protocol: 'openvpn',
   ),
   LocalVpnServer(
     countryName: 'United Kingdom',
@@ -30,6 +31,7 @@ final List<LocalVpnServer> highVpn = [
     ip: '81.0.220.147',
     ping: '',
     configFileName: 'vpn-UK.ovpn',
+    protocol: 'openvpn',
   ),
   LocalVpnServer(
     countryName: 'Germany',
@@ -37,13 +39,15 @@ final List<LocalVpnServer> highVpn = [
     ip: '161.97.120.90',
     ping: '',
     configFileName: 'vpn-germany5.ovpn',
+    protocol: 'openvpn',
   ),
   LocalVpnServer(
-    countryName: 'French - Paris',
+    countryName: 'French',
     countryCode: 'fr',
     ip: '62.171.171.217',
     ping: '',
     configFileName: 'eu_fast.ovpn',
+    protocol: 'openvpn',
   ),
 
   LocalVpnServer(
@@ -52,6 +56,15 @@ final List<LocalVpnServer> highVpn = [
     ip: '185.123.100.216',
     ping: '',
     configFileName: 'vpn-turkey.ovpn',
+    protocol: 'openvpn',
+  ),
+  LocalVpnServer(
+    countryName: 'Turkish',
+    countryCode: 'tr',
+    ip: '185.123.100.216.2',
+    ping: '',
+    configFileName: 'vpn-Turkey8.conf',
+    protocol: 'wireguard',
   ),
   // LocalVpnServer(
   //   countryName: 'India',
@@ -73,6 +86,7 @@ final List<LocalVpnServer> highVpn = [
     ip: '219.100.37.169',
     ping: '',
     configFileName: 'jp_fast.ovpn',
+    protocol: 'openvpn',
   ),
   // LocalVpnServer(
   //   countryName: 'Singapore',
@@ -118,13 +132,15 @@ final List<LocalVpnServer> proVPN = [
     ip: '161.97.120.90.1',
     ping: '',
     configFileName: 'vpn-germanypro.ovpn',
+    protocol: 'openvpn',
   ),
   LocalVpnServer(
-    countryName: 'French - Paris',
+    countryName: 'French',
     countryCode: 'fr',
     ip: ' 161.97.120.90.1',
     ping: '',
     configFileName: 'vpn-francePro.ovpn',
+    protocol: 'openvpn',
   ),
   LocalVpnServer(
     countryName: 'United Kingdom',
@@ -132,6 +148,7 @@ final List<LocalVpnServer> proVPN = [
     ip: '81.0.220.147.1',
     ping: '',
     configFileName: 'vpn-UKPro.ovpn',
+    protocol: 'openvpn',
   ),
   LocalVpnServer(
     countryName: 'United States',
@@ -139,6 +156,7 @@ final List<LocalVpnServer> proVPN = [
     ip: '144.126.138.95.1',
     ping: '',
     configFileName: 'vpn-UsPro.ovpn',
+    protocol: 'openvpn',
   ),
 ];
 
@@ -148,8 +166,46 @@ final List<LocalVpnServer> fastVpn = [
     countryCode: '',
     ip: '222.222.222.2',
     ping: '',
-    configFileName: highVpn[randomIndex(highVpn.length)].configFileName,
+    configFileName:
+        wireguardVpn[randomIndex(wireguardVpn.length)].configFileName,
+    protocol: 'wireguard',
   ),
 ];
+
+final List<LocalVpnServer> wireguardVpn = [
+  LocalVpnServer(
+    countryName: 'Germany',
+    countryCode: 'de',
+    ip: '213.136.95.11',
+    ping: '',
+    configFileName: 'vpn-germany9.conf',
+    protocol: 'wireguard',
+  ),
+  LocalVpnServer(
+    countryName: 'France',
+    countryCode: 'fr',
+    ip: '213.136.95.10',
+    ping: '',
+    configFileName: 'vpn-France8.conf',
+    protocol: 'wireguard',
+  ),
+  LocalVpnServer(
+    countryName: 'United Kingdom',
+    countryCode: 'gb',
+    ip: '185.187.242.51',
+    ping: '',
+    configFileName: 'vpn-US8.conf',
+    protocol: 'wireguard',
+  ),
+  LocalVpnServer(
+    countryName: 'United Kingdom',
+    countryCode: 'gb',
+    ip: '209.126.15.51',
+    ping: '',
+    configFileName: 'vpn-US8.conf',
+    protocol: 'wireguard',
+  ),
+];
+
 // Hàm random index
 int randomIndex(int length) => Random().nextInt(length);

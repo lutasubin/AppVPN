@@ -12,84 +12,85 @@ class VpnCardLocalSpeed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          margin: EdgeInsets.only(bottom: 8),
-          decoration: BoxDecoration(
-            color:
-                const Color(0xFF172032), // Background màu tối giống trong hình
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Color(0xFF2F3A51),
-              width: 1,
+    return Obx(() {
+      // ✅ SỬ DỤNG LOGIC THỐNG NHẤT như VpnCardWireGuard
+      final isSelected = controller.selectedServer.value?.ip == server.ip &&
+          controller.selectedServer.value?.protocol == server.protocol;
+      
+      return Container(
+        margin: EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF172032),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Color(0xFF2F3A51),
+            width: 1,
+          ),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          onTap: () async {
+            await controller.setVpnFromLocalServer(server);
+            Get.back();
+          },
+          leading: CircleAvatar(
+            radius: 18,
+            backgroundColor: Color(0xFF02091A),
+            child: SvgPicture.asset(
+              'assets/svg/earth.svg',
+              width: 30,
+              height: 30,
             ),
           ),
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            onTap: () async {
-              await controller.setVpnFromLocalServer(server);
-              Get.back();
-            },
-            leading: CircleAvatar(
-              radius: 18,
-              backgroundColor: Color(0xFF02091A),
-              child: SvgPicture.asset(
-                'assets/svg/earth.svg',
-                width: 30,
-                height: 30,
+          title: Row(
+            children: [
+              Text(
+                "Fast server",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: const Color(0xFFFFFFFF),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            title: Row(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "Fast sever",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: const Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SignalStrengthIcon(level: 3),
-                SizedBox(width: 12),
-                Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: controller.vpn.value.IP == server.ip
-                          ? const Color(0xFFF15E24)
-                          : Color(0xFFFFFFFF),
-                      width: 2,
-                    ),
-                    color: controller.vpn.value.IP == server.ip
-                        ? const Color(0xFFF15E24)
-                        : Colors.transparent,
-                  ),
-                  child: controller.vpn.value.IP == server.ip
-                      ? Center(
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xFFFFFFFF),
-                            ),
-                          ),
-                        )
-                      : null,
-                ),
-              ],
-            ),
+            ],
           ),
-        ));
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SignalStrengthIcon(level: 3),
+              SizedBox(width: 12),
+              Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected
+                        ? const Color(0xFFF15E24)
+                        : Color(0xFFFFFFFF),
+                    width: 2,
+                  ),
+                  color: isSelected
+                      ? const Color(0xFFF15E24)
+                      : Colors.transparent,
+                ),
+                child: isSelected
+                    ? Center(
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                      )
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

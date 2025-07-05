@@ -43,10 +43,8 @@ class _VpnControlButtonState extends State<VpnControlButton> {
             return const SizedBox.shrink();
           }
 
-          // Kiểm tra trạng thái đang kết nối để hiện hiệu ứng loading
-          final isConnecting = vpnState == VpnEngine.vpnConnecting ||
-              vpnState == VpnEngine.vpnWaitConnection ||
-              vpnState == VpnEngine.vpnAuthenticating;
+          // ✅ SỬA LẠI: Kiểm tra trạng thái đang kết nối cho cả OpenVPN và WireGuard
+          final isConnecting = _isInConnectingState(vpnState);
 
           return Center(
             child: GestureDetector(
@@ -165,5 +163,24 @@ class _VpnControlButtonState extends State<VpnControlButton> {
         }),
       ],
     );
+  }
+
+  /// ✅ THÊM MỚI: Kiểm tra trạng thái đang kết nối cho cả OpenVPN và WireGuard
+  bool _isInConnectingState(String vpnState) {
+    // Kiểm tra trạng thái OpenVPN
+    final isOpenVpnConnecting = vpnState == VpnEngine.vpnConnecting ||
+        vpnState == VpnEngine.vpnWaitConnection ||
+        vpnState == VpnEngine.vpnAuthenticating;
+
+    // Kiểm tra trạng thái WireGuard
+    final isWireGuardConnecting = widget.controller.isUsingWireGuard &&
+        widget.controller.isConnecting.value;
+
+    // Kiểm tra trạng thái controller
+    final isControllerConnecting = widget.controller.isConnecting.value;
+
+    return isOpenVpnConnecting ||
+        isWireGuardConnecting ||
+        isControllerConnecting;
   }
 }
