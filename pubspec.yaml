@@ -66,8 +66,6 @@ dependencies:
   flutter_speed_test_plus: ^1.0.10
  
 
-  # using app
-  installed_apps: ^1.6.0
 
 # Các thư viện dùng trong quá trình phát triển
 dev_dependencies:

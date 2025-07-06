@@ -43,7 +43,9 @@ class LanguageScreen extends StatelessWidget {
                 size: 25,
               ),
               onPressed: () {
-                Get.back();
+                AdHelper.showInterstitialAd(onComplete: () {
+                  Get.back();
+                });
               },
             ),
           ],

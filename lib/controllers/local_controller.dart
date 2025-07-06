@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/local_vpn.dart';
+import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
@@ -239,7 +240,6 @@ class LocalController extends GetxController {
     );
   }
 
-
   /// Disconnect VPN based on protocol
   Future<void> _disconnectVpn() async {
     final server = selectedServer.value;
@@ -307,6 +307,15 @@ class LocalController extends GetxController {
 
     // Log analytics
     AnalyticsHelper.logVpnConnect(currentCountry, currentCountryShort);
+
+    // Delay để đảm bảo UI đã ổn định
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      print('🔥 Attempting to show interstitial ad...');
+    });
+    // ket noi thanh cong hien ads inter
+    AdHelper.showInterstitialAd(onComplete: () {
+      print('*****ads inter *****');
+    });
   }
 
   /// Handle disconnected state
