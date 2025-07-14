@@ -19,7 +19,6 @@ class IconTextButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       onTap: onTap,
       child: Container(
-        width: 180, // size giống hình bạn gửi
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           color: const Color(0xFF172032), // màu nền gần giống hình (xám đậm)

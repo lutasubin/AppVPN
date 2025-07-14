@@ -345,18 +345,20 @@ class LocalController extends GetxController {
   // ===========================================
 
   /// Change VPN server from LocalVpnServer
-  /// Change VPN server from LocalVpnServer
   Future<void> setVpnFromLocalServer(LocalVpnServer server) async {
     try {
-      // ✅ QUAN TRỌNG: Set selectedServer TRƯỚC TIÊN
-      selectedServer.value = server;
-
-      // Disconnect if currently connected
+      // Nếu đang connected, tự động disconnect trước
       if (vpnState.value == VpnEngine.vpnConnected) {
-        await VpnEngine.stopVpn();
+        MyDialogs.info(
+          msg: 'Please disconnect VPN first before changing server!',
+        );
+        await Future.delayed(Duration(seconds: 3));
+        return;
       }
 
-      // Xử lý cả OpenVPN và WireGuard
+      // Set server mới
+      selectedServer.value = server;
+
       if (server.protocol == 'openvpn' || server.protocol == 'wireguard') {
         final newVpn = await server.toVpn();
         vpn.value = newVpn;
@@ -367,7 +369,6 @@ class LocalController extends GetxController {
       AnalyticsHelper.logServerSelection(
           server.countryName, server.countryCode);
 
-      // Force UI update
       update();
     } catch (e) {
       _handleError('Failed to set VPN server', e);

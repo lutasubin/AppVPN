@@ -13,9 +13,13 @@ class MyDialogs {
   }
 
   static error({required String msg}) {
-    Get.snackbar('Error', msg,
-        colorText: Color(0xFFFFFFFF),
-        backgroundColor: Colors.redAccent.withOpacity(.9));
+    Get.snackbar(
+      'Error', 
+      msg,
+      colorText: Color(0xFFFFFFFF),
+      backgroundColor: Colors.redAccent.withOpacity(.9),
+      duration: Duration(seconds: 3),
+    );
   }
 
   static info({required String msg}) {
@@ -23,6 +27,8 @@ class MyDialogs {
       'Info',
       msg,
       colorText: Color(0xFFFFFFFF),
+      backgroundColor: Colors.blue.withOpacity(.9), // Thêm background
+      duration: Duration(seconds: 3), // Thêm duration
     );
   }
 

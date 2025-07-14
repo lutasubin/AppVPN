@@ -19,7 +19,6 @@ class LocationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // Nạp quảng cáo native
     _adController2.ad = AdHelper.loadNativeAd2(adController: _adController2);
     // Sử dụng Obx để theo dõi thay đổi trạng thái
@@ -78,14 +77,14 @@ class LocationScreen extends StatelessWidget {
       ),
     );
   }
-  
+
   /// Phương thức hiển thị danh sách VPN dạng phẳng (không nhóm theo quốc gia)
   Widget _buildFlatListView() {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
-         // Hiển thị tất cả VPN Fast
-         ...controller.availableServersFast
+        // Hiển thị tất cả VPN Fast
+        ...controller.availableServersFast
             .map((server) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: VpnCardLocalSpeed(server: server),
@@ -98,6 +97,13 @@ class LocationScreen extends StatelessWidget {
                   child: VpnCardLocalPro(server: server),
                 ))
             .toList(),
+        // Hiển thị tất cả server WireGuard
+        ...controller.availableWireGuardServers
+            .map((server) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: VpnCardWireGuard(server: server),
+                ))
+            .toList(),
         // Hiển thị tất cả VPN thường
         ...controller.availableServers
             .map((server) => Padding(
@@ -105,13 +111,6 @@ class LocationScreen extends StatelessWidget {
                   child: VpnCardLocal(
                     server: server,
                   ),
-                ))
-            .toList(),
-        // Hiển thị tất cả server WireGuard
-        ...controller.availableWireGuardServers
-            .map((server) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: VpnCardWireGuard(server: server),
                 ))
             .toList(),
       ],

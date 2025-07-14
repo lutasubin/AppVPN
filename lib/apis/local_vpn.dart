@@ -58,14 +58,6 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'vpn-turkey.ovpn',
     protocol: 'openvpn',
   ),
-  LocalVpnServer(
-    countryName: 'Turkish',
-    countryCode: 'tr',
-    ip: '185.123.100.216.2',
-    ping: '',
-    configFileName: 'vpn-Turkey8.conf',
-    protocol: 'wireguard',
-  ),
   // LocalVpnServer(
   //   countryName: 'India',
   //   countryCode: 'in',
@@ -190,8 +182,8 @@ final List<LocalVpnServer> wireguardVpn = [
     protocol: 'wireguard',
   ),
   LocalVpnServer(
-    countryName: 'United Kingdom',
-    countryCode: 'gb',
+    countryName: 'United States',
+    countryCode: 'us',
     ip: '185.187.242.51',
     ping: '',
     configFileName: 'vpn-US8.conf',
@@ -203,6 +195,14 @@ final List<LocalVpnServer> wireguardVpn = [
     ip: '209.126.15.51',
     ping: '',
     configFileName: 'vpn-US8.conf',
+    protocol: 'wireguard',
+  ),
+  LocalVpnServer(
+    countryName: 'Turkish',
+    countryCode: 'tr',
+    ip: '185.123.100.216.2',
+    ping: '',
+    configFileName: 'vpn-Turkey8.conf',
     protocol: 'wireguard',
   ),
 ];

@@ -78,46 +78,59 @@ class HomeScreen extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 2,
-                          child: Column(
-                            children: [
-                              // Hàng đầu tiên: 2 nút Check IP và Speed test
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  IconTextButton(
-                                    svgAsset:
-                                        'assets/svg/map.svg', // icon Check IP
-                                    label: 'ip'.tr,
-                                    onTap: () {
-                                      Get.to(() => NetworkTestScreen());
-                                    },
-                                  ),
-                                  IconTextButton(
-                                    svgAsset:
-                                        'assets/svg/speed.svg', // icon Speed test
-                                    label: 'speed'.tr,
-                                    onTap: () {
-                                      Get.to(() => SpeedTestScreen());
-                                    },
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 18,
-                              ),
-                              Container(
-                                width: 380,
-                                child: IconTextButton(
-                                  svgAsset:
-                                      'assets/svg/apps.svg', // icon Apps (bạn cần tạo file SVG này)
-                                  label: 'app'.tr,
-                                  onTap: () {
-                                    Get.to(() => ApplicationVpnScreen());
-                                  },
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Column(
+                              children: [
+                                // Hàng chứa 2 nút Check IP và Speed Test
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: IconTextButton(
+                                          svgAsset: 'assets/svg/map.svg',
+                                          label: 'ip'.tr,
+                                          onTap: () {
+                                            AdHelper.showInterstitialAd(
+                                                onComplete: () {
+                                              Get.to(() => NetworkTestScreen());
+                                            });
+                                          }),
+                                    ),
+                                    SizedBox(width: 16),
+                                    Expanded(
+                                      child: IconTextButton(
+                                          svgAsset: 'assets/svg/speed.svg',
+                                          label: 'speed'.tr,
+                                          onTap: () {
+                                            AdHelper.showInterstitialAd(
+                                                onComplete: () {
+                                              Get.to(() => SpeedTestScreen());
+                                            });
+                                          }),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 16),
+                                // Nút App bên dưới, chiếm toàn bộ chiều rộng
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: IconTextButton(
+                                          svgAsset: 'assets/svg/apps.svg',
+                                          label: 'app'.tr,
+                                          onTap: () {
+                                            AdHelper.showInterstitialAd(
+                                                onComplete: () {
+                                              Get.to(
+                                                  () => ApplicationVpnScreen());
+                                            });
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -130,7 +143,9 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: const Color(0xFF02091A),
               leading: IconButton(
                 onPressed: () {
-                  Get.to(() => MenuScreen());
+                  AdHelper.showInterstitialAd(onComplete: () {
+                    Get.to(() => MenuScreen());
+                  });
                 },
                 icon: Icon(
                   Icons.menu,
@@ -171,7 +186,9 @@ class HomeScreen extends StatelessWidget {
           button: true,
           child: InkWell(
             onTap: () {
-              Get.to(() => LocationScreen());
+              AdHelper.showInterstitialAd(onComplete: () {
+                Get.to(() => LocationScreen());
+              });
             },
             child: Obx(() {
               final country = _controller.currentCountry.isEmpty

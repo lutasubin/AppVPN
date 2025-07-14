@@ -125,6 +125,7 @@ class SpeedTestController extends GetxController {
     country.value = null;
     unitText.value = 'Mb/s';
     isButtonVisible.value = true;
-    currentTestType.value = null; // Hoặc TestType.download nếu muốn mặc định
+    currentTestType.value =
+        TestType.download; // Hoặc TestType.download nếu muốn mặc định
   }
 }

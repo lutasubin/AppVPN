@@ -1,60 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:installed_apps/installed_apps.dart';
+import 'package:installed_apps/app_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_basic_project/controllers/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/screens/home/home_screen.dart';
-
-class AppModel {
-  final String name;
-  final String packageName;
-  final String iconAsset;
-
-  AppModel({
-    required this.name,
-    required this.packageName,
-    required this.iconAsset,
-  });
-}
-
-final List<AppModel> predefinedApps = [
-  AppModel(
-    name: 'Discord',
-    packageName: 'com.discord',
-    iconAsset: 'assets/icons/discord.png',
-  ),
-  AppModel(
-    name: 'Instagram',
-    packageName: 'com.instagram.android',
-    iconAsset: 'assets/icons/instagram.png',
-  ),
-  AppModel(
-    name: 'Telegram',
-    packageName: 'org.telegram.messenger',
-    iconAsset: 'assets/icons/telegram.png',
-  ),
-  AppModel(
-    name: 'Facebook',
-    packageName: 'com.facebook.katana',
-    iconAsset: 'assets/icons/facebook.png',
-  ),
-  AppModel(
-    name: 'Messenger',
-    packageName: 'com.facebook.orca',
-    iconAsset: 'assets/icons/messenger.png',
-  ),
-  AppModel(
-    name: 'Dribble',
-    packageName: 'com.dribble.app',
-    iconAsset: 'assets/icons/dribble.png',
-  ),
-  AppModel(
-    name: 'Pinterest',
-    packageName: 'com.pinterest',
-    iconAsset: 'assets/icons/pinterest.png',
-  ),
-];
 
 class ApplicationVpnScreen extends StatefulWidget {
   @override
@@ -62,17 +13,19 @@ class ApplicationVpnScreen extends StatefulWidget {
 }
 
 class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
+  List<AppInfo> installedApps = [];
   Map<String, bool> appToggleStates = {};
+  bool isLoading = true;
   static const String _vpnAppsKey = 'vpn_enabled_apps';
   final _adController7 = NativeAdController();
 
   @override
   void initState() {
     super.initState();
-    _loadToggleStates();
-    _adController7.ad = AdHelper.loadNativeAd2(adController: _adController7);
+    _loadInstalledApps();
   }
 
+  // Lưu trạng thái vào SharedPreferences
   Future<void> _saveToggleStates() async {
     final prefs = await SharedPreferences.getInstance();
     final enabledApps = appToggleStates.entries
@@ -82,19 +35,52 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
     await prefs.setStringList(_vpnAppsKey, enabledApps);
   }
 
+  // Tải trạng thái từ SharedPreferences
   Future<void> _loadToggleStates() async {
     final prefs = await SharedPreferences.getInstance();
     final enabledApps = prefs.getStringList(_vpnAppsKey) ?? [];
 
-    for (var app in predefinedApps) {
-      appToggleStates[app.packageName] = enabledApps.contains(app.packageName);
+    // Đặt tất cả về false trước
+    for (var app in installedApps) {
+      appToggleStates[app.packageName] = false;
     }
 
-    setState(() {});
+    // Sau đó set các app đã enable về true
+    for (var packageName in enabledApps) {
+      if (appToggleStates.containsKey(packageName)) {
+        appToggleStates[packageName] = true;
+      }
+    }
+  }
+
+  Future<void> _loadInstalledApps() async {
+    try {
+      // Lấy danh sách ứng dụng đã cài đặt
+      List<AppInfo> apps = await InstalledApps.getInstalledApps(
+        true, // excludeSystemApps - Loại bỏ ứng dụng hệ thống
+        true, // withIcon - Lấy icon của ứng dụng
+        '', // packageNamePrefix - Lọc theo prefix (để trống để lấy tất cả)
+      );
+
+      setState(() {
+        installedApps = apps;
+        isLoading = false;
+      });
+
+      // Tải trạng thái đã lưu
+      await _loadToggleStates();
+      setState(() {}); // Cập nhật UI sau khi load trạng thái
+    } catch (e) {
+      print('Error loading apps: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _adController7.ad = AdHelper.loadNativeAd2(adController: _adController7);
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(
@@ -103,7 +89,7 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
         elevation: 0,
         title: Text(
           'app'.tr,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -113,8 +99,9 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
           TextButton(
             onPressed: () {
               AdHelper.showInterstitialAd(onComplete: () async {
-                _saveVpnSettings();
                 Get.back();
+                // Lưu cài đặt VPN cho các ứng dụng
+                _saveVpnSettings();
               });
             },
             child: Text(
@@ -135,28 +122,35 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
                 SizedBox(height: 120, child: AdWidget(ad: _adController7.ad!)),
           );
         } else {
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         }
       }),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: predefinedApps.length,
-              itemBuilder: (context, index) {
-                final app = predefinedApps[index];
-                return _buildAppItem(app);
-              },
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFFF15E24),
+              ),
+            )
+          : Column(
+              children: [
+                const SizedBox(height: 16),
+                // Danh sách ứng dụng
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: installedApps.length,
+                    itemBuilder: (context, index) {
+                      final app = installedApps[index];
+                      return _buildAppItem(app);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildAppItem(AppModel app) {
+  Widget _buildAppItem(AppInfo app) {
     final isToggled = appToggleStates[app.packageName] ?? false;
 
     return Container(
@@ -165,20 +159,56 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFF172032),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFFFFFFF).withOpacity(0.1)),
+        border: Border.all(
+          color: const Color(0xFFFFFFFF).withOpacity(0.1),
+        ),
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              app.iconAsset,
-              width: 40,
-              height: 40,
-              fit: BoxFit.cover,
+          // Icon ứng dụng
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
             ),
+            child: app.icon != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.memory(
+                      app.icon!,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF02091A),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.android,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF02091A),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.android,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
           ),
           const SizedBox(width: 12),
+          // Tên ứng dụng
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,12 +234,14 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
               ],
             ),
           ),
+          // Toggle switch
           Switch(
             value: isToggled,
             onChanged: (bool value) {
               setState(() {
                 appToggleStates[app.packageName] = value;
               });
+              // Tự động lưu trạng thái khi thay đổi
               _saveToggleStates();
             },
             activeColor: const Color(0xFFF15E24),
@@ -223,7 +255,9 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
   }
 
   void _saveVpnSettings() {
+    // Tự động lưu trạng thái khi bấm SAVE
     _saveToggleStates();
-    // Show snackbar/toast if needed
+
+    // Hiển thị thông báo
   }
 }

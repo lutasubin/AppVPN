@@ -60,7 +60,7 @@ class VpnCardWireGuard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2484F1), // cam đậm
+                  color:const Color(0xFF0CD09C), // cam đậm
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -68,7 +68,7 @@ class VpnCardWireGuard extends StatelessWidget {
                     Icon(Icons.bolt, size: 14, color: Color(0xFFFFFFFF)),
                     SizedBox(width: 2),
                     Text(
-                      'Social media',
+                      'Streaming',
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 12,
