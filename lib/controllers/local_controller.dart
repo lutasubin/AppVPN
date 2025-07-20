@@ -309,7 +309,7 @@ class LocalController extends GetxController {
     AnalyticsHelper.logVpnConnect(currentCountry, currentCountryShort);
 
     // Delay để đảm bảo UI đã ổn định
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       print('🔥 Attempting to show interstitial ad...');
     });
     // ket noi thanh cong hien ads inter
@@ -332,6 +332,15 @@ class LocalController extends GetxController {
     _connectionStartTime = null;
     isConnecting.value = false;
     isDisconnecting.value = false;
+
+    // Delay để đảm bảo UI đã ổn định
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      print('🔥 Attempting to show interstitial ad...');
+    });
+    // ngat ket noi thanh cong hien ads inter
+    AdHelper.showInterstitialAd(onComplete: () {
+      print('*****ads inter *****');
+    });
   }
 
   /// Handle connecting state
@@ -480,7 +489,7 @@ class LocalController extends GetxController {
       int attempts = Pref.connectionAttempts + 1;
       Pref.connectionAttempts = attempts;
 
-      if (attempts >= 3) {
+      if (attempts >= 2) {
         Future.delayed(const Duration(seconds: 1), () {
           showRatingScreen(context);
         });

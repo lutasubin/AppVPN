@@ -22,7 +22,9 @@ Future<void> main() async {
   // Gắn observer để xử lý lifecycle nếu cần
   WidgetsBinding.instance.addObserver(AppLifecycleHandler());
 
+  // ignore: deprecated_member_use
   mq = WidgetsBinding.instance.window.physicalSize /
+      // ignore: deprecated_member_use
       WidgetsBinding.instance.window.devicePixelRatio;
 
   await dotenv.load();

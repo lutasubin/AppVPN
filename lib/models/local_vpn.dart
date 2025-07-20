@@ -43,8 +43,6 @@ class LocalVpnServer {
       );
     } else {
       // WireGuard: chỉ trả về config dạng text, xử lý riêng ở controller
-      final configData =
-          await rootBundle.loadString('assets/wireguard/$configFileName');
       throw UnimplementedError('Use configData directly for WireGuard');
     }
   }

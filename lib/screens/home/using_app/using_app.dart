@@ -160,6 +160,7 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
         color: const Color(0xFF172032),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
+          // ignore: deprecated_member_use
           color: const Color(0xFFFFFFFF).withOpacity(0.1),
         ),
       ),

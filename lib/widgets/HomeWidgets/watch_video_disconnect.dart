@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/helpers/ad_helper.dart';
 
 class WatchAdDialogDisconnect extends StatelessWidget {
   final VoidCallback onComplete;
@@ -38,13 +37,8 @@ class WatchAdDialogDisconnect extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            // ✅ Hiển thị quảng cáo
-            AdHelper.showInterstitialAd(
-              onComplete: () {
-                Get.back(); // Đóng dialog
-                onComplete(); // Thực hiện disconnect
-              },
-            );
+            onComplete();
+            Get.back();
           },
           child: Text(
             'disconnect'.tr,

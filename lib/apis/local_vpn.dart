@@ -3,20 +3,6 @@ import 'dart:math';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 
 final List<LocalVpnServer> highVpn = [
-  // LocalVpnServer(
-  //   countryName: 'Poland-Warsaw',
-  //   countryCode: 'pl',
-  //   ip: '70.34.254.154',
-  //   ping: '',
-  //   configFileName: 'vpn-paland.ovpn',
-  // ),
-  // LocalVpnServer(
-  //   countryName: 'United States - Taxas',
-  //   countryCode: 'us',
-  //   ip: '108.181.199.29',
-  //   ping: '',
-  //   configFileName: 'us_fast2.ovpn',
-  // ),
   LocalVpnServer(
     countryName: 'United States',
     countryCode: 'us',
@@ -49,7 +35,6 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'eu_fast.ovpn',
     protocol: 'openvpn',
   ),
-
   LocalVpnServer(
     countryName: 'Turkish',
     countryCode: 'tr',
@@ -58,20 +43,6 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'vpn-turkey.ovpn',
     protocol: 'openvpn',
   ),
-  // LocalVpnServer(
-  //   countryName: 'India',
-  //   countryCode: 'in',
-  //   ip: '142.93.219.152',
-  //   ping: '',
-  //   configFileName: 'in_fast.ovpn',
-  // ),
-  // LocalVpnServer(
-  //   countryName: 'Australia',
-  //   countryCode: 'au',
-  //   ip: '170.64.162.198',
-  //   ping: '',
-  //   configFileName: 'au_fast.ovpn',
-  // ),
   LocalVpnServer(
     countryName: 'Japan',
     countryCode: 'jp',
@@ -80,44 +51,9 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'jp_fast.ovpn',
     protocol: 'openvpn',
   ),
-  // LocalVpnServer(
-  //   countryName: 'Singapore',
-  //   countryCode: 'sg',
-  //   ip: '165.22.96.219',
-  //   ping: '',
-  //   configFileName: 'sg_fast.ovpn',
-  // ),
-  // LocalVpnServer(
-  //   countryName: 'Canada',
-  //   countryCode: 'ca',
-  //   ip: '68.183.203.154',
-  //   ping: '',
-  //   configFileName: 'ca_fast.ovpn',
-  // ),
-  // LocalVpnServer(
-  //   countryName: 'Canada - Torano',
-  //   countryCode: 'ca',
-  //   ip: '103.98.215.244',
-  //   ping: '',
-  //   configFileName: 'vpn-torano.ovpn',
-  // ),
 ];
 
 final List<LocalVpnServer> proVPN = [
-  // LocalVpnServer(
-  //   countryName: 'Mexico - Mexicocity',
-  //   countryCode: 'mx',
-  //   ip: '216.238.70.29',
-  //   ping: '',
-  //   configFileName: 'vpn-mexicocity.ovpn',
-  // ),
-  // LocalVpnServer(
-  //   countryName: 'Brazil - São Paulo',
-  //   countryCode: 'br',
-  //   ip: '216.238.122.7',
-  //   ping: '',
-  //   configFileName: 'vpn-saopaulo.ovpn',
-  // ),
   LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
@@ -170,7 +106,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'de',
     ip: '213.136.95.11',
     ping: '',
-    configFileName: 'vpn-germany9.conf',
+    configFileName: 'vpn-Ger16.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -178,7 +114,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'fr',
     ip: '213.136.95.10',
     ping: '',
-    configFileName: 'vpn-France8.conf',
+    configFileName: 'vpn-UK15.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -186,7 +122,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'us',
     ip: '185.187.242.51',
     ping: '',
-    configFileName: 'vpn-US8.conf',
+    configFileName: 'vpn-US10.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -194,7 +130,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'gb',
     ip: '209.126.15.51',
     ping: '',
-    configFileName: 'vpn-US8.conf',
+    configFileName: 'vpn-UK15.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -202,7 +138,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'tr',
     ip: '185.123.100.216.2',
     ping: '',
-    configFileName: 'vpn-Turkey8.conf',
+    configFileName: 'vpn-Ger16.conf',
     protocol: 'wireguard',
   ),
 ];

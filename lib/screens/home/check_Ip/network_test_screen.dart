@@ -29,7 +29,7 @@ class NetworkTestScreen extends StatelessWidget {
           backgroundColor: const Color(0xFF02091A), // Mã màu mới
           leading: IconButton(
             onPressed: () {
-              Get.back();
+                Get.back();
             },
             icon: Icon(
               Icons.arrow_back,

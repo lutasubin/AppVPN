@@ -24,6 +24,7 @@ class IconTextButton extends StatelessWidget {
           color: const Color(0xFF172032), // màu nền gần giống hình (xám đậm)
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
+            // ignore: deprecated_member_use
             color: const Color(0xFFFFFFFF).withOpacity(0.05), // viền nhẹ
           ),
         ),

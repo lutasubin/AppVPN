@@ -1,1 +1,0 @@
-C:\VPN app\vpn-basic-project\build\app\intermediates\cxx\RelWithDebInfo\65676t44\obj\x86_64

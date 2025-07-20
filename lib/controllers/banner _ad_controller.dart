@@ -6,7 +6,4 @@ class  BannerAdController extends GetxController{
   BannerAd ? ba;
   final baLoaded =false .obs;
 
-  
-  
-  
 }

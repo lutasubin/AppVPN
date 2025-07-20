@@ -1,1 +1,0 @@
-C:\VPN app\vpn-basic-project\build\app\intermediates\cxx\Debug\6bs6m5k5\obj\arm64-v8a

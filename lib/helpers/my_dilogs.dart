@@ -7,6 +7,7 @@ class MyDialogs {
       'Success',
       msg,
       colorText: Color(0xFFFFFFFF),
+      // ignore: deprecated_member_use
       backgroundColor: Colors.green.withOpacity(.9),
       duration: Duration(seconds: 5),
     );
@@ -14,9 +15,10 @@ class MyDialogs {
 
   static error({required String msg}) {
     Get.snackbar(
-      'Error', 
+      'Error',
       msg,
       colorText: Color(0xFFFFFFFF),
+      // ignore: deprecated_member_use
       backgroundColor: Colors.redAccent.withOpacity(.9),
       duration: Duration(seconds: 3),
     );
@@ -27,12 +29,9 @@ class MyDialogs {
       'Info',
       msg,
       colorText: Color(0xFFFFFFFF),
+      // ignore: deprecated_member_use
       backgroundColor: Colors.blue.withOpacity(.9), // Thêm background
       duration: Duration(seconds: 3), // Thêm duration
     );
-  }
-
-  static showProgress() {
-    Get.dialog(Center(child: CircularProgressIndicator(strokeWidth: 2)));
   }
 }

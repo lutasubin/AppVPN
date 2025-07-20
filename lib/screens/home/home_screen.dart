@@ -91,10 +91,7 @@ class HomeScreen extends StatelessWidget {
                                           svgAsset: 'assets/svg/map.svg',
                                           label: 'ip'.tr,
                                           onTap: () {
-                                            AdHelper.showInterstitialAd(
-                                                onComplete: () {
-                                              Get.to(() => NetworkTestScreen());
-                                            });
+                                            Get.to(() => NetworkTestScreen());
                                           }),
                                     ),
                                     SizedBox(width: 16),
@@ -103,10 +100,7 @@ class HomeScreen extends StatelessWidget {
                                           svgAsset: 'assets/svg/speed.svg',
                                           label: 'speed'.tr,
                                           onTap: () {
-                                            AdHelper.showInterstitialAd(
-                                                onComplete: () {
-                                              Get.to(() => SpeedTestScreen());
-                                            });
+                                            Get.to(() => SpeedTestScreen());
                                           }),
                                     ),
                                   ],
@@ -120,11 +114,8 @@ class HomeScreen extends StatelessWidget {
                                           svgAsset: 'assets/svg/apps.svg',
                                           label: 'app'.tr,
                                           onTap: () {
-                                            AdHelper.showInterstitialAd(
-                                                onComplete: () {
-                                              Get.to(
-                                                  () => ApplicationVpnScreen());
-                                            });
+                                            Get.to(
+                                                () => ApplicationVpnScreen());
                                           }),
                                     ),
                                   ],
@@ -143,9 +134,7 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: const Color(0xFF02091A),
               leading: IconButton(
                 onPressed: () {
-                  AdHelper.showInterstitialAd(onComplete: () {
-                    Get.to(() => MenuScreen());
-                  });
+                  Get.to(() => MenuScreen());
                 },
                 icon: Icon(
                   Icons.menu,
@@ -186,9 +175,7 @@ class HomeScreen extends StatelessWidget {
           button: true,
           child: InkWell(
             onTap: () {
-              AdHelper.showInterstitialAd(onComplete: () {
-                Get.to(() => LocationScreen());
-              });
+              Get.to(() => LocationScreen());
             },
             child: Obx(() {
               final country = _controller.currentCountry.isEmpty
