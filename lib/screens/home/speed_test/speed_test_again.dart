@@ -28,8 +28,10 @@ class SpeedTestAgain extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () {
-            controller.resetValues();
-            Get.back();
+            AdHelper.showInterstitialAd(onComplete: () async {
+              controller.resetValues();
+              Get.back();
+            });
           },
           icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
         ),
@@ -63,6 +65,7 @@ class SpeedTestAgain extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
+        // ignore: deprecated_member_use
         border: Border.all(color: Colors.white.withOpacity(0.1), width: 1),
       ),
       child: Column(

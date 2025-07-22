@@ -71,7 +71,7 @@ class WelcomeScreen extends StatelessWidget {
                       // Nút START
                       Padding(
                         padding: EdgeInsets.only(
-                          bottom: _adController5.adLoaded.isTrue ? 160 : 40,
+                          bottom: _adController5.adLoaded.isTrue ? 100 : 40,
                         ),
                         child: ElevatedButton(
                           onPressed: () {

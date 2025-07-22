@@ -32,7 +32,7 @@ final List<LocalVpnServer> highVpn = [
     countryCode: 'fr',
     ip: '62.171.171.217',
     ping: '',
-    configFileName: 'eu_fast.ovpn',
+    configFileName: 'vpn-francePro.ovpn',
     protocol: 'openvpn',
   ),
   LocalVpnServer(
@@ -43,14 +43,14 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'vpn-turkey.ovpn',
     protocol: 'openvpn',
   ),
-  LocalVpnServer(
-    countryName: 'Japan',
-    countryCode: 'jp',
-    ip: '219.100.37.169',
-    ping: '',
-    configFileName: 'jp_fast.ovpn',
-    protocol: 'openvpn',
-  ),
+  // LocalVpnServer(
+  //   countryName: 'Japan',
+  //   countryCode: 'jp',
+  //   ip: '219.100.37.169',
+  //   ping: '',
+  //   configFileName: 'jp_fast.ovpn',
+  //   protocol: 'openvpn',
+  // ),
 ];
 
 final List<LocalVpnServer> proVPN = [
@@ -106,7 +106,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'de',
     ip: '213.136.95.11',
     ping: '',
-    configFileName: 'vpn-Ger16.conf',
+    configFileName: 'vpn-Germany20.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -114,7 +114,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'fr',
     ip: '213.136.95.10',
     ping: '',
-    configFileName: 'vpn-UK15.conf',
+    configFileName: 'vpn-France20.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -122,7 +122,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'us',
     ip: '185.187.242.51',
     ping: '',
-    configFileName: 'vpn-US10.conf',
+    configFileName: 'vpn-US20.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -130,7 +130,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'gb',
     ip: '209.126.15.51',
     ping: '',
-    configFileName: 'vpn-UK15.conf',
+    configFileName: 'vpn-US20.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -138,7 +138,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'tr',
     ip: '185.123.100.216.2',
     ping: '',
-    configFileName: 'vpn-Ger16.conf',
+    configFileName: 'vpn-France20.conf',
     protocol: 'wireguard',
   ),
 ];

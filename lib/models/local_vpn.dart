@@ -46,4 +46,16 @@ class LocalVpnServer {
       throw UnimplementedError('Use configData directly for WireGuard');
     }
   }
+
+ // Create object from JSON map
+  factory LocalVpnServer.fromJson(Map<String, dynamic> json) {
+    return LocalVpnServer(
+      countryName: json['countryName'],
+      countryCode: json['countryCode'],
+      ip: json['ip'],
+      ping: json['ping'],
+      configFileName: json['configFileName'],
+      protocol: json['protocol'],
+    );
+  }
 }

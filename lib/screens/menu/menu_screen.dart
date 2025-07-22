@@ -41,7 +41,9 @@ class _MenuScreenState extends State<MenuScreen> {
         backgroundColor: const Color(0xFF02091A),
         leading: IconButton(
           onPressed: () {
-                Get.back();
+            AdHelper.showInterstitialAd(onComplete: () async {
+              Get.back();
+            });
           },
           icon: const Icon(
             Icons.arrow_back,

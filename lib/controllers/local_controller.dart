@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/local_vpn.dart';
+import 'package:vpn_basic_project/apis/upload_downkoad.dart';
 import 'package:vpn_basic_project/helpers/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/my_dilogs.dart';
@@ -11,6 +12,7 @@ import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
+import 'package:vpn_basic_project/screens/disconnected/disconected_screen.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/widgets/HomeWidgets/watch_video_disconnect.dart';
 import '../screens/menu/rate/rate_screen.dart';
@@ -53,6 +55,9 @@ class LocalController extends GetxController {
   Timer? _connectionTimer;
   int _retryAttempts = 0;
   static const int _maxRetryAttempts = 3;
+  
+  // Store the final connection duration when disconnecting
+  Duration? _finalConnectionDuration;
 
   // ===========================================
   // LIFECYCLE METHODS
@@ -243,23 +248,29 @@ class LocalController extends GetxController {
   /// Disconnect VPN based on protocol
   Future<void> _disconnectVpn() async {
     final server = selectedServer.value;
+    isDisconnecting.value = true;
 
     try {
+      // Calculate and store final connection duration BEFORE disconnecting
+      if (_connectionStartTime != null && vpnState.value == VpnEngine.vpnConnected) {
+        _finalConnectionDuration = DateTime.now().difference(_connectionStartTime!);
+        
+        // Log disconnect analytics with duration
+        final durationInSeconds = _finalConnectionDuration!.inSeconds;
+        AnalyticsHelper.logVpnDisconnect(currentCountry, durationInSeconds);
+        
+        print('💾 Stored final connection duration: ${formatDuration(_finalConnectionDuration!)}');
+      }
+
+      // Now disconnect
       if (server != null && server.protocol == 'wireguard') {
         await VpnEngine.stopWireGuard();
       } else {
         await VpnEngine.stopVpn();
       }
-
-      // Log disconnect analytics
-      if (_connectionStartTime != null &&
-          vpnState.value == VpnEngine.vpnConnected) {
-        final durationInSeconds =
-            DateTime.now().difference(_connectionStartTime!).inSeconds;
-        AnalyticsHelper.logVpnDisconnect(currentCountry, durationInSeconds);
-      }
     } catch (e) {
       _handleError('Failed to disconnect VPN', e);
+      isDisconnecting.value = false;
       rethrow;
     }
   }
@@ -303,43 +314,80 @@ class LocalController extends GetxController {
     vpnState.value = VpnEngine.vpnConnected;
     _connectionStartTime = DateTime.now();
     isConnecting.value = false;
+    isDisconnecting.value = false;
     _retryAttempts = 0;
+    
+    // Clear any previous final duration when connecting
+    _finalConnectionDuration = null;
 
     // Log analytics
     AnalyticsHelper.logVpnConnect(currentCountry, currentCountryShort);
+    
+    print('✅ VPN Connected at: $_connectionStartTime');
 
     // Delay để đảm bảo UI đã ổn định
     Future.delayed(const Duration(milliseconds: 1000), () {
       print('🔥 Attempting to show interstitial ad...');
-    });
-    // ket noi thanh cong hien ads inter
-    AdHelper.showInterstitialAd(onComplete: () {
-      print('*****ads inter *****');
+      // ket noi thanh cong hien ads inter
+      AdHelper.showInterstitialAd(onComplete: () {
+        print('*****ads inter after connect*****');
+      });
     });
   }
 
   /// Handle disconnected state
   void _handleDisconnectedState() {
-    // Log disconnect if was previously connected
-    if (_connectionStartTime != null &&
-        vpnState.value == VpnEngine.vpnConnected) {
-      final durationInSeconds =
-          DateTime.now().difference(_connectionStartTime!).inSeconds;
-      AnalyticsHelper.logVpnDisconnect(currentCountry, durationInSeconds);
-    }
-
+    print('🔴 VPN Disconnected - State changed to disconnected');
+    
     vpnState.value = VpnEngine.vpnDisconnected;
-    _connectionStartTime = null;
     isConnecting.value = false;
-    isDisconnecting.value = false;
+    
+    // Get the formatted time to display (use stored duration if available)
+    final timeToShow = _finalConnectionDuration ?? connectionDuration.value;
+    final formattedTime = formatDuration(timeToShow);
+    
+    print('⏱️ Connection duration to show: ${formatDuration(timeToShow)}');
+    print('📱 Final formatted time: $formattedTime');
+    
+    // Reset connection tracking
+    _connectionStartTime = null;
+    connectionDuration.value = Duration.zero;
 
+    // Show disconnection ad and navigate to disconnected screen
+    _showDisconnectionAdAndNavigate(formattedTime);
+    
+    // Mark disconnection as complete
+    isDisconnecting.value = false;
+  }
+
+  /// Show disconnection ad and navigate to disconnected screen
+  void _showDisconnectionAdAndNavigate(String formattedTime) {
     // Delay để đảm bảo UI đã ổn định
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      print('🔥 Attempting to show interstitial ad...');
-    });
-    // ngat ket noi thanh cong hien ads inter
-    AdHelper.showInterstitialAd(onComplete: () {
-      print('*****ads inter *****');
+    Future.delayed(const Duration(milliseconds: 500), () {
+      print('🔥 Attempting to show disconnection interstitial ad...');
+      
+      // ngat ket noi thanh cong hien ads inter
+      AdHelper.showInterstitialAd(onComplete: () {
+        print('*****show disconnected screen with time: $formattedTime *****');
+        
+        // Additional delay before showing disconnected screen
+        Future.delayed(const Duration(milliseconds: 500), () {
+          print('🔥 Navigating to disconnected screen...');
+          
+          // Điều hướng đến màn hình ngắt kết nối với thông tin đầy đủ
+          Get.to(() => DisconnectedScreen(
+            country: vpn.value.CountryLong,
+            ip: vpn.value.IP,
+            connectionTime: formattedTime, // Always show the time
+            uploadSpeed: getRandomUploadSpeed(),
+            downloadSpeed: getRandomDownloadSpeed(),
+            flagUrl: 'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
+          ));
+          
+          // Clear the stored duration after navigation
+          _finalConnectionDuration = null;
+        });
+      });
     });
   }
 
@@ -383,6 +431,7 @@ class LocalController extends GetxController {
       _handleError('Failed to set VPN server', e);
     }
   }
+  
   // ===========================================
   // UI HELPERS
   // ===========================================
@@ -528,7 +577,7 @@ class LocalController extends GetxController {
           _connectionStartTime != null) {
         connectionDuration.value =
             DateTime.now().difference(_connectionStartTime!);
-      } else {
+      } else if (vpnState.value == VpnEngine.vpnDisconnected) {
         connectionDuration.value = Duration.zero;
       }
     });
