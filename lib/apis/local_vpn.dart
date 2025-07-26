@@ -35,14 +35,14 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'vpn-francePro.ovpn',
     protocol: 'openvpn',
   ),
-  LocalVpnServer(
-    countryName: 'Turkish',
-    countryCode: 'tr',
-    ip: '185.123.100.216',
-    ping: '',
-    configFileName: 'vpn-turkey.ovpn',
-    protocol: 'openvpn',
-  ),
+  // LocalVpnServer(
+  //   countryName: 'Turkish',
+  //   countryCode: 'tr',
+  //   ip: '185.123.100.216',
+  //   ping: '',
+  //   configFileName: 'vpn-turkey.ovpn',
+  //   protocol: 'openvpn',
+  // ),
   // LocalVpnServer(
   //   countryName: 'Japan',
   //   countryCode: 'jp',
@@ -133,14 +133,14 @@ final List<LocalVpnServer> wireguardVpn = [
     configFileName: 'vpn-US20.conf',
     protocol: 'wireguard',
   ),
-  LocalVpnServer(
-    countryName: 'Turkish',
-    countryCode: 'tr',
-    ip: '185.123.100.216.2',
-    ping: '',
-    configFileName: 'vpn-France20.conf',
-    protocol: 'wireguard',
-  ),
+  // LocalVpnServer(
+  //   countryName: 'Turkish',
+  //   countryCode: 'tr',
+  //   ip: '185.123.100.216.2',
+  //   ping: '',
+  //   configFileName: 'vpn-France20.conf',
+  //   protocol: 'wireguard',
+  // ),
 ];
 
 // Hàm random index

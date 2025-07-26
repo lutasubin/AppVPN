@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/controllers/appbinding.dart';
-import 'package:vpn_basic_project/helpers/analytics_helper.dart';
-import 'package:vpn_basic_project/helpers/app_translations.dart';
-import 'package:vpn_basic_project/helpers/pref.dart';
-import 'package:vpn_basic_project/screens/splash/splash_screen.dart';
+import 'package:vpn_basic_project/controllers/app_binding.dart';
+import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
+import 'package:vpn_basic_project/helpers/lang/app_translations.dart';
+import 'package:vpn_basic_project/helpers/Hive/pref.dart';
+import 'package:vpn_basic_project/view/screens/splash/splash_screen.dart';
 
 /// Lớp chính của ứng dụng.
 /// Cấu hình GetMaterialApp với theme, locale và màn hình khởi đầu.

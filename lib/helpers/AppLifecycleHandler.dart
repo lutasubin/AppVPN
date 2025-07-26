@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
-import 'package:vpn_basic_project/helpers/ad_helper.dart';
+import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 
 class AppLifecycleHandler extends WidgetsBindingObserver {
   bool _wasInBackground = false;

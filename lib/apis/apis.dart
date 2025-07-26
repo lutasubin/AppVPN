@@ -4,7 +4,7 @@ import 'package:csv/csv.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
-import 'package:vpn_basic_project/helpers/pref.dart';
+import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 

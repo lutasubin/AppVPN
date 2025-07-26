@@ -1,43 +1,60 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/appVpn.dart';
-import 'package:vpn_basic_project/helpers/AppLifecycleHandler.dart';
-import 'package:vpn_basic_project/helpers/ad_helper.dart';
-import 'package:vpn_basic_project/helpers/analytics_helper.dart';
-import 'package:vpn_basic_project/helpers/config.dart';
-import 'package:vpn_basic_project/helpers/pref.dart';
+import 'package:vpn_basic_project/helpers/ads/init_ads.dart';
+import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
+import 'package:vpn_basic_project/helpers/ads/config_ads_firebase.dart';
+import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 
 // Biến toàn cục
 late Size mq;
 
-/// Hàm khởi tạo chính của ứng dụng.
-/// Thiết lập các dịch vụ cần thiết trước khi chạy ứng dụng.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-  // Gắn observer để xử lý lifecycle nếu cần
-  WidgetsBinding.instance.addObserver(AppLifecycleHandler());
+  // Tính toán kích thước màn hình
+  mq = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.first).size;
 
-  // ignore: deprecated_member_use
-  mq = WidgetsBinding.instance.window.physicalSize /
-      // ignore: deprecated_member_use
-      WidgetsBinding.instance.window.devicePixelRatio;
+  try {
+    // Khởi tạo dotenv
+    await dotenv.load();
+    log('✅ Dotenv initialized');
 
-  await dotenv.load();
-  await Firebase.initializeApp();
-  await Config.initConfig();
-  await Pref.initializeHive();
-  await AdHelper.initAds();
-  await AnalyticsHelper.logAppOpen();
+    // Khởi tạo Firebase
+    await Firebase.initializeApp();
+    log('✅ Firebase initialized');
 
-  MobileAds.instance.updateRequestConfiguration(
-    RequestConfiguration(testDeviceIds: ['EMULATOR']),
-  );
+    // Khởi tạo cấu hình
+    await Config.initConfig();
+    log('✅ Config initialized');
 
+    // Khởi tạo Hive
+    await Pref.initializeHive();
+    log('✅ Hive initialized');
+
+    // Khởi tạo quảng cáo với lifecycle
+    await AdHelperLifecycle.init();
+    log('✅ AdHelperLifecycle initialized');
+
+    // Ghi log sự kiện mở ứng dụng
+    await AnalyticsHelper.logAppOpen();
+    log('✅ App open event logged');
+
+    // Cấu hình Google Mobile Ads
+    MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(testDeviceIds: ['EMULATOR']),
+    );
+    log('✅ Mobile Ads configured');
+  } catch (e, stackTrace) {
+    log('❌ Error during initialization: $e', stackTrace: stackTrace);
+  }
+
+  // Thiết lập orientation
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -45,3 +62,4 @@ Future<void> main() async {
 
   runApp(const App());
 }
+

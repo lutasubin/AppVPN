@@ -21,6 +21,8 @@
         android:label="AI VPN Fast Safe"
         android:icon="@mipmap/ic_launcher"
         android:extractNativeLibs="true"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
         android:allowBackup="false"
         tools:ignore="AllowBackup">
 

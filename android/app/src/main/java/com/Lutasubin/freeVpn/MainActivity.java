@@ -36,6 +36,16 @@ import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 
+// UMP SDK
+import com.google.android.ump.ConsentForm;
+import com.google.android.ump.ConsentInformation;
+import com.google.android.ump.ConsentRequestParameters;
+import com.google.android.ump.UserMessagingPlatform;
+
+
+import androidx.core.view.WindowCompat;
+
+
 public class MainActivity extends FlutterActivity {
     private MethodChannel vpnControlMethod;
     private EventChannel vpnControlEvent;
@@ -57,13 +67,11 @@ public class MainActivity extends FlutterActivity {
     private boolean attached = true;
     private JSONObject localJson;
 
-    // WireGuard pending
     private String pendingWgName = null;
     private String pendingWgConfig = null;
     private boolean pendingWireGuard = false;
     private MethodChannel.Result pendingWireGuardResult = null;
 
-    // Handler for delays
     private Handler mainHandler = new Handler();
 
     @Override
@@ -88,6 +96,10 @@ public class MainActivity extends FlutterActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        }
+
         NativeLibInitializer.initializeNativeLibs(this);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
@@ -114,6 +126,34 @@ public class MainActivity extends FlutterActivity {
         }, new IntentFilter("connectionState"));
 
         super.onCreate(savedInstanceState);
+
+        ConsentRequestParameters params = new ConsentRequestParameters.Builder()
+            .setTagForUnderAgeOfConsent(false)
+            .build();
+
+        ConsentInformation consentInformation = UserMessagingPlatform.getConsentInformation(this);
+
+        consentInformation.requestConsentInfoUpdate(
+            this,
+            params,
+            () -> {
+                if (consentInformation.isConsentFormAvailable()) {
+                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                        this,
+                        formError -> {
+                            if (formError != null) {
+                                Log.w(TAG, "Consent form error: " + formError.getMessage());
+                            }
+                        }
+                    );
+                }
+            },
+            formError -> {
+                if (formError != null) {
+                    Log.w(TAG, "Consent info update error: " + formError.getMessage());
+                }
+            }
+        );
     }
 
     @Override
@@ -164,13 +204,9 @@ public class MainActivity extends FlutterActivity {
                         return;
                     }
 
-                    // Stop WireGuard before starting OpenVPN
                     if (isWireGuardConnected()) {
-                        Log.d(TAG, "WireGuard is active, stopping before OpenVPN start");
                         WireGuardEngine.getInstance(this).stopTunnel();
-                        mainHandler.postDelayed(() -> {
-                            prepareVPN();
-                        }, 2000);
+                        mainHandler.postDelayed(this::prepareVPN, 2000);
                     } else {
                         prepareVPN();
                     }
@@ -193,14 +229,10 @@ public class MainActivity extends FlutterActivity {
                 case "startWireGuard": {
                     String wgName = call.argument("name");
                     String wgConfig = call.argument("config");
-                    
-                    // Stop OpenVPN before starting WireGuard
+
                     if (isOpenVPNConnected()) {
-                        Log.d(TAG, "OpenVPN is active, stopping before WireGuard start");
                         OpenVPNThread.stop();
-                        mainHandler.postDelayed(() -> {
-                            startWireGuardProcess(wgName, wgConfig, result);
-                        }, 2000);
+                        mainHandler.postDelayed(() -> startWireGuardProcess(wgName, wgConfig, result), 2000);
                     } else {
                         startWireGuardProcess(wgName, wgConfig, result);
                     }
@@ -209,9 +241,7 @@ public class MainActivity extends FlutterActivity {
                 case "stopWireGuard": {
                     boolean stopped = WireGuardEngine.getInstance(this).stopTunnel();
                     result.success(stopped);
-                    if (stopped) {
-                        setStage("DISCONNECTED");
-                    }
+                    if (stopped) setStage("DISCONNECTED");
                     break;
                 }
                 case "getWireGuardState": {
@@ -241,11 +271,10 @@ public class MainActivity extends FlutterActivity {
                         setStage(started ? "CONNECTED" : "DISCONNECTED");
                     });
                 } catch (Exception e) {
-                    Log.e(TAG, "WireGuard start failed", e);
                     runOnUiThread(() -> {
                         result.success(false);
                         setStage("DISCONNECTED");
-                        Toast.makeText(this, "WireGuard failed to start: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "WireGuard failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
                 }
             }).start();
@@ -305,20 +334,8 @@ public class MainActivity extends FlutterActivity {
     }
 
     private void stopAllVPNs() {
-        Log.d(TAG, "Stopping all VPN connections");
-        
-        // Stop OpenVPN
-        if (isOpenVPNConnected()) {
-            OpenVPNThread.stop();
-            Log.d(TAG, "OpenVPN stopped");
-        }
-        
-        // Stop WireGuard
-        if (isWireGuardConnected()) {
-            WireGuardEngine.getInstance(this).stopTunnel();
-            Log.d(TAG, "WireGuard stopped");
-        }
-        
+        if (isOpenVPNConnected()) OpenVPNThread.stop();
+        if (isWireGuardConnected()) WireGuardEngine.getInstance(this).stopTunnel();
         setStage("disconnected");
     }
 
@@ -330,9 +347,8 @@ public class MainActivity extends FlutterActivity {
     private boolean isWireGuardConnected() {
         try {
             String state = WireGuardEngine.getInstance(this).getTunnelState();
-            return state != null && state.equals("UP");
+            return "UP".equals(state);
         } catch (Exception e) {
-            Log.e(TAG, "Error checking WireGuard state", e);
             return false;
         }
     }
@@ -357,47 +373,36 @@ public class MainActivity extends FlutterActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == VPN_REQUEST_ID) {
-            if (resultCode == RESULT_OK) {
-                startVPN();
-            } else {
-                setStage("disconnected");
-                Toast.makeText(this, "Permission is denied! VPN disconnected.", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == VPN_REQUEST_ID && resultCode == RESULT_OK) startVPN();
+        else if (requestCode == VPN_REQUEST_ID) {
+            setStage("disconnected");
+            Toast.makeText(this, "Permission is denied! VPN disconnected.", Toast.LENGTH_SHORT).show();
         }
 
-        if (requestCode == VPN_REQUEST_ID_WG) {
-            if (resultCode == RESULT_OK && pendingWireGuard) {
-                setStage("CONNECTING");
-
-                new Thread(() -> {
-                    try {
-                        boolean started = WireGuardEngine.getInstance(this).startTunnel(pendingWgName, pendingWgConfig);
-                        runOnUiThread(() -> {
-                            if (pendingWireGuardResult != null) {
-                                pendingWireGuardResult.success(started);
-                            }
-                            setStage(started ? "CONNECTED" : "DISCONNECTED");
-                            resetPendingWireGuard();
-                        });
-                    } catch (Exception e) {
-                        Log.e(TAG, "WireGuard start failed in onActivityResult", e);
-                        runOnUiThread(() -> {
-                            if (pendingWireGuardResult != null) {
-                                pendingWireGuardResult.success(false);
-                            }
-                            setStage("DISCONNECTED");
-                            Toast.makeText(this, "WireGuard failed to start: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            resetPendingWireGuard();
-                        });
-                    }
-                }).start();
-            } else if (pendingWireGuardResult != null) {
-                pendingWireGuardResult.success(false);
-                setStage("DISCONNECTED");
-                Toast.makeText(this, "Permission is denied! WireGuard VPN disconnected.", Toast.LENGTH_SHORT).show();
-                resetPendingWireGuard();
-            }
+        if (requestCode == VPN_REQUEST_ID_WG && resultCode == RESULT_OK && pendingWireGuard) {
+            setStage("CONNECTING");
+            new Thread(() -> {
+                try {
+                    boolean started = WireGuardEngine.getInstance(this).startTunnel(pendingWgName, pendingWgConfig);
+                    runOnUiThread(() -> {
+                        if (pendingWireGuardResult != null) pendingWireGuardResult.success(started);
+                        setStage(started ? "CONNECTED" : "DISCONNECTED");
+                        resetPendingWireGuard();
+                    });
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        if (pendingWireGuardResult != null) pendingWireGuardResult.success(false);
+                        setStage("DISCONNECTED");
+                        Toast.makeText(this, "WireGuard failed to start: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        resetPendingWireGuard();
+                    });
+                }
+            }).start();
+        } else if (requestCode == VPN_REQUEST_ID_WG && pendingWireGuardResult != null) {
+            pendingWireGuardResult.success(false);
+            setStage("DISCONNECTED");
+            Toast.makeText(this, "Permission is denied! WireGuard VPN disconnected.", Toast.LENGTH_SHORT).show();
+            resetPendingWireGuard();
         }
     }
 
