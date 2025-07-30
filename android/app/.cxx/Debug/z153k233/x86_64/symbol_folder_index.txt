@@ -1,1 +1,0 @@
-C:\wiregurad\vpn-basic-project\build\app\intermediates\cxx\Debug\z153k233\obj\x86_64

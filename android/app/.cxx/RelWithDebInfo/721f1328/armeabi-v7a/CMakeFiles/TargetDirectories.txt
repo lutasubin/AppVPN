@@ -1,2 +1,0 @@
-C:/wiregurad/vpn-basic-project/android/app/.cxx/RelWithDebInfo/721f1328/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/wiregurad/vpn-basic-project/android/app/.cxx/RelWithDebInfo/721f1328/armeabi-v7a/CMakeFiles/rebuild_cache.dir

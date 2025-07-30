@@ -93,25 +93,29 @@ AI VPN Fast Safe là ứng dụng VPN mạnh mẽ, an toàn và thân thiện v�
 
 ### Cấu hình VPN
 
-Vì lý do bảo mật, các file cấu hình VPN không được đưa vào repository. Bạn cần thiết lập như sau:
+#### 1. OpenVPN
 
-1. Tạo thư mục `assets/vpn` trong project của bạn
+1. Tạo thư mục `assets/vpn` trong project.
 2. Thêm các file cấu hình OpenVPN (.ovpn) vào thư mục này, đặt tên theo quốc gia:
+   - `us_fast.ovpn` - Mỹ
+   - `uk_fast.ovpn` - Anh
+   - `jp_fast.ovpn` - Nhật
+   - ...
+3. Đảm bảo file hợp lệ, đúng định dạng OpenVPN.
+4. Thư mục `assets/vpn` đã được thêm vào `.gitignore`.
 
-   - `us_fast.ovpn` - Máy chủ Mỹ
-   - `uk_fast.ovpn` - Máy chủ Anh
-   - `jp_fast.ovpn` - Máy chủ Nhật Bản
-   - `de_fast.ovpn` - Máy chủ Đức
-   - `sg_fast.ovpn` - Máy chủ Singapore
-   - `ca_fast.ovpn` - Máy chủ Canada
-   - `au_fast.ovpn` - Máy chủ Úc
-   - `in_fast.ovpn` - Máy chủ Ấn Độ
-   - `eu_fast.ovpn` - Máy chủ Pháp
+#### 2. WireGuard
 
-3. Đảm bảo các file cấu hình có định dạng OpenVPN hợp lệ
-4. Thư mục `assets/vpn` đã được thêm vào `.gitignore` để không đưa lên GitHub
+1. Tạo thư mục `assets/wireguard` trong project.
+2. Thêm các file cấu hình WireGuard (.conf) vào thư mục này, đặt tên theo quốc gia:
+   - `us_fast.conf` - Mỹ
+   - `uk_fast.conf` - Anh
+   - `jp_fast.conf` - Nhật
+   - ...
+3. Đảm bảo file hợp lệ, đúng định dạng WireGuard.
+4. Thư mục `assets/wireguard` cũng nên được thêm vào `.gitignore` để bảo mật thông tin cấu hình.
 
-> **Lưu ý**: Bạn có thể tìm các file cấu hình OpenVPN miễn phí từ các nhà cung cấp VPN đáng tin cậy, hoặc tạo máy chủ VPN của riêng bạn.
+> **Lưu ý:** Bạn có thể lấy file cấu hình OpenVPN/WireGuard miễn phí từ các nhà cung cấp uy tín hoặc tự tạo máy chủ riêng.
 
 ## 📄 License
 

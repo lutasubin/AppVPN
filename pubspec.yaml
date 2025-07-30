@@ -59,6 +59,9 @@ dependencies:
 
   # app using
   installed_apps: ^1.6.0
+
+  firebase_crashlytics: ^4.3.5
+
   
  
 
