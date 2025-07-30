@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import '../../../../main.dart';
@@ -12,103 +13,94 @@ import '../../../../apis/apis.dart';
 
 class NetworkTestScreen extends StatelessWidget {
   final _adController4 = NativeAdController();
+  final ipData = IPDetails.fromJson({}).obs;
 
-  NetworkTestScreen({super.key});
+  NetworkTestScreen({super.key}) {
+    // ✅ Gọi API chỉ 1 lần khi khởi tạo
+    Apis.getIPDetails(ipData: ipData);
+    _adController4.ad = AdHelper.loadNativeAd2(adController: _adController4);
+  }
 
   @override
   Widget build(BuildContext context) {
-    _adController4.ad = AdHelper.loadNativeAd2(adController: _adController4);
-
-    final ipData = IPDetails.fromJson({}).obs;
-    Apis.getIPDetails(ipData: ipData);
-
     return Scaffold(
-      backgroundColor: const Color(0xFF02091A), // Mã màu mới
-
+      backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(
-          backgroundColor: const Color(0xFF02091A), // Mã màu mới
-          leading: IconButton(
-            onPressed: () {
-                Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: const Color(0xFFFFFFFF),
-              size: 25,
-            ),
-          ),
-          title: Text(
-            'IP Information'.tr,
-            style: TextStyle(
-                color: const Color(0xFFFFFFFF), fontWeight: FontWeight.w500),
-          )),
-
+        backgroundColor: const Color(0xFF02091A),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
+        ),
+        title: Text(
+          'IP Information'.tr,
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w500),
+        ),
+      ),
       bottomNavigationBar: Obx(() {
-        if (_adController4.ad != null && _adController4.adLoaded.isTrue) {
+        final ad = _adController4.ad;
+        if (ad != null &&
+            _adController4.adLoaded.isTrue &&
+            !_adController4.isDisposed) {
           return SafeArea(
-            child:
-                SizedBox(height: 120, child: AdWidget(ad: _adController4.ad!)),
+            child: SizedBox(
+              height: 120,
+              child: AdWidget(ad: ad),
+            ),
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       }),
-      body: Obx(
-        () => ListView(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.only(
-                left: mq.width * .04,
-                right: mq.width * .04,
-                top: mq.height * .01,
-                bottom: mq.height * .1),
+      body: Obx(() => ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(
+              horizontal: mq.width * 0.04,
+              vertical: mq.height * 0.01,
+            ),
             children: [
-              //ip
-              NetworkCard(
-                  data: NetworkData(
-                      title: 'IP Address'.tr,
-                      subtitle: ipData.value.query,
-                      icon: Icon(CupertinoIcons.location_solid,
-                          color: Colors.blue))),
-              SizedBox(
-                height: 10,
+              _buildNetworkCard(
+                title: 'IP Address'.tr,
+                value: ipData.value.query,
+                icon: const Icon(CupertinoIcons.location_solid, color: Colors.blue),
               ),
-              //isp
-              NetworkCard(
-                  data: NetworkData(
-                      title: 'Internet Provider'.tr,
-                      subtitle: ipData.value.isp,
-                      icon: Icon(Icons.business, color: Colors.orange))),
-              SizedBox(
-                height: 10,
+              _buildNetworkCard(
+                title: 'Internet Provider'.tr,
+                value: ipData.value.isp,
+                icon: const Icon(Icons.business, color: Colors.orange),
               ),
-              //location
-              NetworkCard(
-                  data: NetworkData(
-                      title: 'Location'.tr,
-                      subtitle: ipData.value.country.isEmpty
-                          ? 'Fetching ...'.tr
-                          : '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
-                      icon: Icon(CupertinoIcons.location, color: Colors.pink))),
-              SizedBox(
-                height: 10,
+              _buildNetworkCard(
+                title: 'Location'.tr,
+                value: ipData.value.country.isEmpty
+                    ? 'Fetching...'.tr
+                    : '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
+                icon: const Icon(CupertinoIcons.location, color: Colors.pink),
               ),
-              //pin code
-              NetworkCard(
-                  data: NetworkData(
-                      title: 'Pin-code'.tr,
-                      subtitle: ipData.value.zip,
-                      icon: Icon(CupertinoIcons.location_solid,
-                          color: Colors.cyan))),
-              SizedBox(
-                height: 10,
+              _buildNetworkCard(
+                title: 'Pin-code'.tr,
+                value: ipData.value.zip,
+                icon: const Icon(CupertinoIcons.location_solid, color: Colors.cyan),
               ),
-              //timezone
-              NetworkCard(
-                  data: NetworkData(
-                      title: 'Timezone'.tr,
-                      subtitle: ipData.value.timezone,
-                      icon: Icon(CupertinoIcons.time, color: Colors.green))),
-            ]),
+              _buildNetworkCard(
+                title: 'Timezone'.tr,
+                value: ipData.value.timezone,
+                icon: const Icon(CupertinoIcons.time, color: Colors.green),
+              ),
+            ],
+          )),
+    );
+  }
+
+  // Widget tái sử dụng card hiển thị
+  Widget _buildNetworkCard({required String title, required String? value, required Icon icon}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: NetworkCard(
+        data: NetworkData(
+          title: title,
+          subtitle: value ?? 'N/A',
+          icon: icon,
+        ),
       ),
     );
   }

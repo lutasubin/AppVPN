@@ -24,7 +24,7 @@ final List<LocalVpnServer> highVpn = [
     countryCode: 'de',
     ip: '161.97.120.90',
     ping: '',
-    configFileName: 'vpn-germany5.ovpn',
+    configFileName: 'vpn-germanyctb.ovpn',
     protocol: 'openvpn',
   ),
   LocalVpnServer(
@@ -32,25 +32,18 @@ final List<LocalVpnServer> highVpn = [
     countryCode: 'fr',
     ip: '62.171.171.217',
     ping: '',
-    configFileName: 'vpn-francePro.ovpn',
+    configFileName: 'vpn-francectb.ovpn',
     protocol: 'openvpn',
   ),
-  // LocalVpnServer(
-  //   countryName: 'Turkish',
-  //   countryCode: 'tr',
-  //   ip: '185.123.100.216',
-  //   ping: '',
-  //   configFileName: 'vpn-turkey.ovpn',
-  //   protocol: 'openvpn',
-  // ),
-  // LocalVpnServer(
-  //   countryName: 'Japan',
-  //   countryCode: 'jp',
-  //   ip: '219.100.37.169',
-  //   ping: '',
-  //   configFileName: 'jp_fast.ovpn',
-  //   protocol: 'openvpn',
-  // ),
+  LocalVpnServer(
+    countryName: 'Singapore',
+    countryCode: 'sg',
+    ip: '165.22.96.219',
+    ping: '',
+    configFileName: 'vpn-singapore5.ovpn',
+    protocol: 'openvpn',
+  ),
+  
 ];
 
 final List<LocalVpnServer> proVPN = [
@@ -59,7 +52,7 @@ final List<LocalVpnServer> proVPN = [
     countryCode: 'de',
     ip: '161.97.120.90.1',
     ping: '',
-    configFileName: 'vpn-germanypro.ovpn',
+    configFileName: 'vpn-germanyctb.ovpn',
     protocol: 'openvpn',
   ),
   LocalVpnServer(
@@ -67,7 +60,7 @@ final List<LocalVpnServer> proVPN = [
     countryCode: 'fr',
     ip: ' 161.97.120.90.1',
     ping: '',
-    configFileName: 'vpn-francePro.ovpn',
+    configFileName: 'vpn-francectb.ovpn',
     protocol: 'openvpn',
   ),
   LocalVpnServer(
@@ -84,6 +77,14 @@ final List<LocalVpnServer> proVPN = [
     ip: '144.126.138.95.1',
     ping: '',
     configFileName: 'vpn-UsPro.ovpn',
+    protocol: 'openvpn',
+  ),
+   LocalVpnServer(
+    countryName: 'Singapore',
+    countryCode: 'sg',
+    ip: '165.22.96.219.15',
+    ping: '',
+    configFileName: 'vpn-singapore5.ovpn',
     protocol: 'openvpn',
   ),
 ];
@@ -106,7 +107,7 @@ final List<LocalVpnServer> wireguardVpn = [
     countryCode: 'de',
     ip: '213.136.95.11',
     ping: '',
-    configFileName: 'vpn-Germany20.conf',
+    configFileName: 'vpn-germany5.conf',
     protocol: 'wireguard',
   ),
   LocalVpnServer(
@@ -133,14 +134,14 @@ final List<LocalVpnServer> wireguardVpn = [
     configFileName: 'vpn-US20.conf',
     protocol: 'wireguard',
   ),
-  // LocalVpnServer(
-  //   countryName: 'Turkish',
-  //   countryCode: 'tr',
-  //   ip: '185.123.100.216.2',
-  //   ping: '',
-  //   configFileName: 'vpn-France20.conf',
-  //   protocol: 'wireguard',
-  // ),
+  LocalVpnServer(
+    countryName: 'Singapore',
+    countryCode: 'sg',
+    ip: '165.22.96.2',
+    ping: '',
+    configFileName: 'vpn-singapore3.conf',
+    protocol: 'wireguard',
+  ),
 ];
 
 // Hàm random index

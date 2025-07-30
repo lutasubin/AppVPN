@@ -66,15 +66,20 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
         ),
         backgroundColor: const Color(0xFF02091A),
         bottomNavigationBar: Obx(() {
-          return _adController4.ad != null && _adController4.adLoaded.isTrue
-              ? SafeArea(
-                  child: SizedBox(
-                    height: 120,
-                    child: AdWidget(ad: _adController4.ad!),
-                  ),
-                )
-              : const SizedBox.shrink();
-        }),
+        final ad = _adController4.ad;
+        if (ad != null &&
+            _adController4.adLoaded.isTrue &&
+            !_adController4.isDisposed) {
+          return SafeArea(
+            child: SizedBox(
+              height: 120,
+              child: AdWidget(ad: ad),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: ListView.builder(

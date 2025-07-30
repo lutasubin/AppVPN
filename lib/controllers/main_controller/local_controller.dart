@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/apis/local_vpn.dart';
-import 'package:vpn_basic_project/apis/upload_download.dart';
+import 'package:vpn_basic_project/helpers/fake_data/upload_download.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/dilogs/my_dilogs.dart';
@@ -12,6 +12,7 @@ import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/models/vpn_config.dart';
+import 'package:vpn_basic_project/view/screens/connected/conected_screen.dart';
 import 'package:vpn_basic_project/view/screens/disconnected/disconected_screen.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/watch_video_disconnect.dart';
@@ -336,9 +337,13 @@ class LocalController extends GetxController {
     Future.delayed(const Duration(milliseconds: 1000), () {
       print('🔥 Attempting to show interstitial ad...');
       // ket noi thanh cong hien ads inter
-      AdHelper.showInterstitialAd(onComplete: () {
+      final server1 = selectedServer.value;
+      if (server1 != null) {
         print('*****ads inter after connect*****');
-      });
+        AdHelper.showInterstitialAd(onComplete: () async {
+          await Get.to(() => ConnectedScreen(server: server1));
+        });
+      }
     });
   }
 
@@ -361,7 +366,10 @@ class LocalController extends GetxController {
     connectionDuration.value = Duration.zero;
 
     // Show disconnection ad and navigate to disconnected screen
-    _showDisconnectionAdAndNavigate(formattedTime);
+    final server = selectedServer.value;
+    if (server != null) {
+      _showDisconnectionAdAndNavigate(formattedTime, server);
+    }
 
     // ✅ Tự động reconnect nếu không phải do người dùng ngắt và còn lượt thử
     if (!_userInitiatedDisconnect && _retryAttempts < _maxRetryAttempts) {
@@ -378,7 +386,8 @@ class LocalController extends GetxController {
   }
 
   /// Show disconnection ad and navigate to disconnected screen
-  void _showDisconnectionAdAndNavigate(String formattedTime) {
+  void _showDisconnectionAdAndNavigate(
+      String formattedTime, LocalVpnServer server) {
     // Delay để đảm bảo UI đã ổn định
     Future.delayed(const Duration(milliseconds: 500), () {
       print('*****show disconnected screen with time: $formattedTime *****');
@@ -388,13 +397,12 @@ class LocalController extends GetxController {
 
         // Điều hướng đến màn hình ngắt kết nối với thông tin đầy đủ
         Get.to(() => DisconnectedScreen(
-              country: vpn.value.CountryLong,
-              ip: vpn.value.IP,
+              country: server.countryName,
+              ip: server.ip,
               connectionTime: formattedTime, // Always show the time
               uploadSpeed: getRandomUploadSpeed(),
               downloadSpeed: getRandomDownloadSpeed(),
-              flagUrl:
-                  'assets/flags/${vpn.value.CountryShort.toLowerCase()}.png',
+              flagUrl: 'assets/flags/${server.countryCode.toLowerCase()}.png',
             ));
         // Clear the stored duration after navigation
         _finalConnectionDuration = null;

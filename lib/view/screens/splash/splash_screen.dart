@@ -7,7 +7,7 @@ import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/view/screens/home/home_screen.dart';
 import 'package:vpn_basic_project/view/screens/network_help/internet.dart';
 import 'package:vpn_basic_project/view/screens/menu/lang/langguage_2.dart';
-import 'package:vpn_basic_project/view/screens/splash/welcome/welcome.dart';
+// import 'package:vpn_basic_project/view/screens/splash/welcome/welcome.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -99,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen>
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
       final nextPage =
-          Pref.hasSeenOnboarding ? WelcomeScreen() : LanguageScreen2();
+          Pref.hasSeenOnboarding ? HomeScreen() : LanguageScreen2();
 
       void navigate() {
         if (!_hasNavigated) return;

@@ -43,129 +43,133 @@ class HomeScreen extends StatelessWidget {
 
     return SafeArea(
         child: Scaffold(
-            body: LayoutBuilder(
-              builder: (context, constraints) {
-                return Stack(
-                  children: [
-                    // Hình nền SVG
-                    SvgPicture.asset(
-                      'assets/svg/Group 17.svg',
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight,
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        Color(0xFF02091A), // Mã màu nền
-                        BlendMode.dstATop,
-                      ),
-                    ),
-                    // Nội dung giao diện
-                    Column(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Center(
-                            child: _changeLocation(context),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Center(
-                            child: VpnControlButton(
-                              controller: _controller,
-                              constraints: constraints,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Column(
-                              children: [
-                                // Hàng chứa 2 nút Check IP và Speed Test
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: IconTextButton(
-                                          svgAsset: 'assets/svg/map.svg',
-                                          label: 'ip'.tr,
-                                          onTap: () {
-                                            Get.to(() => NetworkTestScreen());
-                                          }),
-                                    ),
-                                    SizedBox(width: 16),
-                                    Expanded(
-                                      child: IconTextButton(
-                                          svgAsset: 'assets/svg/speed.svg',
-                                          label: 'speed'.tr,
-                                          onTap: () {
-                                            Get.to(() => SpeedTestScreen());
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                // Nút App bên dưới, chiếm toàn bộ chiều rộng
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: IconTextButton(
-                                          svgAsset: 'assets/svg/apps.svg',
-                                          label: 'app'.tr,
-                                          onTap: () {
-                                            Get.to(
-                                                () => ApplicationVpnScreen());
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-            appBar: AppBar(
-              backgroundColor: const Color(0xFF02091A),
-              leading: IconButton(
-                onPressed: () {
-                  Get.to(() => MenuScreen());
-                },
-                icon: Icon(
-                  Icons.menu,
-                  size: 25.0,
-                  color: const Color(0xFFFFFFFF),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              // Hình nền SVG
+              SvgPicture.asset(
+                'assets/svg/Group 17.svg',
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Color(0xFF02091A), // Mã màu nền
+                  BlendMode.dstATop,
                 ),
               ),
-              title: SvgPicture.asset(
-                'assets/svg/logo.svg',
-                width: 158.0,
-                height: 35.0,
+              // Nội dung giao diện
+              Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: _changeLocation(context),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Center(
+                      child: VpnControlButton(
+                        controller: _controller,
+                        constraints: constraints,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Column(
+                        children: [
+                          // Hàng chứa 2 nút Check IP và Speed Test
+                          Row(
+                            children: [
+                              Expanded(
+                                child: IconTextButton(
+                                    svgAsset: 'assets/svg/map.svg',
+                                    label: 'ip'.tr,
+                                    onTap: () {
+                                      Get.to(() => NetworkTestScreen());
+                                    }),
+                              ),
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: IconTextButton(
+                                    svgAsset: 'assets/svg/speed.svg',
+                                    label: 'speed'.tr,
+                                    onTap: () {
+                                      Get.to(() => SpeedTestScreen());
+                                    }),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          // Nút App bên dưới, chiếm toàn bộ chiều rộng
+                          Row(
+                            children: [
+                              Expanded(
+                                child: IconTextButton(
+                                    svgAsset: 'assets/svg/apps.svg',
+                                    label: 'app'.tr,
+                                    onTap: () {
+                                      Get.to(() => ApplicationVpnScreen());
+                                    }),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-              actions: [
-                GestureDetector(
-                  onTap: () {
-                    print('vip');
-                  },
-                  child: SvgPicture.asset('assets/svg/vip.svg'),
-                )
-              ],
+            ],
+          );
+        },
+      ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF02091A),
+        leading: IconButton(
+          onPressed: () {
+            Get.to(() => MenuScreen());
+          },
+          icon: Icon(
+            Icons.menu,
+            size: 25.0,
+            color: const Color(0xFFFFFFFF),
+          ),
+        ),
+        title: SvgPicture.asset(
+          'assets/svg/logo.svg',
+          width: 158.0,
+          height: 35.0,
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              print('vip');
+            },
+            child: SvgPicture.asset('assets/svg/vip.svg'),
+          )
+        ],
+      ),
+      bottomNavigationBar: Obx(() {
+        final ad = _adController.ad;
+        if (ad != null &&
+            _adController.adLoaded.isTrue &&
+            !_adController.isDisposed) {
+          return SafeArea(
+            child: SizedBox(
+              height: 120,
+              child: AdWidget(ad: ad),
             ),
-            bottomNavigationBar: Obx(() {
-              if (_adController.ad != null && _adController.adLoaded.isTrue) {
-                return SafeArea(
-                  child: SizedBox(
-                      height: 120, child: AdWidget(ad: _adController.ad!)),
-                );
-              } else {
-                return SizedBox.shrink();
-              }
-            })));
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
+    ));
   }
 
   /// Tạo thanh chọn vị trí VPN với thông tin quốc gia và IP.

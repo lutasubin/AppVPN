@@ -51,16 +51,21 @@ class LanguageScreen extends StatelessWidget {
           ],
         ),
         backgroundColor: const Color(0xFF02091A),
-        bottomNavigationBar: Obx(() {
-          return _adController1.ad != null && _adController1.adLoaded.isTrue
-              ? SafeArea(
-                  child: SizedBox(
-                    height: 350,
-                    child: AdWidget(ad: _adController1.ad!),
-                  ),
-                )
-              : const SizedBox.shrink();
-        }),
+       bottomNavigationBar: Obx(() {
+        final ad = _adController1.ad;
+        if (ad != null &&
+            _adController1.adLoaded.isTrue &&
+            !_adController1.isDisposed) {
+          return SafeArea(
+            child: SizedBox(
+              height: 350,
+              child: AdWidget(ad: ad),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: ListView.builder(

@@ -157,17 +157,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ],
         ),
-        bottomNavigationBar:
-            //ads native
-            Obx(() {
-          return _adController1.ad != null && _adController1.adLoaded.isTrue
-              ? SafeArea(
-                  child: SizedBox(
-                    height: 350,
-                    child: AdWidget(ad: _adController1.ad!),
-                  ),
-                )
-              : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+        bottomNavigationBar: Obx(() {
+          final ad = _adController1.ad;
+          if (ad != null &&
+              _adController1.adLoaded.isTrue &&
+              !_adController1.isDisposed) {
+            return SafeArea(
+              child: SizedBox(
+                height: 350,
+                child: AdWidget(ad: ad),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
         }),
       ),
     );

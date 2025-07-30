@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+import 'package:vpn_basic_project/apis/apis.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/speed_test_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
+import 'package:vpn_basic_project/models/ip_details.dart';
 
 class SpeedTestAgain extends StatelessWidget {
   SpeedTestAgain({super.key});
 
   final _adController5 = NativeAdController();
+  final ipData = IPDetails.fromJson({}).obs; // ✅ Đặt bên ngoài build()
 
   @override
   Widget build(BuildContext context) {
     _adController5.ad = AdHelper.loadNativeAd1(adController: _adController5);
+
     final SpeedTestController controller = Get.find();
+
+    // ✅ Lấy IP khi build lần đầu
+    Apis.getIPDetails(ipData: ipData);
 
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
@@ -23,7 +31,7 @@ class SpeedTestAgain extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'test3'.tr, // "Speed Test Information"
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
@@ -37,10 +45,15 @@ class SpeedTestAgain extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Obx(() {
-        if (_adController5.ad != null && _adController5.adLoaded.isTrue) {
+        final ad = _adController5.ad;
+        if (ad != null &&
+            _adController5.adLoaded.isTrue &&
+            !_adController5.isDisposed) {
           return SafeArea(
-            child:
-                SizedBox(height: 350, child: AdWidget(ad: _adController5.ad!)),
+            child: SizedBox(
+              height: 350,
+              child: AdWidget(ad: ad),
+            ),
           );
         } else {
           return const SizedBox.shrink();
@@ -51,14 +64,14 @@ class SpeedTestAgain extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildInfoCard(controller),
+            Obx(() => _buildInfoCard(controller)), // ✅ Obx tự cập nhật IP
           ],
         ),
       ),
     );
   }
 
-  // Info Card Widget
+  // ✅ Info Card Widget
   Widget _buildInfoCard(SpeedTestController controller) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -72,13 +85,16 @@ class SpeedTestAgain extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildInfoColum(
-              'assets/svg/ip.svg', 'IP Address'.tr, controller.ip.value ?? ''),
+              'assets/svg/ip.svg', 'IP Address'.tr, ipData.value.query),
           const SizedBox(height: 15),
-          _buildInfoColum('assets/svg/net.svg', 'Internet Provider'.tr,
-              controller.isp.value ?? ''),
+          _buildInfoColum(
+              'assets/svg/net.svg', 'Internet Provider'.tr, ipData.value.isp),
           const SizedBox(height: 15),
-          _buildInfoColum('assets/svg/location.svg', 'Location'.tr,
-              controller.country.value ?? ''),
+          _buildInfoColum(
+            'assets/svg/location.svg',
+            'Location'.tr,
+            '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
+          ),
           const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,7 +110,7 @@ class SpeedTestAgain extends StatelessWidget {
     );
   }
 
-  // Info Colum
+  // ✅ Info Column
   Widget _buildInfoColum(String svgAsset, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -125,7 +141,7 @@ class SpeedTestAgain extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            value.isEmpty ? '__' : value,
+            value,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -139,7 +155,7 @@ class SpeedTestAgain extends StatelessWidget {
     );
   }
 
-  // Download/Upload Column
+  // ✅ Download/Upload Column
   Widget _buildSpeedColumn(IconData icon, String label, String value) {
     return Column(
       children: [

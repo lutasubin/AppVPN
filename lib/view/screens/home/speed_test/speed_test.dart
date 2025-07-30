@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_test_plus/flutter_speed_test_plus.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -37,10 +36,16 @@ class SpeedTestScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Obx(() {
-        if (_adController.ad != null && _adController.adLoaded.isTrue) {
+        final ad = _adController.ad;
+        if (ad != null &&
+            _adController.adLoaded.isTrue &&
+            !_adController.isDisposed) {
           return SafeArea(
-              child: SizedBox(
-                  height: 120, child: AdWidget(ad: _adController.ad!)));
+            child: SizedBox(
+              height: 120,
+              child: AdWidget(ad: ad),
+            ),
+          );
         } else {
           return const SizedBox.shrink();
         }
@@ -87,12 +92,12 @@ class SpeedTestScreen extends StatelessWidget {
               onTap: () async {
                 controller.isButtonVisible.value = false;
                 // ✅ Hiển thị quảng cáo
-                AdHelper.showInterstitialAd(
-                  onComplete: () async {
-                    await controller.startTesting();
-                    Get.off(() => SpeedTestAgain());
-                  },
-                );
+                // AdHelper.showInterstitialAd(
+                //   onComplete: () async {
+                await controller.startTesting();
+                Get.off(() => SpeedTestAgain());
+                //   },
+                // );
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),

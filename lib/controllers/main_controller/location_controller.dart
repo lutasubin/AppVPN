@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/apis/apis.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
-import '../../apis/apis.dart';
 
 class LocationController extends GetxController {
   var vpnList = Pref.vpnList;

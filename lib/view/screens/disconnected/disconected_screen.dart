@@ -57,16 +57,20 @@ class DisconnectedScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF02091A),
         elevation: 0,
       ),
-      bottomNavigationBar: Obx(() {
-        //! boc lai obx
-        return _adController5.ad != null && _adController5.adLoaded.isTrue
-            ? SafeArea(
-                child: SizedBox(
-                  height: 120,
-                  child: AdWidget(ad: _adController5.ad!),
-                ),
-              )
-            : const SizedBox.shrink(); // Hoặc `null`, tùy vào bạn
+     bottomNavigationBar: Obx(() {
+        final ad = _adController5.ad;
+        if (ad != null &&
+            _adController5.adLoaded.isTrue &&
+            !_adController5.isDisposed) {
+          return SafeArea(
+            child: SizedBox(
+              height: 120,
+              child: AdWidget(ad: ad),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
       }),
       body: SingleChildScrollView(
         child: Padding(
@@ -115,7 +119,14 @@ class DisconnectedScreen extends StatelessWidget {
                     Text(
                       ip,
                       style: TextStyle(
-                          color: Color(0xFFFFFFFF),
+                          color: Color(0xFF767C8A),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      'disconnect'.tr,
+                      style: TextStyle(
+                          color: Colors.red,
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),

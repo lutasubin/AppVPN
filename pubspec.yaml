@@ -55,7 +55,7 @@ dependencies:
   percent_indicator: ^4.2.5
   syncfusion_flutter_gauges: ^29.2.11
   dio: ^5.8.0+1
-  flutter_speed_test_plus: ^1.0.10
+  
 
   # app using
   installed_apps: ^1.6.0

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/banner%20_ad_controller.dart';
+import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
@@ -20,12 +20,11 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final _baController = BannerAdController();
-
+  final _adController8 = NativeAdController();
   @override
   void initState() {
     super.initState();
-    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
+    _adController8.ad = AdHelper.loadNativeAd2(adController: _adController8);
   }
 
   @override
@@ -41,7 +40,7 @@ class _MenuScreenState extends State<MenuScreen> {
         backgroundColor: const Color(0xFF02091A),
         leading: IconButton(
           onPressed: () {
-            AdHelper.showInterstitialAd(onComplete: () async {
+            AdHelper.showInterstitialAd(onComplete: () {
               Get.back();
             });
           },
@@ -60,14 +59,20 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Obx(() {
-        return _baController.ba != null && _baController.baLoaded.isTrue
-            ? SafeArea(
-                child: SizedBox(
-                height: 120,
-                child: AdWidget(ad: _baController.ba!),
-              ))
-            : const SizedBox.shrink();
+     bottomNavigationBar: Obx(() {
+        final ad = _adController8.ad;
+        if (ad != null &&
+            _adController8.adLoaded.isTrue &&
+            !_adController8.isDisposed) {
+          return SafeArea(
+            child: SizedBox(
+              height: 120,
+              child: AdWidget(ad: ad),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
       }),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
