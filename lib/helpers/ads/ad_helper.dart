@@ -1,152 +1,86 @@
 import 'dart:developer';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/banner%20_ad_controller.dart';
+import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
+import 'package:vpn_basic_project/helpers/ads/config_ads_firebase.dart';
+import 'package:vpn_basic_project/helpers/dilogs/my_dilogs.dart';
 
-import '../../controllers/ads_controller/native_ad_controller.dart';
-import 'config_ads_firebase.dart';
-
-/// Lớp hỗ trợ quản lý quảng cáo Google Mobile Ads tối ưu hóa
+/// Lớp hỗ trợ quản lý quảng cáo Google Mobile Ads trong ứng dụng Flutter.
+/// Cung cấp các phương thức để khởi tạo, tải và hiển thị các loại quảng cáo khác nhau.
 class AdHelper {
-  // Queue system để tránh load quá nhiều ads cùng lúc
-  static final List<Function> _loadQueue = [];
-  static bool _isProcessingQueue = false;
-  static Timer? _retryTimer;
-
-  // Cache timing
-  static const Duration _retryDelay = Duration(seconds: 30);
-  static const Duration _maxLoadTimeout = Duration(seconds: 5);
-
-  /// Khởi tạo SDK Google Mobile Ads với timeout
+  /// Khởi tạo SDK Google Mobile Ads.
+  /// Cần gọi hàm này trước khi sử dụng bất kỳ loại quảng cáo nào.
   static Future<void> initAds() async {
-    try {
-      await MobileAds.instance.initialize().timeout(_maxLoadTimeout);
-      log('✅ Mobile Ads SDK initialized successfully');
-    } catch (e) {
-      log('❌ Failed to initialize Mobile Ads SDK: $e');
-    }
+    await MobileAds.instance.initialize();
   }
 
-  /// Xử lý queue loading ads
-  static Future<void> _processLoadQueue() async {
-    if (_isProcessingQueue || _loadQueue.isEmpty) return;
-
-    _isProcessingQueue = true;
-
-    while (_loadQueue.isNotEmpty) {
-      final loadFunction = _loadQueue.removeAt(0);
-      try {
-        await loadFunction();
-        // Delay giữa các lần load để tránh spam request
-        await Future.delayed(const Duration(milliseconds: 500));
-      } catch (e) {
-        log('❌ Error in queue processing: $e');
-      }
-    }
-
-    _isProcessingQueue = false;
-  }
-
-  /// Thêm vào queue thay vì load ngay lập tức
-  static void _addToQueue(Function loadFunction) {
-    _loadQueue.add(loadFunction);
-    _processLoadQueue();
-  }
-
-  // Interstitial Ad
   static InterstitialAd? _interstitialAd;
   static bool _interstitialAdLoaded = false;
-  static DateTime? _lastInterstitialFailTime;
 
-  /// Precache Interstitial với retry logic
+  static BannerAd? _bannerAd;
+  static bool _bannerAdLoaded = false;
+
+  static NativeAd? _nativeAd;
+  static bool _nativeAdLoaded = false;
+
+  static NativeAd? _nativeAd1;
+  static bool _nativeAdLoaded1 = false;
+
+  static NativeAd? _nativeAd2;
+  static bool _nativeAdLoaded2 = false;
+
+  static NativeAd? _native1Ad;
+  static bool _native1AdLoaded = false;
+
+  static NativeAd? _native2Ad;
+  static bool _native2AdLoaded = false;
+
+  //*****************Interstitial Ad******************
+
+  /// Tải trước quảng cáo toàn màn hình để sẵn sàng hiển thị khi cần.
+  /// Quảng cáo sẽ tự động tải lại sau khi được hiển thị hoặc thất bại.
   static void precacheInterstitialAd() {
+    log('Precache Interstitial Ad - Id: ${Config.interstitialAd}');
+
     if (Config.hideAds) return;
-
-    // Tránh retry quá nhanh nếu vừa fail
-    if (_lastInterstitialFailTime != null &&
-        DateTime.now().difference(_lastInterstitialFailTime!) < _retryDelay) {
-      log('⏳ Interstitial ad retry too soon, skipping...');
-      return;
-    }
-
-    _addToQueue(() => _loadInterstitialAd());
-  }
-
-  static Future<void> _loadInterstitialAd() async {
-    log('🔄 Loading Interstitial Ad - Id: ${Config.interstitialAd}');
-
-    final completer = Completer<void>();
 
     InterstitialAd.load(
       adUnitId: Config.interstitialAd,
-      request: const AdRequest(),
+      request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              _resetInterstitialAd();
-              // Precache lại sau khi dismiss
-              Future.delayed(
-                  const Duration(seconds: 2), precacheInterstitialAd);
-            },
-            onAdShowedFullScreenContent: (ad) {
-              log('✅ Interstitial ad showed');
-            },
-            onAdFailedToShowFullScreenContent: (ad, error) {
-              log('❌ Interstitial ad failed to show: $error');
-              _resetInterstitialAd();
-            },
-          );
+          // Lắng nghe sự kiện khi quảng cáo được hiển thị hoặc đóng
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            _resetInterstitialAd();
+            precacheInterstitialAd();
+          });
           _interstitialAd = ad;
           _interstitialAdLoaded = true;
-          _lastInterstitialFailTime = null;
-          log('✅ Interstitial ad loaded successfully');
-          completer.complete();
         },
         onAdFailedToLoad: (err) {
           _resetInterstitialAd();
-          _lastInterstitialFailTime = DateTime.now();
-          log('❌ Failed to load interstitial ad: ${err.message}');
-
-          // Retry sau một khoảng thời gian
-          _scheduleRetryInterstitial();
-          completer.complete();
+          log('Failed to load an interstitial ad: ${err.message}');
         },
       ),
     );
-
-    // Timeout protection
-    Timer(_maxLoadTimeout, () {
-      if (!completer.isCompleted) {
-        log('⏰ Interstitial ad loading timeout');
-        completer.complete();
-      }
-    });
-
-    return completer.future;
   }
 
-  static void _scheduleRetryInterstitial() {
-    _retryTimer?.cancel();
-    _retryTimer = Timer(_retryDelay, () {
-      if (!_interstitialAdLoaded) {
-        log('🔄 Retrying interstitial ad load...');
-        precacheInterstitialAd();
-      }
-    });
-  }
-
+  /// Đặt lại trạng thái quảng cáo toàn màn hình về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
   static void _resetInterstitialAd() {
     _interstitialAd?.dispose();
     _interstitialAd = null;
     _interstitialAdLoaded = false;
   }
 
-  /// Show Interstitial với fallback
+  /// Hiển thị quảng cáo toàn màn hình.
+  /// Nếu quảng cáo chưa sẵn sàng, sẽ tải và hiển thị ngay khi hoàn tất.
+  /// [onComplete] được gọi sau khi quảng cáo hiển thị hoặc thất bại.
   static void showInterstitialAd({required VoidCallback onComplete}) {
-    log('📱 Showing Interstitial Ad - Id: ${Config.interstitialAd}');
+    log('Interstitial Ad Id: ${Config.interstitialAd}');
 
     if (Config.hideAds) {
       onComplete();
@@ -159,112 +93,381 @@ class AdHelper {
       return;
     }
 
-    // Nếu không có ad sẵn sàng, load và show ngay
-    _loadAndShowInterstitialAd(onComplete);
-  }
-
-  static void _loadAndShowInterstitialAd(VoidCallback onComplete) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
-    });
-
-    final completer = Completer<void>();
+    MyDialogs.showProgress();
 
     InterstitialAd.load(
       adUnitId: Config.interstitialAd,
-      request: const AdRequest(),
+      request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              _resetInterstitialAd();
-              onComplete();
-              precacheInterstitialAd();
-            },
-            onAdFailedToShowFullScreenContent: (ad, error) {
-              log('❌ Interstitial failed to show: $error');
-              _resetInterstitialAd();
-              onComplete();
-            },
-          );
-
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (Get.isDialogOpen ?? false) Get.back();
-            ad.show();
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            onComplete();
+            _resetInterstitialAd();
+            precacheInterstitialAd();
           });
-
-          completer.complete();
+          Get.back();
+          ad.show();
         },
         onAdFailedToLoad: (err) {
-          log('❌ Interstitial failed to load: ${err.message}');
-          if (Get.isDialogOpen ?? false) Get.back();
-          _resetInterstitialAd();
+          Get.back();
+          log('Failed to load an interstitial ad: ${err.message}');
           onComplete();
-          completer.complete();
         },
       ),
     );
-
-    Timer(_maxLoadTimeout, () {
-      if (!completer.isCompleted) {
-        if (Get.isDialogOpen ?? false) Get.back();
-        log('⏰ Interstitial ad loading timeout');
-        onComplete();
-        completer.complete();
-      }
-    });
   }
 
-  // Banner Ad với cải thiện
-  static BannerAd? _bannerAd;
-  static bool _bannerAdLoaded = false;
-  static DateTime? _lastBannerFailTime;
+  //*****************Native Ad******************
 
-  static void precacheBannerAd() {
+  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
+  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
+  static void precacheNativeAd() {
+    log('Precache Native Ad - Id: ${Config.nativeAd}');
+
     if (Config.hideAds) return;
 
-    if (_lastBannerFailTime != null &&
-        DateTime.now().difference(_lastBannerFailTime!) < _retryDelay) {
+    _nativeAd = NativeAd(
+        adUnitId: Config.nativeAd,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            _nativeAdLoaded = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAd();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
+  }
+
+  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
+  static void _resetNativeAd() {
+    _nativeAd?.dispose();
+    _nativeAd = null;
+    _nativeAdLoaded = false;
+  }
+
+  /// Tải và trả về một quảng cáo tự nhiên.
+  /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
+  /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
+  static NativeAd? loadNativeAd({required NativeAdController adController}) {
+    log('Native Ad Id: ${Config.nativeAd}');
+
+    if (Config.hideAds) return null;
+
+    if (_nativeAdLoaded && _nativeAd != null) {
+      adController.adLoaded.value = true;
+      return _nativeAd;
+    }
+
+    return NativeAd(
+        adUnitId: Config.nativeAd,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            adController.adLoaded.value = true;
+            _resetNativeAd();
+            precacheNativeAd();
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAd();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
+  }
+
+  //*****************Rewarded Ad******************
+
+  /// Hiển thị quảng cáo có thưởng.
+  /// [onComplete] được gọi khi người dùng nhận được phần thưởng.
+  static void showRewardedAd({required VoidCallback onComplete}) {
+    log('Rewarded Ad Id: ${Config.rewardedAd}');
+
+    if (Config.hideAds) {
+      onComplete();
       return;
     }
 
-    _addToQueue(() => _loadBannerAd());
+    MyDialogs.showProgress();
+
+    RewardedAd.load(
+      adUnitId: Config.rewardedAd,
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          Get.back();
+          ad.show(
+              onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
+            onComplete();
+          });
+        },
+        onAdFailedToLoad: (err) {
+          Get.back();
+          log('Failed to load an interstitial ad: ${err.message}');
+          // onComplete();
+        },
+      ),
+    );
   }
 
-  static Future<void> _loadBannerAd() async {
-    log('🔄 Loading Banner Ad - Id: ${Config.bannerAd}');
+  //*****************Native Ad1******************
+
+  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
+  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
+  static void precacheNativeAd1() {
+    log('Precache Native Ad - Id: ${Config.nativeAd}');
+
+    if (Config.hideAds) return;
+
+    _nativeAd1 = NativeAd(
+        adUnitId: Config.nativeAd,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            _nativeAdLoaded1 = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAd1();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.medium))
+      ..load();
+  }
+
+  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
+  static void _resetNativeAd1() {
+    _nativeAd1?.dispose();
+    _nativeAd1 = null;
+    _nativeAdLoaded1 = false;
+  }
+
+  /// Tải và trả về một quảng cáo tự nhiên.
+  /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
+  /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
+  static NativeAd? loadNativeAd1({required NativeAdController adController}) {
+    log('Native Ad Id: ${Config.nativeAd}');
+
+    if (Config.hideAds) return null;
+
+    if (_nativeAdLoaded1 && _nativeAd1 != null) {
+      adController.adLoaded.value = true;
+      return _nativeAd1;
+    }
+
+    return NativeAd(
+        adUnitId: Config.nativeAd,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            adController.adLoaded.value = true;
+            _resetNativeAd1();
+            precacheNativeAd1();
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAd1();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.medium))
+      ..load();
+  }
+
+  //*****************Native Ad2******************
+
+  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
+  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
+  static void precacheNativeAd2() {
+    log('Precache Native Ad - Id: ${Config.nativeAd}');
+
+    if (Config.hideAds) return;
+
+    _nativeAd2 = NativeAd(
+        adUnitId: Config.nativeAd,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            _nativeAdLoaded2 = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAd2();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
+  }
+
+  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
+  static void _resetNativeAd2() {
+    _nativeAd2?.dispose();
+    _nativeAd2 = null;
+    _nativeAdLoaded2 = false;
+  }
+
+  /// Tải và trả về một quảng cáo tự nhiên.
+  /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
+  /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
+  static NativeAd? loadNativeAd2({required NativeAdController adController}) {
+    log('Native Ad Id: ${Config.nativeAd}');
+
+    if (Config.hideAds) return null;
+
+    if (_nativeAdLoaded2 && _nativeAd2 != null) {
+      adController.adLoaded.value = true;
+      return _nativeAd2;
+    }
+
+    return NativeAd(
+        adUnitId: Config.nativeAd,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            adController.adLoaded.value = true;
+            _resetNativeAd2();
+            precacheNativeAd2();
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAd2();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
+  }
+
+  //*****************Banner Ad******************
+  /// Tải trước Banner Ad để sẵn sàng hiển thị.
+  static void precacheBannerAd() {
+    log('Precache Banner Ad - Id: ${Config.bannerAd}');
+
+    if (Config.hideAds) return;
 
     _bannerAd = BannerAd(
       adUnitId: Config.bannerAd,
       size: AdSize.banner,
-      request: const AdRequest(),
+      request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          log('✅ Banner ad loaded successfully');
+          log('$BannerAd loaded.');
           _bannerAdLoaded = true;
-          _lastBannerFailTime = null;
         },
         onAdFailedToLoad: (ad, error) {
           disposeBannerAd();
-          _lastBannerFailTime = DateTime.now();
-          log('❌ Banner ad failed to load: $error');
-
-          // Schedule retry
-          Timer(_retryDelay, () {
-            if (!_bannerAdLoaded) {
-              precacheBannerAd();
-            }
-          });
+          log('$BannerAd failed to load: $error');
         },
-        onAdOpened: (ad) => log('Banner ad opened'),
-        onAdClosed: (ad) => log('Banner ad closed'),
       ),
-    );
-
-    await _bannerAd?.load();
+    )..load();
   }
 
   static void disposeBannerAd() {
@@ -274,7 +477,7 @@ class AdHelper {
   }
 
   static BannerAd? loadBannerAd({required BannerAdController baController}) {
-    log('📱 Loading Banner Ad for display - Id: ${Config.bannerAd}');
+    log('Banner Ad Id : ${Config.bannerAd}');
 
     if (Config.hideAds) return null;
 
@@ -282,456 +485,293 @@ class AdHelper {
       baController.baLoaded.value = true;
       return _bannerAd;
     }
-
-    // Fallback: tạo banner mới nếu chưa có
-    final bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: Config.bannerAd,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          log('✅ Fallback banner ad loaded');
-          baController.baLoaded.value = true;
-          disposeBannerAd();
-          precacheBannerAd();
-        },
-        onAdFailedToLoad: (ad, error) {
-          disposeBannerAd();
-          log('❌ Fallback banner ad failed to load: $error');
-        },
-      ),
-      request: const AdRequest(),
-    );
-
-    bannerAd.load();
-    return bannerAd;
+    return BannerAd(
+        size: AdSize.banner,
+        adUnitId: Config.bannerAd,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            log('$BannerAd loaded.');
+            baController.baLoaded.value = true;
+            disposeBannerAd();
+            precacheBannerAd();
+          },
+          onAdFailedToLoad: (ad, error) {
+            disposeBannerAd();
+            log('$BannerAd failed to load: $error');
+          },
+        ),
+        request: AdRequest())
+      ..load();
   }
+  //*****************App Open Ad******************
 
-  // Native Ad với Map quản lý tốt hơn
-  static final Map<String, NativeAd?> _nativeAds = {};
-  static final Map<String, bool> _nativeAdLoaded = {};
-  static final Map<String, DateTime?> _lastNativeFailTime = {};
+  static AppOpenAd? _appOpenAd;
+  static bool _isOpenAdAvailable = false;
+  // Thêm vào dưới phần AppOpenAd
+  static bool get isAppOpenAdAvailable =>
+      _isOpenAdAvailable && _appOpenAd != null;
 
-  static NativeTemplateStyle _getNativeTemplateStyle(
-      TemplateType templateType) {
-    return NativeTemplateStyle(
-      mainBackgroundColor: const Color(0xFFFFFFFF),
-      primaryTextStyle: NativeTemplateTextStyle(
-        textColor: Colors.black,
-        style: NativeTemplateFontStyle.normal,
-      ),
-      secondaryTextStyle: NativeTemplateTextStyle(
-        textColor: Colors.grey,
-        style: NativeTemplateFontStyle.normal,
-      ),
-      callToActionTextStyle: NativeTemplateTextStyle(
-        textColor: const Color(0xFFFFFFFF),
-        backgroundColor: const Color(0xFFF15E24),
-        style: NativeTemplateFontStyle.bold,
-        size: 15,
-      ),
-      templateType: templateType,
-    );
-  }
-
-  static void _precacheNativeAd(String key, TemplateType templateType) {
-    if (Config.hideAds) return;
-
-    final lastFailTime = _lastNativeFailTime[key];
-    if (lastFailTime != null &&
-        DateTime.now().difference(lastFailTime) < _retryDelay) {
+  /// Tải quảng cáo App Open (quảng cáo khi mở app)
+  static void precacheOpenAd() {
+    if (Config.hideAds) {
+      print('[AppOpenAd] Ads hidden by config. Skipping load.');
       return;
     }
 
-    _addToQueue(() => _loadNativeAdInternal(key, templateType));
-  }
+    final openAdUnitId = Config.openAd;
+    if (openAdUnitId.isEmpty) {
+      print('[AppOpenAd] Error: openAd ID is empty!');
+      return;
+    }
 
-  static Future<void> _loadNativeAdInternal(
-      String key, TemplateType templateType) async {
-    log('🔄 Loading Native Ad - Key: $key, Id: ${Config.nativeAd}');
+    print('[AppOpenAd] Loading App Open Ad with ID: $openAdUnitId');
 
-    _nativeAds[key] = NativeAd(
-      adUnitId: Config.nativeAd,
-      listener: NativeAdListener(
+    AppOpenAd.load(
+      adUnitId: openAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
-          log('✅ Native ad loaded for key: $key');
-          _nativeAdLoaded[key] = true;
-          _lastNativeFailTime[key] = null;
+          _appOpenAd = ad;
+          _isOpenAdAvailable = true;
+          print('[AppOpenAd] ✅ App Open Ad loaded successfully.');
         },
-        onAdFailedToLoad: (ad, error) {
-          _resetNativeAd(key);
-          _lastNativeFailTime[key] = DateTime.now();
-          log('❌ Native ad failed to load for key $key: $error');
-
-          // Schedule retry
-          Timer(_retryDelay, () {
-            if (_nativeAdLoaded[key] != true) {
-              _precacheNativeAd(key, templateType);
-            }
-          });
+        onAdFailedToLoad: (error) {
+          _appOpenAd = null;
+          _isOpenAdAvailable = false;
+          print('[AppOpenAd] ❌ Failed to load: ${error.message}');
         },
       ),
-      request: const AdRequest(),
-      nativeTemplateStyle: _getNativeTemplateStyle(templateType),
+      // orientation: AppOpenAd.orientationPortrait, // ❌ This param was removed from newer SDK versions
     );
-
-    await _nativeAds[key]?.load();
   }
 
-  static void _resetNativeAd(String key) {
-    _nativeAds[key]?.dispose();
-    _nativeAds[key] = null;
-    _nativeAdLoaded[key] = false;
+  static void showOpenAd({required VoidCallback onComplete}) {
+    if (Config.hideAds) {
+      print('[AppOpenAd] Ads hidden. Skipping show.');
+      onComplete();
+      return;
+    }
+
+    if (_isOpenAdAvailable && _appOpenAd != null) {
+      print('[AppOpenAd] ✅ Showing App Open Ad');
+      _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          print('[AppOpenAd] Ad dismissed');
+          _appOpenAd = null;
+          _isOpenAdAvailable = false;
+          precacheOpenAd();
+          onComplete();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          print('[AppOpenAd] ❌ Failed to show: ${error.message}');
+          _appOpenAd = null;
+          _isOpenAdAvailable = false;
+          precacheOpenAd();
+          onComplete();
+        },
+      );
+      _appOpenAd!.show();
+    } else {
+      print('[AppOpenAd] ❗ Ad not ready yet. Calling onComplete().');
+      precacheOpenAd();
+      onComplete();
+    }
   }
 
-  // Public methods for Native Ads
-  static void precacheNativeAd() =>
-      _precacheNativeAd('native', TemplateType.small);
-  static void precacheNativeAd1() =>
-      _precacheNativeAd('native1', TemplateType.medium);
-  static void precacheNativeAd2() =>
-      _precacheNativeAd('native2', TemplateType.small);
 
-  static NativeAd? loadNativeAd({required NativeAdController adController}) =>
-      _loadNativeAdForDisplay('native', TemplateType.small, adController);
+  //*****************Native Ad New 1******************
 
-  static NativeAd? loadNativeAd1({required NativeAdController adController}) =>
-      _loadNativeAdForDisplay('native1', TemplateType.medium, adController);
+  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
+  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
+  static void precacheNativeAdNew() {
+    log('Precache Native Ad 1- Id: ${Config.native1Ad}');
 
-  static NativeAd? loadNativeAd2({required NativeAdController adController}) =>
-      _loadNativeAdForDisplay('native2', TemplateType.small, adController);
+    if (Config.hideAds) return;
 
-  static NativeAd? _loadNativeAdForDisplay(
-      String key, TemplateType templateType, NativeAdController adController) {
-    log('📱 Loading Native Ad for display - Key: $key, Id: ${Config.nativeAd}');
+    _native1Ad = NativeAd(
+        adUnitId: Config.native1Ad,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            _native1AdLoaded = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAdNew();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
+  }
+
+  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
+  static void _resetNativeAdNew() {
+    _native1Ad?.dispose();
+    _native1Ad = null;
+    _native1AdLoaded = false;
+  }
+
+  /// Tải và trả về một quảng cáo tự nhiên.
+  /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
+  /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
+  static NativeAd? loadNativeAdNew({required NativeAdController adController}) {
+    log('Native Ad Id 2: ${Config.native1Ad}');
 
     if (Config.hideAds) return null;
 
-    if (_nativeAdLoaded[key] == true && _nativeAds[key] != null) {
+    if (_native1AdLoaded && _native1Ad != null) {
       adController.adLoaded.value = true;
-      return _nativeAds[key];
+      return _native1Ad;
     }
 
-    // Fallback: tạo native ad mới nếu chưa có
     return NativeAd(
-      adUnitId: Config.nativeAd,
-      listener: NativeAdListener(
-        onAdLoaded: (ad) {
-          log('✅ Fallback native ad loaded for key: $key');
-          adController.adLoaded.value = true;
-          _resetNativeAd(key);
-          _precacheNativeAd(key, templateType);
-        },
-        onAdFailedToLoad: (ad, error) {
-          _resetNativeAd(key);
-          log('❌ Fallback native ad failed to load for key $key: $error');
-        },
-      ),
-      request: const AdRequest(),
-      nativeTemplateStyle: _getNativeTemplateStyle(templateType),
-    )..load();
+        adUnitId: Config.native1Ad,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            adController.adLoaded.value = true;
+            _resetNativeAdNew();
+            precacheNativeAdNew();
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAdNew();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
   }
 
-  // Rewarded Ad với timeout
-  static void showRewardedAd({required VoidCallback onComplete}) {
-    if (Config.hideAds) {
-      onComplete();
-      return;
-    }
+   //*****************Native Ad New 2******************
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
-    });
+  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
+  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
+  static void precacheNativeAdNew2() {
+    log('Precache Native Ad 2 - Id: ${Config.native2Ad}');
 
-    final completer = Completer<void>();
-
-    RewardedAd.load(
-      adUnitId: Config.rewardedAd,
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (Get.isDialogOpen ?? false) Get.back();
-            ad.show(
-              onUserEarnedReward: (ad, rewardItem) {
-                log('✅ User earned reward');
-                onComplete();
-              },
-            );
-          });
-          completer.complete();
-        },
-        onAdFailedToLoad: (err) {
-          if (Get.isDialogOpen ?? false) Get.back();
-          log('❌ Failed to load rewarded ad: ${err.message}');
-          onComplete();
-          completer.complete();
-        },
-      ),
-    );
-
-    Timer(_maxLoadTimeout, () {
-      if (!completer.isCompleted) {
-        if (Get.isDialogOpen ?? false) Get.back();
-        onComplete();
-        completer.complete();
-      }
-    });
-  }
-
-  // App Open Ad
-  static AppOpenAd? _appOpenAd;
-  static bool _appOpenAdLoaded = false;
-  static bool _isAppOpenAdShowing = false;
-  static DateTime? _lastOpenAdFailTime;
-  static DateTime? _lastOpenAdShowTime;
-
-  // Tránh spam show open ad
-  static const Duration _openAdCooldown = Duration(minutes: 5);
-
-  /// Precache App Open Ad với retry logic
-  static void precacheOpenAd() {
     if (Config.hideAds) return;
 
-    // Tránh retry quá nhanh nếu vừa fail
-    if (_lastOpenAdFailTime != null &&
-        DateTime.now().difference(_lastOpenAdFailTime!) < _retryDelay) {
-      log('⏳ Open ad retry too soon, skipping...');
-      return;
+    _native2Ad = NativeAd(
+        adUnitId: Config.native2Ad,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            _native2AdLoaded = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAdNew2();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
+  }
+
+  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
+  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
+  static void _resetNativeAdNew2() {
+    _native2Ad?.dispose();
+    _native2Ad = null;
+    _native2AdLoaded = false;
+  }
+
+  /// Tải và trả về một quảng cáo tự nhiên.
+  /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
+  /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
+  static NativeAd? loadNativeAdNew2({required NativeAdController adController}) {
+    log('Native Ad Id: ${Config.native1Ad}');
+
+    if (Config.hideAds) return null;
+
+    if (_native2AdLoaded && _native2Ad != null) {
+      adController.adLoaded.value = true;
+      return _native2Ad;
     }
 
-    _addToQueue(() => _loadOpenAd());
-  }
-
-  static Future<void> _loadOpenAd() async {
-    log('🔄 Loading App Open Ad - Id: ${Config.openAd}');
-
-    final completer = Completer<void>();
-
-    AppOpenAd.load(
-      adUnitId: Config.openAd,
-      request: const AdRequest(),
-      adLoadCallback: AppOpenAdLoadCallback(
-        onAdLoaded: (ad) {
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              _resetOpenAd();
-              _lastOpenAdShowTime = DateTime.now();
-              // Precache lại sau khi dismiss
-              Future.delayed(const Duration(seconds: 2), precacheOpenAd);
-            },
-            onAdShowedFullScreenContent: (ad) {
-              log('✅ Open ad showed');
-              _isAppOpenAdShowing = true;
-            },
-            onAdFailedToShowFullScreenContent: (ad, error) {
-              log('❌ Open ad failed to show: $error');
-              _resetOpenAd();
-            },
-          );
-          _appOpenAd = ad;
-          _appOpenAdLoaded = true;
-          _lastOpenAdFailTime = null;
-          log('✅ App Open ad loaded successfully');
-          completer.complete();
-        },
-        onAdFailedToLoad: (err) {
-          _resetOpenAd();
-          _lastOpenAdFailTime = DateTime.now();
-          log('❌ Failed to load open ad: ${err.message}');
-
-          // Retry sau một khoảng thời gian
-          _scheduleRetryOpenAd();
-          completer.complete();
-        },
-      ),
-    );
-
-    // Timeout protection
-    Timer(_maxLoadTimeout, () {
-      if (!completer.isCompleted) {
-        log('⏰ Open ad loading timeout');
-        completer.complete();
-      }
-    });
-
-    return completer.future;
-  }
-
-  static void _scheduleRetryOpenAd() {
-    Timer(_retryDelay, () {
-      if (!_appOpenAdLoaded) {
-        log('🔄 Retrying open ad load...');
-        precacheOpenAd();
-      }
-    });
-  }
-
-  static void _resetOpenAd() {
-    _appOpenAd?.dispose();
-    _appOpenAd = null;
-    _appOpenAdLoaded = false;
-    _isAppOpenAdShowing = false;
-  }
-
-  /// Show App Open Ad với cooldown để tránh spam
-  static void showOpenAd({required VoidCallback onComplete}) {
-    log('📱 Showing App Open Ad - Id: ${Config.openAd}');
-
-    if (Config.hideAds) {
-      onComplete();
-      return;
-    }
-
-    // Kiểm tra cooldown (tránh show quá thường xuyên)
-    if (_lastOpenAdShowTime != null &&
-        DateTime.now().difference(_lastOpenAdShowTime!) < _openAdCooldown) {
-      log('⏳ Open ad cooldown active, skipping...');
-      onComplete();
-      return;
-    }
-
-    if (_appOpenAdLoaded && _appOpenAd != null && !_isAppOpenAdShowing) {
-      _appOpenAd?.show();
-      onComplete();
-      return;
-    }
-
-    // Nếu không có ad sẵn sàng, load và show ngay
-    _loadAndShowOpenAd(onComplete);
-  }
-
-  static void _loadAndShowOpenAd(VoidCallback onComplete) {
-    // Show loading indicator
-    if (!(Get.isDialogOpen ?? false)) {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
-    }
-
-    final completer = Completer<void>();
-
-    AppOpenAd.load(
-      adUnitId: Config.openAd,
-      request: const AdRequest(),
-      adLoadCallback: AppOpenAdLoadCallback(
-        onAdLoaded: (ad) {
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              onComplete();
-              _resetOpenAd();
-              precacheOpenAd();
-            },
-            onAdShowedFullScreenContent: (ad) {
-              _isAppOpenAdShowing = true;
-              _lastOpenAdShowTime = DateTime.now();
-            },
-            onAdFailedToShowFullScreenContent: (ad, error) {
-              log('❌ Open ad failed to show: $error');
-              _resetOpenAd();
-            },
-          );
-
-          _appOpenAd = ad;
-          _appOpenAdLoaded = true;
-
-          if (Get.isDialogOpen ?? false) Get.back(); // Hide loading
-
-          // ✅ Tránh ANR bằng cách gọi sau một frame
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            try {
-              ad.show();
-            } catch (e) {
-              log('❌ Error showing open ad: $e');
-              _resetOpenAd();
-              onComplete();
-            }
-          });
-
-          completer.complete();
-        },
-        onAdFailedToLoad: (err) {
-          if (Get.isDialogOpen ?? false) Get.back(); // Hide loading
-          log('❌ Failed to load open ad immediately: ${err.message}');
-          onComplete();
-          completer.complete();
-        },
-      ),
-    );
-
-    // Timeout protection
-    Timer(_maxLoadTimeout, () {
-      if (!completer.isCompleted) {
-        if (Get.isDialogOpen ?? false) Get.back();
-        onComplete();
-        completer.complete();
-      }
-    });
-  }
-
-  /// Khởi tạo tất cả ads với thứ tự ưu tiên
-  static Future<void> initAllAds() async {
-    log('🚀 Initializing all ads with priority queue...');
-
-    // Priority order: Open Ad -> Interstitial -> Banner -> Native ads
-    Future.delayed(const Duration(seconds: 1), precacheOpenAd);
-    Future.delayed(const Duration(seconds: 2), precacheInterstitialAd);
-    Future.delayed(const Duration(seconds: 3), precacheBannerAd);
-    Future.delayed(const Duration(seconds: 4), precacheNativeAd);
-    Future.delayed(const Duration(seconds: 5), precacheNativeAd1);
-    Future.delayed(const Duration(seconds: 6), precacheNativeAd2);
-  }
-
-  /// Dispose tất cả ads
-  static void disposeAllAds() {
-    log('🧹 Disposing all ads...');
-
-    _retryTimer?.cancel();
-    _resetInterstitialAd();
-    _resetOpenAd();
-    disposeBannerAd();
-
-    for (String key in _nativeAds.keys.toList()) {
-      _resetNativeAd(key);
-    }
-
-    _loadQueue.clear();
-    _isProcessingQueue = false;
-  }
-
-  /// Kiểm tra trạng thái ads
-  static Map<String, bool> getAdStatus() {
-    return {
-      'open': _appOpenAdLoaded,
-      'interstitial': _interstitialAdLoaded,
-      'banner': _bannerAdLoaded,
-      'native': _nativeAdLoaded['native'] ?? false,
-      'native1': _nativeAdLoaded['native1'] ?? false,
-      'native2': _nativeAdLoaded['native2'] ?? false,
-    };
-  }
-
-  /// Utility methods for App Open Ad
-  static bool get isAppOpenAdReady => _appOpenAdLoaded && _appOpenAd != null;
-  static bool get isAppOpenAdShowing => _isAppOpenAdShowing;
-
-  /// Check if can show open ad (considering cooldown)
-  static bool canShowOpenAd() {
-    if (Config.hideAds ||
-        !_appOpenAdLoaded ||
-        _appOpenAd == null ||
-        _isAppOpenAdShowing) {
-      return false;
-    }
-
-    if (_lastOpenAdShowTime != null &&
-        DateTime.now().difference(_lastOpenAdShowTime!) < _openAdCooldown) {
-      return false;
-    }
-
-    return true;
+    return NativeAd(
+        adUnitId: Config.native1Ad,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('$NativeAd loaded.');
+            adController.adLoaded.value = true;
+            _resetNativeAdNew2();
+            precacheNativeAdNew2();
+          },
+          onAdFailedToLoad: (ad, error) {
+            _resetNativeAdNew2();
+            log('$NativeAd failed to load: $error');
+          },
+        ),
+        request: const AdRequest(),
+        nativeTemplateStyle: NativeTemplateStyle(
+            mainBackgroundColor: Color(0xFFFFFFFF),
+            primaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.black,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            secondaryTextStyle: NativeTemplateTextStyle(
+              textColor: Colors.grey,
+              style: NativeTemplateFontStyle.normal,
+            ),
+            callToActionTextStyle: NativeTemplateTextStyle(
+              textColor: Color(0xFFFFFFFF),
+              backgroundColor: Color(0xFFF15E24),
+              style: NativeTemplateFontStyle.bold,
+              size: 15,
+            ),
+            templateType: TemplateType.small))
+      ..load();
   }
 }

@@ -3,13 +3,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vpn_basic_project/controllers/main_controller/local_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 
 class DisconnectedScreen extends StatelessWidget {
   final String country;
-  final String ip;
+
   final String connectionTime;
   final String uploadSpeed;
   final String downloadSpeed;
@@ -19,7 +19,6 @@ class DisconnectedScreen extends StatelessWidget {
   DisconnectedScreen({
     super.key,
     required this.country,
-    required this.ip,
     required this.connectionTime,
     required this.uploadSpeed,
     required this.downloadSpeed,
@@ -28,7 +27,7 @@ class DisconnectedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _adController5.ad = AdHelper.loadNativeAd2(adController: _adController5);
+    _adController5.ad = AdHelper.loadNativeAd1(adController: _adController5);
     final LocalController controller = Get.find<LocalController>();
 
     return Scaffold(
@@ -57,14 +56,14 @@ class DisconnectedScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF02091A),
         elevation: 0,
       ),
-     bottomNavigationBar: Obx(() {
+      bottomNavigationBar: Obx(() {
         final ad = _adController5.ad;
         if (ad != null &&
             _adController5.adLoaded.isTrue &&
             !_adController5.isDisposed) {
           return SafeArea(
             child: SizedBox(
-              height: 120,
+              height: 350,
               child: AdWidget(ad: ad),
             ),
           );
@@ -95,7 +94,7 @@ class DisconnectedScreen extends StatelessWidget {
                       children: [
                         Image.asset(
                           flagUrl,
-                          width: 40,
+                          width: 50,
                           height: 30,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
@@ -116,13 +115,6 @@ class DisconnectedScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      ip,
-                      style: TextStyle(
-                          color: Color(0xFF767C8A),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
                     Text(
                       'disconnect'.tr,
                       style: TextStyle(

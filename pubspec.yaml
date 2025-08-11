@@ -58,9 +58,8 @@ dependencies:
   
 
   # app using
-  installed_apps: ^1.6.0
-
   firebase_crashlytics: ^4.3.5
+  installed_apps: ^1.6.0
 
   
  
@@ -84,6 +83,7 @@ flutter:
     - assets/ # Thư mục gốc chứa tài nguyên
     - assets/vpn/ # Tài nguyên liên quan đến VPN
     - assets/wireguard/ # Tài nguyên liên quan đến WireGuard
+    - assets/stunnel/ # Tài nguyên liên quan đến Stunnel
     - assets/images/ # Thư mục chứa hình ảnh
     - assets/icons/ # Thư mục chứa biểu tượng
     - assets/lottie/ # Thư mục chứa tệp hoạt hình Lottie

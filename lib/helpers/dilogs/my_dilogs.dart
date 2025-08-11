@@ -34,4 +34,8 @@ class MyDialogs {
       duration: Duration(seconds: 3), // Thêm duration
     );
   }
+  
+  static showProgress() {
+    Get.dialog(Center(child: CircularProgressIndicator(strokeWidth: 2)));
+  }
 }

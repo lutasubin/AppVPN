@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/controllers/main_controller/local_controller.dart';
-import 'package:vpn_basic_project/controllers/main_controller/location_controller.dart';
-import 'package:vpn_basic_project/controllers/main_controller/network_controller.dart';
-import 'package:vpn_basic_project/controllers/main_controller/speed_test_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/location/location_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/network/network_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/speed/speed_test_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/splash/splash_controller.dart';
 // import 'package:vpn_basic_project/controllers/purchase_controller.dart';
 
 /// Class quản lý tất cả dependencies của ứng dụng
@@ -28,6 +29,8 @@ class AppBinding extends Bindings {
 
     //  // Khởi tạo PurchaseController (VIP)
     // Get.put<PurchaseController>(PurchaseController(), permanent: true);
+
+     Get.put<SplashController>(SplashController());
 
 
   }

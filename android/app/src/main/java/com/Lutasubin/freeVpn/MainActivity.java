@@ -45,6 +45,9 @@ import com.google.android.ump.UserMessagingPlatform;
 
 import androidx.core.view.WindowCompat;
 
+// StunnelEngine import
+import com.Lutasubin.freeVpn.StunnelEngine;
+
 
 public class MainActivity extends FlutterActivity {
     private MethodChannel vpnControlMethod;
@@ -159,6 +162,9 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
+
+        // Đăng ký StunnelEngine plugin
+        flutterEngine.getPlugins().add(new StunnelEngine());
 
         vpnControlEvent = new EventChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), EVENT_CHANNEL_VPN_STAGE);
         vpnControlEvent.setStreamHandler(new EventChannel.StreamHandler() {

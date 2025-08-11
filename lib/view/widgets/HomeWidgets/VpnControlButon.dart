@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/controllers/main_controller/local_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/count_down_time.dart';
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/disconnect_button.dart';
@@ -36,7 +36,7 @@ class _VpnControlButtonState extends State<VpnControlButton> {
       children: [
         /// Nút kết nối VPN (ẩn nếu đã kết nối)
         Obx(() {
-          final vpnState = widget.controller.vpnState.value;
+          final vpnState = widget.controller.vpnState;
 
           // Nếu đã kết nối VPN, nút kết nối ẩn đi
           if (vpnState == VpnEngine.vpnConnected) {
@@ -139,11 +139,11 @@ class _VpnControlButtonState extends State<VpnControlButton> {
 
         /// Bộ đếm thời gian khi đã kết nối VPN
         Obx(() {
-          if (widget.controller.vpnState.value == VpnEngine.vpnConnected) {
+          if (widget.controller.vpnState == VpnEngine.vpnConnected) {
             return CountDownTimer(
               startTimer: true,
               onDurationChanged: (duration) {
-                widget.controller.connectionDuration.value = duration;
+                widget.controller.connectionDuration = duration;
               },
             );
           }
@@ -153,7 +153,7 @@ class _VpnControlButtonState extends State<VpnControlButton> {
 
         /// Nút Disconnect khi đã kết nối VPN
         Obx(() {
-          if (widget.controller.vpnState.value == VpnEngine.vpnConnected) {
+          if (widget.controller.vpnState == VpnEngine.vpnConnected) {
             return DisconnectButton(
               onPressed: () {
                 widget.controller.showDisconnectDialogWithAd();
@@ -175,10 +175,10 @@ class _VpnControlButtonState extends State<VpnControlButton> {
 
     // Kiểm tra trạng thái WireGuard
     final isWireGuardConnecting = widget.controller.isUsingWireGuard &&
-        widget.controller.isConnecting.value;
+        widget.controller.isConnecting;
 
     // Kiểm tra trạng thái controller
-    final isControllerConnecting = widget.controller.isConnecting.value;
+    final isControllerConnecting = widget.controller.isConnecting;
 
     return isOpenVpnConnecting ||
         isWireGuardConnecting ||

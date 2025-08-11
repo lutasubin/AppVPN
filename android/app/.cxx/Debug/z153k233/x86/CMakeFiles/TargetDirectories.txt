@@ -1,0 +1,2 @@
+C:/wiregurad/vpn-basic-project/android/app/.cxx/Debug/z153k233/x86/CMakeFiles/edit_cache.dir
+C:/wiregurad/vpn-basic-project/android/app/.cxx/Debug/z153k233/x86/CMakeFiles/rebuild_cache.dir

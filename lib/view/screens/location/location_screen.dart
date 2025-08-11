@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:vpn_basic_project/controllers/main_controller/local_controller.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_highspeed.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_pro.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_speed.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_wireguard.dart';
+import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_api.dart';
 
 /// Màn hình hiển thị danh sách máy chủ VPN
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
 
   final _adController2 = NativeAdController();
+  final _adController3 = NativeAdController();
 
   final controller = Get.find<LocalController>();
 
   @override
   Widget build(BuildContext context) {
     // Nạp quảng cáo native
-    _adController2.ad = AdHelper.loadNativeAd2(adController: _adController2);
+    _adController2.ad = AdHelper.loadNativeAdNew2(adController: _adController2);
+    _adController3.ad = AdHelper.loadNativeAd(adController: _adController3);
+
     // Sử dụng Obx để theo dõi thay đổi trạng thái
     return Obx(
       () => SafeArea(
@@ -44,15 +46,6 @@ class LocationScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Thanh điều hướng dưới cùng hiển thị quảng cáo nếu có
-          bottomNavigationBar: _adController2.ad != null &&
-                  _adController2.adLoaded.isTrue &&
-                  !_adController2.isDisposed
-              ? SafeArea(
-                  child: SizedBox(
-                      height: 120, child: AdWidget(ad: _adController2.ad!)))
-              : null,
-
           // Nội dung chính của màn hình
           body: SafeArea(
             child: Column(
@@ -73,32 +66,94 @@ class LocationScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
-        // // Hiển thị tất cả VPN Fast
-        // ...controller.availableServersFast
-        //     .map((server) => Padding(
-        //           padding: const EdgeInsets.only(bottom: 8),
-        //           child: VpnCardLocalSpeed(server: server),
-        //         ))
-        //     .toList(),
-        // Hiển thị tất cả VPN Pro
+        Text(
+          'Super VPN',
+          style: TextStyle(
+              color: const Color(0xFFFFFFFF),
+              fontSize: 17,
+              fontWeight: FontWeight.w500),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         ...controller.availableServersPro
             .map((server) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: VpnCardLocalPro(server: server),
                 ))
             .toList(),
-        // // Hiển thị tất cả server WireGuard
-        // ...controller.availableWireGuardServers
-        //     .map((server) => Padding(
-        //           padding: const EdgeInsets.only(bottom: 8),
-        //           child: VpnCardWireGuard(server: server),
-        //         ))
-        //     .toList(),
-        // Hiển thị tất cả VPN thường
+        Container(
+          child: Obx(() {
+            final ad = _adController2.ad;
+            if (ad != null &&
+                _adController2.adLoaded.isTrue &&
+                !_adController2.isDisposed) {
+              return SafeArea(
+                child: SizedBox(
+                  height: 120,
+                  child: AdWidget(ad: ad),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Text(
+          'Social VPN',
+          style: TextStyle(
+              color: const Color(0xFFFFFFFF),
+              fontSize: 17,
+              fontWeight: FontWeight.w500),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         ...controller.availableServers
             .map((server) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: VpnCardLocal(
+                    server: server,
+                  ),
+                ))
+            .toList(),
+        Container(
+          child: Obx(() {
+            final ad = _adController3.ad;
+            if (ad != null &&
+                _adController3.adLoaded.isTrue &&
+                !_adController3.isDisposed) {
+              return SafeArea(
+                child: SizedBox(
+                  height: 120,
+                  child: AdWidget(ad: ad),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        Text(
+          'Public VPN',
+          style: TextStyle(
+              color: const Color(0xFFFFFFFF),
+              fontSize: 17,
+              fontWeight: FontWeight.w500),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ...controller.availableApiServers
+            .map((server) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: VpnCardApi(
                     server: server,
                   ),
                 ))

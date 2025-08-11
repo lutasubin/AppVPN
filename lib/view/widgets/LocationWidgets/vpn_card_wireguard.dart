@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/controllers/main_controller/local_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/SignalStrengthIcon.dart';
 
@@ -12,15 +12,8 @@ class VpnCardWireGuard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final isSelected = controller.selectedServer.value?.ip == server.ip &&
-          controller.selectedServer.value?.protocol == server.protocol;
-
-      // 🔍 Debug logs
-      print("🔍 WireGuard Card - ${server.countryName}:");
-      print("   Server IP: ${server.ip}, Protocol: ${server.protocol}");
-      print(
-          "   Selected IP: ${controller.selectedServer.value?.ip}, Protocol: ${controller.selectedServer.value?.protocol}");
-      print("   IsSelected: $isSelected");
+      final isSelected = controller.selectedServer?.ip == server.ip &&
+          controller.selectedServer?.protocol == server.protocol;
 
       return Container(
         margin: EdgeInsets.only(bottom: 8),

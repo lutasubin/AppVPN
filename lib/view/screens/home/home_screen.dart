@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:vpn_basic_project/apis/apis.dart';
-import 'package:vpn_basic_project/controllers/main_controller/local_controller.dart';
+import 'package:vpn_basic_project/apis/vpn_gate.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/view/screens/location/location_screen.dart';
 import 'package:vpn_basic_project/view/screens/menu/menu_screen.dart';
 import 'package:vpn_basic_project/view/screens/home/check_Ip/network_test_screen.dart';
-import 'package:vpn_basic_project/view/screens/home/speed_test/speed_test.dart';
 import 'package:vpn_basic_project/view/screens/home/using_app/using_app.dart';
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/VpnControlButon.dart';
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/button_speed_map.dart';
@@ -36,7 +35,7 @@ class HomeScreen extends StatelessWidget {
     Apis.getIPDetails(ipData: ipData);
 
     // Tải quảng cáo tự nhiên
-    _adController.ad = AdHelper.loadNativeAd(adController: _adController);
+    _adController.ad = AdHelper.loadNativeAdNew(adController: _adController);
 
     // Tải trước quảng cáo toàn màn hình
     AdHelper.precacheInterstitialAd();
@@ -68,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Center(
                       child: VpnControlButton(
                         controller: _controller,
@@ -77,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Column(
@@ -94,20 +93,6 @@ class HomeScreen extends StatelessWidget {
                                     }),
                               ),
                               SizedBox(width: 16),
-                              Expanded(
-                                child: IconTextButton(
-                                    svgAsset: 'assets/svg/speed.svg',
-                                    label: 'speed'.tr,
-                                    onTap: () {
-                                      Get.to(() => SpeedTestScreen());
-                                    }),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          // Nút App bên dưới, chiếm toàn bộ chiều rộng
-                          Row(
-                            children: [
                               Expanded(
                                 child: IconTextButton(
                                     svgAsset: 'assets/svg/apps.svg',

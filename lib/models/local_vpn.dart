@@ -9,7 +9,8 @@ class LocalVpnServer {
   final String ip;
   final String ping;
   final String configFileName;
-  final String protocol; // 'openvpn' hoặc 'wireguard'
+  final String protocol; // 'openvpn', 'wireguard', hoặc 'stunnel-wireguard'
+  final String? stunnelConfigFileName; // Tên file cấu hình Stunnel (nếu có)
 
   LocalVpnServer({
     required this.countryName,
@@ -18,6 +19,7 @@ class LocalVpnServer {
     required this.ping,
     required this.configFileName,
     required this.protocol,
+    this.stunnelConfigFileName,
   });
 
   // Convert to Vpn model (chỉ dùng cho OpenVPN)
@@ -42,10 +44,13 @@ class LocalVpnServer {
         ConfigFileName: configFileName,
       );
     } else {
-      // WireGuard: chỉ trả về config dạng text, xử lý riêng ở controller
-      throw UnimplementedError('Use configData directly for WireGuard');
+      // WireGuard hoặc Stunnel-WireGuard: chỉ trả về config dạng text, xử lý riêng ở controller
+      throw UnimplementedError('Use configData directly for WireGuard/Stunnel');
     }
   }
+
+  // Kiểm tra xem có sử dụng Stunnel không
+  bool get usesStunnel => protocol == 'stunnel-wireguard' && stunnelConfigFileName != null;
 
  // Create object from JSON map
   factory LocalVpnServer.fromJson(Map<String, dynamic> json) {
@@ -56,6 +61,7 @@ class LocalVpnServer {
       ping: json['ping'],
       configFileName: json['configFileName'],
       protocol: json['protocol'],
+      stunnelConfigFileName: json['stunnelConfigFileName'],
     );
   }
 }

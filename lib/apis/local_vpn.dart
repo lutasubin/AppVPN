@@ -20,11 +20,19 @@ final List<LocalVpnServer> highVpn = [
     protocol: 'openvpn',
   ),
   LocalVpnServer(
-    countryName: 'Germany',
+    countryName: 'Germany 1',
     countryCode: 'de',
     ip: '161.97.120.90',
     ping: '',
     configFileName: 'vpn-germanyctb.ovpn',
+    protocol: 'openvpn',
+  ),
+    LocalVpnServer(
+    countryName: 'Germany 2',
+    countryCode: 'de',
+    ip: '161.97.120.90.1',
+    ping: '',
+    configFileName: 'vpn-germany5.ovpn',
     protocol: 'openvpn',
   ),
   LocalVpnServer(
@@ -43,7 +51,6 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'vpn-singapore5.ovpn',
     protocol: 'openvpn',
   ),
-  
 ];
 
 final List<LocalVpnServer> proVPN = [
@@ -79,7 +86,7 @@ final List<LocalVpnServer> proVPN = [
     configFileName: 'vpn-UsPro.ovpn',
     protocol: 'openvpn',
   ),
-   LocalVpnServer(
+  LocalVpnServer(
     countryName: 'Singapore',
     countryCode: 'sg',
     ip: '165.22.96.219.15',
@@ -89,60 +96,109 @@ final List<LocalVpnServer> proVPN = [
   ),
 ];
 
-final List<LocalVpnServer> fastVpn = [
-  LocalVpnServer(
-    countryName: 'Fast Speed',
-    countryCode: '',
-    ip: '222.222.222.2',
-    ping: '',
-    configFileName:
-        wireguardVpn[randomIndex(wireguardVpn.length)].configFileName,
-    protocol: 'wireguard',
-  ),
-];
+// final List<LocalVpnServer> fastVpn = [
+//   LocalVpnServer(
+//     countryName: 'Fast Speed',
+//     countryCode: '',
+//     ip: '222.222.222.2',
+//     ping: '',
+//     configFileName:
+//         wireguardVpn[randomIndex(wireguardVpn.length)].configFileName,
+//     protocol: 'wireguard',
+//   ),
+// ];
 
-final List<LocalVpnServer> wireguardVpn = [
-  LocalVpnServer(
-    countryName: 'Germany',
-    countryCode: 'de',
-    ip: '213.136.95.11',
-    ping: '',
-    configFileName: 'vpn-germany5.conf',
-    protocol: 'wireguard',
-  ),
-  LocalVpnServer(
-    countryName: 'France',
-    countryCode: 'fr',
-    ip: '213.136.95.10',
-    ping: '',
-    configFileName: 'vpn-France20.conf',
-    protocol: 'wireguard',
-  ),
-  LocalVpnServer(
-    countryName: 'United States',
-    countryCode: 'us',
-    ip: '185.187.242.51',
-    ping: '',
-    configFileName: 'vpn-US20.conf',
-    protocol: 'wireguard',
-  ),
-  LocalVpnServer(
-    countryName: 'United Kingdom',
-    countryCode: 'gb',
-    ip: '209.126.15.51',
-    ping: '',
-    configFileName: 'vpn-US20.conf',
-    protocol: 'wireguard',
-  ),
-  LocalVpnServer(
-    countryName: 'Singapore',
-    countryCode: 'sg',
-    ip: '165.22.96.2',
-    ping: '',
-    configFileName: 'vpn-singapore3.conf',
-    protocol: 'wireguard',
-  ),
-];
+// final List<LocalVpnServer> wireguardVpn = [
+//   LocalVpnServer(
+//     countryName: 'Germany',
+//     countryCode: 'de',
+//     ip: '213.136.95.11',
+//     ping: '',
+//     configFileName: 'vpn-germany5.conf',
+//     protocol: 'wireguard',
+//   ),
+//   LocalVpnServer(
+//     countryName: 'France',
+//     countryCode: 'fr',
+//     ip: '213.136.95.10',
+//     ping: '',
+//     configFileName: 'vpn-France20.conf',
+//     protocol: 'wireguard',
+//   ),
+//   LocalVpnServer(
+//     countryName: 'United States',
+//     countryCode: 'us',
+//     ip: '185.187.242.51',
+//     ping: '',
+//     configFileName: 'vpn-US20.conf',
+//     protocol: 'wireguard',
+//   ),
+//   LocalVpnServer(
+//     countryName: 'United Kingdom',
+//     countryCode: 'gb',
+//     ip: '209.126.15.51',
+//     ping: '',
+//     configFileName: 'vpn-US20.conf',
+//     protocol: 'wireguard',
+//   ),
+//   LocalVpnServer(
+//     countryName: 'Singapore',
+//     countryCode: 'sg',
+//     ip: '165.22.96.2',
+//     ping: '',
+//     configFileName: 'vpn-singapore3.conf',
+//     protocol: 'wireguard',
+//   ),
+// ];
 
 // Hàm random index
 int randomIndex(int length) => Random().nextInt(length);
+
+// Danh sách server Stunnel + WireGuard
+// final List<LocalVpnServer> stunnelWireguardVpn = [
+//   LocalVpnServer(
+//     countryName: 'United States',
+//     countryCode: 'us',
+//     ip: '144.126.138.95',
+//     ping: '',
+//     configFileName: 'vpn_US22.conf',
+//     protocol: 'stunnel-wireguard',
+//     stunnelConfigFileName: 'stunnelclient.conf',
+//   ),
+//   // LocalVpnServer(
+//   //   countryName: 'Germany',
+//   //   countryCode: 'de',
+//   //   ip: '213.136.95.11',
+//   //   ping: '',
+//   //   configFileName: 'vpn_DE22.conf',
+//   //   protocol: 'stunnel-wireguard',
+//   //   stunnelConfigFileName: 'stunnelclient.conf',
+//   // ),
+//   // LocalVpnServer(
+//   //   countryName: 'France',
+//   //   countryCode: 'fr',
+//   //   ip: '213.136.95.10',
+//   //   ping: '',
+//   //   configFileName: 'vpn_FR22.conf',
+//   //   protocol: 'stunnel-wireguard',
+//   //   stunnelConfigFileName: 'stunnelclient.conf',
+//   // ),
+//   // LocalVpnServer(
+//   //   countryName: 'United Kingdom',
+//   //   countryCode: 'gb',
+//   //   ip: '209.126.15.51',
+//   //   ping: '',
+//   //   configFileName: 'vpn_UK22.conf',
+//   //   protocol: 'stunnel-wireguard',
+//   //   stunnelConfigFileName: 'stunnelclient.conf',
+//   // ),
+//   // LocalVpnServer(
+//   //   countryName: 'Singapore',
+//   //   countryCode: 'sg',
+//   //   ip: '165.22.96.2',
+//   //   ping: '',
+//   //   configFileName: 'vpn_SG22.conf',
+//   //   protocol: 'stunnel-wireguard',
+//   //   stunnelConfigFileName: 'stunnelclient.conf',
+//   // ),
+// ];

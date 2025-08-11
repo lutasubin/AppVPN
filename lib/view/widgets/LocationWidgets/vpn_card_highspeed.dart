@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vpn_basic_project/controllers/main_controller/local_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/SignalStrengthIcon.dart';
 
@@ -14,8 +14,8 @@ class VpnCardLocal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       // ✅ SỬ DỤNG LOGIC THỐNG NHẤT như VpnCardWireGuard
-      final isSelected = controller.selectedServer.value?.ip == server.ip &&
-          controller.selectedServer.value?.protocol == server.protocol;
+      final isSelected = controller.selectedServer?.ip == server.ip &&
+          controller.selectedServer?.protocol == server.protocol;
 
       return Container(
         margin: EdgeInsets.only(bottom: 8),

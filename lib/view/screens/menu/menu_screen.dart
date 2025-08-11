@@ -3,13 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
+import 'package:vpn_basic_project/controllers/ads_controller/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
 import 'package:vpn_basic_project/view/screens/menu/privacy_police/Privacy_policy.dart';
 import 'package:vpn_basic_project/view/screens/menu/lang/language_screen.dart';
+import 'package:vpn_basic_project/view/screens/menu/speed_test/speed_test.dart';
 import 'rate/rate_screen.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -20,11 +21,11 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final _adController8 = NativeAdController();
+  final _baController = BannerAdController();
   @override
   void initState() {
     super.initState();
-    _adController8.ad = AdHelper.loadNativeAd2(adController: _adController8);
+    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
   }
 
   @override
@@ -40,9 +41,7 @@ class _MenuScreenState extends State<MenuScreen> {
         backgroundColor: const Color(0xFF02091A),
         leading: IconButton(
           onPressed: () {
-            AdHelper.showInterstitialAd(onComplete: () {
-              Get.back();
-            });
+            Get.back();
           },
           icon: const Icon(
             Icons.arrow_back,
@@ -59,20 +58,14 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
       ),
-     bottomNavigationBar: Obx(() {
-        final ad = _adController8.ad;
-        if (ad != null &&
-            _adController8.adLoaded.isTrue &&
-            !_adController8.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 120,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
+      bottomNavigationBar: Obx(() {
+        return _baController.ba != null && _baController.baLoaded.isTrue
+            ? SafeArea(
+                child: SizedBox(
+                height: 120,
+                child: AdWidget(ad: _baController.ba!),
+              ))
+            : SizedBox.shrink();
       }),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
@@ -86,6 +79,17 @@ class _MenuScreenState extends State<MenuScreen> {
             const SizedBox(height: 20),
 
             // Các mục menu cũ
+            _buildMenuItem(
+              context: context,
+              icon: Icons.network_check,
+              iconColor: Colors.cyanAccent,
+              title: 'test1'.tr,
+              onTap: () {
+                AnalyticsHelper.logSettingChange('open_speedtest', 'clicked');
+                Get.to(() => SpeedTestScreen());
+              },
+            ),
+            const SizedBox(height: 8),
             _buildMenuItem(
               context: context,
               icon: Icons.language,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/app_binding.dart';
+import 'package:vpn_basic_project/helpers/AppLifecycleHandler.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
+import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/lang/app_translations.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/view/screens/splash/splash_screen.dart';
@@ -13,6 +15,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Chạy sau khi widget tree được render
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addObserver(AppLifecycleHandler());
+      AdHelper.initAds(); // ✅ Chỉ khởi tạo sau khi widget tree có mặt
+    });
+
     return GetMaterialApp(
       initialBinding: AppBinding(),
       title: 'AI VPN Fast Safe',

@@ -17,6 +17,8 @@ class Config {
     "rewarded_ad": "",
     "interstitial_ad": "",
     "native_ad": "",
+    "native1_ad":"",
+    "native2_ad":"",
     "banner_ad": "",
     "open_ad": "",
     "show_ads": true,
@@ -164,6 +166,8 @@ class Config {
     log('  interstitial_ad: ${interstitialAd.isNotEmpty ? "SET" : "EMPTY"}');
     log('  banner_ad: ${bannerAd.isNotEmpty ? "SET" : "EMPTY"}');
     log('  native_ad: ${nativeAd.isNotEmpty ? "SET" : "EMPTY"}');
+    log('  native1_ad: ${native1Ad.isNotEmpty ? "SET" : "EMPTY"}');
+    log('  native2_ad: ${native2Ad.isNotEmpty ? "SET" : "EMPTY"}');
     log('  rewarded_ad: ${rewardedAd.isNotEmpty ? "SET" : "EMPTY"}');
     log('  open_ad: ${openAd.isNotEmpty ? "SET" : "EMPTY"}');
     log('  ad_request_timeout: ${adRequestTimeout}s');
@@ -188,6 +192,24 @@ class Config {
     } catch (e) {
       return _prefs?.getString('${_cachePrefix}native_ad') ?? 
              _defaultValues['native_ad'] as String;
+    }
+  }
+
+   static String get native1Ad {
+    try {
+      return _config.getString('native1_ad');
+    } catch (e) {
+      return _prefs?.getString('${_cachePrefix}native1_ad') ?? 
+             _defaultValues['native1_ad'] as String;
+    }
+  }
+
+   static String get native2Ad {
+    try {
+      return _config.getString('native2_ad');
+    } catch (e) {
+      return _prefs?.getString('${_cachePrefix}native2_ad') ?? 
+             _defaultValues['native2_ad'] as String;
     }
   }
 
@@ -272,6 +294,8 @@ class Config {
     return {
       'show_ads': showAds,
       'native_ad': nativeAd.isNotEmpty ? 'SET' : 'EMPTY',
+      'native1_ad': native1Ad.isNotEmpty ? 'SET' : 'EMPTY',
+      'native2_ad': native2Ad.isNotEmpty ? 'SET' : 'EMPTY',
       'rewarded_ad': rewardedAd.isNotEmpty ? 'SET' : 'EMPTY',
       'interstitial_ad': interstitialAd.isNotEmpty ? 'SET' : 'EMPTY',
       'banner_ad': bannerAd.isNotEmpty ? 'SET' : 'EMPTY',
