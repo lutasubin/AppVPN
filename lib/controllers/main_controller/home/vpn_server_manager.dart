@@ -48,10 +48,9 @@ class VpnServerManager {
     try {
       loadAvailableServers();
       loadAvailableServersPro();
-      // Uncomment these if needed
-      // loadAvailableServersFast();
-      // loadAvailableWireGuardServers();
-      // loadAvailableStunnelWireGuardServers();
+      loadAvailableServersFast();
+      loadAvailableWireGuardServers();
+      loadAvailableStunnelWireGuardServers();
     } catch (e) {
       _handleError('Failed to load servers', e);
     }
@@ -77,38 +76,38 @@ class VpnServerManager {
     }
   }
   
-  // /// Load fast VPN servers
-  // void loadAvailableServersFast() {
-  //   try {
-  //     availableServersFast.value = fastVpn;
-  //     _setDefaultServerIfNeeded(availableServersFast);
-  //   } catch (e) {
-  //     _handleError('Failed to load fast servers', e);
-  //   }
-  // }
+  /// Load fast VPN servers
+  void loadAvailableServersFast() {
+    try {
+      availableServersFast.value = fastVpn;
+      _setDefaultServerIfNeeded(availableServersFast);
+    } catch (e) {
+      _handleError('Failed to load fast servers', e);
+    }
+  }
   
-  // /// Load WireGuard servers
-  // void loadAvailableWireGuardServers() {
-  //   try {
-  //     availableWireGuardServers.value = wireguardVpn;
-  //   } catch (e) {
-  //     _handleError('Failed to load WireGuard servers', e);
-  //   }
-  // }
+  /// Load WireGuard servers
+  void loadAvailableWireGuardServers() {
+    try {
+      availableWireGuardServers.value = wireguardVpn;
+    } catch (e) {
+      _handleError('Failed to load WireGuard servers', e);
+    }
+  }
   
   /// Load Stunnel + WireGuard servers
-  // void loadAvailableStunnelWireGuardServers() {
-  //   try {
-  //     availableStunnelWireGuardServers.value = stunnelWireguardVpn;
-  //     print('✅ Loaded ${stunnelWireguardVpn.length} Stunnel-WireGuard servers');
-  //     for (var server in stunnelWireguardVpn) {
-  //       print('  - ${server.countryName} (${server.protocol})');
-  //     }
-  //   } catch (e) {
-  //     print('❌ Error loading Stunnel-WireGuard servers: $e');
-  //     _handleError('Failed to load Stunnel-WireGuard servers', e);
-  //   }
-  // }
+  void loadAvailableStunnelWireGuardServers() {
+    try {
+      availableStunnelWireGuardServers.value = stunnelWireguardVpn;
+      print('✅ Loaded ${stunnelWireguardVpn.length} Stunnel-WireGuard servers');
+      for (var server in stunnelWireguardVpn) {
+        print('  - ${server.countryName} (${server.protocol})');
+      }
+    } catch (e) {
+      print('❌ Error loading Stunnel-WireGuard servers: $e');
+      _handleError('Failed to load Stunnel-WireGuard servers', e);
+    }
+  }
   
   /// Load API servers
   void _loadApiServers() async {
@@ -125,19 +124,56 @@ class VpnServerManager {
   /// Change VPN server from LocalVpnServer
   Future<void> setVpnFromLocalServer(LocalVpnServer server) async {
     try {
+      print('🔧 Setting local server: ${server.countryName} (${server.protocol})');
+      
       // Set server mới
       selectedServer.value = server;
       
-      // Chỉ tạo Vpn object cho OpenVPN
-      if (server.protocol == 'openvpn') {
+      // ✅ FIX: Clear API VPN data khi chọn local server
+      if (server.protocol == 'wireguard' || server.protocol == 'stunnel-wireguard') {
+        // Tạo một Vpn object rỗng để clear data API
+        vpn.value = Vpn.fromJson({
+          'IP': '',
+          'CountryLong': server.countryName,
+          'CountryShort': server.countryCode,
+          'OpenVPN_ConfigData_Base64': '',
+          // Các field khác...
+        });
+        Pref.vpn = vpn.value;
+        
+        print('🧹 Cleared API VPN data for local server');
+      } else if (server.protocol == 'openvpn') {
+        // Chỉ tạo Vpn object cho OpenVPN
         final newVpn = await server.toVpn();
         vpn.value = newVpn;
         Pref.vpn = newVpn;
+        
+        print('📝 Created VPN config for OpenVPN server');
       }
       
       print('✅ Selected server: ${server.countryName} (${server.protocol})');
     } catch (e) {
+      print('❌ Error setting local server: $e');
       _handleError('Failed to set VPN server', e);
+    }
+  }
+  
+  /// Set VPN from API server 
+  Future<void> setVpnFromApiServer(Vpn apiServer) async {
+    try {
+      print('🌐 Setting API server: ${apiServer.CountryLong}');
+      
+      // Clear local server selection
+      selectedServer.value = null;
+      
+      // Set API VPN
+      vpn.value = apiServer;
+      Pref.vpn = apiServer;
+      
+      print('✅ Selected API server: ${apiServer.CountryLong}');
+    } catch (e) {
+      print('❌ Error setting API server: $e');
+      _handleError('Failed to set API VPN server', e);
     }
   }
   
@@ -145,21 +181,19 @@ class VpnServerManager {
   // GETTERS FOR CURRENT SERVER INFO
   // ===========================================
   
-  /// Get current country name (prioritize WireGuard and Stunnel-WireGuard)
+  /// Get current country name (prioritize local server)
   String get currentCountry {
     final server = selectedServer.value;
-    if (server != null && 
-        (server.protocol == 'wireguard' || server.protocol == 'stunnel-wireguard')) {
+    if (server != null) {
       return server.countryName;
     }
     return vpn.value.CountryLong;
   }
   
-  /// Get current country code (prioritize WireGuard and Stunnel-WireGuard)
+  /// Get current country code (prioritize local server)
   String get currentCountryShort {
     final server = selectedServer.value;
-    if (server != null && 
-        (server.protocol == 'wireguard' || server.protocol == 'stunnel-wireguard')) {
+    if (server != null) {
       return server.countryCode;
     }
     return vpn.value.CountryShort;
@@ -185,14 +219,24 @@ class VpnServerManager {
     return server != null && server.protocol == 'stunnel-wireguard';
   }
   
-  /// Check if using API VPN server
+  /// ✅ FIX: Check if using API VPN server - FIXED LOGIC
   bool get isUsingApiServer {
     final server = selectedServer.value;
-    final apiVpn = vpn.value;
     
-    return apiVpn.IP.isNotEmpty && 
-           apiVpn.OpenVPNConfigDataBase64.isNotEmpty && 
-           (server == null || server.ip != apiVpn.IP);
+    print('🔍 Checking isUsingApiServer:');
+    print('  - selectedServer: ${server?.countryName} (${server?.protocol})');
+    print('  - vpn.IP: ${vpn.value.IP}');
+    print('  - vpn.OpenVPNConfig: ${vpn.value.OpenVPNConfigDataBase64.isNotEmpty}');
+    
+    // Logic đơn giản và rõ ràng:
+    // - Nếu có selectedServer (local server) → không phải API server
+    // - Nếu không có selectedServer và có API VPN data → là API server
+    bool result = server == null && 
+                  vpn.value.IP.isNotEmpty && 
+                  vpn.value.OpenVPNConfigDataBase64.isNotEmpty;
+    
+    print('  - Result: $result');
+    return result;
   }
   
   /// Get current server (local or create temp from API VPN)

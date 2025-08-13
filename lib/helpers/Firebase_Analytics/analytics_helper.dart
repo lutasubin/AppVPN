@@ -18,6 +18,8 @@ class AnalyticsHelper {
       parameters: {
         'server_name': serverName,
         'server_country': serverCountry,
+        'value': 0.00258, // USD
+        'currency': 'USD',
         'timestamp': DateTime.now().toIso8601String(),
       },
     );
@@ -83,29 +85,26 @@ class AnalyticsHelper {
     await _analytics.setUserProperty(name: name, value: value);
   }
 
+  static Future<Map<String, dynamic>?> getMostConnectedVpn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final allKeys = prefs.getKeys().where((k) => k.startsWith('vpn_count_'));
 
-  
-   static Future<Map<String, dynamic>?> getMostConnectedVpn() async {
-  final prefs = await SharedPreferences.getInstance();
-  final allKeys = prefs.getKeys().where((k) => k.startsWith('vpn_count_'));
+    if (allKeys.isEmpty) return null;
 
-  if (allKeys.isEmpty) return null;
+    String topServer = '';
+    int topCount = 0;
 
-  String topServer = '';
-  int topCount = 0;
-
-  for (String key in allKeys) {
-    int count = prefs.getInt(key) ?? 0;
-    if (count > topCount) {
-      topCount = count;
-      topServer = key.replaceFirst('vpn_count_', '');
+    for (String key in allKeys) {
+      int count = prefs.getInt(key) ?? 0;
+      if (count > topCount) {
+        topCount = count;
+        topServer = key.replaceFirst('vpn_count_', '');
+      }
     }
+
+    return {
+      'server_name': topServer, // String
+      'count': topCount // int
+    };
   }
-
-  return {
-    'server_name': topServer, // String
-    'count': topCount         // int
-  };
-}
-
 }

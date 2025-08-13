@@ -261,6 +261,33 @@ class LocalController extends GetxController {
     }
   }
 
+  /// ✅ NEW: Change VPN server from API Vpn
+  Future<void> setVpnFromApiServer(Vpn server) async {
+    try {
+      // Nếu đang connected, cảnh báo người dùng
+      if (vpnState == VpnEngine.vpnConnected) {
+        MyDialogs.info(
+          msg: 'Please disconnect VPN first before changing server!',
+        );
+        await Future.delayed(Duration(seconds: 3));
+        return;
+      }
+
+      await _serverManager.setVpnFromApiServer(server);
+
+      // Log server selection
+      VpnAnalyticsManager.logServerSelection(
+          server.CountryLong, server.CountryShort);
+
+      update();
+    } catch (e) {
+      _handleError('Failed to set API VPN server', e);
+    }
+  }
+
+  /// ✅ NEW: Get server manager for external access (if needed)
+  VpnServerManager get serverManager => _serverManager;
+
   // ===========================================
   // UI HELPERS
   // ===========================================
@@ -349,7 +376,6 @@ class LocalController extends GetxController {
 
         Get.to(() => DisconnectedScreen(
               country: currentCountry,
-              
               connectionTime: formattedTime,
               uploadSpeed: getRandomUploadSpeed(),
               downloadSpeed: getRandomDownloadSpeed(),
@@ -449,7 +475,9 @@ class LocalController extends GetxController {
   /// Load specific server types (delegates to server manager)
   void loadAvailableServers() => _serverManager.loadAvailableServers();
   void loadAvailableServersPro() => _serverManager.loadAvailableServersPro();
-  // void loadAvailableServersFast() => _serverManager.loadAvailableServersFast();
-  // void loadAvailableWireGuardServers() => _serverManager.loadAvailableWireGuardServers();
-  // void loadAvailableStunnelWireGuardServers() => _serverManager.loadAvailableStunnelWireGuardServers();
+  void loadAvailableServersFast() => _serverManager.loadAvailableServersFast();
+  void loadAvailableWireGuardServers() =>
+      _serverManager.loadAvailableWireGuardServers();
+  void loadAvailableStunnelWireGuardServers() =>
+      _serverManager.loadAvailableStunnelWireGuardServers();
 }

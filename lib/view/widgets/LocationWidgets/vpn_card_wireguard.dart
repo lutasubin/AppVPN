@@ -53,7 +53,7 @@ class VpnCardWireGuard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color:const Color(0xFF0CD09C), // cam đậm
+                  color: Colors.pinkAccent, // cam đậm
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(

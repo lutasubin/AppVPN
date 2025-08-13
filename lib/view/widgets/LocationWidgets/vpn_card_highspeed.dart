@@ -86,12 +86,12 @@ class VpnCardLocal extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: isSelected
-                        ? const Color(0xFFF15E24)
+                        ? const Color(0xFF2484F1)
                         : Color(0xFFFFFFFF),
                     width: 2,
                   ),
                   color:
-                      isSelected ? const Color(0xFFF15E24) : Colors.transparent,
+                      isSelected ? const Color(0xFF2484F1) : Colors.transparent,
                 ),
                 child: isSelected
                     ? Center(

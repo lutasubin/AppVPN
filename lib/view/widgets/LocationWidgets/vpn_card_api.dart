@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
-import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/helpers/dilogs/my_dilogs.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
@@ -58,7 +57,7 @@ class VpnCardApi extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0CD09C), // cam đậm
+                  color: const Color(0xFF0CD09C),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -81,7 +80,6 @@ class VpnCardApi extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Signal strength based on score
               SignalStrengthIcon(level: _getSignalLevel(server.Score)),
               SizedBox(width: 12),
               Container(
@@ -91,12 +89,12 @@ class VpnCardApi extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: isSelected
-                        ? const Color(0xFFF15E24)
+                        ? Color(0xFF0CD09C)
                         : Color(0xFFFFFFFF),
                     width: 2,
                   ),
                   color:
-                      isSelected ? const Color(0xFFF15E24) : Colors.transparent,
+                      isSelected ? Color(0xFF0CD09C) : Colors.transparent,
                 ),
                 child: isSelected
                     ? Center(
@@ -118,12 +116,11 @@ class VpnCardApi extends StatelessWidget {
     });
   }
 
-  /// Set VPN server from API using LocalController
+  /// ✅ Set VPN server from API using new method
   Future<void> _setVpnFromApiServer(Vpn server) async {
     try {
       // Nếu đang connected, tự động disconnect trước
       if (controller.vpnState == VpnEngine.vpnConnected) {
-        // Show dialog to disconnect first
         MyDialogs.info(
           msg: 'Please disconnect VPN first before changing server!',
         );
@@ -131,12 +128,15 @@ class VpnCardApi extends StatelessWidget {
         return;
       }
 
-      // Set server mới
-      controller.vpn = server;
-      Pref.vpn = server;
+      print('🌐 Setting API server: ${server.CountryLong}');
+      
+      // ✅ SỬ DỤNG METHOD MỚI từ LocalController
+      await controller.setVpnFromApiServer(server);
       controller.update();
+      
+      print('✅ API server set successfully');
     } catch (e) {
-      print('Failed to set VPN server: $e');
+      print('❌ Failed to set API server: $e');
     }
   }
 
