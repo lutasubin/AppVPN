@@ -24,6 +24,9 @@ class VpnServerManager {
   final RxList<LocalVpnServer> availableWireGuardServers = <LocalVpnServer>[].obs;
   final RxList<LocalVpnServer> availableStunnelWireGuardServers = <LocalVpnServer>[].obs;
   
+  // ✅ NEW: WireGuard API servers
+  final RxList<LocalVpnServer> availableWireGuardApiServers = <LocalVpnServer>[].obs;
+  
   // API Server list
   final RxList<Vpn> availableApiServers = <Vpn>[].obs;
   
@@ -51,6 +54,7 @@ class VpnServerManager {
       loadAvailableServersFast();
       loadAvailableWireGuardServers();
       loadAvailableStunnelWireGuardServers();
+      loadAvailableWireGuardApiServers(); // ✅ NEW: Load API servers
     } catch (e) {
       _handleError('Failed to load servers', e);
     }
@@ -86,12 +90,27 @@ class VpnServerManager {
     }
   }
   
-  /// Load WireGuard servers
+  /// Load WireGuard servers (from assets)
   void loadAvailableWireGuardServers() {
     try {
       availableWireGuardServers.value = wireguardVpn;
+      print('✅ Loaded ${wireguardVpn.length} WireGuard (assets) servers');
     } catch (e) {
       _handleError('Failed to load WireGuard servers', e);
+    }
+  }
+  
+  /// ✅ NEW: Load WireGuard API servers
+  void loadAvailableWireGuardApiServers() {
+    try {
+      availableWireGuardApiServers.value = wireguardApiVpn;
+      print('✅ Loaded ${wireguardApiVpn.length} WireGuard API servers');
+      for (var server in wireguardApiVpn) {
+        print('  - ${server.countryName} (${server.protocol})');
+      }
+    } catch (e) {
+      print('❌ Error loading WireGuard API servers: $e');
+      _handleError('Failed to load WireGuard API servers', e);
     }
   }
   
@@ -129,19 +148,35 @@ class VpnServerManager {
       // Set server mới
       selectedServer.value = server;
       
-      // ✅ FIX: Clear API VPN data khi chọn local server
-      if (server.protocol == 'wireguard' || server.protocol == 'stunnel-wireguard') {
+      // ✅ UPDATED: Handle different protocols including wireguard-api
+      if (server.protocol == 'wireguard' || 
+          server.protocol == 'stunnel-wireguard' ||
+          server.protocol == 'wireguard-api') { // ✅ NEW: Support API protocol
+        
         // Tạo một Vpn object rỗng để clear data API
         vpn.value = Vpn.fromJson({
-          'IP': '',
+          'IP': server.ip,
           'CountryLong': server.countryName,
           'CountryShort': server.countryCode,
           'OpenVPN_ConfigData_Base64': '',
-          // Các field khác...
+          'HostName': '',
+          'Score': '0',
+          'Ping': server.ping,
+          'Speed': '100',
+          'NumVpnSessions': '0',
+          'Uptime': '0',
+          'TotalUsers': '0',
+          'TotalTraffic': '0',
+          'ConfigFileName': server.configFileName,
         });
         Pref.vpn = vpn.value;
         
-        print('🧹 Cleared API VPN data for local server');
+        if (server.protocol == 'wireguard-api') {
+          print('🌐 Prepared WireGuard API server');
+        } else {
+          print('🧹 Cleared API VPN data for local server');
+        }
+        
       } else if (server.protocol == 'openvpn') {
         // Chỉ tạo Vpn object cho OpenVPN
         final newVpn = await server.toVpn();
@@ -210,13 +245,21 @@ class VpnServerManager {
   bool get isUsingWireGuard {
     final server = selectedServer.value;
     return server != null && 
-        (server.protocol == 'wireguard' || server.protocol == 'stunnel-wireguard');
+        (server.protocol == 'wireguard' || 
+         server.protocol == 'stunnel-wireguard' ||
+         server.protocol == 'wireguard-api'); // ✅ NEW: Include API protocol
   }
   
   /// Check if currently using Stunnel protocol
   bool get isUsingStunnel {
     final server = selectedServer.value;
     return server != null && server.protocol == 'stunnel-wireguard';
+  }
+  
+  /// ✅ UPDATED: Check if using WireGuard API protocol
+  bool get isUsingWireGuardApi {
+    final server = selectedServer.value;
+    return server != null && server.protocol == 'wireguard-api';
   }
   
   /// ✅ FIX: Check if using API VPN server - FIXED LOGIC
@@ -229,11 +272,12 @@ class VpnServerManager {
     print('  - vpn.OpenVPNConfig: ${vpn.value.OpenVPNConfigDataBase64.isNotEmpty}');
     
     // Logic đơn giản và rõ ràng:
-    // - Nếu có selectedServer (local server) → không phải API server
-    // - Nếu không có selectedServer và có API VPN data → là API server
-    bool result = server == null && 
-                  vpn.value.IP.isNotEmpty && 
-                  vpn.value.OpenVPNConfigDataBase64.isNotEmpty;
+    // - Nếu có selectedServer với protocol wireguard-api → là WireGuard API server
+    // - Nếu không có selectedServer và có API VPN data → là OpenVPN API server
+    bool result = (server != null && server.protocol == 'wireguard-api') ||
+                  (server == null && 
+                   vpn.value.IP.isNotEmpty && 
+                   vpn.value.OpenVPNConfigDataBase64.isNotEmpty);
     
     print('  - Result: $result');
     return result;
@@ -246,8 +290,8 @@ class VpnServerManager {
     
     if (server != null) {
       return server;
-    } else if (isUsingApiServer) {
-      // Create a temporary LocalVpnServer for API VPN
+    } else if (isUsingApiServer && !isUsingWireGuardApi) {
+      // Create a temporary LocalVpnServer for OpenVPN API
       return LocalVpnServer(
         countryName: apiVpn.CountryLong,
         countryCode: apiVpn.CountryShort,

@@ -15,7 +15,7 @@ class VpnStateManager {
   /// Connection status for UI feedback
   final isConnecting = false.obs;
   final isDisconnecting = false.obs;
-  final countdownSeconds = 10.obs;
+  final countdownSeconds = 20.obs;
   
   /// Connection duration timer
   final connectionDuration = Duration().obs;
@@ -36,7 +36,7 @@ class VpnStateManager {
   // Store the final connection duration when disconnecting
   Duration? _finalConnectionDuration;
   
-  static const int _connectionTimeoutSeconds = 10;
+  static const int _connectionTimeoutSeconds = 20;
   
   // ===========================================
   // CALLBACKS

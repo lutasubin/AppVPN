@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:vpn_basic_project/models/local_vpn.dart';
 
 final List<LocalVpnServer> highVpn = [
@@ -27,7 +26,7 @@ final List<LocalVpnServer> highVpn = [
     configFileName: 'vpn-germanyctb.ovpn',
     protocol: 'openvpn',
   ),
-    LocalVpnServer(
+  LocalVpnServer(
     countryName: 'Germany 2',
     countryCode: 'de',
     ip: '161.97.120.90.1',
@@ -108,6 +107,7 @@ final List<LocalVpnServer> fastVpn = [
   ),
 ];
 
+// ✅ UPDATED: WireGuard servers từ assets (giữ nguyên để backward compatibility)
 final List<LocalVpnServer> wireguardVpn = [
   LocalVpnServer(
     countryName: 'Germany',
@@ -148,6 +148,50 @@ final List<LocalVpnServer> wireguardVpn = [
     ping: '',
     configFileName: 'vpn-singapore3.conf',
     protocol: 'wireguard',
+  ),
+];
+
+// ✅ NEW: WireGuard API servers - lấy config từ API thay vì assets
+final List<LocalVpnServer> wireguardApiVpn = [
+  LocalVpnServer(
+    countryName: 'Germany',
+    countryCode: 'de',
+    ip: '81.0.220.147', // IP của API server
+    ping: '',
+    configFileName: '', // Không cần file name vì lấy từ API
+    protocol: 'wireguard-api', // Protocol mới để phân biệt
+  ),
+  LocalVpnServer(
+    countryName: 'United States',
+    countryCode: 'us',
+    ip: '81.0.220.147.1',
+    ping: '',
+    configFileName: '',
+    protocol: 'wireguard-api',
+  ),
+  LocalVpnServer(
+    countryName: 'United Kingdom',
+    countryCode: 'gb',
+    ip: '81.0.220.147.2',
+    ping: '',
+    configFileName: '',
+    protocol: 'wireguard-api',
+  ),
+  LocalVpnServer(
+    countryName: 'France',
+    countryCode: 'fr',
+    ip: '81.0.220.147.3',
+    ping: '',
+    configFileName: '',
+    protocol: 'wireguard-api',
+  ),
+  LocalVpnServer(
+    countryName: 'Singapore',
+    countryCode: 'sg',
+    ip: '81.0.220.147.4',
+    ping: '',
+    configFileName: '',
+    protocol: 'wireguard-api',
   ),
 ];
 

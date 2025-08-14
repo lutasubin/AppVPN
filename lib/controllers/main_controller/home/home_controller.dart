@@ -86,6 +86,12 @@ class LocalController extends GetxController {
   set availableStunnelWireGuardServers(List<LocalVpnServer> value) =>
       _serverManager.availableStunnelWireGuardServers.value = value;
 
+  /// ✅ NEW: WireGuard API servers
+  List<LocalVpnServer> get availableWireGuardApiServers =>
+      _serverManager.availableWireGuardApiServers;
+  set availableWireGuardApiServers(List<LocalVpnServer> value) =>
+      _serverManager.availableWireGuardApiServers.value = value;
+
   List<Vpn> get availableApiServers => _serverManager.availableApiServers;
   set availableApiServers(List<Vpn> value) =>
       _serverManager.availableApiServers.value = value;
@@ -96,6 +102,9 @@ class LocalController extends GetxController {
   String get currentFlagAsset => _serverManager.currentFlagAsset;
   bool get isUsingWireGuard => _serverManager.isUsingWireGuard;
   bool get isUsingStunnel => _serverManager.isUsingStunnel;
+  
+  /// ✅ NEW: WireGuard API specific getters
+  bool get isUsingWireGuardApi => _serverManager.isUsingWireGuardApi;
 
   // ===========================================
   // LIFECYCLE METHODS
@@ -251,9 +260,14 @@ class LocalController extends GetxController {
 
       await _serverManager.setVpnFromLocalServer(server);
 
-      // Log server selection
+      // Log server selection with protocol info
       VpnAnalyticsManager.logServerSelection(
-          server.countryName, server.countryCode);
+          '${server.countryName} (${server.protocol})', server.countryCode);
+
+      // ✅ Log specific info for WireGuard API
+      if (server.protocol == 'wireguard-api') {
+        print('🌐 Selected WireGuard API server: ${server.countryName}');
+      }
 
       update();
     } catch (e) {
@@ -308,7 +322,14 @@ class LocalController extends GetxController {
 
   /// Handle connected state
   void _handleConnectedState() {
-    // Log analytics
+    // Log analytics with protocol info
+    final protocolInfo = isUsingWireGuardApi 
+        ? 'WireGuard API' 
+        : isUsingWireGuard 
+            ? 'WireGuard' 
+            : 'OpenVPN';
+    
+    print('✅ Connected via $protocolInfo: $currentCountry');
     VpnAnalyticsManager.logVpnConnect(currentCountry, currentCountryShort);
 
     // Show interstitial ad and navigate to connected screen
@@ -362,6 +383,12 @@ class LocalController extends GetxController {
 
   /// Handle connecting state
   void _handleConnectingState() {
+    final protocolInfo = isUsingWireGuardApi 
+        ? 'WireGuard API' 
+        : isUsingWireGuard 
+            ? 'WireGuard' 
+            : 'OpenVPN';
+    print('🔄 Connecting via $protocolInfo...');
     update();
   }
 
@@ -451,10 +478,13 @@ class LocalController extends GetxController {
     }
   }
 
-  /// Get current server type for logging
+  /// ✅ UPDATED: Get current server type for logging
   String _getServerType() {
     final server = selectedServer;
     if (server != null) {
+      if (server.protocol == 'wireguard-api') {
+        return 'wireguard-api';
+      }
       return server.protocol;
     } else if (_serverManager.isUsingApiServer) {
       return 'api-openvpn';
@@ -480,4 +510,39 @@ class LocalController extends GetxController {
       _serverManager.loadAvailableWireGuardServers();
   void loadAvailableStunnelWireGuardServers() =>
       _serverManager.loadAvailableStunnelWireGuardServers();
+  
+  /// ✅ NEW: Load WireGuard API servers
+  void loadAvailableWireGuardApiServers() =>
+      _serverManager.loadAvailableWireGuardApiServers();
+
+  // ===========================================
+  // ✅ NEW HELPER METHODS FOR UI
+  // ===========================================
+
+  /// Get all WireGuard servers (both assets and API)
+  List<LocalVpnServer> get allWireGuardServers {
+    List<LocalVpnServer> allServers = [];
+    allServers.addAll(availableWireGuardServers);
+    allServers.addAll(availableWireGuardApiServers);
+    return allServers;
+  }
+
+  /// Check if current server is from API
+  bool get isCurrentServerFromApi {
+    return selectedServer?.protocol == 'wireguard-api' || 
+           _serverManager.isUsingApiServer;
+  }
+
+  /// Get server connection info for UI
+  String get serverConnectionInfo {
+    if (isUsingWireGuardApi) {
+      return 'WireGuard API • ${currentCountry}';
+    } else if (isUsingWireGuard) {
+      return 'WireGuard • ${currentCountry}';
+    } else if (isUsingStunnel) {
+      return 'Stunnel+WireGuard • ${currentCountry}';
+    } else {
+      return 'OpenVPN • ${currentCountry}';
+    }
+  }
 }

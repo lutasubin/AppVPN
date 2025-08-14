@@ -138,27 +138,27 @@ class LocationScreen extends StatelessWidget {
             }
           }),
         ),
-        SizedBox(
-          height: 5,
-        ),
-        Text(
-          'Public VPN',
-          style: TextStyle(
-              color: const Color(0xFFFFFFFF),
-              fontSize: 17,
-              fontWeight: FontWeight.w500),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        ...controller.availableApiServers
-            .map((server) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: VpnCardApi(
-                    server: server,
-                  ),
-                ))
-            .toList(),
+        // SizedBox(
+        //   height: 5,
+        // ),
+        // Text(
+        //   'Public VPN',
+        //   style: TextStyle(
+        //       color: const Color(0xFFFFFFFF),
+        //       fontSize: 17,
+        //       fontWeight: FontWeight.w500),
+        // ),
+        // SizedBox(
+        //   height: 10,
+        // ),
+        // ...controller.availableApiServers
+        //     .map((server) => Padding(
+        //           padding: const EdgeInsets.only(bottom: 8),
+        //           child: VpnCardApi(
+        //             server: server,
+        //           ),
+        //         ))
+        //     .toList(),
         SizedBox(
           height: 5,
         ),
@@ -172,7 +172,7 @@ class LocationScreen extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        ...controller.availableWireGuardServers
+        ...controller.availableWireGuardApiServers
             .map((server) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: VpnCardWireGuard(
