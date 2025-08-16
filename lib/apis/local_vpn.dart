@@ -161,38 +161,6 @@ final List<LocalVpnServer> wireguardApiVpn = [
     configFileName: '', // Không cần file name vì lấy từ API
     protocol: 'wireguard-api', // Protocol mới để phân biệt
   ),
-  LocalVpnServer(
-    countryName: 'United States',
-    countryCode: 'us',
-    ip: '81.0.220.147.1',
-    ping: '',
-    configFileName: '',
-    protocol: 'wireguard-api',
-  ),
-  LocalVpnServer(
-    countryName: 'United Kingdom',
-    countryCode: 'gb',
-    ip: '81.0.220.147.2',
-    ping: '',
-    configFileName: '',
-    protocol: 'wireguard-api',
-  ),
-  LocalVpnServer(
-    countryName: 'France',
-    countryCode: 'fr',
-    ip: '81.0.220.147.3',
-    ping: '',
-    configFileName: '',
-    protocol: 'wireguard-api',
-  ),
-  LocalVpnServer(
-    countryName: 'Singapore',
-    countryCode: 'sg',
-    ip: '81.0.220.147.4',
-    ping: '',
-    configFileName: '',
-    protocol: 'wireguard-api',
-  ),
 ];
 
 // Hàm random index
