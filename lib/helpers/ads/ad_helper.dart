@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
-import 'package:vpn_basic_project/helpers/ads/config_ads_firebase.dart';
+import 'package:vpn_basic_project/helpers/remote_cofig/config_firebase.dart';
 import 'package:vpn_basic_project/helpers/dilogs/my_dilogs.dart';
 
 /// Lớp hỗ trợ quản lý quảng cáo Google Mobile Ads trong ứng dụng Flutter.

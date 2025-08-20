@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
-import 'package:vpn_basic_project/view/widgets/HomeWidgets/count_down_time.dart';
-import 'package:vpn_basic_project/view/widgets/HomeWidgets/disconnect_button.dart';
-import 'package:vpn_basic_project/view/widgets/HomeWidgets/rotaltingcircle.dart';
+import 'package:vpn_basic_project/view/widgets/HomeWidgets/count_downt_time/count_down_time.dart';
+import 'package:vpn_basic_project/view/widgets/HomeWidgets/vpn_button/disconnect_button.dart';
+import 'package:vpn_basic_project/view/widgets/HomeWidgets/vpn_button/rotaltingcircle.dart';
 
 class VpnControlButton extends StatefulWidget {
   final LocalController controller;

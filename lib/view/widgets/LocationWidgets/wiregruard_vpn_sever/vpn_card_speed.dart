@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/SignalStrengthIcon.dart';
+import 'package:vpn_basic_project/view/widgets/LocationWidgets/icon_custom/SignalStrengthIcon.dart';
 
-class VpnCardWireGuard extends StatelessWidget {
+class VpnCardLocalSpeed extends StatelessWidget {
   final LocalVpnServer server;
-  VpnCardWireGuard({super.key, required this.server});
+  VpnCardLocalSpeed({super.key, required this.server});
   final controller = Get.find<LocalController>();
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      // ✅ SỬ DỤNG LOGIC THỐNG NHẤT như VpnCardWireGuard
       final isSelected = controller.selectedServer?.ip == server.ip &&
           controller.selectedServer?.protocol == server.protocol;
 
@@ -28,47 +30,26 @@ class VpnCardWireGuard extends StatelessWidget {
         child: ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           onTap: () async {
-            print("🔥 Tapping WireGuard server: ${server.countryName}");
             await controller.setVpnFromLocalServer(server);
             Get.back();
           },
           leading: CircleAvatar(
             radius: 18,
-            backgroundColor: Colors.transparent,
-            backgroundImage: AssetImage(
-              'assets/flags/${server.countryCode.toLowerCase()}.png',
+            backgroundColor: Color(0xFF02091A),
+            child: SvgPicture.asset(
+              'assets/svg/earth.svg',
+              width: 30,
+              height: 30,
             ),
           ),
           title: Row(
             children: [
               Text(
-                server.countryName,
+                "Fast server",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white,
+                  color: const Color(0xFFFFFFFF),
                   fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(width: 3),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.pinkAccent, // cam đậm
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: const [
-                    Icon(Icons.bolt, size: 14, color: Color(0xFFFFFFFF)),
-                    SizedBox(width: 2),
-                    Text(
-                      'Streaming',
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],

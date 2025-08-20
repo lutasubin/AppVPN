@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/view/screens/home/home_screen.dart';
+import 'package:vpn_basic_project/models/Onboarding.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -190,14 +191,5 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-class OnboardingItem {
-  final String title;
-  final String assetImage;
-  final String buttonText;
 
-  OnboardingItem({
-    required this.title,
-    required this.assetImage,
-    required this.buttonText,
-  });
-}
+

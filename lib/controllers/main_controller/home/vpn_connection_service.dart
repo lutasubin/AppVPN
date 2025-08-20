@@ -20,7 +20,7 @@ class VpnConnectionService {
 
   // WireGuard service instance
   final WireGuardService _wireGuardService = WireGuardService();
-  
+
   // ✅ NEW: Track active client name for cleanup
   String? _activeClientName;
   String? _activeServerProtocol;
@@ -31,9 +31,10 @@ class VpnConnectionService {
 
   Function(String, dynamic)? onError;
   Function()? onRetryAttempt;
-  
+
   // ✅ NEW: Add the missing callback properties
-  Function(String clientName, String protocol, String serverId)? onClientCreated;
+  Function(String clientName, String protocol, String serverId)?
+      onClientCreated;
   Function(String clientName)? onClientCleanupNeeded;
 
   // ===========================================
@@ -48,11 +49,11 @@ class VpnConnectionService {
   }) async {
     try {
       _retryAttempts = 0;
-      
+
       // ✅ Clear previous client info
       _activeClientName = null;
       _activeServerProtocol = null;
-      
+
       if (server != null) {
         await _connectBasedOnProtocol(server, apiVpn);
       } else if (isApiVpnServer || server == null) {
@@ -62,10 +63,10 @@ class VpnConnectionService {
       }
     } catch (e) {
       print("❌ Connection failed: $e");
-      
+
       // ✅ Clean up client on connection failure
       await _cleanupClientOnError();
-      
+
       _handleConnectionError('Connection failed', e);
       rethrow;
     }
@@ -88,7 +89,7 @@ class VpnConnectionService {
       // ✅ STEP 1: Store client info for cleanup BEFORE stopping VPN
       String? clientToCleanup = _activeClientName;
       String? protocolToCleanup = _activeServerProtocol;
-      
+
       // STEP 2: Stop VPN tunnel FIRST (traditional approach)
       if (isApiVpnServer) {
         print('🔄 Stopping API VPN...');
@@ -137,7 +138,8 @@ class VpnConnectionService {
       }
 
       // ✅ STEP 3: Clean up client from server AFTER stopping VPN
-      await _cleanupWireGuardClientAfterStop(server, isApiVpnServer, clientToCleanup, protocolToCleanup);
+      await _cleanupWireGuardClientAfterStop(
+          server, isApiVpnServer, clientToCleanup, protocolToCleanup);
 
       // STEP 4: Clear tracking info
       _clearClientInfo();
@@ -145,10 +147,10 @@ class VpnConnectionService {
       print('🎉 VpnConnectionService.disconnectVpn() COMPLETED SUCCESSFULLY');
     } catch (e) {
       print('❌ VpnConnectionService.disconnectVpn() ERROR: $e');
-      
+
       // ✅ Still try to cleanup on error
       await _cleanupClientOnError();
-      
+
       _handleError('Failed to disconnect VPN', e);
       rethrow;
     }
@@ -156,20 +158,20 @@ class VpnConnectionService {
 
   /// ✅ NEW: Clean up WireGuard client from server AFTER stopping VPN
   Future<void> _cleanupWireGuardClientAfterStop(
-    LocalVpnServer? server, 
-    bool isApiVpnServer, 
-    String? clientToCleanup,
-    String? protocolToCleanup
-  ) async {
+      LocalVpnServer? server,
+      bool isApiVpnServer,
+      String? clientToCleanup,
+      String? protocolToCleanup) async {
     // Only cleanup for WireGuard API connections
     if (server?.protocol == 'wireguard-api' && clientToCleanup != null) {
       print('🗑️ Cleaning up WireGuard API client: $clientToCleanup');
-      
+
       // ✅ Trigger callback before cleanup
       onClientCleanupNeeded?.call(clientToCleanup);
-      
+
       try {
-        final success = await _wireGuardService.removeClientFromServer(clientToCleanup);
+        final success =
+            await _wireGuardService.removeClientFromServer(clientToCleanup);
         if (success) {
           print('✅ Client cleanup successful');
         } else {
@@ -180,7 +182,8 @@ class VpnConnectionService {
         // Don't throw - cleanup failure after VPN stop shouldn't fail the disconnect
       }
     } else if (clientToCleanup != null) {
-      print('ℹ️ Skipping client cleanup for protocol: ${server?.protocol ?? 'unknown'}');
+      print(
+          'ℹ️ Skipping client cleanup for protocol: ${server?.protocol ?? 'unknown'}');
     } else {
       print('ℹ️ No client to cleanup');
     }
@@ -190,10 +193,10 @@ class VpnConnectionService {
   Future<void> _cleanupClientOnError() async {
     if (_activeClientName != null && _activeServerProtocol == 'wireguard-api') {
       print('🗑️ Emergency cleanup for client: $_activeClientName');
-      
+
       // ✅ NEW: Trigger callback before emergency cleanup
       onClientCleanupNeeded?.call(_activeClientName!);
-      
+
       try {
         await _wireGuardService.removeClientFromServer(_activeClientName!);
         print('✅ Emergency cleanup successful');
@@ -201,7 +204,7 @@ class VpnConnectionService {
         print('⚠️ Emergency cleanup failed: $e');
         // Don't throw - this is cleanup after an error
       }
-      
+
       _clearClientInfo();
     }
   }
@@ -262,7 +265,8 @@ class VpnConnectionService {
       print('🔄 Auto-disconnecting due to timeout');
 
       // ✅ Clean up client first
-      await _cleanupWireGuardClientAfterStop(server, isApiVpnServer, _activeClientName, _activeServerProtocol);
+      await _cleanupWireGuardClientAfterStop(
+          server, isApiVpnServer, _activeClientName, _activeServerProtocol);
 
       if (isApiVpnServer) {
         print('wait stop');
@@ -354,20 +358,28 @@ class VpnConnectionService {
     }
   }
 
-  /// ✅ ENHANCED: Connect to WireGuard VPN from API with client tracking
+  /// ✅ ENHANCED: Connect to WireGuard VPN from API with dynamic server selection
   Future<void> _connectWireGuardFromApi(LocalVpnServer server) async {
     try {
       print('🌐 Connecting to WireGuard via API...');
+      print('🌍 Selected server: ${server.countryName} (${server.ip})');
+
+      // ✅ NEW: Set the server IP in WireGuardService to use correct base URL
+      _wireGuardService.setServerIp(server.ip);
 
       // 1. Get validated config content directly from API (no file saving)
       final configData = await _wireGuardService.getConfigDataWithClientName();
 
-      if (configData == null || configData['config'] == null || configData['config'].isEmpty) {
+      if (configData == null ||
+          configData['config'] == null ||
+          configData['config'].isEmpty) {
         throw Exception('Failed to get valid WireGuard config from API');
       }
 
       final String configContent = configData['config'];
       final String? clientName = configData['clientName'];
+      final String? serverIp = configData['serverIp'];
+      final String? baseUrl = configData['baseUrl'];
 
       // ✅ Store client info for cleanup
       _activeClientName = clientName;
@@ -375,11 +387,13 @@ class VpnConnectionService {
 
       // ✅ NEW: Trigger callback after client creation
       if (_activeClientName != null) {
-        onClientCreated?.call(_activeClientName!, 'wireguard-api', server.countryCode);
+        onClientCreated?.call(
+            _activeClientName!, 'wireguard-api', server.countryCode);
       }
 
       print('📋 WireGuard config loaded from API');
       print('👤 Client name: $_activeClientName');
+      print('🌍 Server: $serverIp -> $baseUrl');
       print('Config size: ${configContent.length} characters');
 
       // 2. Log first few lines for debugging (safe)

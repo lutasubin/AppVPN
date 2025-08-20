@@ -11,8 +11,8 @@ import 'package:vpn_basic_project/view/screens/location/location_screen.dart';
 import 'package:vpn_basic_project/view/screens/menu/menu_screen.dart';
 import 'package:vpn_basic_project/view/screens/home/check_Ip/network_test_screen.dart';
 import 'package:vpn_basic_project/view/screens/home/using_app/using_app.dart';
-import 'package:vpn_basic_project/view/widgets/HomeWidgets/VpnControlButon.dart';
-import 'package:vpn_basic_project/view/widgets/HomeWidgets/button_speed_map.dart';
+import 'package:vpn_basic_project/view/widgets/HomeWidgets/vpn_button/VpnControlButon.dart';
+import 'package:vpn_basic_project/view/widgets/HomeWidgets/button_speed_map/button_speed_map.dart';
 
 /// Màn hình chính của ứng dụng VPN.
 /// Hiển thị trạng thái VPN, nút kết nối, thông tin tải lên/tải xuống và quảng cáo.
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                   Color(0xFF02091A), // Mã màu nền
                   BlendMode.dstATop,
                 ),
@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                                       Get.to(() => NetworkTestScreen());
                                     }),
                               ),
-                              SizedBox(width: 16),
+                              const SizedBox(width: 16),
                               Expanded(
                                 child: IconTextButton(
                                     svgAsset: 'assets/svg/apps.svg',
@@ -119,10 +119,10 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             Get.to(() => MenuScreen());
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.menu,
             size: 25.0,
-            color: const Color(0xFFFFFFFF),
+            color: Color(0xFFFFFFFF),
           ),
         ),
         title: SvgPicture.asset(
@@ -131,11 +131,14 @@ class HomeScreen extends StatelessWidget {
           height: 35.0,
         ),
         actions: [
-          GestureDetector(
-            onTap: () {
-              print('vip');
-            },
-            child: SvgPicture.asset('assets/svg/vip.svg'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                print('vip');
+              },
+              child: SvgPicture.asset('assets/svg/vip.svg'),
+            ),
           )
         ],
       ),
@@ -173,17 +176,19 @@ class HomeScreen extends StatelessWidget {
               final countryShort = _controller.currentCountryShort;
               final flagAsset = _controller.currentFlagAsset;
               return Container(
-                padding: EdgeInsets.symmetric(horizontal: 32.0),
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 height: 60,
                 decoration: BoxDecoration(
-                  color: Color(0xFF172032),
+                  color: const Color(0xFF172032),
                   borderRadius: BorderRadius.circular(32.0),
                 ),
                 child: Row(
                   children: [
                     CircleAvatar(
-                      backgroundColor: Color(0xFF02091A),
+                      backgroundColor: const Color(0xFF02091A),
                       radius: 18.0,
+                      backgroundImage:
+                          (countryShort.isEmpty) ? null : AssetImage(flagAsset),
                       child: (countryShort.isEmpty)
                           ? SvgPicture.asset(
                               'assets/svg/earth.svg',
@@ -191,14 +196,12 @@ class HomeScreen extends StatelessWidget {
                               height: 30,
                             )
                           : null,
-                      backgroundImage:
-                          (countryShort.isEmpty) ? null : AssetImage(flagAsset),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         country,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -206,7 +209,7 @@ class HomeScreen extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    CircleAvatar(
+                    const CircleAvatar(
                       backgroundColor: Color(0xFF172032),
                       radius: 16.0,
                       child: Icon(

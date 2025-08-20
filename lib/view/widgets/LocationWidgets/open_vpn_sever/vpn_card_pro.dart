@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/SignalStrengthIcon.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/watch_video_pro.dart';
+import 'package:vpn_basic_project/view/widgets/LocationWidgets/icon_custom/SignalStrengthIcon.dart';
+import 'package:vpn_basic_project/helpers/dilogs/watch_video_pro.dart';
 
 class VpnCardLocalPro extends StatelessWidget {
   final LocalVpnServer server;
@@ -19,17 +19,18 @@ class VpnCardLocalPro extends StatelessWidget {
           controller.selectedServer?.protocol == server.protocol;
 
       return Container(
-        margin: EdgeInsets.only(bottom: 8),
+        margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           color: const Color(0xFF172032),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Color(0xFF2F3A51),
+            color: const Color(0xFF2F3A51),
             width: 1,
           ),
         ),
         child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           onTap: () async {
             WatchAdDialogPro.show(context, server, () async {
               AdHelper.showRewardedAd(onComplete: () async {
@@ -49,7 +50,7 @@ class VpnCardLocalPro extends StatelessWidget {
             children: [
               Text(
                 server.countryName,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
@@ -62,8 +63,8 @@ class VpnCardLocalPro extends StatelessWidget {
                   color: const Color(0xFFF15E24), // cam đậm
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Icon(Icons.bolt, size: 14, color: Color(0xFFFFFFFF)),
                     SizedBox(width: 2),
                     Text(
@@ -82,8 +83,8 @@ class VpnCardLocalPro extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SignalStrengthIcon(level: 3),
-              SizedBox(width: 12),
+              const SignalStrengthIcon(level: 3),
+              const SizedBox(width: 12),
               Container(
                 width: 22,
                 height: 22,
@@ -92,7 +93,7 @@ class VpnCardLocalPro extends StatelessWidget {
                   border: Border.all(
                     color: isSelected
                         ? const Color(0xFFF15E24)
-                        : Color(0xFFFFFFFF),
+                        : const Color(0xFFFFFFFF),
                     width: 2,
                   ),
                   color:
@@ -103,7 +104,7 @@ class VpnCardLocalPro extends StatelessWidget {
                         child: Container(
                           width: 10,
                           height: 10,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Color(0xFFFFFFFF),
                           ),

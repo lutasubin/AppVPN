@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
+import 'package:vpn_basic_project/controllers/main_controller/location/location_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_highspeed.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_pro.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_api.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/vpn_card_wireguard.dart';
+import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_highspeed.dart';
+import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_pro.dart';
+import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_api.dart';
+import 'package:vpn_basic_project/view/widgets/LocationWidgets/wiregruard_vpn_sever/vpn_card_wireguard.dart';
 
 /// Màn hình hiển thị danh sách máy chủ VPN
 class LocationScreen extends StatelessWidget {
@@ -17,6 +18,7 @@ class LocationScreen extends StatelessWidget {
   final _adController3 = NativeAdController();
 
   final controller = Get.find<LocalController>();
+  final locationController = Get.find<LocationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +42,8 @@ class LocationScreen extends StatelessWidget {
             ),
             title: Text(
               'sever'.tr,
-              style: TextStyle(
-                color: const Color(0xFFFFFFFF),
+              style: const TextStyle(
+                color: Color(0xFFFFFFFF),
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
               ),
@@ -51,8 +53,11 @@ class LocationScreen extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
+                _buildModeSelector(),
                 Expanded(
-                  child: _buildFlatListView(),
+                  child: locationController.isShareFreeMode.value
+                      ? _buildFlatListViewPublic()
+                      : _buildFlatListViewFast(),
                 ),
               ],
             ),
@@ -62,124 +67,133 @@ class LocationScreen extends StatelessWidget {
     );
   }
 
+  // Thanh chọn chế độ hiển thị VPN
+  Widget _buildModeSelector() {
+    return Obx(() => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                  onTap: () => locationController.isShareFreeMode.value = false,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Fast Speed',
+                        style: TextStyle(
+                          color: !locationController.isShareFreeMode.value
+                              ? const Color(0xFFFFFFFF)
+                              : const Color(0xFF767C8A),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  )),
+              const Text('|',
+                  style: TextStyle(color: Color(0xFF03C343), fontSize: 18)),
+              GestureDetector(
+                onTap: () => locationController.isShareFreeMode.value = true,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Public Vpn',
+                      style: TextStyle(
+                        color: locationController.isShareFreeMode.value
+                            ? const Color(0xFFFFFFFF)
+                            : const Color(0xFF767C8A),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+
   /// Phương thức hiển thị danh sách VPN dạng phẳng (không nhóm theo quốc gia)
-  Widget _buildFlatListView() {
+  Widget _buildFlatListViewFast() {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
-        Text(
-          'Super VPN',
-          style: TextStyle(
-              color: const Color(0xFFFFFFFF),
-              fontSize: 17,
-              fontWeight: FontWeight.w500),
-        ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        ...controller.availableServersPro
-            .map((server) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: VpnCardLocalPro(server: server),
-                ))
-            .toList(),
-        Container(
-          child: Obx(() {
-            final ad = _adController2.ad;
-            if (ad != null &&
-                _adController2.adLoaded.isTrue &&
-                !_adController2.isDisposed) {
-              return SafeArea(
-                child: SizedBox(
-                  height: 120,
-                  child: AdWidget(ad: ad),
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Text(
-          'Social VPN',
-          style: TextStyle(
-              color: const Color(0xFFFFFFFF),
-              fontSize: 17,
-              fontWeight: FontWeight.w500),
-        ),
-        SizedBox(
+        ...controller.availableServersPro.map((server) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: VpnCardLocalPro(server: server),
+            )),
+        Obx(() {
+          final ad = _adController2.ad;
+          if (ad != null &&
+              _adController2.adLoaded.isTrue &&
+              !_adController2.isDisposed) {
+            return SafeArea(
+              child: SizedBox(
+                height: 120,
+                child: AdWidget(ad: ad),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
+        const SizedBox(
           height: 10,
         ),
-        ...controller.availableServers
-            .map((server) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: VpnCardLocal(
-                    server: server,
-                  ),
-                ))
-            .toList(),
-        Container(
-          child: Obx(() {
-            final ad = _adController3.ad;
-            if (ad != null &&
-                _adController3.adLoaded.isTrue &&
-                !_adController3.isDisposed) {
-              return SafeArea(
-                child: SizedBox(
-                  height: 120,
-                  child: AdWidget(ad: ad),
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
-        ),
-        // SizedBox(
-        //   height: 5,
-        // ),
-        // Text(
-        //   'Public VPN',
-        //   style: TextStyle(
-        //       color: const Color(0xFFFFFFFF),
-        //       fontSize: 17,
-        //       fontWeight: FontWeight.w500),
-        // ),
-        // SizedBox(
-        //   height: 10,
-        // ),
-        // ...controller.availableApiServers
-        //     .map((server) => Padding(
-        //           padding: const EdgeInsets.only(bottom: 8),
-        //           child: VpnCardApi(
-        //             server: server,
-        //           ),
-        //         ))
-        //     .toList(),
-        SizedBox(
-          height: 5,
-        ),
-        Text(
-          'Media VPN',
-          style: TextStyle(
-              color: const Color(0xFFFFFFFF),
-              fontSize: 17,
-              fontWeight: FontWeight.w500),
-        ),
-        SizedBox(
+        ...controller.availableWireGuardApiServers.map((server) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: VpnCardWireGuard(
+                server: server,
+              ),
+            )),
+        Obx(() {
+          final ad = _adController3.ad;
+          if (ad != null &&
+              _adController3.adLoaded.isTrue &&
+              !_adController3.isDisposed) {
+            return SafeArea(
+              child: SizedBox(
+                height: 120,
+                child: AdWidget(ad: ad),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
+        const SizedBox(
           height: 10,
         ),
-        ...controller.availableWireGuardApiServers
-            .map((server) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: VpnCardWireGuard(
-                    server: server,
-                  ),
-                ))
-            .toList(),
+        ...controller.availableServers.map((server) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: VpnCardLocal(
+                server: server,
+              ),
+            )),
+      ],
+    );
+  }
+
+  /// Phương thức hiển thị danh sách VPN dạng phẳng (không nhóm theo quốc gia)
+  Widget _buildFlatListViewPublic() {
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        ...controller.availableApiServers.map((server) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: VpnCardApi(
+                server: server,
+              ),
+            )),
       ],
     );
   }

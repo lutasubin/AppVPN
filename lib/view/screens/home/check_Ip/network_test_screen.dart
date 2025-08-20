@@ -23,6 +23,7 @@ class NetworkTestScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    mq = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(

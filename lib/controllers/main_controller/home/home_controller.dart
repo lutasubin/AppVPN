@@ -9,7 +9,7 @@ import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/view/screens/connected/conected_screen.dart';
 import 'package:vpn_basic_project/view/screens/disconnected/disconected_screen.dart';
-import 'package:vpn_basic_project/view/widgets/HomeWidgets/watch_video_disconnect.dart';
+import 'package:vpn_basic_project/helpers/dilogs/watch_video_disconnect.dart';
 
 // Import các manager đã tách
 import 'vpn_state_manager.dart';
@@ -72,16 +72,6 @@ class LocalController extends GetxController {
       _serverManager.availableServersPro;
   set availableServersPro(List<LocalVpnServer> value) =>
       _serverManager.availableServersPro.value = value;
-
-  List<LocalVpnServer> get availableServersFast =>
-      _serverManager.availableServersFast;
-  set availableServersFast(List<LocalVpnServer> value) =>
-      _serverManager.availableServersFast.value = value;
-
-  List<LocalVpnServer> get availableWireGuardServers =>
-      _serverManager.availableWireGuardServers;
-  set availableWireGuardServers(List<LocalVpnServer> value) =>
-      _serverManager.availableWireGuardServers.value = value;
 
   List<LocalVpnServer> get availableStunnelWireGuardServers =>
       _serverManager.availableStunnelWireGuardServers;
@@ -594,67 +584,5 @@ class LocalController extends GetxController {
     } else {
       return 'openvpn';
     }
-  }
-
-  // ===========================================
-  // UTILITY METHODS
-  // ===========================================
-
-  /// Format duration as HH:MM:SS
-  String formatDuration(Duration duration) {
-    return _stateManager.formatDuration(duration);
-  }
-
-  /// Load specific server types (delegates to server manager)
-  void loadAvailableServers() => _serverManager.loadAvailableServers();
-  void loadAvailableServersPro() => _serverManager.loadAvailableServersPro();
-  void loadAvailableServersFast() => _serverManager.loadAvailableServersFast();
-  void loadAvailableWireGuardServers() =>
-      _serverManager.loadAvailableWireGuardServers();
-  void loadAvailableStunnelWireGuardServers() =>
-      _serverManager.loadAvailableStunnelWireGuardServers();
-
-  /// ✅ NEW: Load WireGuard API servers
-  void loadAvailableWireGuardApiServers() =>
-      _serverManager.loadAvailableWireGuardApiServers();
-
-  // ===========================================
-  // ✅ NEW HELPER METHODS FOR UI
-  // ===========================================
-
-  /// Get all WireGuard servers (both assets and API)
-  List<LocalVpnServer> get allWireGuardServers {
-    List<LocalVpnServer> allServers = [];
-    allServers.addAll(availableWireGuardServers);
-    allServers.addAll(availableWireGuardApiServers);
-    return allServers;
-  }
-
-  /// Check if current server is from API
-  bool get isCurrentServerFromApi {
-    return selectedServer?.protocol == 'wireguard-api' ||
-        _serverManager.isUsingApiServer;
-  }
-
-  /// Get server connection info for UI
-  String get serverConnectionInfo {
-    if (isUsingWireGuardApi) {
-      return 'WireGuard API • ${currentCountry}';
-    } else if (isUsingWireGuard) {
-      return 'WireGuard • ${currentCountry}';
-    } else if (isUsingStunnel) {
-      return 'Stunnel+WireGuard • ${currentCountry}';
-    } else {
-      return 'OpenVPN • ${currentCountry}';
-    }
-  }
-
-  /// ✅ NEW: Get client cleanup status for debugging
-  Map<String, dynamic> get clientCleanupStatus {
-    return {
-      'trackedClients': _cleanupManager.activeClients.length,
-      'clients': _cleanupManager.activeClients.keys.toList(),
-      'isCleanupActive': _cleanupManager.activeClients.isNotEmpty,
-    };
   }
 }

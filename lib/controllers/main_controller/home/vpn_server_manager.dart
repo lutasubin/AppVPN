@@ -27,9 +27,7 @@ class VpnServerManager {
   // Server lists
   final RxList<LocalVpnServer> availableServers = <LocalVpnServer>[].obs;
   final RxList<LocalVpnServer> availableServersPro = <LocalVpnServer>[].obs;
-  final RxList<LocalVpnServer> availableServersFast = <LocalVpnServer>[].obs;
-  final RxList<LocalVpnServer> availableWireGuardServers =
-      <LocalVpnServer>[].obs;
+  
   final RxList<LocalVpnServer> availableStunnelWireGuardServers =
       <LocalVpnServer>[].obs;
 
@@ -61,8 +59,6 @@ class VpnServerManager {
     try {
       loadAvailableServers();
       loadAvailableServersPro();
-      loadAvailableServersFast();
-      loadAvailableWireGuardServers();
       loadAvailableStunnelWireGuardServers();
       loadAvailableWireGuardApiServers(); // ✅ NEW: Load API servers
     } catch (e) {
@@ -90,25 +86,6 @@ class VpnServerManager {
     }
   }
 
-  /// Load fast VPN servers
-  void loadAvailableServersFast() {
-    try {
-      availableServersFast.value = fastVpn;
-      _setDefaultServerIfNeeded(availableServersFast);
-    } catch (e) {
-      _handleError('Failed to load fast servers', e);
-    }
-  }
-
-  /// Load WireGuard servers (from assets)
-  void loadAvailableWireGuardServers() {
-    try {
-      availableWireGuardServers.value = wireguardVpn;
-      print('✅ Loaded ${wireguardVpn.length} WireGuard (assets) servers');
-    } catch (e) {
-      _handleError('Failed to load WireGuard servers', e);
-    }
-  }
 
   /// ✅ NEW: Load WireGuard API servers
   void loadAvailableWireGuardApiServers() {
@@ -171,17 +148,18 @@ class VpnServerManager {
           'IP': server.ip,
           'CountryLong': server.countryName,
           'CountryShort': server.countryCode,
-          'OpenVPN_ConfigData_Base64': '', // ✅ Rỗng cho local WireGuard
+          'OpenVPN_ConfigData_Base64': '',
           'HostName': '',
-          'Score': '0',
-          'Ping': server.ping,
-          'Speed': '100',
-          'NumVpnSessions': '0',
-          'Uptime': '0',
-          'TotalUsers': '0',
-          'TotalTraffic': '0',
+          'Score': 0,
+          'Ping': '', // ép sang String cho chắc chắn
+          'Speed': 100,
+          'NumVpnSessions': 0,
+          'Uptime': 0,
+          'TotalUsers': 0,
+          'TotalTraffic': 0,
           'ConfigFileName': server.configFileName,
         });
+
         Pref.vpn = vpn.value;
 
         print('🧹 Set local WireGuard server');
@@ -195,17 +173,17 @@ class VpnServerManager {
           'IP': server.ip,
           'CountryLong': server.countryName,
           'CountryShort': server.countryCode,
-          'OpenVPN_ConfigData_Base64': '', // ✅ Rỗng cho WireGuard API
+          'OpenVPN_ConfigData_Base64': '',
           'HostName': '',
-          'Score': '0',
-          'Ping': server.ping,
-          'Speed': '100',
-          'NumVpnSessions': '0',
-          'Uptime': '0',
-          'TotalUsers': '0',
-          'TotalTraffic': '0',
+          'Score': 0,
+          'Ping': '',
+          'NumVpnSessions': 0,
+          'Uptime': 0,
+          'TotalUsers': 0,
+          'TotalTraffic': 0,
           'ConfigFileName': server.configFileName,
         });
+
         Pref.vpn = vpn.value;
 
         print('🌐 Set WireGuard API server');

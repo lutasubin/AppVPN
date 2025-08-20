@@ -5,7 +5,7 @@ import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 class AppLifecycleHandler extends WidgetsBindingObserver {
   bool _wasInBackground = false;
   DateTime? _lastAdTime;
-  
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
@@ -31,7 +31,7 @@ class AppLifecycleHandler extends WidgetsBindingObserver {
         break;
     }
   }
-  
+
   bool _canShowAd() {
     if (_lastAdTime == null) return true;
     return DateTime.now().difference(_lastAdTime!).inSeconds > 30; // 30s delay
@@ -40,6 +40,7 @@ class AppLifecycleHandler extends WidgetsBindingObserver {
   void disconnectVPN() async {
     try {
       await VpnEngine.stopVpn(); // Hoặc phương thức tương ứng trong NizVPN
+      await VpnEngine.stopWireGuard();
       print('VPN disconnected automatically.');
     } catch (e) {
       print('Error disconnecting VPN: $e');

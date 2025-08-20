@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:vpn_basic_project/helpers/ads/config_ads_firebase.dart';
+import 'package:vpn_basic_project/helpers/remote_cofig/config_firebase.dart';
 
 class NetworkController extends GetxController {
   var hasInternet = true.obs;

@@ -56,7 +56,7 @@ final List<LocalVpnServer> proVPN = [
   LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
-    ip: '161.97.120.90.1',
+    ip: '161.97.120.90.10',
     ping: '',
     configFileName: 'vpn-germanyctb.ovpn',
     protocol: 'openvpn',
@@ -95,71 +95,47 @@ final List<LocalVpnServer> proVPN = [
   ),
 ];
 
-final List<LocalVpnServer> fastVpn = [
+// ✅ NEW: WireGuard API servers - lấy config từ API thay vì assets
+final List<LocalVpnServer> wireguardApiVpn = [
   LocalVpnServer(
-    countryName: 'Fast Speed',
-    countryCode: '',
-    ip: '222.222.222.2',
+    countryName: 'United Kingdom',
+    countryCode: 'gb',
+    ip: '81.0.220.147',
     ping: '',
-    configFileName:
-        wireguardVpn[randomIndex(wireguardVpn.length)].configFileName,
-    protocol: 'wireguard',
+    configFileName: '',
+    protocol: 'wireguard-api',
   ),
-];
-
-// ✅ UPDATED: WireGuard servers từ assets (giữ nguyên để backward compatibility)
-final List<LocalVpnServer> wireguardVpn = [
   LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
-    ip: '213.136.95.11',
+    ip: '161.97.120.90',
     ping: '',
-    configFileName: 'vpn-germany5.conf',
-    protocol: 'wireguard',
+    configFileName: '',
+    protocol: 'wireguard-api',
   ),
   LocalVpnServer(
-    countryName: 'France',
+    countryName: 'French',
     countryCode: 'fr',
-    ip: '213.136.95.10',
+    ip: '62.171.171.217',
     ping: '',
-    configFileName: 'vpn-France20.conf',
-    protocol: 'wireguard',
+    configFileName: '',
+    protocol: 'wireguard-api',
   ),
   LocalVpnServer(
     countryName: 'United States',
     countryCode: 'us',
-    ip: '185.187.242.51',
+    ip: '144.126.138.95',
     ping: '',
-    configFileName: 'vpn-US20.conf',
-    protocol: 'wireguard',
-  ),
-  LocalVpnServer(
-    countryName: 'United Kingdom',
-    countryCode: 'gb',
-    ip: '209.126.15.51',
-    ping: '',
-    configFileName: 'vpn-US20.conf',
-    protocol: 'wireguard',
+    configFileName: '',
+    protocol: 'wireguard-api',
   ),
   LocalVpnServer(
     countryName: 'Singapore',
     countryCode: 'sg',
-    ip: '165.22.96.2',
+    ip: '51.79.144.227',
     ping: '',
-    configFileName: 'vpn-singapore3.conf',
-    protocol: 'wireguard',
-  ),
-];
-
-// ✅ NEW: WireGuard API servers - lấy config từ API thay vì assets
-final List<LocalVpnServer> wireguardApiVpn = [
-  LocalVpnServer(
-    countryName: 'Germany',
-    countryCode: 'de',
-    ip: '81.0.220.147', // IP của API server
-    ping: '',
-    configFileName: '', // Không cần file name vì lấy từ API
-    protocol: 'wireguard-api', // Protocol mới để phân biệt
+    configFileName: '',
+    protocol: 'wireguard-api',
   ),
 ];
 

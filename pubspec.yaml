@@ -82,7 +82,7 @@ flutter:
   assets:
     - assets/ # Thư mục gốc chứa tài nguyên
     - assets/vpn/ # Tài nguyên liên quan đến VPN
-    - assets/wireguard/ # Tài nguyên liên quan đến WireGuard
+    # - assets/wireguard/ # Tài nguyên liên quan đến WireGuard
     - assets/stunnel/ # Tài nguyên liên quan đến Stunnel
     - assets/images/ # Thư mục chứa hình ảnh
     - assets/icons/ # Thư mục chứa biểu tượng

@@ -5,7 +5,7 @@ import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controlle
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
-import 'package:vpn_basic_project/view/screens/splash/onboard/first_screen.dart';
+import 'package:vpn_basic_project/view/screens/splash/onboard/Onboarding_Screen.dart';
 
 class LanguageScreen2 extends StatefulWidget {
   LanguageScreen2({super.key});

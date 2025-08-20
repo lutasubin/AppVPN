@@ -10,7 +10,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:vpn_basic_project/appVpn.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
-import 'package:vpn_basic_project/helpers/ads/config_ads_firebase.dart';
+import 'package:vpn_basic_project/helpers/remote_cofig/config_firebase.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 
 late Size mq;
@@ -34,10 +34,7 @@ Future<void> main() async {
 /// Khởi tạo tất cả dịch vụ cốt lõi (không bao gồm PlatformView như Ads)
 Future<void> _initializeCoreServices() async {
   try {
-    // Tính toán kích thước màn hình
-    mq = MediaQueryData.fromView(
-            WidgetsBinding.instance.platformDispatcher.views.first)
-        .size;
+    
 
     await dotenv.load();
     log('✅ Dotenv initialized');

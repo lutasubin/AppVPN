@@ -2,10 +2,57 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:vpn_basic_project/helpers/remote_cofig/config_firebase.dart';
 
 class WireGuardService {
-  final String baseUrl = "http://81.0.220.147:5000/wireguard";
-  final String apiToken = "abc123456abccba";
+  // ✅ NEW: Map IP addresses to their corresponding base URLs
+  final Map<String, String> _ipToBaseUrl = {
+    "81.0.220.147": Config.nuocAnh, // United Kingdom
+    "144.126.138.95": Config.nuocMy, // United States
+    "51.79.144.227": Config.nuocSin, // Singapore
+    "62.171.171.217": Config.nuocPhap, // French
+    "161.97.120.90": Config.nuocPhap, // Germany
+  };
+
+  final List<String> baseUrlList = [
+    Config.nuocAnh, //United Kingdom
+    Config.nuocMy, //United States
+    Config.nuocSin, //Singapore
+    Config.nuocPhap, //French
+    Config.nuocPhap, //Germany
+  ];
+
+  // Default base URL (fallback)
+  String baseUrl = "http://81.0.220.147:5000/wireguard";
+  final String apiToken = Config.apiToken;
+
+  // ✅ NEW: Current server IP for dynamic base URL selection
+  String? _currentServerIp;
+
+  /// ✅ NEW: Set the server IP to use appropriate base URL
+  void setServerIp(String serverIp) {
+    _currentServerIp = serverIp;
+
+    // Update baseUrl based on server IP
+    if (_ipToBaseUrl.containsKey(serverIp)) {
+      baseUrl = _ipToBaseUrl[serverIp]!;
+      print('🌍 Base URL updated for server $serverIp: $baseUrl');
+    } else {
+      // Fallback to default
+      baseUrl = baseUrlList.first;
+      print('⚠️ Unknown server IP $serverIp, using default base URL: $baseUrl');
+    }
+  }
+
+  /// ✅ NEW: Get current base URL
+  String getCurrentBaseUrl() {
+    return baseUrl;
+  }
+
+  /// ✅ NEW: Get base URL for specific server IP
+  String getBaseUrlForServer(String serverIp) {
+    return _ipToBaseUrl[serverIp] ?? baseUrlList.first;
+  }
 
   /// ========== [1] Sinh nhiều định dạng clientName để test ==========
   Map<String, String> _generateTestClientNames() {
@@ -17,7 +64,8 @@ class WireGuardService {
       "simple": "client$random",
       "timestamp": "client_$timestamp",
       "full": "${deviceId}_${timestamp}_$random",
-      "uuid_like": "client-${random.toString().padLeft(4, '0')}-${timestamp.toString().substring(timestamp.toString().length - 6)}",
+      "uuid_like":
+          "client-${random.toString().padLeft(4, '0')}-${timestamp.toString().substring(timestamp.toString().length - 6)}",
       "short": "c$random",
     };
   }
@@ -25,7 +73,7 @@ class WireGuardService {
   /// ========== [2] Tìm định dạng clientName hợp lệ ==========
   Future<String?> findValidClientName() async {
     final testNames = _generateTestClientNames();
-    print("🔍 Testing different client name formats...");
+    print("🔍 Testing different client name formats on $baseUrl...");
 
     for (final entry in testNames.entries) {
       final nameType = entry.key;
@@ -67,6 +115,9 @@ class WireGuardService {
   /// ========== [3] MODIFIED: Lấy config từ server trả về String thay vì File ==========
   Future<String?> getValidatedConfigContent() async {
     try {
+      print('🌐 Using base URL: $baseUrl');
+      print('🌍 Current server IP: $_currentServerIp');
+
       // 1. Tìm clientName hợp lệ
       final validName = await findValidClientName();
       if (validName == null) {
@@ -133,6 +184,9 @@ class WireGuardService {
   /// ========== [✅ NEW] Get config with client name for tracking ==========
   Future<Map<String, dynamic>?> getValidatedConfigWithClientName() async {
     try {
+      print('🌐 Using base URL: $baseUrl');
+      print('🌍 Current server IP: $_currentServerIp');
+
       // 1. Tìm clientName hợp lệ
       final validName = await findValidClientName();
       if (validName == null) {
@@ -193,6 +247,8 @@ class WireGuardService {
       return {
         'config': configContent,
         'clientName': validName,
+        'serverIp': _currentServerIp,
+        'baseUrl': baseUrl,
       };
     } catch (e) {
       print('❌ Error getting validated config with client name: $e');
@@ -200,7 +256,8 @@ class WireGuardService {
     }
   }
 
-  /// ========== [4] Config decode and clean (không thay đổi) ==========
+  // ========== [Rest of the methods remain the same] ==========
+
   Future<String> _decodeAndCleanConfig(List<int> configBytes) async {
     String configContent = '';
 
@@ -220,7 +277,6 @@ class WireGuardService {
     return configContent;
   }
 
-  /// ========== [5] Clean config content (không thay đổi) ==========
   String _cleanConfigContent(String config) {
     print('🧹 Độ dài config gốc: ${config.length}');
 
@@ -269,7 +325,8 @@ class WireGuardService {
           String cleanValue = value.replaceAll(RegExp(r'[^\x20-\x7E]'), '');
 
           if (key.contains('Key') && cleanValue.length < 40) {
-            print('⚠️ Key "$key" có vẻ bị cắt ngắn: ${cleanValue.length} ký tự');
+            print(
+                '⚠️ Key "$key" có vẻ bị cắt ngắn: ${cleanValue.length} ký tự');
             final originalValue = line.substring(line.indexOf('=') + 1).trim();
             cleanValue = originalValue.replaceAll(RegExp(r'[^\x20-\x7E]'), '');
           }
@@ -292,7 +349,6 @@ class WireGuardService {
     return cleaned;
   }
 
-  /// ========== [6] Validation WireGuard (không thay đổi) ==========
   bool _isValidWireGuardConfig(String config) {
     final cleanConfig = config.trim();
 
@@ -331,8 +387,10 @@ class WireGuardService {
             RegExp(r'PrivateKey\s*=\s*(.+)').firstMatch(interfaceSection);
         if (keyLineMatch != null) {
           final keyValue = keyLineMatch.group(1)?.trim() ?? '';
-          print('❌ PrivateKey không hợp lệ. Tìm thấy: "${keyValue.length} ký tự"');
-          print('❌ Key preview: ${keyValue.length > 10 ? keyValue.substring(0, 10) + '...' : keyValue}');
+          print(
+              '❌ PrivateKey không hợp lệ. Tìm thấy: "${keyValue.length} ký tự"');
+          print(
+              '❌ Key preview: ${keyValue.length > 10 ? '${keyValue.substring(0, 10)}...' : keyValue}');
         } else {
           print('❌ Không tìm thấy dòng PrivateKey');
         }
@@ -369,14 +427,16 @@ class WireGuardService {
             RegExp(r'PublicKey\s*=\s*(.+)').firstMatch(peerSection);
         if (keyLineMatch != null) {
           final keyValue = keyLineMatch.group(1)?.trim() ?? '';
-          print('❌ PublicKey không hợp lệ. Tìm thấy: "${keyValue.length} ký tự"');
+          print(
+              '❌ PublicKey không hợp lệ. Tìm thấy: "${keyValue.length} ký tự"');
           print('❌ PublicKey đầy đủ: "$keyValue"');
         } else {
           print('❌ Không tìm thấy dòng PublicKey');
         }
         return false;
       } else {
-        print('✅ PublicKey validation thành công: ${publicKeyMatch.group(1)?.length} ký tự');
+        print(
+            '✅ PublicKey validation thành công: ${publicKeyMatch.group(1)?.length} ký tự');
       }
 
       final endpointMatch =
@@ -394,7 +454,6 @@ class WireGuardService {
     return true;
   }
 
-  /// ========== [7] Debug config printing (không thay đổi) ==========
   void _debugPrintConfig(String config) {
     final lines = config.split('\n');
     print('📋 Debug config (${lines.length} dòng):');
@@ -406,29 +465,33 @@ class WireGuardService {
           final parts = line.split('=');
           if (parts.length >= 2) {
             final keyValue = parts[1].trim();
-            print('  Dòng ${i + 1}: ${parts[0].trim()} = [${keyValue.length} ký tự] ${keyValue.substring(0, min(8, keyValue.length))}...');
+            print(
+                '  Dòng ${i + 1}: ${parts[0].trim()} = [${keyValue.length} ký tự] ${keyValue.substring(0, min(8, keyValue.length))}...');
           } else {
-            print('  Dòng ${i + 1}: ${line}');
+            print('  Dòng ${i + 1}: $line');
           }
         } else if (line.contains('PublicKey')) {
           final parts = line.split('=');
           if (parts.length >= 2) {
             final keyValue = parts[1].trim();
-            print('  Dòng ${i + 1}: ${parts[0].trim()} = [${keyValue.length} ký tự] ${keyValue.substring(0, min(8, keyValue.length))}...');
+            print(
+                '  Dòng ${i + 1}: ${parts[0].trim()} = [${keyValue.length} ký tự] ${keyValue.substring(0, min(8, keyValue.length))}...');
             print('     🔍 PublicKey đầy đủ: "$keyValue"');
           } else {
-            print('  Dòng ${i + 1}: ${line}');
+            print('  Dòng ${i + 1}: $line');
           }
         } else if (line.contains('PresharedKey')) {
           final parts = line.split('=');
           if (parts.length >= 2) {
             final keyValue = parts[1].trim();
-            print('  Dòng ${i + 1}: ${parts[0].trim()} = [${keyValue.length} ký tự] ***ẨN***');
+            print(
+                '  Dòng ${i + 1}: ${parts[0].trim()} = [${keyValue.length} ký tự] ***ẨN***');
           } else {
-            print('  Dòng ${i + 1}: ${line}');
+            print('  Dòng ${i + 1}: $line');
           }
         } else {
-          print('  Dòng ${i + 1}: ${line.length > 50 ? line.substring(0, 50) + '...' : line}');
+          print(
+              '  Dòng ${i + 1}: ${line.length > 50 ? '${line.substring(0, 50)}...' : line}');
         }
       } else {
         print('  Dòng ${i + 1}: [trống]');
@@ -440,9 +503,9 @@ class WireGuardService {
     }
   }
 
-  /// ========== [8] NEW: Method chính trả về config content thay vì file ==========
   Future<String?> getConfigForVPN() async {
     print('🌐 Starting WireGuard API config retrieval...');
+    print('🌍 Using server: $_currentServerIp -> $baseUrl');
 
     try {
       final configContent = await getValidatedConfigContent();
@@ -452,7 +515,6 @@ class WireGuardService {
         return null;
       }
 
-      // Validate lần cuối
       if (!_isValidWireGuardConfig(configContent)) {
         print('❌ Final validation failed');
         return null;
@@ -466,23 +528,22 @@ class WireGuardService {
     }
   }
 
-  /// ========== [✅ NEW] Method trả về config với client name để track ==========
   Future<Map<String, dynamic>?> getConfigDataWithClientName() async {
     print('🌐 Starting WireGuard API config retrieval with client tracking...');
+    print('🌍 Using server: $_currentServerIp -> $baseUrl');
 
     try {
       final configData = await getValidatedConfigWithClientName();
 
-      if (configData == null || 
-          configData['config'] == null || 
+      if (configData == null ||
+          configData['config'] == null ||
           configData['clientName'] == null) {
         print('❌ Failed to get valid config with client name from API');
         return null;
       }
 
       final configContent = configData['config'] as String;
-      
-      // Validate lần cuối
+
       if (!_isValidWireGuardConfig(configContent)) {
         print('❌ Final validation failed');
         return null;
@@ -490,7 +551,8 @@ class WireGuardService {
 
       print('✅ WireGuard API config ready for VPN with client tracking');
       print('👤 Client: ${configData['clientName']}');
-      
+      print('🌍 Server: ${configData['serverIp']} -> ${configData['baseUrl']}');
+
       return configData;
     } catch (e) {
       print('❌ Error in getConfigDataWithClientName: $e');
@@ -498,11 +560,8 @@ class WireGuardService {
     }
   }
 
-  /// ========== [9] NEW: Utility method để lưu config nếu cần ==========
   Future<bool> saveConfigToFile(String configContent, String fileName) async {
     try {
-      // Sử dụng getApplicationDocumentsDirectory() thay vì getTemporaryDirectory()
-      // Nhưng vì không có import path_provider, sẽ dùng Directory.current
       final file = File(fileName);
       await file.writeAsString(configContent, encoding: utf8);
       print('💾 Config saved to: ${file.path}');
@@ -513,10 +572,9 @@ class WireGuardService {
     }
   }
 
-  /// ========== [10] Debug và test methods (không thay đổi) ==========
   Future<Map<String, dynamic>> debugServer() async {
     final result = <String, dynamic>{};
-    print("🔍 Starting server debug...");
+    print("🔍 Starting server debug for: $baseUrl");
 
     try {
       final res = await http
@@ -550,6 +608,8 @@ class WireGuardService {
       {"clientName": "test123", "allowedIPs": "10.0.0.0/24"},
     ];
 
+    print("🧪 Testing create parameters on $baseUrl");
+
     for (int i = 0; i < paramsList.length; i++) {
       final param = paramsList[i];
       print("📝 Test param ${i + 1}: ${jsonEncode(param)}");
@@ -573,10 +633,9 @@ class WireGuardService {
     }
   }
 
-  /// ========== [11] ✅ ENHANCED: Server-side client cleanup method ==========
   Future<bool> removeClientFromServer(String clientName) async {
     try {
-      print('🗑️ Removing client "$clientName" from server...');
+      print('🗑️ Removing client "$clientName" from server $baseUrl...');
 
       final response = await http
           .post(
@@ -597,7 +656,7 @@ class WireGuardService {
         return true;
       } else if (response.statusCode == 404) {
         print('⚠️ Client "$clientName" not found on server (already removed?)');
-        return true; // Consider this as success since client is not on server
+        return true;
       } else {
         print('❌ Failed to remove client from server: ${response.statusCode}');
         return false;
@@ -608,37 +667,33 @@ class WireGuardService {
     }
   }
 
-  /// ========== [✅ NEW] Batch cleanup multiple clients ==========
   Future<void> cleanupMultipleClients(List<String> clientNames) async {
-    print('🗑️ Cleaning up ${clientNames.length} clients from server...');
-    
+    print(
+        '🗑️ Cleaning up ${clientNames.length} clients from server $baseUrl...');
+
     for (String clientName in clientNames) {
       try {
         await removeClientFromServer(clientName);
-        // Small delay to avoid overwhelming the server
         await Future.delayed(const Duration(milliseconds: 200));
       } catch (e) {
         print('⚠️ Failed to cleanup client $clientName: $e');
       }
     }
-    
+
     print('🎉 Batch cleanup completed');
   }
 
-  /// ========== [✅ NEW] Get server stats (optional) ==========
   Future<Map<String, dynamic>?> getServerStats() async {
     try {
-      print('📊 Getting server statistics...');
-      
-      final response = await http
-          .get(
-            Uri.parse('$baseUrl/stats'),
-            headers: {
-              'Authorization': apiToken,
-              'Content-Type': 'application/json',
-            },
-          )
-          .timeout(const Duration(seconds: 10));
+      print('📊 Getting server statistics from $baseUrl...');
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/stats'),
+        headers: {
+          'Authorization': apiToken,
+          'Content-Type': 'application/json',
+        },
+      ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final stats = jsonDecode(response.body);
