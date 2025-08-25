@@ -80,7 +80,7 @@ class LocationScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Fast Speed',
+                        'Social Media',
                         style: TextStyle(
                           color: !locationController.isShareFreeMode.value
                               ? const Color(0xFFFFFFFF)
@@ -99,7 +99,7 @@ class LocationScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Public Vpn',
+                      'Streaming',
                       style: TextStyle(
                         color: locationController.isShareFreeMode.value
                             ? const Color(0xFFFFFFFF)
@@ -127,30 +127,6 @@ class LocationScreen extends StatelessWidget {
         ...controller.availableServersPro.map((server) => Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: VpnCardLocalPro(server: server),
-            )),
-        Obx(() {
-          final ad = _adController2.ad;
-          if (ad != null &&
-              _adController2.adLoaded.isTrue &&
-              !_adController2.isDisposed) {
-            return SafeArea(
-              child: SizedBox(
-                height: 120,
-                child: AdWidget(ad: ad),
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }),
-        const SizedBox(
-          height: 10,
-        ),
-        ...controller.availableWireGuardApiServers.map((server) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: VpnCardWireGuard(
-                server: server,
-              ),
             )),
         Obx(() {
           final ad = _adController3.ad;
@@ -185,6 +161,30 @@ class LocationScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
+        const SizedBox(
+          height: 10,
+        ),
+        ...controller.availableWireGuardApiServers.map((server) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: VpnCardWireGuard(
+                server: server,
+              ),
+            )),
+        Obx(() {
+          final ad = _adController2.ad;
+          if (ad != null &&
+              _adController2.adLoaded.isTrue &&
+              !_adController2.isDisposed) {
+            return SafeArea(
+              child: SizedBox(
+                height: 120,
+                child: AdWidget(ad: ad),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
         const SizedBox(
           height: 10,
         ),

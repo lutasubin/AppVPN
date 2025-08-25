@@ -50,28 +50,6 @@ class VpnCardWireGuard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(width: 3),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: Colors.pinkAccent, // cam đậm
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.bolt, size: 14, color: Color(0xFFFFFFFF)),
-                    SizedBox(width: 2),
-                    Text(
-                      'Streaming',
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
           trailing: Row(

@@ -54,28 +54,7 @@ class VpnCardApi extends StatelessWidget {
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(width: 3),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0CD09C),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.bolt, size: 14, color: Color(0xFFFFFFFF)),
-                    SizedBox(width: 2),
-                    Text(
-                      'Favor',
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              
             ],
           ),
           trailing: Row(

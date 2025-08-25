@@ -10,7 +10,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:vpn_basic_project/appVpn.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
-import 'package:vpn_basic_project/helpers/remote_cofig/config_firebase.dart';
+import 'package:vpn_basic_project/helpers/remote_config/config_firebase.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 
 late Size mq;

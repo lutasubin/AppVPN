@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:vpn_basic_project/helpers/remote_cofig/config_firebase.dart';
+import 'package:vpn_basic_project/helpers/remote_config/config_firebase.dart';
 
 class WireGuardService {
   // ✅ NEW: Map IP addresses to their corresponding base URLs

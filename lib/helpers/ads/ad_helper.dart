@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
-import 'package:vpn_basic_project/helpers/remote_cofig/config_firebase.dart';
+import 'package:vpn_basic_project/helpers/remote_config/config_firebase.dart';
 import 'package:vpn_basic_project/helpers/dilogs/my_dilogs.dart';
 
 /// Lớp hỗ trợ quản lý quảng cáo Google Mobile Ads trong ứng dụng Flutter.
@@ -48,7 +48,7 @@ class AdHelper {
 
     InterstitialAd.load(
       adUnitId: Config.interstitialAd,
-      request: AdRequest(),
+      request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           // Lắng nghe sự kiện khi quảng cáo được hiển thị hoặc đóng
@@ -97,7 +97,7 @@ class AdHelper {
 
     InterstitialAd.load(
       adUnitId: Config.interstitialAd,
-      request: AdRequest(),
+      request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           ad.fullScreenContentCallback =
@@ -141,7 +141,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -151,8 +151,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -197,7 +197,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -207,8 +207,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -232,7 +232,7 @@ class AdHelper {
 
     RewardedAd.load(
       adUnitId: Config.rewardedAd,
-      request: AdRequest(),
+      request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           Get.back();
@@ -273,7 +273,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -283,8 +283,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -329,7 +329,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -339,8 +339,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -371,7 +371,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -381,8 +381,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -427,7 +427,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -437,8 +437,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -456,7 +456,7 @@ class AdHelper {
     _bannerAd = BannerAd(
       adUnitId: Config.bannerAd,
       size: AdSize.banner,
-      request: AdRequest(),
+      request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           log('$BannerAd loaded.');
@@ -500,7 +500,7 @@ class AdHelper {
             log('$BannerAd failed to load: $error');
           },
         ),
-        request: AdRequest())
+        request: const AdRequest())
       ..load();
   }
   //*****************App Open Ad******************
@@ -578,7 +578,6 @@ class AdHelper {
     }
   }
 
-
   //*****************Native Ad New 1******************
 
   /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
@@ -602,7 +601,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -612,8 +611,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -658,7 +657,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -668,8 +667,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -677,7 +676,7 @@ class AdHelper {
       ..load();
   }
 
-   //*****************Native Ad New 2******************
+  //*****************Native Ad New 2******************
 
   /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
   /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
@@ -700,7 +699,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -710,8 +709,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
@@ -730,7 +729,8 @@ class AdHelper {
   /// Tải và trả về một quảng cáo tự nhiên.
   /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
   /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
-  static NativeAd? loadNativeAdNew2({required NativeAdController adController}) {
+  static NativeAd? loadNativeAdNew2(
+      {required NativeAdController adController}) {
     log('Native Ad Id: ${Config.native1Ad}');
 
     if (Config.hideAds) return null;
@@ -756,7 +756,7 @@ class AdHelper {
         ),
         request: const AdRequest(),
         nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: Color(0xFFFFFFFF),
+            mainBackgroundColor: const Color(0xFFFFFFFF),
             primaryTextStyle: NativeTemplateTextStyle(
               textColor: Colors.black,
               style: NativeTemplateFontStyle.normal,
@@ -766,8 +766,8 @@ class AdHelper {
               style: NativeTemplateFontStyle.normal,
             ),
             callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFFF15E24),
+              textColor: const Color(0xFFFFFFFF),
+              backgroundColor: const Color(0xFFF15E24),
               style: NativeTemplateFontStyle.bold,
               size: 15,
             ),
