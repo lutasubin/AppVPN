@@ -229,14 +229,14 @@ class LocalController extends GetxController {
     Get.dialog(
       WatchAdDialogDisconnect(
         onComplete: () async {
-          await _disconnectVpn();
+          await disconnectVpn();
         },
       ),
     );
   }
 
   /// ✅ ENHANCED: Disconnect VPN với client cleanup
-  Future<void> _disconnectVpn() async {
+  Future<void> disconnectVpn() async {
     print('🔥 LocalController._disconnectVpn() CALLED');
 
     final server = selectedServer;

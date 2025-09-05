@@ -1,9 +1,9 @@
 plugins {
     id "com.android.application"
-    id 'com.google.gms.google-services' // for firebase
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services' // for firebase
 }
 
 def localProperties = new Properties()
@@ -26,23 +26,23 @@ if (flutterVersionName == null) {
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) { 
+if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
 android {
     namespace = "com.Lutasubin.freeVpn"
     compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+
+    // ⚠️ Chỉ định NDK mới hỗ trợ 16KB page size
+    ndkVersion "28.0.12433566"
 
     lintOptions {
         disable 'InvalidPackage'
     }
 
     packagingOptions {
-        jniLibs {
-            useLegacyPackaging true
-        }
+        // ❌ Bỏ useLegacyPackaging để Gradle tự quản lý đúng chuẩn
         pickFirst '**/libjbcrypto.so'
         pickFirst '**/libopenvpn.so'
         pickFirst '**/libopvpnutil.so'
@@ -51,30 +51,28 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         coreLibraryDesugaringEnabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     defaultConfig {
         applicationId = "com.Lutasubin.freeVpn"
         minSdk = 23
         targetSdk = 35
-        versionCode 33
-        versionName "2.7.0"
-        
+        versionCode 34
+        versionName "2.8.0"
+
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
 
         multiDexEnabled true
 
-        // ⚠️ Hỗ trợ thiết bị có kích thước trang bộ nhớ 16KB (Android 15)
-        externalNativeBuild {
-            cmake {
-                arguments "-DANDROID_PAGE_SIZE=16384"
-            }
-        }
     }
 
     signingConfigs {
@@ -113,6 +111,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':vpnLib')
     implementation project(path: ':vpnLib:tunnel')
+
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation('androidx.work:work-runtime') {
@@ -120,7 +119,9 @@ dependencies {
           strictly '2.7.0'
         }
     }
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
     implementation 'com.google.android.gms:play-services-ads:24.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

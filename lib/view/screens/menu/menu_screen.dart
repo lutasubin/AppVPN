@@ -11,6 +11,7 @@ import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
 import 'package:vpn_basic_project/view/screens/menu/privacy_police/Privacy_policy.dart';
 import 'package:vpn_basic_project/view/screens/menu/lang/language_screen.dart';
 import 'package:vpn_basic_project/view/screens/menu/speed_test/speed_test.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 import 'rate/rate_screen.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -58,15 +59,18 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Obx(() {
-        return _baController.ba != null && _baController.baLoaded.isTrue
-            ? SafeArea(
-                child: SizedBox(
-                height: 120,
-                child: AdWidget(ad: _baController.ba!),
-              ))
-            : SizedBox.shrink();
-      }),
+
+      // bottomNavigationBar: Obx(() {
+      //   return _baController.ba != null && _baController.baLoaded.isTrue
+      //       ? SafeArea(
+      //           child: SizedBox(
+      //           height: 120,
+      //           child: AdWidget(ad: _baController.ba!),
+      //         ))
+      //       : SizedBox.shrink();
+      // }),
+     bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
+
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(

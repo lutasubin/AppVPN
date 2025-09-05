@@ -47,7 +47,7 @@ class DisconnectedScreen extends StatelessWidget {
         ),
         title: Text(
           'connection_report'.tr,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFFFFFFFF),
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -117,7 +117,7 @@ class DisconnectedScreen extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       'disconnect'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.red,
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
@@ -126,7 +126,7 @@ class DisconnectedScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('time'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xFF767C8A),
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold)),
@@ -143,7 +143,7 @@ class DisconnectedScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('upload_speed'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xFF767C8A),
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold)),
@@ -160,7 +160,7 @@ class DisconnectedScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('download_speed'.tr,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xFF767C8A),
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold)),
@@ -174,7 +174,7 @@ class DisconnectedScreen extends StatelessWidget {
                     const SizedBox(height: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFF15E24),
+                        backgroundColor: const Color(0xFFF15E24),
                         minimumSize: const Size.fromHeight(45),
                       ),
                       onPressed: () {
@@ -182,7 +182,7 @@ class DisconnectedScreen extends StatelessWidget {
                         Get.back();
                       },
                       child: Text('connection_again'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 16,
                               color: Color(0xFFFFFFFF),
                               fontWeight: FontWeight.bold)),
@@ -206,7 +206,7 @@ class DisconnectedScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Rate us'.tr,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -214,7 +214,8 @@ class DisconnectedScreen extends StatelessWidget {
                     ),
                     Text(
                       'rate_message'.tr,
-                      style: TextStyle(color: Color(0xFF767C8A), fontSize: 14),
+                      style: const TextStyle(
+                          color: Color(0xFF767C8A), fontSize: 14),
                       textAlign: TextAlign.center,
                     ),
                     Row(

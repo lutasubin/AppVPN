@@ -5,6 +5,7 @@ import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controlle
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/location/location_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_highspeed.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_pro.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_api.dart';
@@ -121,11 +122,8 @@ class LocationScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
-        const SizedBox(
-          height: 10,
-        ),
         ...controller.availableServersPro.map((server) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 12),
               child: VpnCardLocalPro(server: server),
             )),
         Obx(() {
@@ -143,30 +141,9 @@ class LocationScreen extends StatelessWidget {
             return const SizedBox.shrink();
           }
         }),
-        const SizedBox(
-          height: 10,
-        ),
         ...controller.availableServers.map((server) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 12),
               child: VpnCardLocal(
-                server: server,
-              ),
-            )),
-      ],
-    );
-  }
-
-  /// Phương thức hiển thị danh sách VPN dạng phẳng (không nhóm theo quốc gia)
-  Widget _buildFlatListViewPublic() {
-    return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        ...controller.availableWireGuardApiServers.map((server) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: VpnCardWireGuard(
                 server: server,
               ),
             )),
@@ -185,12 +162,25 @@ class LocationScreen extends StatelessWidget {
             return const SizedBox.shrink();
           }
         }),
-        const SizedBox(
-          height: 10,
-        ),
         ...controller.availableApiServers.map((server) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 12),
               child: VpnCardApi(
+                server: server,
+              ),
+            )),
+      ],
+    );
+  }
+
+  /// Phương thức hiển thị danh sách VPN dạng phẳng (không nhóm theo quốc gia)
+  Widget _buildFlatListViewPublic() {
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+      children: [
+        const NativeAdWithLoadingWidget(adType: 'small'),
+        ...controller.availableWireGuardApiServers.map((server) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: VpnCardWireGuard(
                 server: server,
               ),
             )),

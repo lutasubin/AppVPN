@@ -7,11 +7,11 @@ class IconTextButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const IconTextButton({
-    Key? key,
+    super.key,
     required this.svgAsset,
     required this.label,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

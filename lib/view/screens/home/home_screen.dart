@@ -98,7 +98,8 @@ class HomeScreen extends StatelessWidget {
                                     svgAsset: 'assets/svg/apps.svg',
                                     label: 'app'.tr,
                                     onTap: () {
-                                      Get.to(() => ApplicationVpnScreen());
+                                      Get.to(
+                                          () => const ApplicationVpnScreen());
                                     }),
                               ),
                             ],
@@ -143,20 +144,20 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: Obx(() {
-        final ad = _adController.ad;
-        if (ad != null &&
-            _adController.adLoaded.isTrue &&
-            !_adController.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 120,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+                      final ad = _adController.ad;
+                      if (ad != null &&
+                          _adController.adLoaded.isTrue &&
+                          !_adController.isDisposed) {
+                        return SafeArea(
+                          child: SizedBox(
+                            height: 120,
+                            child: AdWidget(ad: ad),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }),
     ));
   }
 

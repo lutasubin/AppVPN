@@ -7,12 +7,15 @@ import 'package:vpn_basic_project/view/screens/home/home_screen.dart';
 import 'package:vpn_basic_project/models/Onboarding.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final _adController1 = NativeAdController();
+  final _adController1 = Get.find<NativeAdController>();
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -121,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             onTap: () {
                               _pageController.animateToPage(
                                 i,
-                                duration: Duration(milliseconds: 300),
+                                duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeIn,
                               );
                             },
@@ -134,10 +137,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           if (_currentPage == onboardingItems.length - 1) {
                             Get.offAll(() => HomeScreen(),
                                 transition: Transition.fade,
-                                duration: Duration(milliseconds: 500));
+                                duration: const Duration(milliseconds: 500));
                           } else {
                             _pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               curve: Curves.easeIn,
                             );
                           }
@@ -190,6 +193,3 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 }
-
-
-

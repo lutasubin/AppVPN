@@ -22,20 +22,7 @@ class AdHelper {
   static BannerAd? _bannerAd;
   static bool _bannerAdLoaded = false;
 
-  static NativeAd? _nativeAd;
-  static bool _nativeAdLoaded = false;
-
-  static NativeAd? _nativeAd1;
-  static bool _nativeAdLoaded1 = false;
-
-  static NativeAd? _nativeAd2;
-  static bool _nativeAdLoaded2 = false;
-
-  static NativeAd? _native1Ad;
-  static bool _native1AdLoaded = false;
-
-  static NativeAd? _native2Ad;
-  static bool _native2AdLoaded = false;
+  // Xóa tất cả static native ad variables để tránh chia sẻ ad objects
 
   //*****************Interstitial Ad******************
 
@@ -120,53 +107,7 @@ class AdHelper {
 
   //*****************Native Ad******************
 
-  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
-  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
-  static void precacheNativeAd() {
-    log('Precache Native Ad - Id: ${Config.nativeAd}');
-
-    if (Config.hideAds) return;
-
-    _nativeAd = NativeAd(
-        adUnitId: Config.nativeAd,
-        listener: NativeAdListener(
-          onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
-            _nativeAdLoaded = true;
-          },
-          onAdFailedToLoad: (ad, error) {
-            _resetNativeAd();
-            log('$NativeAd failed to load: $error');
-          },
-        ),
-        request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
-      ..load();
-  }
-
-  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
-  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
-  static void _resetNativeAd() {
-    _nativeAd?.dispose();
-    _nativeAd = null;
-    _nativeAdLoaded = false;
-  }
+  // Xóa precacheNativeAd và _resetNativeAd - không cần thiết nữa
 
   /// Tải và trả về một quảng cáo tự nhiên.
   /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
@@ -176,43 +117,21 @@ class AdHelper {
 
     if (Config.hideAds) return null;
 
-    if (_nativeAdLoaded && _nativeAd != null) {
-      adController.adLoaded.value = true;
-      return _nativeAd;
-    }
-
+    // Luôn tạo ad mới thay vì chia sẻ static ad
     return NativeAd(
         adUnitId: Config.nativeAd,
         listener: NativeAdListener(
           onAdLoaded: (ad) {
             log('$NativeAd loaded.');
             adController.adLoaded.value = true;
-            _resetNativeAd();
-            precacheNativeAd();
           },
           onAdFailedToLoad: (ad, error) {
-            _resetNativeAd();
             log('$NativeAd failed to load: $error');
+            adController.adLoaded.value = false;
           },
         ),
         request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
+        factoryId: 'customNativeAd')
       ..load();
   }
 
@@ -252,197 +171,57 @@ class AdHelper {
 
   //*****************Native Ad1******************
 
-  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
-  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
-  static void precacheNativeAd1() {
-    log('Precache Native Ad - Id: ${Config.nativeAd}');
-
-    if (Config.hideAds) return;
-
-    _nativeAd1 = NativeAd(
-        adUnitId: Config.nativeAd,
-        listener: NativeAdListener(
-          onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
-            _nativeAdLoaded1 = true;
-          },
-          onAdFailedToLoad: (ad, error) {
-            _resetNativeAd1();
-            log('$NativeAd failed to load: $error');
-          },
-        ),
-        request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.medium))
-      ..load();
-  }
-
-  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
-  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
-  static void _resetNativeAd1() {
-    _nativeAd1?.dispose();
-    _nativeAd1 = null;
-    _nativeAdLoaded1 = false;
-  }
-
-  /// Tải và trả về một quảng cáo tự nhiên.
+  /// Tải và trả về một quảng cáo tự nhiên medium.
   /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
   /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
   static NativeAd? loadNativeAd1({required NativeAdController adController}) {
-    log('Native Ad Id: ${Config.nativeAd}');
+    log('Native Ad Medium Id: ${Config.nativeAd}');
 
     if (Config.hideAds) return null;
 
-    if (_nativeAdLoaded1 && _nativeAd1 != null) {
-      adController.adLoaded.value = true;
-      return _nativeAd1;
-    }
-
+    // Luôn tạo ad mới thay vì chia sẻ static ad
     return NativeAd(
         adUnitId: Config.nativeAd,
         listener: NativeAdListener(
           onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
+            log('$NativeAd Medium loaded.');
             adController.adLoaded.value = true;
-            _resetNativeAd1();
-            precacheNativeAd1();
           },
           onAdFailedToLoad: (ad, error) {
-            _resetNativeAd1();
-            log('$NativeAd failed to load: $error');
+            log('$NativeAd Medium failed to load: $error');
+            adController.adLoaded.value = false;
           },
         ),
         request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.medium))
+        factoryId: 'customNativeAdMedium') // Sử dụng medium factory
       ..load();
   }
 
   //*****************Native Ad2******************
 
-  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
-  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
-  static void precacheNativeAd2() {
-    log('Precache Native Ad - Id: ${Config.nativeAd}');
-
-    if (Config.hideAds) return;
-
-    _nativeAd2 = NativeAd(
-        adUnitId: Config.nativeAd,
-        listener: NativeAdListener(
-          onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
-            _nativeAdLoaded2 = true;
-          },
-          onAdFailedToLoad: (ad, error) {
-            _resetNativeAd2();
-            log('$NativeAd failed to load: $error');
-          },
-        ),
-        request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
-      ..load();
-  }
-
-  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
-  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
-  static void _resetNativeAd2() {
-    _nativeAd2?.dispose();
-    _nativeAd2 = null;
-    _nativeAdLoaded2 = false;
-  }
-
   /// Tải và trả về một quảng cáo tự nhiên.
   /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
   /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
   static NativeAd? loadNativeAd2({required NativeAdController adController}) {
-    log('Native Ad Id: ${Config.nativeAd}');
+    log('Native Ad2 Id: ${Config.nativeAd}');
 
     if (Config.hideAds) return null;
 
-    if (_nativeAdLoaded2 && _nativeAd2 != null) {
-      adController.adLoaded.value = true;
-      return _nativeAd2;
-    }
-
+    // Luôn tạo ad mới thay vì chia sẻ static ad
     return NativeAd(
         adUnitId: Config.nativeAd,
         listener: NativeAdListener(
           onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
+            log('Native Ad2 loaded.');
             adController.adLoaded.value = true;
-            _resetNativeAd2();
-            precacheNativeAd2();
           },
           onAdFailedToLoad: (ad, error) {
-            _resetNativeAd2();
-            log('$NativeAd failed to load: $error');
+            log('Native Ad2 failed to load: $error');
+            adController.adLoaded.value = false;
           },
         ),
         request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
+        factoryId: 'customNativeAd')
       ..load();
   }
 
@@ -580,198 +359,58 @@ class AdHelper {
 
   //*****************Native Ad New 1******************
 
-  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
-  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
-  static void precacheNativeAdNew() {
-    log('Precache Native Ad 1- Id: ${Config.native1Ad}');
-
-    if (Config.hideAds) return;
-
-    _native1Ad = NativeAd(
-        adUnitId: Config.native1Ad,
-        listener: NativeAdListener(
-          onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
-            _native1AdLoaded = true;
-          },
-          onAdFailedToLoad: (ad, error) {
-            _resetNativeAdNew();
-            log('$NativeAd failed to load: $error');
-          },
-        ),
-        request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
-      ..load();
-  }
-
-  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
-  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
-  static void _resetNativeAdNew() {
-    _native1Ad?.dispose();
-    _native1Ad = null;
-    _native1AdLoaded = false;
-  }
-
-  /// Tải và trả về một quảng cáo tự nhiên.
+  /// Tải và trả về một quảng cáo tự nhiên New 1.
   /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
   /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
   static NativeAd? loadNativeAdNew({required NativeAdController adController}) {
-    log('Native Ad Id 2: ${Config.native1Ad}');
+    log('Native Ad New 1 Id: ${Config.native1Ad}');
 
     if (Config.hideAds) return null;
 
-    if (_native1AdLoaded && _native1Ad != null) {
-      adController.adLoaded.value = true;
-      return _native1Ad;
-    }
-
+    // Luôn tạo ad mới thay vì chia sẻ static ad
     return NativeAd(
         adUnitId: Config.native1Ad,
         listener: NativeAdListener(
           onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
+            log('Native Ad New 1 loaded.');
             adController.adLoaded.value = true;
-            _resetNativeAdNew();
-            precacheNativeAdNew();
           },
           onAdFailedToLoad: (ad, error) {
-            _resetNativeAdNew();
-            log('$NativeAd failed to load: $error');
+            log('Native Ad New 1 failed to load: $error');
+            adController.adLoaded.value = false;
           },
         ),
         request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
+        factoryId: 'customNativeAd')
       ..load();
   }
 
   //*****************Native Ad New 2******************
 
-  /// Tải trước quảng cáo tự nhiên để sử dụng sau này.
-  /// Quảng cáo sẽ được định dạng theo kiểu mẫu nhỏ (small template).
-  static void precacheNativeAdNew2() {
-    log('Precache Native Ad 2 - Id: ${Config.native2Ad}');
-
-    if (Config.hideAds) return;
-
-    _native2Ad = NativeAd(
-        adUnitId: Config.native2Ad,
-        listener: NativeAdListener(
-          onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
-            _native2AdLoaded = true;
-          },
-          onAdFailedToLoad: (ad, error) {
-            _resetNativeAdNew2();
-            log('$NativeAd failed to load: $error');
-          },
-        ),
-        request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
-      ..load();
-  }
-
-  /// Đặt lại trạng thái quảng cáo tự nhiên về ban đầu.
-  /// Xóa quảng cáo hiện tại và đánh dấu là chưa tải.
-  static void _resetNativeAdNew2() {
-    _native2Ad?.dispose();
-    _native2Ad = null;
-    _native2AdLoaded = false;
-  }
-
-  /// Tải và trả về một quảng cáo tự nhiên.
+  /// Tải và trả về một quảng cáo tự nhiên New 2.
   /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
   /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
   static NativeAd? loadNativeAdNew2(
       {required NativeAdController adController}) {
-    log('Native Ad Id: ${Config.native1Ad}');
+    log('Native Ad New 2 Id: ${Config.native2Ad}');
 
     if (Config.hideAds) return null;
 
-    if (_native2AdLoaded && _native2Ad != null) {
-      adController.adLoaded.value = true;
-      return _native2Ad;
-    }
-
+    // Luôn tạo ad mới thay vì chia sẻ static ad
     return NativeAd(
-        adUnitId: Config.native1Ad,
+        adUnitId: Config.native2Ad,
         listener: NativeAdListener(
           onAdLoaded: (ad) {
-            log('$NativeAd loaded.');
+            log('Native Ad New 2 loaded.');
             adController.adLoaded.value = true;
-            _resetNativeAdNew2();
-            precacheNativeAdNew2();
           },
           onAdFailedToLoad: (ad, error) {
-            _resetNativeAdNew2();
-            log('$NativeAd failed to load: $error');
+            log('Native Ad New 2 failed to load: $error');
+            adController.adLoaded.value = false;
           },
         ),
         request: const AdRequest(),
-        nativeTemplateStyle: NativeTemplateStyle(
-            mainBackgroundColor: const Color(0xFFFFFFFF),
-            primaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.black,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            secondaryTextStyle: NativeTemplateTextStyle(
-              textColor: Colors.grey,
-              style: NativeTemplateFontStyle.normal,
-            ),
-            callToActionTextStyle: NativeTemplateTextStyle(
-              textColor: const Color(0xFFFFFFFF),
-              backgroundColor: const Color(0xFFF15E24),
-              style: NativeTemplateFontStyle.bold,
-              size: 15,
-            ),
-            templateType: TemplateType.small))
+        factoryId: 'customNativeAd')
       ..load();
   }
 }

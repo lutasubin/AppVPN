@@ -1,10 +1,15 @@
+// ignore: file_names
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/services/vpn_engine.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 
 class AppLifecycleHandler extends WidgetsBindingObserver {
   bool _wasInBackground = false;
   DateTime? _lastAdTime;
+  final _controller = Get.find<LocalController>();
+
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -40,7 +45,7 @@ class AppLifecycleHandler extends WidgetsBindingObserver {
   void disconnectVPN() async {
     try {
       await VpnEngine.stopVpn(); // Hoặc phương thức tương ứng trong NizVPN
-      await VpnEngine.stopWireGuard();
+      await _controller.disconnectVpn();
       print('VPN disconnected automatically.');
     } catch (e) {
       print('Error disconnecting VPN: $e');

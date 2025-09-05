@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/models/local_vpn.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class ConnectedScreen extends StatelessWidget {
   final LocalVpnServer server;
@@ -31,7 +32,7 @@ class ConnectedScreen extends StatelessWidget {
         ),
         title: Text(
           'connection_report'.tr,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFFFFFFFF),
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -40,6 +41,7 @@ class ConnectedScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF02091A),
         elevation: 0,
       ),
+      bottomNavigationBar:  const NativeAdWithLoadingWidget(adType: 'medium'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -65,7 +67,7 @@ class ConnectedScreen extends StatelessWidget {
                         height: 30,
                         decoration: BoxDecoration(
                           color: const Color(0xFF02091A),
-                          image: !_controller.currentCountryShort.isEmpty
+                          image: _controller.currentCountryShort.isNotEmpty
                               ? DecorationImage(
                                   image:
                                       AssetImage(_controller.currentFlagAsset),
@@ -94,8 +96,8 @@ class ConnectedScreen extends StatelessWidget {
                       const SizedBox(height: 10),
                       Text(
                         'CONNECTED'.tr,
-                        style: TextStyle(
-                            color: const Color(0xFF0CD09C),
+                        style: const TextStyle(
+                            color: Color(0xFF0CD09C),
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ),
@@ -118,7 +120,7 @@ class ConnectedScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Rate us'.tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFFFFFFFF),
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -126,8 +128,8 @@ class ConnectedScreen extends StatelessWidget {
                       ),
                       Text(
                         'rate_message'.tr,
-                        style:
-                            TextStyle(color: Color(0xFF767C8A), fontSize: 14),
+                        style: const TextStyle(
+                            color: Color(0xFF767C8A), fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                       Row(

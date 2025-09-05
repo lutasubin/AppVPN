@@ -66,7 +66,7 @@ class NetworkTestScreen extends StatelessWidget {
                   data: NetworkData(
                       title: 'IP Address',
                       subtitle: ipData.value.query,
-                      icon: Icon(CupertinoIcons.location_solid,
+                      icon: const Icon(CupertinoIcons.location_solid,
                           color: Colors.blue))),
 
               //isp
@@ -74,7 +74,7 @@ class NetworkTestScreen extends StatelessWidget {
                   data: NetworkData(
                       title: 'Internet Provider',
                       subtitle: ipData.value.isp,
-                      icon: Icon(Icons.business, color: Colors.orange))),
+                      icon: const Icon(Icons.business, color: Colors.orange))),
 
               //location
               NetworkCard(
@@ -83,14 +83,15 @@ class NetworkTestScreen extends StatelessWidget {
                       subtitle: ipData.value.country.isEmpty
                           ? 'Fetching ...'
                           : '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
-                      icon: Icon(CupertinoIcons.location, color: Colors.pink))),
+                      icon: const Icon(CupertinoIcons.location,
+                          color: Colors.pink))),
 
               //pin code
               NetworkCard(
                   data: NetworkData(
                       title: 'Pin-code',
                       subtitle: ipData.value.zip,
-                      icon: Icon(CupertinoIcons.location_solid,
+                      icon: const Icon(CupertinoIcons.location_solid,
                           color: Colors.cyan))),
 
               //timezone
@@ -98,7 +99,8 @@ class NetworkTestScreen extends StatelessWidget {
                   data: NetworkData(
                       title: 'Timezone',
                       subtitle: ipData.value.timezone,
-                      icon: Icon(CupertinoIcons.time, color: Colors.green))),
+                      icon: const Icon(CupertinoIcons.time,
+                          color: Colors.green))),
             ],
           )),
     );

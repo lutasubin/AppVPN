@@ -71,7 +71,7 @@ class VpnCardLocalPro extends StatelessWidget {
                       'Ultra-Fast',
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
-                        fontSize: 12,
+                        fontSize: 8,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

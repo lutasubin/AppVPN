@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:installed_apps/installed_apps.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class ApplicationVpnScreen extends StatefulWidget {
+  const ApplicationVpnScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ApplicationVpnScreenState createState() => _ApplicationVpnScreenState();
 }
 
@@ -17,7 +19,6 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
   Map<String, bool> appToggleStates = {};
   bool isLoading = true;
   static const String _vpnAppsKey = 'vpn_enabled_apps';
-  final _adController7 = NativeAdController();
 
   @override
   void initState() {
@@ -80,7 +81,6 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _adController7.ad = AdHelper.loadNativeAd2(adController: _adController7);
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
       appBar: AppBar(
@@ -89,7 +89,7 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
         elevation: 0,
         title: Text(
           'app'.tr,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -106,7 +106,7 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
             },
             child: Text(
               'save'.tr,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Color(0xFFF15E24),
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -115,16 +115,7 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: Obx(() {
-        if (_adController7.ad != null && _adController7.adLoaded.isTrue) {
-          return SafeArea(
-            child:
-                SizedBox(height: 120, child: AdWidget(ad: _adController7.ad!)),
-          );
-        } else {
-          return SizedBox.shrink();
-        }
-      }),
+      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(

@@ -42,6 +42,8 @@ import com.google.android.ump.ConsentInformation;
 import com.google.android.ump.ConsentRequestParameters;
 import com.google.android.ump.UserMessagingPlatform;
 
+// Google Mobile Ads
+import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin;
 
 import androidx.core.view.WindowCompat;
 
@@ -165,6 +167,19 @@ public class MainActivity extends FlutterActivity {
 
         // Đăng ký StunnelEngine plugin
         flutterEngine.getPlugins().add(new StunnelEngine());
+
+        // Đăng ký Custom Native Ad Factories
+        GoogleMobileAdsPlugin.registerNativeAdFactory(
+            flutterEngine,
+            "customNativeAd",
+            new CustomNativeAdFactory(this)
+        );
+
+        GoogleMobileAdsPlugin.registerNativeAdFactory(
+            flutterEngine,
+            "customNativeAdMedium",
+            new CustomNativeAdMediumFactory(this)
+        );
 
         vpnControlEvent = new EventChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), EVENT_CHANNEL_VPN_STAGE);
         vpnControlEvent.setStreamHandler(new EventChannel.StreamHandler() {

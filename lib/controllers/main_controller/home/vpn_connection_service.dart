@@ -481,8 +481,8 @@ class VpnConnectionService {
     }
 
     try {
-      final data = Base64Decoder().convert(vpn.OpenVPNConfigDataBase64);
-      final config = Utf8Decoder().convert(data);
+      final data = const Base64Decoder().convert(vpn.OpenVPNConfigDataBase64);
+      final config = const Utf8Decoder().convert(data);
       final vpnConfig = VpnConfig(
         country: vpn.CountryLong,
         username: '',

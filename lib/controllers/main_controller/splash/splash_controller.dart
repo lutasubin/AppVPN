@@ -47,10 +47,6 @@ class SplashController extends GetxController {
   void _precacheAds() {
     AdHelper.precacheOpenAd();
     AdHelper.precacheInterstitialAd();
-    AdHelper.precacheNativeAd();
-    AdHelper.precacheNativeAdNew();
-    AdHelper.precacheNativeAdNew2();
-    AdHelper.precacheBannerAd();
   }
 
   void _setupNetworkListener() {

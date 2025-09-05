@@ -53,8 +53,8 @@ class VpnCardApi extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
                 overflow: TextOverflow.ellipsis,
+                maxLines: 1, // ✅ Chỉ 1 dòng
               ),
-              
             ],
           ),
           trailing: Row(

@@ -24,7 +24,7 @@ class SpeedTestScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF02091A),
         title: Text(
           'test1'.tr, // "Speed Test"
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
@@ -113,7 +113,7 @@ class SpeedTestScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   'test2'.tr, // "Start Speed Test"
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
