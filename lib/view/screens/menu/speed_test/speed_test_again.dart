@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-
 import 'package:vpn_basic_project/apis/vpn_gate.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/speed/speed_test_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class SpeedTestAgain extends StatelessWidget {
   SpeedTestAgain({super.key});
 
-  final _adController5 = NativeAdController();
   final ipData = IPDetails.fromJson({}).obs; // ✅ Đặt bên ngoài build()
 
   @override
   Widget build(BuildContext context) {
-    _adController5.ad = AdHelper.loadNativeAd1(adController: _adController5);
 
     final SpeedTestController controller = Get.find();
 
@@ -44,21 +40,8 @@ class SpeedTestAgain extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
         ),
       ),
-      bottomNavigationBar: Obx(() {
-        final ad = _adController5.ad;
-        if (ad != null &&
-            _adController5.adLoaded.isTrue &&
-            !_adController5.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 350,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+            bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

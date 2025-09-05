@@ -8,7 +8,7 @@ import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
 import 'package:vpn_basic_project/view/screens/splash/onboard/Onboarding_Screen.dart';
 
 class LanguageScreen2 extends StatefulWidget {
-  LanguageScreen2({super.key});
+  const LanguageScreen2({super.key});
 
   @override
   State<LanguageScreen2> createState() => _LanguageScreen2State();
@@ -58,7 +58,7 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                       : Locale(selectedLanguage.value));
                   // Đánh dấu đã xem onboarding
                   Pref.hasSeenOnboarding = true;
-                  Get.offAll(() => OnboardingScreen());
+                  Get.offAll(() => const OnboardingScreen());
                 }
               },
             ),
@@ -66,22 +66,22 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
         ),
         backgroundColor: const Color(0xFF02091A),
         bottomNavigationBar: Obx(() {
-        final ad = _adController4.ad;
-        if (ad != null &&
-            _adController4.adLoaded.isTrue &&
-            !_adController4.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 120,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+          final ad = _adController4.ad;
+          if (ad != null &&
+              _adController4.adLoaded.isTrue &&
+              !_adController4.isDisposed) {
+            return SafeArea(
+              child: SizedBox(
+                height: 120,
+                child: AdWidget(ad: ad),
+              ),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
         body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: ListView.builder(
             itemCount: languages.length,
             itemBuilder: (context, index) {
@@ -103,7 +103,8 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     onTap: () {
                       selectedLanguage.value = language['code'];
                       Pref.selectedLanguage = language['code'];
@@ -125,9 +126,9 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                       children: [
                         Text(
                           language['name'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
-                            color: const Color(0xFFFFFFFF),
+                            color: Color(0xFFFFFFFF),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -141,7 +142,7 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                         border: Border.all(
                           color: isSelected
                               ? const Color(0xFFF15E24)
-                              : Color(0xFFFFFFFF),
+                              : const Color(0xFFFFFFFF),
                           width: 2,
                         ),
                         color: isSelected
@@ -153,7 +154,7 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
                               child: Container(
                                 width: 10,
                                 height: 10,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Color(0xFFFFFFFF),
                                 ),

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/speed/speed_test_controller.dart';
-import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/view/screens/menu/speed_test/speed_test_again.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class SpeedTestScreen extends StatelessWidget {
   SpeedTestScreen({super.key});
 
-  final _adController = NativeAdController();
 
   @override
   Widget build(BuildContext context) {
-    _adController.ad = AdHelper.loadNativeAd2(adController: _adController);
     final SpeedTestController controller = Get.find();
 
     return Scaffold(
@@ -35,21 +31,7 @@ class SpeedTestScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
         ),
       ),
-      bottomNavigationBar: Obx(() {
-        final ad = _adController.ad;
-        if (ad != null &&
-            _adController.adLoaded.isTrue &&
-            !_adController.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 120,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

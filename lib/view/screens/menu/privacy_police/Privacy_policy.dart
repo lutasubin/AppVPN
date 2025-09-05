@@ -36,13 +36,13 @@ class PrivacyPolicy extends StatelessWidget {
                 CrossAxisAlignment.start, // Align text to the left
             children: [
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
                   children: [
-                    const TextSpan(text: 'This Privacy Policy explains how '),
+                    TextSpan(text: 'This Privacy Policy explains how '),
                     TextSpan(
                       text: 'AI VPN Fast & Safe',
                       style: TextStyle(
@@ -50,7 +50,7 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text:
                             ' collects, uses, and protects your information, as well as your privacy rights when using the app.'),
                   ],
@@ -58,13 +58,13 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
                   children: [
-                    const TextSpan(text: 'By using '),
+                    TextSpan(text: 'By using '),
                     TextSpan(
                       text: 'AI VPN Fast & Safe',
                       style: TextStyle(
@@ -72,14 +72,14 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text:
                             ', you agree to the terms outlined in this Privacy Policy and our Terms of Use. This policy may be updated from time to time, and if significant changes occur, we will update the "last updated" date. Please check back regularly to stay informed about our latest policies.'),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'Information We Collect',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -89,13 +89,13 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
                   children: [
-                    const TextSpan(
+                    TextSpan(
                         text:
                             'We are committed to protecting user privacy and '),
                     TextSpan(
@@ -105,14 +105,14 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text:
                             ' collect personally identifiable information or your browsing activity while using the VPN service. However, we may collect some non-personally identifiable data to improve our service, including:'),
                   ],
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 '- Device type, operating system, and version.\n'
                 '- Anonymous device identifiers.\n'
                 '- Total amount of data transmitted through the VPN (without logging content).\n'
@@ -124,7 +124,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'Information We DO NOT Collect:',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -133,7 +133,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 '- Your real IP address.\n'
                 '- Browsing history, accessed content, or search queries.\n'
                 '- Personal data such as name, email address, or phone number.\n'
@@ -144,7 +144,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'How We Collect Information',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -154,13 +154,13 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
                   children: [
-                    const TextSpan(
+                    TextSpan(
                         text: 'Information may be collected in three ways:\n'),
                     TextSpan(
                       text: '1:Information You Provide',
@@ -169,7 +169,7 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text:
                             ': When you contact support or provide feedback about the app.\n'),
                     TextSpan(
@@ -179,7 +179,7 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text:
                             ': Technical data about your device and VPN performance.\n'),
                     TextSpan(
@@ -189,13 +189,13 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text: ': Analytics providers or payment platforms.'),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'Sharing of Information',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -205,13 +205,13 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
                   children: [
-                    const TextSpan(text: 'We '),
+                    TextSpan(text: 'We '),
                     TextSpan(
                       text: 'DO NOT',
                       style: TextStyle(
@@ -219,7 +219,7 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text:
                             ' sell, trade, or share your personal data with any third parties for commercial purposes. However, we may share non-personally identifiable data with:\n'
                             '- Service providers for app performance analytics.\n'
@@ -229,7 +229,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'Your Privacy Rights',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -238,7 +238,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 'You have the right to:\n'
                 '- Request access, modification, or deletion of your personal data (if applicable).\n'
                 '- Opt out of non-personal data collection.\n'
@@ -250,7 +250,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'Data Security',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -259,7 +259,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 'We implement technical and organizational security measures to protect your data from unauthorized access, loss, or misuse. VPN-transmitted data is encrypted using high-security protocols.',
                 style: TextStyle(
                   color: Colors.white70,
@@ -267,7 +267,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'Children’s Privacy',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -276,7 +276,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 'This app is not intended for children under the age of 16. If you are under 16, please do not use our services.',
                 style: TextStyle(
                   color: Colors.white70,
@@ -284,7 +284,7 @@ class PrivacyPolicy extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'Compliance with GDPR and International Laws',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -294,13 +294,13 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
                   children: [
-                    const TextSpan(text: 'We comply with the '),
+                    TextSpan(text: 'We comply with the '),
                     TextSpan(
                       text:
                           'General Data Protection Regulation (GDPR) of the EU',
@@ -309,14 +309,14 @@ class PrivacyPolicy extends StatelessWidget {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                         text:
                             ', U.S. laws, and other international privacy regulations.'),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
-              Text(
+              const Text(
                 'Contact Us',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
@@ -326,13 +326,13 @@ class PrivacyPolicy extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
                   ),
                   children: [
-                    const TextSpan(
+                    TextSpan(
                         text:
                             'If you have any questions regarding privacy, please contact us via email: '),
                     TextSpan(

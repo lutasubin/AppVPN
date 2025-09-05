@@ -16,7 +16,7 @@ class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
 
   final _adController2 = NativeAdController();
-  final _adController3 = NativeAdController();
+  
 
   final controller = Get.find<LocalController>();
   final locationController = Get.find<LocationController>();
@@ -25,7 +25,6 @@ class LocationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Nạp quảng cáo native
     _adController2.ad = AdHelper.loadNativeAdNew2(adController: _adController2);
-    _adController3.ad = AdHelper.loadNativeAd(adController: _adController3);
 
     // Sử dụng Obx để theo dõi thay đổi trạng thái
     return Obx(
@@ -126,21 +125,7 @@ class LocationScreen extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12),
               child: VpnCardLocalPro(server: server),
             )),
-        Obx(() {
-          final ad = _adController3.ad;
-          if (ad != null &&
-              _adController3.adLoaded.isTrue &&
-              !_adController3.isDisposed) {
-            return SafeArea(
-              child: SizedBox(
-                height: 120,
-                child: AdWidget(ad: ad),
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }),
+             const NativeAdWithLoadingWidget(adType: 'small'),
         ...controller.availableServers.map((server) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: VpnCardLocal(

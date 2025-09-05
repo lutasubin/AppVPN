@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/banner%20_ad_controller.dart';
-import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
@@ -15,19 +12,14 @@ import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 import 'rate/rate_screen.dart';
 
 class MenuScreen extends StatefulWidget {
-  MenuScreen({super.key});
+  const MenuScreen({super.key});
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final _baController = BannerAdController();
-  @override
-  void initState() {
-    super.initState();
-    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +52,7 @@ class _MenuScreenState extends State<MenuScreen> {
         ),
       ),
 
-      // bottomNavigationBar: Obx(() {
-      //   return _baController.ba != null && _baController.baLoaded.isTrue
-      //       ? SafeArea(
-      //           child: SizedBox(
-      //           height: 120,
-      //           child: AdWidget(ad: _baController.ba!),
-      //         ))
-      //       : SizedBox.shrink();
-      // }),
-     bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
+      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
@@ -125,9 +108,9 @@ class _MenuScreenState extends State<MenuScreen> {
               title: 'Share with friend'.tr,
               onTap: () async {
                 AnalyticsHelper.logSettingChange('share_app', 'clicked');
-                final String appLink =
+                const String appLink =
                     'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn';
-                final String message = 'Check out Our app: $appLink';
+                const String message = 'Check out Our app: $appLink';
                 await Share.share(
                   message,
                   subject: 'Share App',
@@ -143,7 +126,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 onTap: () {
                   AnalyticsHelper.logSettingChange(
                       'open_privacy_policy', 'clicked');
-                  Get.to(() => PrivacyPolicy());
+                  Get.to(() => const PrivacyPolicy());
                 }),
           ],
         ),

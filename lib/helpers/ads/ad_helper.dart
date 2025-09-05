@@ -226,11 +226,13 @@ class AdHelper {
   }
 
   //*****************Banner Ad******************
-  /// Tải trước Banner Ad để sẵn sàng hiển thị.
+  /// Tải trước Banner Ad để sẵn sàng hiển thị
   static void precacheBannerAd() {
-    log('Precache Banner Ad - Id: ${Config.bannerAd}');
+    log('[BannerAd] Precache Banner Ad - Id: ${Config.bannerAd}');
 
     if (Config.hideAds) return;
+
+    disposeBannerAd(); // clear ad cũ nếu có
 
     _bannerAd = BannerAd(
       adUnitId: Config.bannerAd,
@@ -238,25 +240,29 @@ class AdHelper {
       request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          log('$BannerAd loaded.');
+          log('[BannerAd] ✅ Loaded.');
           _bannerAdLoaded = true;
         },
         onAdFailedToLoad: (ad, error) {
-          disposeBannerAd();
-          log('$BannerAd failed to load: $error');
+          log('[BannerAd] ❌ Failed to load: $error');
+          ad.dispose();
+          _bannerAd = null;
+          _bannerAdLoaded = false;
         },
       ),
     )..load();
   }
 
+  /// Giải phóng Banner Ad
   static void disposeBannerAd() {
     _bannerAd?.dispose();
     _bannerAd = null;
     _bannerAdLoaded = false;
   }
 
+  /// Lấy BannerAd đã load hoặc tạo mới nếu chưa có
   static BannerAd? loadBannerAd({required BannerAdController baController}) {
-    log('Banner Ad Id : ${Config.bannerAd}');
+    log('[BannerAd] Requesting Banner Ad - Id: ${Config.bannerAd}');
 
     if (Config.hideAds) return null;
 
@@ -264,24 +270,31 @@ class AdHelper {
       baController.baLoaded.value = true;
       return _bannerAd;
     }
-    return BannerAd(
-        size: AdSize.banner,
-        adUnitId: Config.bannerAd,
-        listener: BannerAdListener(
-          onAdLoaded: (ad) {
-            log('$BannerAd loaded.');
-            baController.baLoaded.value = true;
-            disposeBannerAd();
-            precacheBannerAd();
-          },
-          onAdFailedToLoad: (ad, error) {
-            disposeBannerAd();
-            log('$BannerAd failed to load: $error');
-          },
-        ),
-        request: const AdRequest())
-      ..load();
+
+    final bannerAd = BannerAd(
+      adUnitId: Config.bannerAd,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          log('[BannerAd] ✅ Loaded new ad.');
+          baController.baLoaded.value = true;
+          // Lưu lại ad cho lần sau
+          _bannerAd = ad as BannerAd;
+          _bannerAdLoaded = true;
+        },
+        onAdFailedToLoad: (ad, error) {
+          log('[BannerAd] ❌ Failed to load new ad: $error');
+          ad.dispose();
+          _bannerAd = null;
+          _bannerAdLoaded = false;
+        },
+      ),
+    )..load();
+
+    return bannerAd;
   }
+
   //*****************App Open Ad******************
 
   static AppOpenAd? _appOpenAd;

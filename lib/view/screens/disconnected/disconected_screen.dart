@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class DisconnectedScreen extends StatelessWidget {
   final String country;
@@ -14,9 +13,8 @@ class DisconnectedScreen extends StatelessWidget {
   final String uploadSpeed;
   final String downloadSpeed;
   final String flagUrl;
-  final _adController5 = NativeAdController();
 
-  DisconnectedScreen({
+  const DisconnectedScreen({
     super.key,
     required this.country,
     required this.connectionTime,
@@ -27,7 +25,6 @@ class DisconnectedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _adController5.ad = AdHelper.loadNativeAd1(adController: _adController5);
     final LocalController controller = Get.find<LocalController>();
 
     return Scaffold(
@@ -56,21 +53,8 @@ class DisconnectedScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF02091A),
         elevation: 0,
       ),
-      bottomNavigationBar: Obx(() {
-        final ad = _adController5.ad;
-        if (ad != null &&
-            _adController5.adLoaded.isTrue &&
-            !_adController5.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 350,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),

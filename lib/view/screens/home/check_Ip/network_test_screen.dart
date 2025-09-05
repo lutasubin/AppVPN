@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
-import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 import '../../../../main.dart';
 import '../../../../models/ip_details.dart';
 import '../../../../models/network_data.dart';
@@ -12,13 +9,11 @@ import '../../../widgets/NetworkWidgets/network_card.dart';
 import '../../../../apis/vpn_gate.dart';
 
 class NetworkTestScreen extends StatelessWidget {
-  final _adController4 = NativeAdController();
   final ipData = IPDetails.fromJson({}).obs;
 
   NetworkTestScreen({super.key}) {
     // ✅ Gọi API chỉ 1 lần khi khởi tạo
     Apis.getIPDetails(ipData: ipData);
-    _adController4.ad = AdHelper.loadNativeAd1(adController: _adController4);
   }
 
   @override
@@ -38,21 +33,7 @@ class NetworkTestScreen extends StatelessWidget {
               const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       ),
-      bottomNavigationBar: Obx(() {
-        final ad = _adController4.ad;
-        if (ad != null &&
-            _adController4.adLoaded.isTrue &&
-            !_adController4.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 350,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
       body: Obx(() => ListView(
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.only(

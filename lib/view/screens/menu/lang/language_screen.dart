@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart'
+    show NativeAdWithLoadingWidget;
 
 class LanguageScreen extends StatelessWidget {
-  final _adController1 = NativeAdController();
-
-  LanguageScreen({super.key});
+  const LanguageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    _adController1.ad = AdHelper.loadNativeAd1(adController: _adController1);
     final RxString selectedLanguage = Pref.selectedLanguage.obs;
 
     return SafeArea(
@@ -51,23 +48,9 @@ class LanguageScreen extends StatelessWidget {
           ],
         ),
         backgroundColor: const Color(0xFF02091A),
-       bottomNavigationBar: Obx(() {
-        final ad = _adController1.ad;
-        if (ad != null &&
-            _adController1.adLoaded.isTrue &&
-            !_adController1.isDisposed) {
-          return SafeArea(
-            child: SizedBox(
-              height: 350,
-              child: AdWidget(ad: ad),
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+        bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
         body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: ListView.builder(
             itemCount: languages.length,
             itemBuilder: (context, index) {
@@ -92,7 +75,7 @@ class LanguageScreen extends StatelessWidget {
                   ),
                   child: ListTile(
                     contentPadding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     onTap: () {
                       selectedLanguage.value = language['code'];
                       Pref.selectedLanguage = language['code'];
@@ -120,9 +103,9 @@ class LanguageScreen extends StatelessWidget {
                       children: [
                         Text(
                           language['name'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
-                            color: const Color(0xFFFFFFFF),
+                            color: Color(0xFFFFFFFF),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -136,7 +119,7 @@ class LanguageScreen extends StatelessWidget {
                         border: Border.all(
                           color: isSelected
                               ? const Color(0xFFF15E24)
-                              : Color(0xFFFFFFFF),
+                              : const Color(0xFFFFFFFF),
                           width: 2,
                         ),
                         color: isSelected
@@ -148,7 +131,7 @@ class LanguageScreen extends StatelessWidget {
                               child: Container(
                                 width: 10,
                                 height: 10,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Color(0xFFFFFFFF),
                                 ),

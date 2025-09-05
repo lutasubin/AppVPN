@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
-import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/view/screens/home/home_screen.dart';
 import 'package:vpn_basic_project/models/Onboarding.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -15,7 +13,6 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final _adController1 = Get.find<NativeAdController>();
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -37,16 +34,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _adController1.ad = AdHelper.loadNativeAd1(adController: _adController1);
-  }
+ 
 
   @override
   void dispose() {
     _pageController.dispose();
-    _adController1.dispose();
     super.dispose();
   }
 
@@ -161,21 +153,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: Obx(() {
-          final ad = _adController1.ad;
-          if (ad != null &&
-              _adController1.adLoaded.isTrue &&
-              !_adController1.isDisposed) {
-            return SafeArea(
-              child: SizedBox(
-                height: 350,
-                child: AdWidget(ad: ad),
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }),
+         bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
+
       ),
     );
   }
