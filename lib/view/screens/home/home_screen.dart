@@ -12,7 +12,7 @@ import 'package:vpn_basic_project/view/screens/menu/menu_screen.dart';
 import 'package:vpn_basic_project/view/screens/home/check_Ip/network_test_screen.dart';
 import 'package:vpn_basic_project/view/screens/home/using_app/using_app.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
-    
+
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/vpn_button/VpnControlButon.dart';
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/button_speed_map/button_speed_map.dart';
 
@@ -28,20 +28,15 @@ class HomeScreen extends StatelessWidget {
   /// Bộ điều khiển chính cho màn hình Home - SỬ DỤNG Get.find thay vì Get.put
   final _controller = Get.find<LocalController>();
 
-  final BannerAdController _baController = Get.put(BannerAdController());
+  final _baController = BannerAdController();
 
   @override
   Widget build(BuildContext context) {
     // Lấy thông tin IP ban đầu
     Apis.getIPDetails(ipData: ipData);
 
-    // Load Banner Ad (nếu chưa có)
-    if (_baController.ba == null) {
-      final ad = AdHelper.loadBannerAd(baController: _baController);
-      if (ad != null) {
-        _baController.setBannerAd(ad);
-      }
-    }
+    _baController.ba = AdHelper.loadBannerAd(baController: _baController);
+
     // Tải trước quảng cáo toàn màn hình
     AdHelper.precacheInterstitialAd();
 
@@ -86,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Column(
@@ -157,11 +152,30 @@ class HomeScreen extends StatelessWidget {
         return _baController.baLoaded.isTrue && _baController.ba != null
             ? SafeArea(
                 child: SizedBox(
-                  height: _baController.ba!.size.height.toDouble(),
+                 height: 120,
                   child: AdWidget(ad: _baController.ba!),
                 ),
               )
-            : const SizedBox.shrink();
+            : Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                height: 60,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF172032),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    // ignore: deprecated_member_use
+                    color:
+                        // ignore: deprecated_member_use
+                        const Color(0xFFFFFFFF).withOpacity(0.05), // viền nhẹ
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Ads loading...',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ),
+              );
       }),
     ));
   }

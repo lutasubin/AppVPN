@@ -1,31 +1,21 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
-    id 'com.google.gms.google-services' // for firebase
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader("UTF-8") { reader ->
-        localProperties.load(reader)
-    }
+    localPropertiesFile.withReader("UTF-8") { reader -> localProperties.load(reader) }
 }
 
-def flutterVersionCode = localProperties.getProperty("flutter.versionCode")
-if (flutterVersionCode == null) {
-    flutterVersionCode = "1"
-}
-
-def flutterVersionName = localProperties.getProperty("flutter.versionName")
-if (flutterVersionName == null) {
-    flutterVersionName = "1.0"
-}
+def flutterVersionCode = localProperties.getProperty("flutter.versionCode") ?: "1"
+def flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "1.0"
 
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+def keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
@@ -34,20 +24,26 @@ android {
     namespace = "com.Lutasubin.freeVpn"
     compileSdk = 35
 
-    // ⚠️ Chỉ định NDK mới hỗ trợ 16KB page size
+    // ✅ fix cứng NDK r28 (hỗ trợ 16KB page size)
     ndkVersion "28.0.12433566"
 
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
     }
 
-    packagingOptions {
-        // ❌ Bỏ useLegacyPackaging để Gradle tự quản lý đúng chuẩn
-        pickFirst '**/libjbcrypto.so'
-        pickFirst '**/libopenvpn.so'
-        pickFirst '**/libopvpnutil.so'
-        pickFirst '**/libovpnexec.so'
-        pickFirst '**/libstunnel.so'
+    packaging {
+        jniLibs {
+            useLegacyPackaging false
+        }
+        resources {
+            pickFirsts += [
+                '**/libjbcrypto.so',
+                '**/libopenvpn.so',
+                '**/libopvpnutil.so',
+                '**/libovpnexec.so',
+                '**/libstunnel.so'
+            ]
+        }
     }
 
     compileOptions {
@@ -64,23 +60,24 @@ android {
         applicationId = "com.Lutasubin.freeVpn"
         minSdk = 23
         targetSdk = 35
-        versionCode 34
-        versionName "2.8.0"
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
 
         multiDexEnabled true
-
     }
 
     signingConfigs {
         release {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
+            if (keystorePropertiesFile.exists()) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
         }
     }
 
@@ -92,7 +89,10 @@ android {
             ndk {
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
             }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release // ✅ tránh lỗi khi debug trên máy thật
         }
     }
 
@@ -109,19 +109,25 @@ flutter {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // VPN modules
     implementation project(path: ':vpnLib')
     implementation project(path: ':vpnLib:tunnel')
 
+    // AndroidX
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation('androidx.work:work-runtime') {
+    implementation("androidx.work:work-runtime") {
         version {
-          strictly '2.7.0'
+            strictly("2.9.0")
         }
     }
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
+    // Java 8+ APIs support
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+
+    // Google SDKs
     implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
     implementation 'com.google.android.gms:play-services-ads:24.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

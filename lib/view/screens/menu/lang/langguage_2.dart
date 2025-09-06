@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
-import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
 import 'package:vpn_basic_project/view/screens/splash/onboard/Onboarding_Screen.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class LanguageScreen2 extends StatefulWidget {
   const LanguageScreen2({super.key});
@@ -15,14 +13,7 @@ class LanguageScreen2 extends StatefulWidget {
 }
 
 class _LanguageScreen2State extends State<LanguageScreen2> {
-  final _adController4 = NativeAdController();
   final RxString selectedLanguage = Pref.selectedLanguage.obs;
-
-  @override
-  void initState() {
-    super.initState();
-    _adController4.ad = AdHelper.loadNativeAd2(adController: _adController4);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +56,7 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
           ],
         ),
         backgroundColor: const Color(0xFF02091A),
-        bottomNavigationBar: Obx(() {
-          final ad = _adController4.ad;
-          if (ad != null &&
-              _adController4.adLoaded.isTrue &&
-              !_adController4.isDisposed) {
-            return SafeArea(
-              child: SizedBox(
-                height: 120,
-                child: AdWidget(ad: ad),
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }),
+        bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: ListView.builder(

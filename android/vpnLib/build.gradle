@@ -1,16 +1,21 @@
 apply plugin: 'com.android.library'
+
 android {
     namespace "de.blinkt.openvpn"
-    compileSdkVersion 34
+    compileSdkVersion 35   // đồng bộ với app
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 34
+        minSdkVersion 23   // đồng bộ với app
+        targetSdkVersion 35
+        // Nếu có .so thì thêm ABI filter cho rõ ràng
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
     }
 
-     buildFeatures {
-         buildConfig true
-     }
+    buildFeatures {
+        buildConfig true
+    }
 
     buildTypes {
         release {
@@ -18,15 +23,18 @@ android {
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        // update lên Java 17 để đồng bộ với app
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+    // ❌ Không có kotlinOptions ở đây vì module này không dùng Kotlin
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation project(':vpnLib:tunnel') // Thêm dòng này
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation project(':vpnLib:tunnel')
 }

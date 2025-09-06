@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/location/location_controller.dart';
-import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_highspeed.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_pro.dart';
@@ -15,16 +12,12 @@ import 'package:vpn_basic_project/view/widgets/LocationWidgets/wiregruard_vpn_se
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
 
-  final _adController2 = NativeAdController();
-  
-
   final controller = Get.find<LocalController>();
   final locationController = Get.find<LocationController>();
 
   @override
   Widget build(BuildContext context) {
-    // Nạp quảng cáo native
-    _adController2.ad = AdHelper.loadNativeAdNew2(adController: _adController2);
+    
 
     // Sử dụng Obx để theo dõi thay đổi trạng thái
     return Obx(
@@ -132,21 +125,7 @@ class LocationScreen extends StatelessWidget {
                 server: server,
               ),
             )),
-        Obx(() {
-          final ad = _adController2.ad;
-          if (ad != null &&
-              _adController2.adLoaded.isTrue &&
-              !_adController2.isDisposed) {
-            return SafeArea(
-              child: SizedBox(
-                height: 120,
-                child: AdWidget(ad: ad),
-              ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        }),
+              const NativeAdWithLoadingWidget(adType: 'new2'),
         ...controller.availableApiServers.map((server) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: VpnCardApi(
