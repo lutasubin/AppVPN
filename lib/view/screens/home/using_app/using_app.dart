@@ -10,7 +10,6 @@ class ApplicationVpnScreen extends StatefulWidget {
   const ApplicationVpnScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ApplicationVpnScreenState createState() => _ApplicationVpnScreenState();
 }
 
@@ -26,7 +25,7 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
     _loadInstalledApps();
   }
 
-  // Lưu trạng thái vào SharedPreferences
+  /// Lưu trạng thái toggle vào SharedPreferences
   Future<void> _saveToggleStates() async {
     final prefs = await SharedPreferences.getInstance();
     final enabledApps = appToggleStates.entries
@@ -36,47 +35,60 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
     await prefs.setStringList(_vpnAppsKey, enabledApps);
   }
 
-  // Tải trạng thái từ SharedPreferences
+  /// Load trạng thái toggle từ SharedPreferences
   Future<void> _loadToggleStates() async {
     final prefs = await SharedPreferences.getInstance();
     final enabledApps = prefs.getStringList(_vpnAppsKey) ?? [];
 
-    // Đặt tất cả về false trước
     for (var app in installedApps) {
       appToggleStates[app.packageName] = false;
     }
 
-    // Sau đó set các app đã enable về true
     for (var packageName in enabledApps) {
       if (appToggleStates.containsKey(packageName)) {
         appToggleStates[packageName] = true;
       }
     }
+
+    if (!mounted) return;
+    setState(() {}); // cập nhật UI
   }
 
+  /// Load danh sách app đã cài đặt
   Future<void> _loadInstalledApps() async {
     try {
-      // Lấy danh sách ứng dụng đã cài đặt
       List<AppInfo> apps = await InstalledApps.getInstalledApps(
-        true, // excludeSystemApps - Loại bỏ ứng dụng hệ thống
-        true, // withIcon - Lấy icon của ứng dụng
-        '', // packageNamePrefix - Lọc theo prefix (để trống để lấy tất cả)
+        true, // excludeSystemApps
+        true, // withIcon
+        '',
       );
 
+      if (!mounted) return;
       setState(() {
         installedApps = apps;
         isLoading = false;
       });
 
-      // Tải trạng thái đã lưu
-      await _loadToggleStates();
-      setState(() {}); // Cập nhật UI sau khi load trạng thái
+      await _loadToggleStates(); // load toggle sau khi load apps
     } catch (e) {
       print('Error loading apps: $e');
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });
     }
+  }
+
+  /// Lưu cài đặt VPN khi nhấn nút SAVE
+  void _saveVpnSettings() {
+    _saveToggleStates();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('vpn_settings_saved'.tr),
+        backgroundColor: const Color(0xFFF15E24),
+      ),
+    );
   }
 
   @override
@@ -98,9 +110,9 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              AdHelper.showInterstitialAd(onComplete: () async {
+              AdHelper.showInterstitialAd(onComplete: () {
+                if (!mounted) return;
                 Get.back();
-                // Lưu cài đặt VPN cho các ứng dụng
                 _saveVpnSettings();
               });
             },
@@ -125,7 +137,6 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
           : Column(
               children: [
                 const SizedBox(height: 16),
-                // Danh sách ứng dụng
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -151,7 +162,6 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
         color: const Color(0xFF172032),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          // ignore: deprecated_member_use
           color: const Color(0xFFFFFFFF).withOpacity(0.1),
         ),
       ),
@@ -173,31 +183,11 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
                       height: 40,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF02091A),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.android,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        );
+                        return _buildDefaultIcon();
                       },
                     ),
                   )
-                : Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF02091A),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.android,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
+                : _buildDefaultIcon(),
           ),
           const SizedBox(width: 12),
           // Tên ứng dụng
@@ -230,16 +220,15 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
           Switch(
             value: isToggled,
             onChanged: (bool value) {
+              if (!mounted) return;
               setState(() {
                 appToggleStates[app.packageName] = value;
               });
-              // Tự động lưu trạng thái khi thay đổi
               _saveToggleStates();
             },
             activeColor: const Color(0xFFF15E24),
             activeTrackColor: Colors.white,
             inactiveThumbColor: Colors.grey,
-            // ignore: deprecated_member_use
             inactiveTrackColor: Colors.grey.withOpacity(0.3),
           ),
         ],
@@ -247,10 +236,17 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
     );
   }
 
-  void _saveVpnSettings() {
-    // Tự động lưu trạng thái khi bấm SAVE
-    _saveToggleStates();
-
-    // Hiển thị thông báo
+  Widget _buildDefaultIcon() {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF02091A),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Icon(
+        Icons.android,
+        color: Colors.white,
+        size: 24,
+      ),
+    );
   }
 }

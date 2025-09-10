@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 
+def buildNativeFromSource = (project.findProperty("buildNativeFromSource") ?: "false").toBoolean()
+
 android {
     namespace "de.blinkt.openvpn"
     compileSdkVersion 35   // đồng bộ với app
@@ -30,6 +32,27 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     // ❌ Không có kotlinOptions ở đây vì module này không dùng Kotlin
+
+    if (buildNativeFromSource) {
+        // Bật build native bằng CMake khi được yêu cầu
+        externalNativeBuild {
+            cmake {
+                path file('src/main/cpp/CMakeLists.txt')
+            }
+        }
+
+        defaultConfig {
+            externalNativeBuild {
+                cmake {
+                    // Thêm flags chung nếu cần
+                    // cppFlags "-fPIC"
+                }
+            }
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            }
+        }
+    }
 }
 
 dependencies {
@@ -38,3 +61,29 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation project(':vpnLib:tunnel')
 }
+
+// --- Helper tasks to copy prebuilt natives into jniLibs (from scripts output) ---
+def nativesOutDir = rootProject.file("native-out")
+def jniLibsDir = file("src/main/jniLibs")
+
+tasks.register("copyNativeOutputs") {
+    group = "native"
+    description = "Copy built native .so files into vpnLib jniLibs"
+    doLast {
+        ["arm64-v8a","armeabi-v7a","x86","x86_64"].each { abi ->
+            def fromDir = new File(nativesOutDir, abi)
+            def toDir = new File(jniLibsDir, abi)
+            if (fromDir.exists()) {
+                toDir.mkdirs()
+                copy {
+                    from fromDir
+                    into toDir
+                    include "*.so"
+                }
+            } else {
+                logger.lifecycle("No native outputs for ABI ${abi} at ${fromDir}")
+            }
+        }
+    }
+}
+

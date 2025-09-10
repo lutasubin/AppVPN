@@ -11,6 +11,14 @@ final List<LocalVpnServer> highVpn = [
     protocol: 'openvpn',
   ),
   LocalVpnServer(
+        countryName: 'Canada',
+        countryCode: 'ca',
+        ip: '68.183.203.154',
+        ping: '',
+        configFileName: 'vpn-canada.ovpn', 
+        protocol: 'openvpn',
+      ),
+  LocalVpnServer(
     countryName: 'United Kingdom',
     countryCode: 'gb',
     ip: '81.0.220.147',

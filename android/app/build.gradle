@@ -33,11 +33,11 @@ android {
 
     packaging {
         jniLibs {
-            useLegacyPackaging false
+            // Force extraction for runtime execution of .so (OpenVPN/Stunnel)
+            useLegacyPackaging true
         }
         resources {
             pickFirsts += [
-                '**/libjbcrypto.so',
                 '**/libopenvpn.so',
                 '**/libopvpnutil.so',
                 '**/libovpnexec.so',
@@ -60,8 +60,8 @@ android {
         applicationId = "com.Lutasubin.freeVpn"
         minSdk = 23
         targetSdk = 35
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 41
+        versionName '2.8.2'
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'

@@ -124,3 +124,19 @@ AI VPN Fast Safe là ứng dụng VPN mạnh mẽ, an toàn và thân thiện v�
 ## 👨‍💻 Nhà phát triển
 
 Ứng dụng được phát triển bởi DucThanhNguyen.
+
+## 🔧 Build native 16KB page size (tuỳ chọn)
+
+Module `android/vpnLib` đã được cấu hình để có thể build native bằng CMake khi truyền Gradle property `-PbuildNativeFromSource=true`. CMake đã ép linker flag `-Wl,-z,max-page-size=16384` để đáp ứng yêu cầu Android 15+.
+
+Hướng dẫn nhanh:
+- Đặt mã nguồn native vào `android/vpnLib/src/main/cpp` (thay thế các file trong thư mục `stub/`).
+- Build:
+  ```pwsh
+  .\gradlew :vpnLib:assembleRelease -PbuildNativeFromSource=true
+  ```
+- Thay thế các `.so` sinh ra vào `android/vpnLib/src/main/jniLibs/<abi>/` hoặc cấu hình copy tự động.
+- Kiểm tra 16KB bằng llvm-readelf:
+  ```pwsh
+  & "D:\\Android\\Sdk\\ndk\\28.0.12433566\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\llvm-readelf.exe" -W -l android/vpnLib/src/main/jniLibs/arm64-v8a/libopenvpn.so | Select-String "MaxPageSize|Align"
+  ```
