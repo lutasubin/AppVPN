@@ -25,7 +25,7 @@ class LocationController extends GetxController {
   // Tải danh sách VPN
   Future<void> getVpnData() async {
     isLoading.value = true;
-    final servers = await Apis.getVPNServers();
+    final servers = await APIs.getVPNServers();
     vpnList = servers;
     filteredVpnList.value = servers;
     Pref.vpnList = servers; // Lưu vào Hive

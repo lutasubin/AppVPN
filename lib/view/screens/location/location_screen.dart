@@ -5,7 +5,7 @@ import 'package:vpn_basic_project/controllers/main_controller/location/location_
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_highspeed.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_pro.dart';
-import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_api.dart';
+// import 'package:vpn_basic_project/view/widgets/LocationWidgets/open_vpn_sever/vpn_card_api.dart';
 import 'package:vpn_basic_project/view/widgets/LocationWidgets/wiregruard_vpn_sever/vpn_card_wireguard.dart';
 
 /// Màn hình hiển thị danh sách máy chủ VPN
@@ -42,6 +42,8 @@ class LocationScreen extends StatelessWidget {
               ),
             ),
           ),
+
+        
           // Nội dung chính của màn hình
           body: SafeArea(
             child: Column(
@@ -114,6 +116,7 @@ class LocationScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
       children: [
+         const NativeAdWithLoadingWidget(adType: 'new2'),
         ...controller.availableServersPro.map((server) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: VpnCardLocalPro(server: server),
@@ -125,13 +128,13 @@ class LocationScreen extends StatelessWidget {
                 server: server,
               ),
             )),
-              const NativeAdWithLoadingWidget(adType: 'new2'),
-        ...controller.availableApiServers.map((server) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: VpnCardApi(
-                server: server,
-              ),
-            )),
+            
+        // ...controller.availableApiServers.map((server) => Padding(
+        //       padding: const EdgeInsets.only(bottom: 12),
+        //       child: VpnCardApi(
+        //         server: server,
+        //       ),
+        //     )),
       ],
     );
   }

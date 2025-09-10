@@ -62,6 +62,14 @@ final List<LocalVpnServer> highVpn = [
 
 final List<LocalVpnServer> proVPN = [
   LocalVpnServer(
+    countryName: 'United States',
+    countryCode: 'us',
+    ip: '144.126.138.95.1',
+    ping: '',
+    configFileName: 'vpn-UsPro.ovpn',
+    protocol: 'openvpn',
+  ),
+  LocalVpnServer(
     countryName: 'Germany',
     countryCode: 'de',
     ip: '161.97.120.90.10',
@@ -85,14 +93,7 @@ final List<LocalVpnServer> proVPN = [
     configFileName: 'vpn-UKPro.ovpn',
     protocol: 'openvpn',
   ),
-  LocalVpnServer(
-    countryName: 'United States',
-    countryCode: 'us',
-    ip: '144.126.138.95.1',
-    ping: '',
-    configFileName: 'vpn-UsPro.ovpn',
-    protocol: 'openvpn',
-  ),
+  
   LocalVpnServer(
     countryName: 'Singapore',
     countryCode: 'sg',

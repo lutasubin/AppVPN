@@ -11,10 +11,10 @@ class VpnControlButton extends StatefulWidget {
   final BoxConstraints constraints;
 
   const VpnControlButton({
-    Key? key,
+    super.key,
     required this.controller,
     required this.constraints,
-  }) : super(key: key);
+  });
 
   @override
   State<VpnControlButton> createState() => _VpnControlButtonState();
@@ -174,8 +174,8 @@ class _VpnControlButtonState extends State<VpnControlButton> {
         vpnState == VpnEngine.vpnAuthenticating;
 
     // Kiểm tra trạng thái WireGuard
-    final isWireGuardConnecting = widget.controller.isUsingWireGuard &&
-        widget.controller.isConnecting;
+    final isWireGuardConnecting =
+        widget.controller.isUsingWireGuard && widget.controller.isConnecting;
 
     // Kiểm tra trạng thái controller
     final isControllerConnecting = widget.controller.isConnecting;

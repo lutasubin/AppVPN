@@ -41,7 +41,6 @@ dependencies:
   firebase_analytics: ^11.4.5
   # Tiện ích
   intl: ^0.20.2 # Hỗ trợ quốc tế hóa và định dạng ngôn ngữ
-  flutter_native_splash: ^2.4.4 # Màn hình khởi động tùy chỉnh cho ứng dụng
 
   # Share and Rate App
   share_plus: ^7.2.1

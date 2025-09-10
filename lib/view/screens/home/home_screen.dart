@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Lấy thông tin IP ban đầu
-    Apis.getIPDetails(ipData: ipData);
+    APIs.getIPDetails(ipData: ipData);
 
     _baController.ba = AdHelper.loadBannerAd(baController: _baController);
 

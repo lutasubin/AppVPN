@@ -118,7 +118,7 @@ class VpnServerManager {
   /// Load API servers
   void _loadApiServers() async {
     try {
-      final servers = await Apis.getVPNServers();
+      final servers = await APIs.getVPNServers();
       availableApiServers.value = servers;
       print('✅ Loaded ${servers.length} API servers');
     } catch (e) {

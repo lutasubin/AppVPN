@@ -1,89 +1,72 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:csv/csv.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
-import 'package:vpn_basic_project/models/ip_details.dart';
-import 'package:vpn_basic_project/models/vpn.dart';
+import 'package:vpn_basic_project/helpers/dilogs/my_dilogs.dart';
 
-class Apis {
-  /// Lấy danh sách VPN server từ API và lọc theo tiêu chí chất lượng
+
+import '../models/ip_details.dart';
+import '../models/vpn.dart';
+
+class APIs {
   static Future<List<Vpn>> getVPNServers() async {
     final List<Vpn> vpnList = [];
 
     try {
-      final response = await get(Uri.parse(dotenv.env['VPN_FREE'] ?? ''));
-      final csvString = response.body.split('#')[1].replaceAll('*', '');
-      final List<List<dynamic>> list =
-          const CsvToListConverter().convert(csvString);
+      final res = await get(Uri.parse('http://www.vpngate.net/api/iphone/'));
+      final csvString = res.body.split("#")[1].replaceAll('*', '');
 
-      final headers = list.first;
+      List<List<dynamic>> list = const CsvToListConverter().convert(csvString);
 
-      // Chuyển từng dòng CSV thành object Vpn
+      final header = list[0];
+
       for (int i = 1; i < list.length - 1; ++i) {
-        final Map<String, dynamic> jsonMap = {
-          for (int j = 0; j < headers.length; ++j)
-            headers[j].toString(): list[i][j],
-        };
-        vpnList.add(Vpn.fromJson(jsonMap));
-      }
+        Map<String, dynamic> tempJson = {};
 
-      log("Tổng số server: ${vpnList.length}");
-
-      // Lọc server theo điều kiện:
-      final filteredList = vpnList.where((vpn) {
-        final ping = int.tryParse(vpn.Ping) ?? 9999;
-        final isJapan =
-            vpn.CountryLong == "Japan"; // Kiểm tra xem có phải Nhật Bản không
-        // final isSouthKorea = vpn.CountryLong ==
-        //     "Korea Republic of"; // Kiểm tra xem có phải Hàn Quốc không
-        final score = vpn.Score;
-        final speed = vpn.Speed;
-
-        if (isJapan) {
-          // Nếu là Japan : Score > 1 triệu và Ping <= 50
-          return score > 500000 && 15 <= ping && ping <= 50 && speed >= 100;
-        } else {
-          // Các quốc gia khác: Score >500000 và Ping <= 50
-          return score > 500000 && ping <= 50 && speed >= 100;
+        for (int j = 0; j < header.length; ++j) {
+          tempJson.addAll({header[j].toString(): list[i][j]});
         }
-      }).toList();
-
-      log("Số server đạt chuẩn: ${filteredList.length}");
-
-      // Sắp xếp theo Score giảm dần, nếu bằng thì Ping tăng dần
-      filteredList.sort((a, b) {
-        final scoreCompare = b.Score.compareTo(a.Score);
-        return scoreCompare != 0 ? scoreCompare : a.Ping.compareTo(b.Ping);
-      });
-
-      // Nếu không còn server nào đạt chuẩn thì dùng danh sách gốc
-      final finalList = filteredList.isNotEmpty ? filteredList : vpnList;
-
-      // Xáo trộn tránh trùng lặp mỗi lần load
-      finalList.shuffle();
-
-      // Lưu vào Pref
-      Pref.vpnList = finalList;
-
-      return finalList;
+        vpnList.add(Vpn.fromJson(tempJson));
+      }
     } catch (e) {
-      log('getVPNServers Error: $e');
-      return vpnList;
+      MyDialogs.error(msg: e.toString());
+      log('\ngetVPNServersE: $e');
     }
+    vpnList.shuffle();
+
+    if (vpnList.isNotEmpty) Pref.vpnList = vpnList;
+
+    return vpnList;
   }
 
-  /// Lấy thông tin IP hiện tại của người dùng
   static Future<void> getIPDetails({required Rx<IPDetails> ipData}) async {
     try {
-      final response = await get(Uri.parse(dotenv.env['IP_FREE'] ?? ''));
-      final data = jsonDecode(response.body);
+      final res = await get(Uri.parse('http://ip-api.com/json/'));
+      final data = jsonDecode(res.body);
       log(data.toString());
       ipData.value = IPDetails.fromJson(data);
     } catch (e) {
-      log('getIPDetails Error: $e');
+      MyDialogs.error(msg: e.toString());
+      log('\ngetIPDetailsE: $e');
     }
   }
 }
+
+// Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36
+
+// For Understanding Purpose
+
+//*** CSV Data ***
+// Name,    Country,  Ping
+// Test1,   JP,       12
+// Test2,   US,       112
+// Test3,   IN,       7
+
+//*** List Data ***
+// [ [Name, Country, Ping], [Test1, JP, 12], [Test2, US, 112], [Test3, IN, 7] ]
+
+//*** Json Data ***
+// {"Name": "Test1", "Country": "JP", "Ping": 12}

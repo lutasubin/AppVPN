@@ -3,17 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.Lutasubin.freeVpn">
 
+    <!-- Quyền cơ bản -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Foreground Service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <!-- Notification + Alarm -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <!-- Cho phép query package -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
 
-
-
-     <!-- Ads Permission for Android 12 or higher -->
+    <!-- Ads Permission cho Android 12+ -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <application
@@ -26,18 +33,16 @@
         android:allowBackup="false"
         tools:ignore="AllowBackup">
 
-       <!-- for ads -->
+        <!-- ID quảng cáo AdMob -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6249555933736346~5693810225"/>
-             <!-- android:value="ca-app-pub-6249555933736346~5693810225"/> -->
-             
-         
-        <!-- Disable Impeller -->
+
+        <!-- Tắt Impeller -->
         <meta-data
             android:name="io.flutter.embedding.android.EnableImpeller"
             android:value="false" />    
-        
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -61,6 +66,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <!-- Activity ngắt kết nối -->
         <activity
             android:name="de.blinkt.openvpn.DisconnectVPNActivity"
             android:excludeFromRecents="true"
@@ -68,30 +74,28 @@
             android:exported="false"
             android:taskAffinity=".DisconnectVPN"
             android:theme="@style/blinkt.dialog" />
-            
+
+        <!-- Service OpenVPN -->
         <service
             android:name="de.blinkt.openvpn.core.OpenVPNService"
             android:exported="true"
-            android:permission="android.permission.BIND_VPN_SERVICE">
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="dataSync">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
 
-        <!-- Xóa hoặc comment đoạn GoBackend service này nếu có -->
-        <!--
-        <service
-            android:name="com.wireguard.android.backend.GoBackend"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="true" />
-        -->
+        <!-- Nếu bạn có MyVpnService riêng -->
         <service
             android:name=".MyVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="true">
+            android:exported="true"
+            android:foregroundServiceType="dataSync">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
+
     </application>
 </manifest>

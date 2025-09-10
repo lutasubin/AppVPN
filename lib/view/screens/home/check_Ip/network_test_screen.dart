@@ -13,7 +13,7 @@ class NetworkTestScreen extends StatelessWidget {
 
   NetworkTestScreen({super.key}) {
     // ✅ Gọi API chỉ 1 lần khi khởi tạo
-    Apis.getIPDetails(ipData: ipData);
+    APIs.getIPDetails(ipData: ipData);
   }
 
   @override

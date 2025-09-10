@@ -152,6 +152,12 @@ class VpnStateManager {
         break;
       default:
         vpnState.value = stageLower;
+        // Treat other transitional stages as connecting to ensure timeout handling
+        if (VpnEngine.isStageConnecting(stageLower)) {
+          if (!isConnecting.value) {
+            startConnecting();
+          }
+        }
     }
   }
 
@@ -243,8 +249,7 @@ class VpnStateManager {
   void _startConnectionTimeoutTimer() {
     _connectionTimeoutTimer?.cancel();
     countdownSeconds.value = _connectionTimeoutSeconds;
-
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    _connectionTimeoutTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (isConnecting.value && vpnState.value != VpnEngine.vpnConnected) {
         if (countdownSeconds.value > 0) {
           countdownSeconds.value--;

@@ -63,34 +63,4 @@ class VpnUIHelper {
       end: Alignment.bottomCenter,
     );
   }
-  
-  /// Get connection status color
-  static Color getStatusColor(String vpnState) {
-    switch (vpnState) {
-      case VpnEngine.vpnConnected:
-        return Colors.green;
-      case VpnEngine.vpnConnecting:
-      case VpnEngine.vpnWaitConnection:
-      case VpnEngine.vpnAuthenticating:
-        return Colors.orange;
-      case VpnEngine.vpnDisconnected:
-      default:
-        return Colors.red;
-    }
-  }
-  
-  /// Get connection status text
-  static String getStatusText(String vpnState) {
-    switch (vpnState) {
-      case VpnEngine.vpnConnected:
-        return 'Connected'.tr;
-      case VpnEngine.vpnConnecting:
-      case VpnEngine.vpnWaitConnection:
-      case VpnEngine.vpnAuthenticating:
-        return 'Connecting...'.tr;
-      case VpnEngine.vpnDisconnected:
-      default:
-        return 'Disconnected'.tr;
-    }
-  }
 }

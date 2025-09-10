@@ -18,7 +18,7 @@ class SpeedTestAgain extends StatelessWidget {
     final SpeedTestController controller = Get.find();
 
     // ✅ Lấy IP khi build lần đầu
-    Apis.getIPDetails(ipData: ipData);
+    APIs.getIPDetails(ipData: ipData);
 
     return Scaffold(
       backgroundColor: const Color(0xFF02091A),
