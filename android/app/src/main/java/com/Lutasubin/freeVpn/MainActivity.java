@@ -181,6 +181,12 @@ public class MainActivity extends FlutterActivity {
             new CustomNativeAdMediumFactory(this)
         );
 
+        GoogleMobileAdsPlugin.registerNativeAdFactory(
+            flutterEngine,
+            "customNativeAdFull",
+            new CustomNativeAdFullFactory(this)
+        );
+
         vpnControlEvent = new EventChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), EVENT_CHANNEL_VPN_STAGE);
         vpnControlEvent.setStreamHandler(new EventChannel.StreamHandler() {
             @Override

@@ -46,5 +46,5 @@ app.*.map.json
 /android/key.properties
 
 # VPN configuration files 
-/assets/vpn
-/assets/wireguard
+# /assets/vpn
+# /assets/wireguard

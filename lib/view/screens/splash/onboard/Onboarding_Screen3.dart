@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/view/screens/welcome/welcome_screen.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
-import 'package:vpn_basic_project/view/screens/splash/onboard/Onboarding_Screen2.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
+class OnboardingScreen3 extends StatelessWidget {
+  const OnboardingScreen3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class OnboardingScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(screenSize.width * 0.05),
                 child: Image.asset(
-                  'assets/images/image1.png',
+                  'assets/images/image3.png',
                   fit: BoxFit.contain,
                 ),
               ),
@@ -32,7 +32,7 @@ class OnboardingScreen extends StatelessWidget {
               padding:
                   EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
               child: Text(
-                'Just One Touch To Connect.',
+                'Protect Your Online Private',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: isSmallScreen ? 16 : 20,
@@ -49,7 +49,7 @@ class OnboardingScreen extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    Get.off(() => const OnboardingScreen2(),
+                    Get.offAll(() => const WelcomeScreen(),
                         transition: Transition.fade,
                         duration: const Duration(milliseconds: 300));
                   },
@@ -64,7 +64,6 @@ class OnboardingScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // Native full occupies big area like screenshot
             const NativeAdWithLoadingWidget(adType: 'medium'),
           ],
         ),
@@ -72,3 +71,5 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 }
+
+

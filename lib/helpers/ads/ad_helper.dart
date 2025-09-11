@@ -197,6 +197,32 @@ class AdHelper {
       ..load();
   }
 
+  //*****************Native Ad Full******************
+
+  /// Tải và trả về một quảng cáo tự nhiên full-screen height container.
+  /// Sử dụng factory riêng cho layout full.
+  static NativeAd? loadNativeAdFull({required NativeAdController adController}) {
+    log('Native Ad Full Id: ${Config.nativeAd}');
+
+    if (Config.hideAds) return null;
+
+    return NativeAd(
+        adUnitId: Config.nativeAd,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            log('Native Ad Full loaded.');
+            adController.adLoaded.value = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            log('Native Ad Full failed to load: $error');
+            adController.adLoaded.value = false;
+          },
+        ),
+        request: const AdRequest(),
+        factoryId: 'customNativeAdFull')
+      ..load();
+  }
+
   //*****************Native Ad2******************
 
   /// Tải và trả về một quảng cáo tự nhiên.
