@@ -10,8 +10,6 @@
 
     <!-- Foreground Service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <!-- Notification + Alarm -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
@@ -80,7 +78,7 @@
             android:name="de.blinkt.openvpn.core.OpenVPNService"
             android:exported="true"
             android:permission="android.permission.BIND_VPN_SERVICE"
-            android:foregroundServiceType="dataSync">
+           >
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
@@ -91,7 +89,7 @@
             android:name=".MyVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
             android:exported="true"
-            android:foregroundServiceType="dataSync">
+            >
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
