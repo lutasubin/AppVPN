@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,10 +16,6 @@ import java.util.Map;
 
 import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin;
 
-/**
- * Custom Native Ad Factory để tạo layout tùy chỉnh cho native ads
- * Tạo layout giống như trong design mẫu với background tối và button cam
- */
 public class CustomNativeAdFactory implements GoogleMobileAdsPlugin.NativeAdFactory {
 
     private final Context context;
@@ -31,186 +26,151 @@ public class CustomNativeAdFactory implements GoogleMobileAdsPlugin.NativeAdFact
 
     @Override
     public NativeAdView createNativeAd(NativeAd nativeAd, Map<String, Object> customOptions) {
-        // Tạo NativeAdView container
         NativeAdView adView = new NativeAdView(context);
 
-        // Tạo main container với background tối
+        // ================= MAIN CONTAINER =================
         LinearLayout mainContainer = new LinearLayout(context);
-        mainContainer.setOrientation(LinearLayout.VERTICAL);
+        mainContainer.setOrientation(LinearLayout.HORIZONTAL);
         mainContainer.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
         ));
 
-        // Set background tối với border radius và border
         GradientDrawable background = new GradientDrawable();
-        background.setColor(Color.parseColor("#172032")); // Đổi màu nền như yêu cầu
-        background.setCornerRadius(dpToPx(8)); // Đổi corner radius thành 8
-        background.setStroke(dpToPx(1), Color.argb(13, 255, 255, 255)); // Thêm border trắng với opacity 0.05 (13/255)
+        background.setColor(Color.parseColor("#1A2332")); // nền xanh đậm
+        background.setCornerRadius(dpToPx(12));
         mainContainer.setBackground(background);
-        mainContainer.setPadding(dpToPx(8), dpToPx(8), dpToPx(8), dpToPx(8));
+        mainContainer.setPadding(dpToPx(10), dpToPx(10), dpToPx(10), dpToPx(10));
 
-        // Tạo header container (icon + text info)
-        LinearLayout headerContainer = new LinearLayout(context);
-        headerContainer.setOrientation(LinearLayout.HORIZONTAL);
-        headerContainer.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+        // ================= LEFT SIDE (info + button) =================
+        LinearLayout leftContainer = new LinearLayout(context);
+        leftContainer.setOrientation(LinearLayout.VERTICAL);
+        leftContainer.setLayoutParams(new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f
         ));
 
-        // Tạo app icon
+        // Row AD label + Icon + Text
+        LinearLayout headerRow = new LinearLayout(context);
+        headerRow.setOrientation(LinearLayout.HORIZONTAL);
+        headerRow.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+        headerRow.setGravity(Gravity.CENTER_VERTICAL);
+
+        // Label "AD"
+        TextView adLabel = new TextView(context);
+        LinearLayout.LayoutParams adLabelParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        adLabelParams.setMarginEnd(dpToPx(6));
+        adLabel.setLayoutParams(adLabelParams);
+
+        GradientDrawable adBg = new GradientDrawable();
+        adBg.setColor(Color.parseColor("#4CAF50")); // xanh lá
+        adBg.setCornerRadius(dpToPx(4));
+        adLabel.setBackground(adBg);
+
+        adLabel.setText("AD");
+        adLabel.setTextColor(Color.WHITE);
+        adLabel.setTextSize(10);
+        adLabel.setPadding(dpToPx(4), dpToPx(2), dpToPx(4), dpToPx(2));
+
+        // Icon
         ImageView iconView = new ImageView(context);
         LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(
-            dpToPx(40), dpToPx(40)
+                dpToPx(20), dpToPx(20)
         );
+        iconParams.setMarginEnd(dpToPx(8));
         iconView.setLayoutParams(iconParams);
+        iconView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        // Set icon background
-        GradientDrawable iconBg = new GradientDrawable();
-        iconBg.setColor(Color.parseColor("#E0E0E0"));
-        iconBg.setCornerRadius(dpToPx(8));
-        iconView.setBackground(iconBg);
-        iconView.setScaleType(ImageView.ScaleType.CENTER);
-
-        // Tạo text container (title + description)
+        // Text container
         LinearLayout textContainer = new LinearLayout(context);
         textContainer.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
-            0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f
         );
-        textParams.setMarginStart(dpToPx(8));
+        textParams.setMargins(0, 0, dpToPx(8), 0);
         textContainer.setLayoutParams(textParams);
 
-        // Tạo title text
         TextView titleView = new TextView(context);
-        titleView.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
         titleView.setTextColor(Color.WHITE);
         titleView.setTextSize(14);
         titleView.setTypeface(null, android.graphics.Typeface.BOLD);
         titleView.setSingleLine(true);
-        titleView.setText("Title ads");
 
-        // Tạo description container (AD badge + text)
-        LinearLayout descContainer = new LinearLayout(context);
-        descContainer.setOrientation(LinearLayout.HORIZONTAL);
-        descContainer.setLayoutParams(new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ));
-        LinearLayout.LayoutParams descContainerParams = (LinearLayout.LayoutParams) descContainer.getLayoutParams();
-        descContainerParams.setMargins(0, dpToPx(2), 0, 0);
-
-        // Tạo AD badge
-        TextView adBadge = new TextView(context);
-        LinearLayout.LayoutParams badgeParams = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        adBadge.setLayoutParams(badgeParams);
-
-        // Style AD badge
-        GradientDrawable badgeBg = new GradientDrawable();
-        badgeBg.setColor(Color.parseColor("#4CAF50")); // Green
-        badgeBg.setCornerRadius(dpToPx(4));
-        adBadge.setBackground(badgeBg);
-        adBadge.setPadding(dpToPx(6), dpToPx(2), dpToPx(6), dpToPx(2));
-        adBadge.setTextColor(Color.WHITE);
-        adBadge.setTextSize(10);
-        adBadge.setTypeface(null, android.graphics.Typeface.BOLD);
-        adBadge.setText("AD");
-
-        // Tạo description text
         TextView descView = new TextView(context);
-        LinearLayout.LayoutParams descParams = new LinearLayout.LayoutParams(
-            0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f
-        );
-        descParams.setMarginStart(dpToPx(8));
-        descView.setLayoutParams(descParams);
-        descView.setTextColor(Color.GRAY);
-        descView.setTextSize(12);
+        descView.setTextColor(Color.parseColor("#8A94A6"));
+        descView.setTextSize(11);
         descView.setSingleLine(true);
-        descView.setText("Install video maker app for free!");
+        descView.setPadding(0, dpToPx(2), 0, 0);
 
-        // Add views to description container
-        descContainer.addView(adBadge);
-        descContainer.addView(descView);
-
-        // Add views to text container
         textContainer.addView(titleView);
-        textContainer.addView(descContainer);
+        textContainer.addView(descView);
 
-        // Add views to header container
-        headerContainer.addView(iconView);
-        headerContainer.addView(textContainer);
+        headerRow.addView(adLabel);
+        headerRow.addView(iconView);
+        headerRow.addView(textContainer);
 
-        // Tạo button container để center button
-        LinearLayout buttonContainer = new LinearLayout(context);
-        buttonContainer.setOrientation(LinearLayout.HORIZONTAL);
-        buttonContainer.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams buttonContainerParams = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        buttonContainerParams.setMargins(0, dpToPx(6), 0, 0);
-        buttonContainer.setLayoutParams(buttonContainerParams);
-
-        // Tạo install button với width nhỏ hơn
+        // Button Install
         Button installButton = new Button(context);
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
-            dpToPx(120), // Width cố định 120dp
-            LinearLayout.LayoutParams.WRAP_CONTENT
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dpToPx(40)
         );
+        buttonParams.topMargin = dpToPx(8);
         installButton.setLayoutParams(buttonParams);
 
-        // Style install button
         GradientDrawable buttonBg = new GradientDrawable();
-        buttonBg.setColor(Color.parseColor("#F15E24")); // Orange
-        buttonBg.setCornerRadius(dpToPx(6));
+        buttonBg.setColor(Color.parseColor("#4A9EFF"));
+        buttonBg.setCornerRadius(dpToPx(8));
         installButton.setBackground(buttonBg);
         installButton.setTextColor(Color.WHITE);
-        installButton.setTextSize(12);
+        installButton.setTextSize(14);
         installButton.setTypeface(null, android.graphics.Typeface.BOLD);
-        installButton.setText("INSTALL");
         installButton.setAllCaps(true);
-        installButton.setPadding(0, dpToPx(8), 0, dpToPx(8));
+        installButton.setText("INSTALL");
 
-        // Add button to container
-        buttonContainer.addView(installButton);
+        leftContainer.addView(headerRow);
+        leftContainer.addView(installButton);
 
-        // Add views to main container
-        mainContainer.addView(headerContainer);
-        mainContainer.addView(buttonContainer);
+        // ================= RIGHT SIDE (media view) =================
+        com.google.android.gms.ads.nativead.MediaView mediaView =
+                new com.google.android.gms.ads.nativead.MediaView(context);
+        LinearLayout.LayoutParams mediaParams = new LinearLayout.LayoutParams(
+                0, dpToPx(120), 1.0f
+        );
+        mediaView.setLayoutParams(mediaParams);
 
-        // Add container to ad view
+      
+
+        // ================= ADD TO MAIN =================
+        mainContainer.addView(leftContainer);
+        mainContainer.addView(mediaView);
         adView.addView(mainContainer);
 
-        // Set native ad data
+        // ================= GÁN DỮ LIỆU =================
         if (nativeAd.getIcon() != null) {
             iconView.setImageDrawable(nativeAd.getIcon().getDrawable());
         }
-        
         if (nativeAd.getHeadline() != null) {
             titleView.setText(nativeAd.getHeadline());
         }
-        
         if (nativeAd.getBody() != null) {
             descView.setText(nativeAd.getBody());
         }
-        
         if (nativeAd.getCallToAction() != null) {
             installButton.setText(nativeAd.getCallToAction().toUpperCase());
         }
 
-        // Register views with NativeAdView
         adView.setIconView(iconView);
         adView.setHeadlineView(titleView);
         adView.setBodyView(descView);
         adView.setCallToActionView(installButton);
+        adView.setMediaView(mediaView);
 
-        // Set the native ad
         adView.setNativeAd(nativeAd);
 
         return adView;

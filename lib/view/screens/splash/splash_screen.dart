@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen>
   late final Animation<double> _logoAnimation;
   late final Animation<double> _textFade;
   late final Animation<double> _textScale;
-  
+
   late final SplashController splashController;
 
   @override
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
     _textScale = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(parent: _textController, curve: Curves.easeOutBack),
     );
-    
+
     // Start text animation after 1s
     Future.delayed(const Duration(milliseconds: 1000), () {
       if (mounted) _textController.forward();
@@ -88,7 +88,7 @@ class _SplashScreenState extends State<SplashScreen>
           ScaleTransition(
             scale: _logoAnimation,
             child: Image.asset(
-              'assets/images/Logo VPN.png',
+              'assets/images/app_logo.png',
               width: 86,
               height: 86,
             ),
@@ -99,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen>
             child: FadeTransition(
               opacity: _textFade,
               child: const Text(
-                'VPN Fast & Safe',
+                'Free VPN Fast & Safe',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -121,18 +121,18 @@ class _SplashScreenState extends State<SplashScreen>
           width: double.infinity,
           padding: const EdgeInsets.all(16.0),
           color: const Color(0xFF02091A),
-          child: Column(
+          child: const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const LinearProgressIndicator(
+              LinearProgressIndicator(
                 backgroundColor: Color(0xFF767C8A),
                 valueColor: AlwaysStoppedAnimation<Color>(
                   Color(0xFFF15E24),
                 ),
                 minHeight: 8,
               ),
-              const SizedBox(height: 10),
-              const Text(
+              SizedBox(height: 10),
+              Text(
                 'This action can contain ads',
                 textAlign: TextAlign.center,
                 style: TextStyle(

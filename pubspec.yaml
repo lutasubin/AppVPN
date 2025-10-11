@@ -71,6 +71,14 @@ dev_dependencies:
 
   change_app_package_name: ^1.4.0 # Công cụ để thay đổi tên gói ứng dụng
   flutter_lints: ^4.0.0 # Quy tắc kiểm tra mã để đảm bảo chất lượng code
+  flutter_launcher_icons: ^0.14.4
+
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/app_logo.png"
+
 
 # Cấu hình Flutter
 flutter:

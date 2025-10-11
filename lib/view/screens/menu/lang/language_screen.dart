@@ -48,7 +48,8 @@ class LanguageScreen extends StatelessWidget {
           ],
         ),
         backgroundColor: const Color(0xFF02091A),
-        bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
+        bottomNavigationBar:
+            const SafeArea(child: NativeAdWithLoadingWidget(adType: 'medium')),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: ListView.builder(

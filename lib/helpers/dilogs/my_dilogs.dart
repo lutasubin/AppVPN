@@ -6,10 +6,10 @@ class MyDialogs {
     Get.snackbar(
       'Success',
       msg,
-      colorText: Color(0xFFFFFFFF),
+      colorText: const Color(0xFFFFFFFF),
       // ignore: deprecated_member_use
       backgroundColor: Colors.green.withOpacity(.9),
-      duration: Duration(seconds: 5),
+      duration: const Duration(seconds: 5),
     );
   }
 
@@ -17,10 +17,10 @@ class MyDialogs {
     Get.snackbar(
       'Error',
       msg,
-      colorText: Color(0xFFFFFFFF),
+      colorText: const Color(0xFFFFFFFF),
       // ignore: deprecated_member_use
       backgroundColor: Colors.redAccent.withOpacity(.9),
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     );
   }
 
@@ -28,14 +28,14 @@ class MyDialogs {
     Get.snackbar(
       'Info',
       msg,
-      colorText: Color(0xFFFFFFFF),
+      colorText: const Color(0xFFFFFFFF),
       // ignore: deprecated_member_use
       backgroundColor: Colors.blue.withOpacity(.9), // Thêm background
-      duration: Duration(seconds: 3), // Thêm duration
+      duration: const Duration(seconds: 3), // Thêm duration
     );
   }
-  
+
   static showProgress() {
-    Get.dialog(Center(child: CircularProgressIndicator(strokeWidth: 2)));
+    Get.dialog(const Center(child: CircularProgressIndicator(strokeWidth: 2)));
   }
 }

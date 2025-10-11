@@ -123,7 +123,7 @@ public class CustomNativeAdMediumFactory implements GoogleMobileAdsPlugin.Native
         
         // Style install button
         GradientDrawable buttonBg = new GradientDrawable();
-        buttonBg.setColor(Color.parseColor("#F15E24")); // Orange
+        buttonBg.setColor(Color.parseColor("#4A9EFF")); 
         buttonBg.setCornerRadius(dpToPx(8));
         installButton.setBackground(buttonBg);
         installButton.setTextColor(Color.WHITE);

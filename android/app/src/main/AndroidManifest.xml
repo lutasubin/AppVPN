@@ -23,7 +23,7 @@
 
     <application
         android:name="${applicationName}"
-        android:label="AI VPN Fast Safe"
+        android:label="Free VPN Fast Safe"
         android:icon="@mipmap/ic_launcher"
         android:extractNativeLibs="true"
         android:hardwareAccelerated="true"

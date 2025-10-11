@@ -19,8 +19,6 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
- 
-
   @override
   Widget build(BuildContext context) {
     final currentLanguageCode = Pref.selectedLanguage.isNotEmpty
@@ -51,9 +49,8 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
       ),
-
-      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
-
+      bottomNavigationBar:
+          const SafeArea(child: NativeAdWithLoadingWidget(adType: 'small')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
@@ -73,7 +70,7 @@ class _MenuScreenState extends State<MenuScreen> {
               title: 'test1'.tr,
               onTap: () {
                 AnalyticsHelper.logSettingChange('open_speedtest', 'clicked');
-                Get.to(() => SpeedTestScreen());
+                Get.to(() => const SpeedTestScreen());
               },
             ),
             const SizedBox(height: 8),
@@ -86,7 +83,7 @@ class _MenuScreenState extends State<MenuScreen> {
               onTap: () {
                 AnalyticsHelper.logSettingChange(
                     'open_language_settings', 'clicked');
-                Get.off(() => LanguageScreen());
+                Get.off(() => const LanguageScreen());
               },
             ),
             const SizedBox(height: 8),

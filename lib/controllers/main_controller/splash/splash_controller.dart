@@ -89,7 +89,7 @@ class SplashController extends GetxController {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     // Xác định trang tiếp theo
-    final nextPage = Pref.hasSeenOnboarding ? HomeScreen() : LanguageScreen2();
+    final nextPage = Pref.hasSeenOnboarding ? HomeScreen() : const LanguageScreen2();
 
     void navigate() {
       if (!_hasNavigated) return;

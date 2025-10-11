@@ -9,9 +9,9 @@ import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
 import 'package:vpn_basic_project/view/screens/location/location_screen.dart';
 import 'package:vpn_basic_project/view/screens/menu/menu_screen.dart';
-import 'package:vpn_basic_project/view/screens/home/check_Ip/network_test_screen.dart';
 import 'package:vpn_basic_project/view/screens/home/using_app/using_app.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_full_ads.dart';
 
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/vpn_button/VpnControlButon.dart';
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/button_speed_map/button_speed_map.dart';
@@ -66,6 +66,9 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           const NativeAdWithLoadingWidget(adType: 'new1'),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           _changeLocation(context),
                         ],
                       ),
@@ -94,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                                     svgAsset: 'assets/svg/map.svg',
                                     label: 'ip'.tr,
                                     onTap: () {
-                                      Get.to(() => NetworkTestScreen());
+                                      Get.to(() => const NativeFullScreen1());
                                     }),
                               ),
                               const SizedBox(width: 16),
@@ -152,7 +155,7 @@ class HomeScreen extends StatelessWidget {
         return _baController.baLoaded.isTrue && _baController.ba != null
             ? SafeArea(
                 child: SizedBox(
-                 height: 120,
+                  height: 120,
                   child: AdWidget(ad: _baController.ba!),
                 ),
               )

@@ -126,7 +126,7 @@ public class CustomNativeAdFullFactory implements GoogleMobileAdsPlugin.NativeAd
         buttonParams.setMargins(dpToPx(8), dpToPx(8), dpToPx(8), dpToPx(8));
         ctaButton.setLayoutParams(buttonParams);
         GradientDrawable buttonBg = new GradientDrawable();
-        buttonBg.setColor(Color.parseColor("#F15E24")); // Orange
+        buttonBg.setColor(Color.parseColor("#4A9EFF")); 
         buttonBg.setCornerRadius(dpToPx(24));
         ctaButton.setBackground(buttonBg);
         ctaButton.setTextColor(Color.WHITE);

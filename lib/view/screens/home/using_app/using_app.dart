@@ -127,7 +127,8 @@ class _ApplicationVpnScreenState extends State<ApplicationVpnScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
+      bottomNavigationBar:
+          const SafeArea(child: NativeAdWithLoadingWidget(adType: 'new2')),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(

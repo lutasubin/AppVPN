@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
+import 'package:vpn_basic_project/view/screens/home/home_screen.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
-import 'package:vpn_basic_project/view/widgets/Ads/native_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -68,9 +69,11 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Get.off(() => const NativeFullScreen(),
+                        AdHelper.showInterstitialAd(onComplete: (){
+                          Get.off(() =>  HomeScreen(),
                             transition: Transition.fade,
                             duration: const Duration(milliseconds: 300));
+                        });
                       },
                       child: const Text(
                         'START',

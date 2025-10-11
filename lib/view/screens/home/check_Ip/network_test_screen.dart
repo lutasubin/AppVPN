@@ -33,7 +33,8 @@ class NetworkTestScreen extends StatelessWidget {
               const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       ),
-      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
+      bottomNavigationBar:
+          const SafeArea(child: NativeAdWithLoadingWidget(adType: 'medium')),
       body: Obx(() => ListView(
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.only(

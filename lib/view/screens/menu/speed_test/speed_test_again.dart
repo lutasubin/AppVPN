@@ -14,7 +14,6 @@ class SpeedTestAgain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final SpeedTestController controller = Get.find();
 
     // ✅ Lấy IP khi build lần đầu
@@ -40,8 +39,8 @@ class SpeedTestAgain extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
         ),
       ),
-            bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
-
+      bottomNavigationBar:
+          const SafeArea(child: NativeAdWithLoadingWidget(adType: 'medium')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

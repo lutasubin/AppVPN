@@ -15,15 +15,16 @@ class WatchAdDialog {
       ),
       builder: (context) => SafeArea(
         child: Container(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                 Text(
+                Text(
                   "sever".tr,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 ListTile(
@@ -48,7 +49,6 @@ class WatchAdDialog {
                       color: Color(0xFF767C8A),
                     ),
                   ),
-                 
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
@@ -56,11 +56,10 @@ class WatchAdDialog {
                     Get.back(); // Đóng bottom sheet
                     onComplete(); // Gọi callback
                   },
-                  label:  Text( 'vpn_connection'.tr,
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.bold
-                      )),
+                  label: Text('vpn_connection'.tr,
+                      style: const TextStyle(
+                          color: Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.bold)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFF15E24),
                     minimumSize: const Size(double.infinity, 50),

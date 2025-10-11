@@ -7,8 +7,7 @@ import 'package:vpn_basic_project/view/screens/menu/speed_test/speed_test_again.
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class SpeedTestScreen extends StatelessWidget {
-  SpeedTestScreen({super.key});
-
+  const SpeedTestScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +30,8 @@ class SpeedTestScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
         ),
       ),
-      bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'small'),
+      bottomNavigationBar:
+          const SafeArea(child: NativeAdWithLoadingWidget(adType: 'small')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

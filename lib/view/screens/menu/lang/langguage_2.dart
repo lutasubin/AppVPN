@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 import 'package:vpn_basic_project/helpers/lang/setting_languae.dart';
-import 'package:vpn_basic_project/view/screens/splash/onboard/Onboarding_Screen.dart';
+import 'package:vpn_basic_project/view/screens/splash/onboard/New_Onboarding.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 
 class LanguageScreen2 extends StatefulWidget {
@@ -56,7 +56,8 @@ class _LanguageScreen2State extends State<LanguageScreen2> {
           ],
         ),
         backgroundColor: const Color(0xFF02091A),
-        bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
+        bottomNavigationBar:
+            const SafeArea(child: NativeAdWithLoadingWidget(adType: 'medium')),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: ListView.builder(
