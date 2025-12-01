@@ -1,0 +1,92 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
+import '../../../../main.dart';
+import '../../../../models/ip_details.dart';
+import '../../../../models/network_data.dart';
+import '../../../widgets/NetworkWidgets/network_card.dart';
+import '../../../../apis/vpn_gate.dart';
+
+class NetworkTestScreen extends StatelessWidget {
+  final ipData = IPDetails.fromJson({}).obs;
+
+  NetworkTestScreen({super.key}) {
+    // ✅ Gọi API chỉ 1 lần khi khởi tạo
+    APIs.getIPDetails(ipData: ipData);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    mq = MediaQuery.sizeOf(context);
+    return Scaffold(
+      backgroundColor: const Color(0xFF02091A),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF02091A),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
+        ),
+        title: Text(
+          'IP Information'.tr,
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
+      ),
+      bottomNavigationBar:
+          const SafeArea(child: NativeAdWithLoadingWidget(adType: 'medium')),
+      body: Obx(() => ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.only(
+                left: mq.width * .04,
+                right: mq.width * .04,
+                top: mq.height * .01,
+                bottom: mq.height * .1),
+            children: [
+              //ip
+              NetworkCard(
+                  data: NetworkData(
+                      title: 'IP Address',
+                      subtitle: ipData.value.query,
+                      icon: const Icon(CupertinoIcons.location_solid,
+                          color: Colors.blue))),
+
+              //isp
+              NetworkCard(
+                  data: NetworkData(
+                      title: 'Internet Provider',
+                      subtitle: ipData.value.isp,
+                      icon: const Icon(Icons.business, color: Colors.orange))),
+
+              //location
+              NetworkCard(
+                  data: NetworkData(
+                      title: 'Location',
+                      subtitle: ipData.value.country.isEmpty
+                          ? 'Fetching ...'
+                          : '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
+                      icon: const Icon(CupertinoIcons.location,
+                          color: Colors.pink))),
+
+              //pin code
+              NetworkCard(
+                  data: NetworkData(
+                      title: 'Pin-code',
+                      subtitle: ipData.value.zip,
+                      icon: const Icon(CupertinoIcons.location_solid,
+                          color: Colors.cyan))),
+
+              //timezone
+              NetworkCard(
+                  data: NetworkData(
+                      title: 'Timezone',
+                      subtitle: ipData.value.timezone,
+                      icon: const Icon(CupertinoIcons.time,
+                          color: Colors.green))),
+            ],
+          )),
+    );
+  }
+
+  // Widget tái sử dụng card hiển thị
+}

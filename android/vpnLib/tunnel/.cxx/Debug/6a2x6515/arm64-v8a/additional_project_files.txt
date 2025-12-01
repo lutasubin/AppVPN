@@ -1,0 +1,4 @@
+C:\wiregurad\vpn-basic-project\android\vpnLib\tunnel\.cxx\Debug\6a2x6515\arm64-v8a\CMakeFiles\elf-cleaner
+C:\wiregurad\vpn-basic-project\android\vpnLib\tunnel\.cxx\Debug\6a2x6515\arm64-v8a\CMakeFiles\elf-cleaner.rule
+C:\wiregurad\vpn-basic-project\android\vpnLib\tunnel\.cxx\Debug\6a2x6515\arm64-v8a\CMakeFiles\libwg-go.so
+C:\wiregurad\vpn-basic-project\android\vpnLib\tunnel\.cxx\Debug\6a2x6515\arm64-v8a\CMakeFiles\libwg-go.so.rule

@@ -1,0 +1,99 @@
+# Thông tin dự án
+# Được tạo bởi DucThanhNguyen
+name: vpn_basic_project
+description: Ứng dụng VPN Android được xây dựng bằng Flutter dựa trên thư viện OpenVPN.
+publish_to: "none" # Ngăn việc vô tình xuất bản lên pub.dev
+
+# Phiên bản ứng dụng
+version: 2.1.0+30
+
+# Yêu cầu phiên bản Dart SDK
+environment:
+  sdk: ">=3.6.0 <4.0.0" # Chỉ định phiên bản Dart SDK tương thích
+
+# Các thư viện cần thiết cho ứng dụng
+dependencies:
+  flutter:
+    sdk: flutter # Framework Flutter cơ bản
+
+  # Giao diện và điều hướng
+  cupertino_icons: ^1.0.8 # Bộ biểu tượng phong cách Cupertino cho giao diện giống iOS
+  get: ^4.6.6 # GetX để quản lý trạng thái, điều hướng và tiêm phụ thuộc
+  flutter_svg: ^2.0.17 # Hỗ trợ hiển thị hình ảnh SVG
+  lottie: ^3.1.3 # Hoạt hình Lottie để tạo giao diện sinh động
+
+  # Lưu trữ và cấu hình
+  shared_preferences: ^2.2.2 # Lưu trữ dữ liệu đơn giản dạng key-value
+  hive: ^2.2.3 # Cơ sở dữ liệu NoSQL nhẹ
+  hive_flutter: ^1.1.0 # Tiện ích mở rộng của Hive dành cho Flutter
+  flutter_dotenv: ^5.0.2 # Tải biến môi trường từ tệp .env
+
+  # Kết nối mạng và xử lý dữ liệu
+  http: ^1.2.2 # Thư viện để thực hiện các yêu cầu HTTP
+  csv: ^6.0.0 # Hỗ trợ phân tích và tạo tệp CSV
+  url_launcher: ^6.2.5 # Mở URL trong trình duyệt hoặc ứng dụng khác
+  connectivity_plus: ^6.0.4 # Kiểm tra trạng thái kết nối mạng
+
+  # Kiếm tiền và phân tích
+  google_mobile_ads: ^6.0.0 # Google AdMob để hiển thị quảng cáo
+  firebase_core: ^3.8.0 # Thư viện lõi của Firebase
+  firebase_remote_config: ^5.4.3 # Cấu hình từ xa để cập nhật động ứng dụng
+  firebase_analytics: ^11.4.5
+  # Tiện ích
+  intl: ^0.20.2 # Hỗ trợ quốc tế hóa và định dạng ngôn ngữ
+
+  # Share and Rate App
+  share_plus: ^7.2.1
+  store_redirect: ^2.0.1
+  rating_dialog: ^2.0.4
+  
+  # Thanh toan app
+  in_app_purchase: ^3.2.3
+
+  # Speed test
+  percent_indicator: ^4.2.5
+  syncfusion_flutter_gauges: ^29.2.11
+  dio: ^5.8.0+1
+  
+
+  # app using
+  firebase_crashlytics: ^4.3.5
+  installed_apps: ^1.6.0
+
+  
+ 
+
+
+# Các thư viện dùng trong quá trình phát triển
+dev_dependencies:
+  flutter_test:
+    sdk: flutter # Framework kiểm thử của Flutter
+
+  change_app_package_name: ^1.4.0 # Công cụ để thay đổi tên gói ứng dụng
+  flutter_lints: ^4.0.0 # Quy tắc kiểm tra mã để đảm bảo chất lượng code
+  flutter_launcher_icons: ^0.14.4
+
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/app_logo.png"
+
+
+# Cấu hình Flutter
+flutter:
+  uses-material-design: true # Kích hoạt các thành phần giao diện Material Design
+  generate: true # Kích hoạt tạo mã tự động (ví dụ: cho tài nguyên)
+
+  # Tài nguyên của ứng dụng
+  assets:
+    - assets/ # Thư mục gốc chứa tài nguyên
+    - assets/vpn/ # Tài nguyên liên quan đến VPN
+    # - assets/wireguard/ # Tài nguyên liên quan đến WireGuard
+    - assets/stunnel/ # Tài nguyên liên quan đến Stunnel
+    - assets/images/ # Thư mục chứa hình ảnh
+    - assets/icons/ # Thư mục chứa biểu tượng
+    - assets/lottie/ # Thư mục chứa tệp hoạt hình Lottie
+    - assets/flags/ # Thư mục chứa hình ảnh cờ quốc gia
+    - assets/svg/ # Thư mục chứa hình ảnh SVG
+    
