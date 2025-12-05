@@ -66,7 +66,7 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
               context: context,
               icon: Icons.network_check,
-              iconColor: Color(0xFF3FD8EF),
+              iconColor: const Color(0xFF3FD8EF),
               title: 'test1'.tr,
               onTap: () {
                 AnalyticsHelper.logSettingChange('open_speedtest', 'clicked');
@@ -77,7 +77,7 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
               context: context,
               icon: Icons.language,
-              iconColor: Color(0xFF3FD8EF),
+              iconColor: const Color(0xFF3FD8EF),
               title: 'Language'.tr,
               trailingText: currentLanguage,
               onTap: () {
@@ -90,7 +90,7 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
               context: context,
               icon: Icons.star,
-              iconColor: Color(0xFF3FD8EF),
+              iconColor: const Color(0xFF3FD8EF),
               title: 'Rate us'.tr,
               onTap: () {
                 AnalyticsHelper.logSettingChange('open_rating', 'clicked');

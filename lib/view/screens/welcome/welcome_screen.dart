@@ -72,7 +72,7 @@ class WelcomeScreen extends StatelessWidget {
                         Get.off(() => HomeScreen(),
                             transition: Transition.fade,
                             duration: const Duration(milliseconds: 300));
-                        AdHelper.showInterstitialAd(onComplete: () {});
+                        // AdHelper.showInterstitialAd(onComplete: () {});
                       },
                       child: const Text(
                         'START',

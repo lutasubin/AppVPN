@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/view/screens/welcome/welcome_screen.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_screen.dart';
 
@@ -42,11 +43,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      Get.offAll(
-        () => const  NativeFullScreen(),
+      Get.offAll(() =>  const WelcomeScreen(),
         transition: Transition.fade,
-        duration: const Duration(milliseconds: 300),
-      );
+        duration: const Duration(milliseconds: 300));
     }
   }
 

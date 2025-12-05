@@ -1,0 +1,2 @@
+C:/Vpn/AppVPN-VpnAppUpdate/AppVPN-VpnAppUpdate/android/app/.cxx/RelWithDebInfo/6o4o2i91/x86/CMakeFiles/edit_cache.dir
+C:/Vpn/AppVPN-VpnAppUpdate/AppVPN-VpnAppUpdate/android/app/.cxx/RelWithDebInfo/6o4o2i91/x86/CMakeFiles/rebuild_cache.dir
