@@ -85,8 +85,8 @@ class _VpnControlButtonState extends State<VpnControlButton> {
                                   size: buttonSize,
                                   colors: const [
                                     Color(0xFF02091A),
-                                    Color(0xFF15EDB3),
-                                    Color(0xFF2484F1),
+                                    Color(0xFF23F1E0),
+                                    Color(0xFF5BC0FF),
                                   ],
                                 )
                               : AnimatedScale(

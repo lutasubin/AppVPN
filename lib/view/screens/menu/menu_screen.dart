@@ -56,7 +56,7 @@ class _MenuScreenState extends State<MenuScreen> {
         child: Column(
           children: [
             SvgPicture.asset(
-              'assets/svg/Frame 14.svg',
+              'assets/svg/image_setting.svg',
               height: 173,
               width: double.infinity,
             ),
@@ -66,7 +66,7 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
               context: context,
               icon: Icons.network_check,
-              iconColor: Colors.cyanAccent,
+              iconColor: Color(0xFF3FD8EF),
               title: 'test1'.tr,
               onTap: () {
                 AnalyticsHelper.logSettingChange('open_speedtest', 'clicked');
@@ -77,7 +77,7 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
               context: context,
               icon: Icons.language,
-              iconColor: Colors.purpleAccent,
+              iconColor: Color(0xFF3FD8EF),
               title: 'Language'.tr,
               trailingText: currentLanguage,
               onTap: () {
@@ -90,7 +90,7 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
               context: context,
               icon: Icons.star,
-              iconColor: Colors.yellow,
+              iconColor: Color(0xFF3FD8EF),
               title: 'Rate us'.tr,
               onTap: () {
                 AnalyticsHelper.logSettingChange('open_rating', 'clicked');
@@ -101,12 +101,12 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
               context: context,
               icon: Icons.share,
-              iconColor: Colors.blueAccent,
+              iconColor: const Color(0xFF3FD8EF),
               title: 'Share with friend'.tr,
               onTap: () async {
                 AnalyticsHelper.logSettingChange('share_app', 'clicked');
                 const String appLink =
-                    'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn';
+                    'https://play.google.com/store/apps/details?id=com.SpAiMobileToMobileTool.TurborVpn';
                 const String message = 'Check out Our app: $appLink';
                 await Share.share(
                   message,
@@ -118,7 +118,7 @@ class _MenuScreenState extends State<MenuScreen> {
             _buildMenuItem(
                 context: context,
                 icon: Icons.privacy_tip,
-                iconColor: const Color(0xFF03C343),
+                iconColor: const Color(0xFF3FD8EF),
                 title: 'Privacy Policy'.tr,
                 onTap: () {
                   AnalyticsHelper.logSettingChange(

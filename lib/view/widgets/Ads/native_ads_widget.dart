@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/native_ad_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
+import 'package:vpn_basic_project/view/widgets/Ads/native_ads_loading.dart';
 
 /// Widget hiển thị Native Ad với loading state
 class NativeAdWithLoadingWidget extends StatefulWidget {
@@ -54,34 +55,61 @@ class _NativeAdWithLoadingWidgetState extends State<NativeAdWithLoadingWidget> {
     super.dispose();
   }
 
+  // Helper method để lấy margin phù hợp
+  EdgeInsetsGeometry _getLoadingMargin() {
+    switch (widget.adType) {
+      case 'medium':
+      case 'new1':
+      case 'new2':
+        return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+      default: // small
+        return const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+    }
+  }
+
+  // Helper method để lấy height phù hợp
+  double _getLoadingHeight() {
+    switch (widget.adType) {
+      case 'medium':
+        return 350;
+      case 'new1':
+      case 'new2':
+        return 120;
+      default: // small
+        return 120;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (!_adController.adLoaded.value) {
-        // Loading state
-        return Container(
-          margin: widget.adType == 'full'
-              ? EdgeInsets.zero
-              : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          height: widget.adType == 'full'
-              ? MediaQuery.of(context).size.height * 0.7
-              : (widget.adType == 'medium' ? 350 : 120),
-          decoration: BoxDecoration(
-            color: const Color(0xFF172032),
-            borderRadius:
-                widget.adType == 'full' ? BorderRadius.zero : BorderRadius.circular(12),
-             border: Border.all(
-            // ignore: deprecated_member_use
-            color: const Color(0xFFFFFFFF).withOpacity(0.05), // viền nhẹ
-          ),
-          ),
-          child: const Center(
-            child: Text(
-              'Ads loading...',
-              style: TextStyle(color: Colors.white, fontSize: 15),
+        // Loading state - khác nhau cho từng loại ad
+        if (widget.adType == 'full') {
+          // Giữ nguyên loading cho full ad
+          return Container(
+            margin: EdgeInsets.zero,
+            height: MediaQuery.of(context).size.height * 0.7,
+            decoration: BoxDecoration(
+              color: const Color(0xFF172032),
+              border: Border.all(
+                color: const Color(0xFFFFFFFF).withOpacity(0.05),
+              ),
             ),
-          ),
-        );
+            child: const Center(
+              child: Text(
+                'Ads loading...',
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
+            ),
+          );
+        } else {
+          // Dùng shimmer cho medium, new1, new2, và default (small)
+          return NativeAdShimmerPremiumDark(
+            margin: _getLoadingMargin(),
+            height: _getLoadingHeight(),
+          );
+        }
       }
 
       if (_nativeAd == null) {
@@ -105,4 +133,4 @@ class _NativeAdWithLoadingWidgetState extends State<NativeAdWithLoadingWidget> {
       );
     });
   }
-} 
+}

@@ -47,8 +47,7 @@ dependencies:
   store_redirect: ^2.0.1
   rating_dialog: ^2.0.4
   
-  # Thanh toan app
-  in_app_purchase: ^3.2.3
+  
 
   # Speed test
   percent_indicator: ^4.2.5
@@ -58,7 +57,8 @@ dependencies:
 
   # app using
   firebase_crashlytics: ^4.3.5
-  installed_apps: ^1.6.0
+  flutter_native_splash: ^2.4.6
+  shimmer: ^3.0.0
 
   
  
@@ -74,10 +74,26 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
 
 
+flutter_native_splash:
+  color: "#000000"
+  image: assets/images/1.png
+ 
+
+  android_12:
+    color: "#000000"
+    image: assets/images/1.png
+   
+
+  
+  ios: false
+  web: false 
+
+
+
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "assets/images/app_logo.png"
+  image_path: "assets/images/logo_app.png"
 
 
 # Cấu hình Flutter
@@ -89,11 +105,8 @@ flutter:
   assets:
     - assets/ # Thư mục gốc chứa tài nguyên
     - assets/vpn/ # Tài nguyên liên quan đến VPN
-    # - assets/wireguard/ # Tài nguyên liên quan đến WireGuard
     - assets/stunnel/ # Tài nguyên liên quan đến Stunnel
     - assets/images/ # Thư mục chứa hình ảnh
-    - assets/icons/ # Thư mục chứa biểu tượng
-    - assets/lottie/ # Thư mục chứa tệp hoạt hình Lottie
     - assets/flags/ # Thư mục chứa hình ảnh cờ quốc gia
     - assets/svg/ # Thư mục chứa hình ảnh SVG
     

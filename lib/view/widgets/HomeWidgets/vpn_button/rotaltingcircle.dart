@@ -5,10 +5,10 @@ class RotatingGradientCircle extends StatefulWidget {
   final List<Color> colors;
 
   const RotatingGradientCircle({
-    Key? key,
+    super.key,
     required this.size,
     required this.colors,
-  }) : super(key: key);
+  });
 
   @override
   _RotatingGradientCircleState createState() => _RotatingGradientCircleState();
@@ -68,7 +68,7 @@ class _GradientCirclePainter extends CustomPainter {
       ..shader = gradient.createShader(rect)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 15.0
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 10);
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
 
     canvas.drawCircle(center, radius, glowPaint);
 

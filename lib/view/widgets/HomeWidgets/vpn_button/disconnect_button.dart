@@ -69,8 +69,8 @@ class _DisconnectButtonState extends State<DisconnectButton>
                 borderRadius: BorderRadius.circular(25),
                 border: Border.all(
                   color: Color.lerp(
-                    const Color(0xFFF15E24),
-                    Color(0xFF4CAF50),
+                    const Color(0xFF3FD8EF),
+                    const Color(0xFF4CAF50),
                     _glowAnimation.value,
                   )!,
                   width: 2,
@@ -90,7 +90,7 @@ class _DisconnectButtonState extends State<DisconnectButton>
                 child: Text(
                   'disconnect'.tr,
                   style: const TextStyle(
-                    color: Color(0xFFF15E24),
+                    color: Color(0xFF3FD8EF),
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.5,

@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:vpn_basic_project/appVpn.dart';
 import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
@@ -15,49 +17,83 @@ import 'package:vpn_basic_project/helpers/Hive/pref.dart';
 late Size mq;
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  final WidgetsBinding binding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: binding);
 
-  await _initializeCoreServices();
-
-  // Khóa màn hình theo chiều dọc
-  await SystemChrome.setPreferredOrientations([
+  // Không block UI
+  unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive));
+  unawaited(SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]);
+  ]));
 
-  // Chạy ứng dụng
+  // Init Hive trước vì App cần đọc language/theme
+  await Pref.initializeHive();
+
+  // Run UI ngay lập tức
   runApp(const App());
+
+  // Remove splash khi frame đầu render
+  binding.addPostFrameCallback((_) {
+    FlutterNativeSplash.remove();
+  });
+
+  // Khởi tạo các service nặng ở background, **theo thứ tự đúng**
+  unawaited(_initBackgroundServices());
 }
 
-/// Khởi tạo tất cả dịch vụ cốt lõi (không bao gồm PlatformView như Ads)
-Future<void> _initializeCoreServices() async {
+/// Init các service nặng, theo thứ tự:
+/// 1. Firebase
+/// 2. Analytics (phải sau Firebase)
+/// 3. Remote Config (có thể song song)
+Future<void> _initBackgroundServices() async {
   try {
-    
-    await Firebase.initializeApp();
-    log('✅ Firebase initialized');
+    await _initFirebase();      // Firebase phải init trước
+    await _initAnalytics();     // Analytics init sau Firebase
+    unawaited(_initRemoteConfig()); // Remote Config có thể chạy song song
+  } catch (e) {
+    log('❌ Background services init error: $e');
+  }
+}
 
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+Future<void> _initFirebase() async {
+  try {
+    await Firebase.initializeApp();
+    log('⚡ Firebase initialized');
+
+    FlutterError.onError =
+        FirebaseCrashlytics.instance.recordFlutterFatalError;
+
     PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
+  } catch (e) {
+    log('❌ Firebase init error: $e');
+  }
+}
 
-    await Config.initConfig();
-    log('✅ Config initialized');
+Future<void> _initAnalytics() async {
+  try {
+    // Khởi tạo AnalyticsHelper sau khi Firebase init xong
+    await AnalyticsHelper.init();
 
-    await Pref.initializeHive();
-    log('✅ Hive initialized');
-
+    // Log AppOpen
     await AnalyticsHelper.logAppOpen();
-    log('✅ App open event logged');
+    log('⚡ Analytics AppOpen logged');
+  } catch (e) {
+    log('❌ Analytics init error: $e');
+  }
+}
 
-    MobileAds.instance.updateRequestConfiguration(
-      RequestConfiguration(testDeviceIds: ['EMULATOR']),
+Future<void> _initRemoteConfig() async {
+  try {
+    await Config.initConfig().timeout(
+      const Duration(seconds: 2),
+      onTimeout: () => log('⚠ Remote Config timeout — skipping'),
     );
-    log('✅ Mobile Ads configured');
-  } catch (e, stackTrace) {
-    await FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: true);
-    log('❌ Error during initialization: $e', stackTrace: stackTrace);
+    log('⚡ Remote Config loaded');
+  } catch (e) {
+    log('❌ Remote Config error: $e');
   }
 }

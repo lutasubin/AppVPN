@@ -88,7 +88,7 @@ class _SplashScreenState extends State<SplashScreen>
           ScaleTransition(
             scale: _logoAnimation,
             child: Image.asset(
-              'assets/images/app_logo.png',
+              'assets/images/logo_app.png',
               width: 86,
               height: 86,
             ),
@@ -99,9 +99,9 @@ class _SplashScreenState extends State<SplashScreen>
             child: FadeTransition(
               opacity: _textFade,
               child: const Text(
-                'Free VPN Fast & Safe',
+                'Free Vpn Super',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFF3FD8EF),
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -127,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen>
               LinearProgressIndicator(
                 backgroundColor: Color(0xFF767C8A),
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  Color(0xFFF15E24),
+                  Color(0xFF3FD8EF),
                 ),
                 minHeight: 8,
               ),

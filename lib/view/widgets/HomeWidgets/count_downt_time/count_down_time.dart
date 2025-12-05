@@ -17,7 +17,7 @@ class CountDownTimer extends StatefulWidget {
 }
 
 class _CountDownTimerState extends State<CountDownTimer> {
-  Duration _duration = Duration();
+  Duration _duration = const Duration();
   Timer? _timer;
 
   @override
@@ -68,7 +68,7 @@ class _CountDownTimerState extends State<CountDownTimer> {
       setState(() {
         _timer?.cancel();
         _timer = null;
-        _duration = Duration();
+        _duration = const Duration();
       });
     }
   }
@@ -83,9 +83,7 @@ class _CountDownTimerState extends State<CountDownTimer> {
     return Text(
       '$hours:$minutes:$seconds',
       style: const TextStyle(
-          fontSize: 50,
-          color: const Color(0xFFFFFFFF),
-          fontWeight: FontWeight.bold),
+          fontSize: 50, color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
     );
   }
 }

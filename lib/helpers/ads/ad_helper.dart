@@ -392,13 +392,13 @@ class AdHelper {
   /// [adController] dùng để theo dõi trạng thái tải quảng cáo.
   /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
   static NativeAd? loadNativeAdNew({required NativeAdController adController}) {
-    log('Native Ad New 1 Id: ${Config.native1Ad}');
+    log('Native Ad New 1 Id: ${Config.nativeAd}');
 
     if (Config.hideAds) return null;
 
     // Luôn tạo ad mới thay vì chia sẻ static ad
     return NativeAd(
-        adUnitId: Config.native1Ad,
+        adUnitId: Config.nativeAd,
         listener: NativeAdListener(
           onAdLoaded: (ad) {
             log('Native Ad New 1 loaded.');
@@ -421,13 +421,13 @@ class AdHelper {
   /// Trả về null nếu quảng cáo bị ẩn hoặc tải thất bại.
   static NativeAd? loadNativeAdNew2(
       {required NativeAdController adController}) {
-    log('Native Ad New 2 Id: ${Config.native2Ad}');
+    log('Native Ad New 2 Id: ${Config.nativeAd}');
 
     if (Config.hideAds) return null;
 
     // Luôn tạo ad mới thay vì chia sẻ static ad
     return NativeAd(
-        adUnitId: Config.native2Ad,
+        adUnitId: Config.nativeAd,
         listener: NativeAdListener(
           onAdLoaded: (ad) {
             log('Native Ad New 2 loaded.');

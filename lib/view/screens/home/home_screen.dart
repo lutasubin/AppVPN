@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:vpn_basic_project/apis/vpn_gate.dart';
 import 'package:vpn_basic_project/controllers/ads_controller/banner%20_ad_controller.dart';
 import 'package:vpn_basic_project/controllers/main_controller/home/home_controller.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/models/ip_details.dart';
+import 'package:vpn_basic_project/view/screens/home/check_Ip/ip.dart';
 import 'package:vpn_basic_project/view/screens/location/location_screen.dart';
 import 'package:vpn_basic_project/view/screens/menu/menu_screen.dart';
-import 'package:vpn_basic_project/view/screens/home/using_app/using_app.dart';
 import 'package:vpn_basic_project/view/widgets/Ads/native_ads_widget.dart';
-import 'package:vpn_basic_project/view/widgets/Ads/native_full_ads.dart';
 
 import 'package:vpn_basic_project/view/widgets/HomeWidgets/vpn_button/VpnControlButon.dart';
-import 'package:vpn_basic_project/view/widgets/HomeWidgets/button_speed_map/button_speed_map.dart';
 
 /// Màn hình chính của ứng dụng VPN.
 /// Hiển thị trạng thái VPN, nút kết nối, thông tin tải lên/tải xuống và quảng cáo.
@@ -48,7 +45,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               // Hình nền SVG
               SvgPicture.asset(
-                'assets/svg/Group 17.svg',
+                'assets/svg/bg_home.svg',
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 fit: BoxFit.cover,
@@ -61,7 +58,7 @@ class HomeScreen extends StatelessWidget {
               Column(
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Center(
                       child: Column(
                         children: [
@@ -83,36 +80,14 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
+                  const Expanded(
+                    flex: 2,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Column(
-                        children: [
-                          // Hàng chứa 2 nút Check IP và Speed Test
-                          Row(
-                            children: [
-                              Expanded(
-                                child: IconTextButton(
-                                    svgAsset: 'assets/svg/map.svg',
-                                    label: 'ip'.tr,
-                                    onTap: () {
-                                      Get.to(() => const NativeFullScreen1());
-                                    }),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: IconTextButton(
-                                    svgAsset: 'assets/svg/apps.svg',
-                                    label: 'app'.tr,
-                                    onTap: () {
-                                      Get.to(
-                                          () => const ApplicationVpnScreen());
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ],
+                      padding: EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Center(
+                        child: Column(
+                          children: [Ip()],
+                        ),
                       ),
                     ),
                   )
@@ -124,62 +99,54 @@ class HomeScreen extends StatelessWidget {
       ),
       appBar: AppBar(
         backgroundColor: const Color(0xFF02091A),
-        leading: IconButton(
-          onPressed: () {
-            Get.to(() => const MenuScreen());
-          },
-          icon: const Icon(
-            Icons.menu,
-            size: 25.0,
-            color: Color(0xFFFFFFFF),
-          ),
-        ),
         title: SvgPicture.asset(
-          'assets/svg/logo.svg',
+          'assets/svg/title_home.svg',
           width: 158.0,
           height: 35.0,
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                print('vip');
-              },
-              child: SvgPicture.asset('assets/svg/vip.svg'),
-            ),
+            child: IconButton(
+                onPressed: () {
+                  Get.to(() => const MenuScreen());
+                },
+                icon: const Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                )),
           )
         ],
       ),
-      bottomNavigationBar: Obx(() {
-        return _baController.baLoaded.isTrue && _baController.ba != null
-            ? SafeArea(
-                child: SizedBox(
-                  height: 120,
-                  child: AdWidget(ad: _baController.ba!),
-                ),
-              )
-            : Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF172032),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    // ignore: deprecated_member_use
-                    color:
-                        // ignore: deprecated_member_use
-                        const Color(0xFFFFFFFF).withOpacity(0.05), // viền nhẹ
-                  ),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Ads loading...',
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                  ),
-                ),
-              );
-      }),
+      // bottomNavigationBar: Obx(() {
+      //   return _baController.baLoaded.isTrue && _baController.ba != null
+      //       ? SafeArea(
+      //           child: SizedBox(
+      //             height: 120,
+      //             child: AdWidget(ad: _baController.ba!),
+      //           ),
+      //         )
+      //       : Container(
+      //           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      //           height: 60,
+      //           decoration: BoxDecoration(
+      //             color: const Color(0xFF172032),
+      //             borderRadius: BorderRadius.circular(12),
+      //             border: Border.all(
+      //               // ignore: deprecated_member_use
+      //               color:
+      //                   // ignore: deprecated_member_use
+      //                   const Color(0xFFFFFFFF).withOpacity(0.05), // viền nhẹ
+      //             ),
+      //           ),
+      //           child: const Center(
+      //             child: Text(
+      //               'Ads loading...',
+      //               style: TextStyle(color: Colors.white, fontSize: 15),
+      //             ),
+      //           ),
+      //         );
+      // }),
     ));
   }
 
@@ -199,7 +166,9 @@ class HomeScreen extends StatelessWidget {
               final countryShort = _controller.currentCountryShort;
               final flagAsset = _controller.currentFlagAsset;
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32.0,
+                ),
                 height: 60,
                 decoration: BoxDecoration(
                   color: const Color(0xFF172032),

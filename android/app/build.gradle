@@ -3,6 +3,7 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id "com.google.gms.google-services"
+    id 'com.google.firebase.crashlytics'
 }
 
 def localProperties = new Properties()
@@ -21,7 +22,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.Lutasubin.freeVpn"
+    namespace = "com.SpAiMobileToMobileTool.TurborVpn"
     compileSdk = 35
 
     // ✅ fix cứng NDK r28 (hỗ trợ 16KB page size)
@@ -57,11 +58,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.Lutasubin.freeVpn"
+        applicationId = "com.SpAiMobileToMobileTool.TurborVpn"
         minSdk = 23
         targetSdk = 35
-        versionCode 46
-        versionName '2.8.6'
+        versionCode 1
+        versionName '1.0.0'
 
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'

@@ -54,7 +54,6 @@ class DisconnectedScreen extends StatelessWidget {
         elevation: 0,
       ),
       bottomNavigationBar: const NativeAdWithLoadingWidget(adType: 'medium'),
-
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
@@ -158,7 +157,7 @@ class DisconnectedScreen extends StatelessWidget {
                     const SizedBox(height: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF15E24),
+                        backgroundColor: const Color(0xFF3FD8EF),
                         minimumSize: const Size.fromHeight(45),
                       ),
                       onPressed: () {
@@ -228,7 +227,7 @@ class DisconnectedScreen extends StatelessWidget {
 
   Future<void> _launchPlayStore() async {
     final Uri uri = Uri.parse(
-        'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn'); // thay bằng package ID của bạn
+        'https://play.google.com/store/apps/details?id=com.SpAiMobileToMobileTool.TurborVpn'); // thay bằng package ID của bạn
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);

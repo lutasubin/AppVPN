@@ -110,9 +110,9 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     (Set<WidgetState> states) {
                       if (states.contains(WidgetState.disabled)) {
                         // ignore: deprecated_member_use
-                        return Colors.deepOrange.withOpacity(0.4);
+                        return const Color(0xFF3FD8EF).withOpacity(0.4);
                       }
-                      return Colors.deepOrange;
+                      return const Color(0xFF3FD8EF);
                     },
                   ),
                   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
@@ -151,7 +151,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
 
   Future<void> _launchPlayStore() async {
     final Uri uri = Uri.parse(
-        'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn'); // thay bằng package ID của bạn
+        'https://play.google.com/store/apps/details?id=com.SpAiMobileToMobileTool.TurborVpn'); // thay bằng package ID của bạn
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);

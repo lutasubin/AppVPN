@@ -159,7 +159,7 @@ class ConnectedScreen extends StatelessWidget {
 
   Future<void> _launchPlayStore() async {
     final Uri uri = Uri.parse(
-        'https://play.google.com/store/apps/details?id=com.Lutasubin.freeVpn'); // thay bằng package ID của bạn
+        'https://play.google.com/store/apps/details?id=com.SpAiMobileToMobileTool.TurborVpn'); // thay bằng package ID của bạn
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);

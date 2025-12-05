@@ -20,7 +20,7 @@ class SignalStrengthIcon extends StatelessWidget {
             width: 3,
             height: heights[index],
             decoration: BoxDecoration(
-              color: const Color(0xFF03C343),
+              color: const Color(0xFF3FD8EF),
               borderRadius: BorderRadius.circular(1.2), // làm mềm góc tương ứng
             ),
           ),

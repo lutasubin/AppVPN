@@ -11,27 +11,18 @@ import 'package:vpn_basic_project/controllers/main_controller/splash/splash_cont
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    // Khởi tạo LocationController
-    Get.put<LocationController>(LocationController(), permanent: true);
+    // Lazily create heavy controllers để tránh block splash
+    Get.lazyPut<LocationController>(() => LocationController(), fenix: true);
+    Get.lazyPut<LocalController>(() => LocalController(), fenix: true);
+    Get.lazyPut<SpeedTestController>(() => SpeedTestController(), fenix: true);
+    // Get.lazyPut<PurchaseController>(() => PurchaseController(), fenix: true);
 
-    // Khởi tạo LocalController
-    Get.put<LocalController>(LocalController(), permanent: true);
-
-    //  Khởi tạo NetworkController
+    // Network controller cần chạy sớm để lấy trạng thái, nhưng defer check sang microtask
     final networkController =
         Get.put<NetworkController>(NetworkController(), permanent: true);
+    Future.microtask(networkController.checkInitialConnectivity);
 
-    // Gọi kiểm tra mạng ban đầu
-    networkController.checkInitialConnectivity();
-
-     // Khởi tạo SpeedTestController
-    Get.put<SpeedTestController>(SpeedTestController(), permanent: true);
-
-    //  // Khởi tạo PurchaseController (VIP)
-    // Get.put<PurchaseController>(PurchaseController(), permanent: true);
-
-     Get.put<SplashController>(SplashController());
-
-
+    // Splash controller vẫn init ngay vì là entry flow
+    Get.put<SplashController>(SplashController());
   }
 }

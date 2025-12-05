@@ -49,14 +49,14 @@ class NetworkTestScreen extends StatelessWidget {
                       title: 'IP Address',
                       subtitle: ipData.value.query,
                       icon: const Icon(CupertinoIcons.location_solid,
-                          color: Colors.blue))),
+                          color: Color(0xFF3FD8EF),))),
 
               //isp
               NetworkCard(
                   data: NetworkData(
                       title: 'Internet Provider',
                       subtitle: ipData.value.isp,
-                      icon: const Icon(Icons.business, color: Colors.orange))),
+                      icon: const Icon(Icons.business, color: Color(0xFF3FD8EF),))),
 
               //location
               NetworkCard(
@@ -66,7 +66,7 @@ class NetworkTestScreen extends StatelessWidget {
                           ? 'Fetching ...'
                           : '${ipData.value.city}, ${ipData.value.regionName}, ${ipData.value.country}',
                       icon: const Icon(CupertinoIcons.location,
-                          color: Colors.pink))),
+                          color: Color(0xFF3FD8EF),))),
 
               //pin code
               NetworkCard(
@@ -74,7 +74,7 @@ class NetworkTestScreen extends StatelessWidget {
                       title: 'Pin-code',
                       subtitle: ipData.value.zip,
                       icon: const Icon(CupertinoIcons.location_solid,
-                          color: Colors.cyan))),
+                          color: Color(0xFF3FD8EF),))),
 
               //timezone
               NetworkCard(
@@ -82,7 +82,7 @@ class NetworkTestScreen extends StatelessWidget {
                       title: 'Timezone',
                       subtitle: ipData.value.timezone,
                       icon: const Icon(CupertinoIcons.time,
-                          color: Colors.green))),
+                          color: Color(0xFF3FD8EF),))),
             ],
           )),
     );

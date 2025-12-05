@@ -60,7 +60,7 @@ class VpnCardLocalPro extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF15E24), // cam đậm
+                  color: const Color(0xFF3FD8EF),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Row(
@@ -92,12 +92,12 @@ class VpnCardLocalPro extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: isSelected
-                        ? const Color(0xFFF15E24)
+                        ? const Color(0xFF3FD8EF)
                         : const Color(0xFFFFFFFF),
                     width: 2,
                   ),
                   color:
-                      isSelected ? const Color(0xFFF15E24) : Colors.transparent,
+                      isSelected ? const Color(0xFF3FD8EF) : Colors.transparent,
                 ),
                 child: isSelected
                     ? Center(

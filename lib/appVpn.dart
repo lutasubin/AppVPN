@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/controllers/app_binding.dart';
 import 'package:vpn_basic_project/helpers/AppLifecycleHandler.dart';
-import 'package:vpn_basic_project/helpers/Firebase_Analytics/analytics_helper.dart';
 import 'package:vpn_basic_project/helpers/ads/ad_helper.dart';
 import 'package:vpn_basic_project/helpers/lang/app_translations.dart';
 import 'package:vpn_basic_project/helpers/Hive/pref.dart';
@@ -37,7 +36,6 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
-      navigatorObservers: [AnalyticsHelper.observer],
     );
   }
 }

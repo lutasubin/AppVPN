@@ -24,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/BG (2).png'),
+                image: AssetImage('assets/images/bg_welcome.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -49,7 +49,7 @@ class WelcomeScreen extends StatelessWidget {
                               ),
                               SizedBox(height: verticalGap),
                               SvgPicture.asset(
-                                'assets/svg/Wellcome Free VPN Super.svg',
+                                'assets/svg/welcome_text.svg',
                                 fit: BoxFit.contain,
                               ),
                             ],
@@ -63,17 +63,16 @@ class WelcomeScreen extends StatelessWidget {
                     height: buttonHeight,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF15E24),
+                        backgroundColor: const Color(0xFF3FD8EF),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(28),
                         ),
                       ),
                       onPressed: () {
-                        AdHelper.showInterstitialAd(onComplete: (){
-                          Get.off(() =>  HomeScreen(),
+                        Get.off(() => HomeScreen(),
                             transition: Transition.fade,
                             duration: const Duration(milliseconds: 300));
-                        });
+                        AdHelper.showInterstitialAd(onComplete: () {});
                       },
                       child: const Text(
                         'START',
